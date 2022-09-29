@@ -1,0 +1,35 @@
+.footerSpacer {
+    height: 107.5px;
+}
+
+.footer {
+    width: 100%;
+    height: 100px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background: green;
+    /* position: fixed */
+    display: flex;
+    align-items: center;
+}
+
+.textWrapper {
+    /* display: flex;
+    align-items: center;
+    justify-content: space-around; */
+    position: relative;
+    width: 950px;
+    margin: auto 0px;
+}  
+
+.footer a:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.projectName {
+    position: absolute;
+    right: 2px;
+    color: grey;
+}
