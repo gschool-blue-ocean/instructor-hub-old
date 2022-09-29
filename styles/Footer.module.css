@@ -5,9 +5,9 @@
 .footer {
     width: 100%;
     height: 100px;
-    left: 0px;
+    /* left: 0px;
     right: 0px;
-    bottom: 0px;
+    bottom: 0px; */
     background: green;
     /* position: fixed */
     display: flex;
@@ -15,12 +15,11 @@
 }
 
 .textWrapper {
-    /* display: flex;
-    align-items: center;
-    justify-content: space-around; */
-    position: relative;
+    display: flex;
+    justify-content: space-around;
+    /* position: relative; */
     width: 950px;
-    margin: auto 0px;
+    margin: 0px auto;
 }  
 
 .footer a:hover {
@@ -30,6 +29,6 @@
 
 .projectName {
     position: absolute;
-    right: 2px;
+    right: 50px;
     color: grey;
 }
