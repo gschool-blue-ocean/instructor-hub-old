@@ -30,10 +30,11 @@ SEIR1 TEXT,
 SEIR2 TEXT
 );
 
-
+--THIS ENABLES TRACKING OF STUDENT'S CODING PAIR/GROUP ASSIGNEMENTS
 CREATE TABLE coding_groups (
 group_id SERIAL PRIMARY KEY
 );
+
 
 CREATE TABLE assigned_student_groupings (
   group_assignment_id SERIAL PRIMARY KEY,
@@ -42,6 +43,7 @@ CREATE TABLE assigned_student_groupings (
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (group_id) REFERENCES coding_groups(group_id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE notes (
 student_id INT,
@@ -53,16 +55,11 @@ note_date DATE,
 FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 );
 
+--THIS ALLOWS TRACKIJNG STUDENTS' PROJECT RATINGS/SCORES
 CREATE TABLE projects (
   project_id SERIAL PRIMARY KEY,
   project_name TEXT
 );
-
-CREATE TABLE learn (
-assessment_id SERIAL PRIMARY KEY,
-assessment_name TEXT
-);
-
 
 CREATE TABLE project_grades (
 student_id INT,
@@ -70,6 +67,12 @@ project_id INT,
 project_grade INT,
 FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
 FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE learn (
+assessment_id SERIAL PRIMARY KEY,
+assessment_name TEXT
 );
 
 
@@ -97,17 +100,18 @@ INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '60');
 
 
---GET ALL LEARN GRADES FOR A STUDENT BY THEIR ID
+--EXAMPLE QUERY: GET ALL LEARN GRADES FOR A STUDENT BY THEIR ID
 SELECT assessment_grade, name_first 
 FROM learn_grades
 INNER JOIN students ON students.student_id = learn_grades.student_id
 WHERE learn_grades.student_id = 1;
 
 
-
---UPDATE learn SET learn_avg = (SELECT AVG(grade) AS avg_grade FROM (VALUES (learn.learn1), (learn.learn2), (learn.learn3)) v(grade));
-
-
+--EXAMPLE QUERY: GET ALL PROJECT SCORES FOR A STUDENT BY THEIR ID
+SELECT project_grade, name_first 
+FROM project_grades
+INNER JOIN students ON students.student_id = project_grades.student_id
+WHERE project_grades.student_id = 1;
 
 
 --CALCULATE STUDENT'S AVERAGE PROJECT SCROE/RATING
