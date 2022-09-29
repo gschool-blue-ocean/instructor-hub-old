@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS project_grades CASCADE;
 DROP TABLE IF EXISTS learn_grades CASCADE;
 
 CREATE TABLE students (
-student_id SERIAL PRIMARY KEY,
+student_id SERIAL NOT NULL PRIMARY KEY,
 name_first TEXT,
 name_last TEXT,
 learn_avg INT,
@@ -31,7 +31,7 @@ SEIR2 TEXT
 
 
 CREATE TABLE pairs (
-cohort_id INT,
+cohort_id SERIAL PRIMARY KEY,
 cohort TEXT,
 student1_ln TEXT,
 student2_ln TEXT
@@ -62,8 +62,8 @@ CREATE TABLE project_grades (
 student_id INT,
 project_id INT,
 project_grade INT,
-FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
+  FOREIGN KEY(student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  FOREIGN KEY(project_id) REFERENCES projects(project_id) ON DELETE CASCADE
 );
 
 
@@ -71,8 +71,8 @@ CREATE TABLE learn_grades (
 student_id INT,
 assessment_id INT,
 assessment_grade INT,
-FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE CASCADE
+FOREIGN KEY(student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+FOREIGN KEY(assessment_id) REFERENCES learn(assessment_id) ON DELETE CASCADE
 );
 
 INSERT INTO students (name_first, name_last, server_side_test, client_side_test, soft_skills, cohort, ETS_date) 
@@ -85,12 +85,9 @@ INSERT INTO learn (assessment_name)
   VALUES('Ajax');
 
 
-INSERT INTO project_grades (project_grade) VALUES ('4');
-INSERT INTO project_grades (project_grade) VALUES ('4');
-INSERT INTO project_grades (project_grade) VALUES ('2');
-INSERT INTO learn_grades (assessment_grade) VALUES ('99');
-INSERT INTO learn_grades (assessment_grade) VALUES ('90');
-INSERT INTO learn_grades (assessment_grade) VALUES ('60');
+INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '4');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1','1','99');
+
 
 SELECT assessment_grade, name_first 
 FROM learn_grades
