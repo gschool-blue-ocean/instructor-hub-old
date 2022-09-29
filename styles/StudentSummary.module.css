@@ -1,4 +1,12 @@
 .border {
-    background-color: rgba(146, 151, 179, 0.13);
-    /* border: 1px solid; */
+    background-color:rgba(146, 151, 179, 0.13);
+    border: 1px solid;
+    float: right;
+    width: 625px;
+    height:475px;
+    margin-left: 0px;
+}
+
+.topBorder {
+    border: 1px solid;
 }
