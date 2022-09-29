@@ -1,11 +1,12 @@
-import FullPage from '../components/main_page/FullPage.js'
+import FullPage from "../components/main_page/FullPage.js";
 
-const home = () => {
+const Home = () => {
   return (
-    <div>Home Page
-        <FullPage />
+    <div>
+      Home Page
+      <FullPage />
     </div>
-  )
-}
+  );
+};
 
-export default home
+export default Home;

@@ -10,3 +10,5 @@ const FullPage = () => {
     </div>
   );
 };
+
+export default FullPage;
