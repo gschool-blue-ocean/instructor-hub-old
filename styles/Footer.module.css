@@ -16,19 +16,26 @@
 
 .textWrapper {
     display: flex;
-    justify-content: space-around;
-    /* position: relative; */
+    flex-direction: column;
+    align-items: center;
     width: 950px;
     margin: 0px auto;
 }  
+
 
 .footer a:hover {
     color: white;
     cursor: pointer;
 }
 
-.projectName {
-    position: absolute;
-    right: 50px;
-    color: grey;
+.techAbout {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.copyright {
+    width: 100%;
+    margin-top: 5px;
+    font-size: 12px;
 }
