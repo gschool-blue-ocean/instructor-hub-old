@@ -5,7 +5,21 @@ const StudentSummary = () => {
 
   return (
     <div className = {studentStlye.border}>
-      <div className = {studentStlye.topBorder}>Student Summary</div>
+      <div>
+        <div className = {studentStlye.topBorder}>
+          <div className = {studentStlye.selectRow}>
+            <div className = {studentStlye.selectAllBox}>
+              <input className= {studentStlye.checkBox} type= "checkbox" name= "selectAll"/>
+                <label htmlFor = "selectMe"> Select/Deselect All</label>
+            </div>
+            <div className = {studentStlye.addGit}>
+              <a className = {studentStlye.gitBtn}>
+                <span>Github Accounts</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

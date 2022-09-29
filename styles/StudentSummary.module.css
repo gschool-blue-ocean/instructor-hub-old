@@ -9,4 +9,46 @@
 
 .topBorder {
     border: 1px solid;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0px 0 0!important;
+    padding: 0 16px 0 16px;
+}
+
+.selectRow {
+    display:flex;
+    height: 24px;
+    border: 1px solid;
+    width:100%;
+}
+
+.selectAllBox {
+    float: left;
+    white-space: nowrap;
+}
+
+.checkBox {
+    background-image: url(https://www.gstatic.com/images/icons/material/system_gm/1x/check_box_outline_blank_white_20dp.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    opacity: 1;
+}
+
+.addGit {
+    float: right;
+    white-space: nowrap;
+    margin-left:auto;
+}
+
+.gitBtn {
+    border-radius: 2px;
+    border: none;
+    padding: 1px;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none !important;
+    margin-right: 3px;
 }
