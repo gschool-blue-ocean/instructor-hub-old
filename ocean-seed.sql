@@ -75,7 +75,7 @@ FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
 FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE CASCADE
 );
 
-INSERT INTO students (name_first, name_last, server_s_ide_test, client_s_ide_test, soft_skills, cohort, ETS_date) 
+INSERT INTO students (name_first, name_last, server_side_test, client_side_test, soft_skills, cohort, ETS_date) 
   VALUES ('John', 'Testor', 'pass', 'pass', '2', 'MCSP13', '12/31/2022');
 INSERT INTO cohorts (cohort, begin_date, end_date, instructor, SEIR1, SEIR2) 
   VALUES ('MCSP13', '01/01/2022', '04/04/2022', 'Egg', 'May', 'Growl');
