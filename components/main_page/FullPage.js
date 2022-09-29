@@ -4,8 +4,9 @@ import NavBar from './NavBar'
 const FullPage = () => {
   return (
     <div>
-      <NavBar />
-      <CohortContainer />
+      FullPage
+      <NavBar/>
+      <CohortContainer/>
     </div>
   )
 }
