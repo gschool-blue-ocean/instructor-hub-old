@@ -52,3 +52,39 @@
     text-decoration: none !important;
     margin-right: 3px;
 }
+
+.middleBorder {
+    border: 1px solid;
+    height: 426.5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0px 0 0!important;
+    padding: 4px 16px 16px 16px;
+}
+
+.table {
+    width: 100%;
+}
+
+.topColumn {
+    text-transform: uppercase;
+    text-align: left;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    border-bottom-width: 1px;
+    padding: 12px 20px;
+}
+
+.row {
+    padding-right: 12px;
+    font-size: 14px;
+    line-height: 20px;
+    border-bottom-width: 1px
+}
+
+.nameColumn {
+    display:flex;
+    align-items: center;
+}

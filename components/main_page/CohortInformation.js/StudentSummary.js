@@ -19,6 +19,30 @@ const StudentSummary = () => {
             </div>
           </div>
         </div>
+        <div className= {studentStlye.middleBorder}>
+          <table className= {studentStlye.table}>
+            <thread>
+              <tr>
+                <th className= {studentStlye.topColumn}>Name</th>
+                {/* <th className= {studentStlye.topColumn}>Grade</th> */}
+                <th className= {studentStlye.topColumn}>Tech Skill</th>
+                <th className= {studentStlye.topColumn}>Progess</th>
+                <th className= {studentStlye.topColumn}>Comments</th>
+                <th className= {studentStlye.topColumn}></th>
+              </tr>
+            </thread>
+              <tbody>
+                <tr>
+                  <td className= {studentStlye.row}>
+                    <div className= {studentStlye.nameColumn}>
+                      <input type="checkbox" name= "student"/>
+                        <label htmlFor = "student">Chuck Tanza</label>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
