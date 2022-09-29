@@ -1,8 +1,10 @@
-import React from 'react'
+import StudentNavBar from './StudentNavBar'
 
 const StudentMainBody = () => {
   return (
-    <div>StudentMainBody</div>
+    <div>StudentMainBody
+      <StudentNavBar />
+    </div>
   )
 }
 
