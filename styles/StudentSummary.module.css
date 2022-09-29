@@ -1,0 +1,6 @@
+.border {
+  background-color: rgba(146, 151, 179, 0.13);
+  border: 1px solid;
+  position: absolute;
+  right: 800px;
+}

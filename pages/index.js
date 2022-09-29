@@ -1,6 +1,8 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import CohortContainer from "../components/main_page/CohortContainer";
+import styles from "../styles/Home.module.css";
+import FullPage from "../components/main_page/FullPage";
 
 export default function Home() {
   return (
@@ -11,6 +13,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       trash
+      <FullPage />
     </div>
-  )
+  );
 }
