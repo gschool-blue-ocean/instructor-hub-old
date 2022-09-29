@@ -1,8 +1,12 @@
-import React from 'react'
+import CohortContainer from './CohortContainer'
+import NavBar from './NavBar'
 
 const FullPage = () => {
   return (
-    <div>FullPage</div>
+    <div>
+      <NavBar />
+      <CohortContainer />
+    </div>
   )
 }
 
