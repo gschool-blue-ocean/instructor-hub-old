@@ -26,7 +26,8 @@ export default async function studentsHandler(req, res) {
     }
   } else if (req.method === "DELETE") {
     try {
-      const student_id = req.params.id;
+      const { student_id } = req.params.id;
+      console.log(student_id);
       const deleteStudent =
         await sql`DELETE FROM students WHERE student_id = ${student_id} RETURNING *;`;
     } catch (err) {
