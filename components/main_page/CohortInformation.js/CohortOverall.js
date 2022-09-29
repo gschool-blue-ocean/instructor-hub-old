@@ -1,9 +1,9 @@
 import React from 'react'
 
-const CohortOveral = () => {
+const CohortOverall = () => {
   return (
     <div>CohortOveral</div>
   )
 }
 
-export default CohortOveral
+export default CohortOverall
