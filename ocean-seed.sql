@@ -98,7 +98,7 @@ SET project_avg = projects.project_avg FROM projects
 WHERE students.student_id = projects.student_id;
 
 UPDATE students
-SET learn_avg = projects.project_avg FROM learn
+SET learn_avg = learn.learn_avg FROM learn
 WHERE students.student_id = learn.student_id;
 
 
