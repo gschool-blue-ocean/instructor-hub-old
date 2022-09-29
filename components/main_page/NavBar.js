@@ -4,7 +4,7 @@ import styles from '../../styles/navBar.module.css'
 const NavBar = () => {
   return (
     <>
-      <div className={styles} >
+      <div className={styles.navBarCon} >
         NavBar
       </div>
     </>
