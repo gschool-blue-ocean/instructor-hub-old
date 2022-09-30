@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS learn CASCADE;
 DROP TABLE IF EXISTS project_grades CASCADE;
 DROP TABLE IF EXISTS learn_grades CASCADE;
 DROP TABLE IF EXISTS assigned_student_groupings CASCADE;
+DROP TABLE IF EXISTS pairs CASCADE;
 CREATE TABLE students (
   student_id SERIAL PRIMARY KEY,
   name_first TEXT,
