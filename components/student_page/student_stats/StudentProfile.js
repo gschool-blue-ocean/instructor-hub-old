@@ -6,6 +6,7 @@ const StudentProfile = () => {
     <div>StudentProfile
         <StudentStatsLeft />
         <StudentStatsRight />
+        <textarea></textarea>
     </div>
   )
 }
