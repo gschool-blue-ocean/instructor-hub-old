@@ -1,6 +1,6 @@
 .navBarCon {
     width: 950px; 
-
+    min-width: 450px;
     margin: 0px auto;
 
 }
