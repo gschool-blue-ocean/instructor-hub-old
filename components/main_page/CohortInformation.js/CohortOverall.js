@@ -35,17 +35,17 @@ const CohortOverall = () => {
   let classTechAvg = randomizer();
   let classTeamAvg = randomizer();
 
-  useEffect(() => {
-    async function getListingData() {
-      const res = await axios.get("/api/");
-      setComments(await res.data.comments);
-      setProperties(await res.data.properties[0]);
-      setReservations(await res.data.reservations);
-      setUsers(await res.data.users[0]);
-      console.log(res.data);
-    }
-    getListingData();
-  }, []);
+  // useEffect(() => {
+  //   async function getListingData() {
+  //     const res = await axios.get("/api/");
+  //     setComments(await res.data.comments);
+  //     setProperties(await res.data.properties[0]);
+  //     setReservations(await res.data.reservations);
+  //     setUsers(await res.data.users[0]);
+  //     console.log(res.data);
+  //   }
+  //   getListingData();
+  // }, []);
 
   const data = {
     labels: ["Class Tech Avg", "Class Teamwork Avg"],
