@@ -53,7 +53,25 @@
     display: inline-block;
     cursor: pointer;
     text-decoration: none !important;
+    color: white !important;
+    background: black;
     margin-right: 3px;
+}
+
+.gitBtn:hover {
+    background: radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgb(0, 0, 0) 99.4%);
+}
+
+.gitBtn_medium {
+    padding: 0 15px;
+    font-size: 15px;
+    line-height: 30px
+}
+
+.span {
+    border-radius: 2px;
+    display: block;
+    background: transparent;
 }
 
 .middleBorder {
@@ -114,7 +132,7 @@
     display: table-cell;
     vertical-align: inherit;
     text-align: center;
-    font-size: 13px;
+    font-size: 16px;
     border: 0px solid;
     /* padding: 8px 0px 8px 0px; */
 }

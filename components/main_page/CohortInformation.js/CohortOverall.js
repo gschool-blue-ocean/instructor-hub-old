@@ -1,8 +1,8 @@
-import overallStlyes from '../../../styles/CohortOveral.module.css'
+import overallStlyes from '../../../styles/CohortOverall.module.css'
 
 const CohortOverall = () => {
   return (
-    <div className = {overallStlyes.overalBorder}>CohortOveral</div>
+    <div className = {overallStlyes.overallBorder}>CohortOveral</div>
   )
 }
 

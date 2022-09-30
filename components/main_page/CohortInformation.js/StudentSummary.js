@@ -15,7 +15,7 @@ const StudentSummary = () => {
             </div>
             <div className = {studentStyle.addGit}>
               <a className = {studentStyle.gitBtn}>
-                <span>Github Accounts</span>
+                <span className ={` ${studentStyle.gitBtn_medium} ${studentStyle.span}`}>Github Accounts</span>
               </a>
             </div>
           </div>
@@ -25,19 +25,42 @@ const StudentSummary = () => {
             <table className= {studentStyle.table}>
               <thead className= {studentStyle.thead}>
                 <tr className= {studentStyle.headerRow}>
-                  <th className= {studentStyle.header} scope= "col">Name</th>
-                  <th className= {studentStyle.header} scope= "col">Technical Skills</th>
-                  <th className= {studentStyle.header} scope= "col">Progress</th>
-                  <th className= {studentStyle.header} scope= "col">Comments</th>
-                  {/* <th className= {studentStyle.header} scope= "col"></th> */}
+                  <th></th>
+                  <th className= {studentStyle.header} scope= "col">Name
+                    <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/>
+                  </th>
+                  <th className= {studentStyle.header} scope= "col">Technical Skills
+                    <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/>
+                  </th>
+                  <th className= {studentStyle.header} scope= "col">Progress
+                    <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/>
+                  </th>
+                  <th className= {studentStyle.header} scope= "col">Comments
+                    <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/>
+                  </th>
+                  <th className= {studentStyle.header} scope= "col"></th>
                 </tr>
               </thead>
               <tbody className= {studentStyle.tbody}>
                 <tr className= {studentStyle.tbodyRow}>
-                  {/* <td><input type = "checkbox" name = "row1"></input></td> */}
-                  <td className= {studentStyle.content}>Chuck Tanza</td>
+                  <td><input type = "checkbox" name = "row1"></input></td>
+                  <td className= {studentStyle.content}>student1</td>
                   <td className= {studentStyle.content}>04/100</td> 
-                  <td className= {studentStyle.content}>Dropdown</td>
+                  <td className= {studentStyle.content}>Responsive</td>
+                  <td className= {studentStyle.content}>Click Me</td> 
+                </tr>
+                <tr className= {studentStyle.tbodyRow}>
+                  <td><input type = "checkbox" name = "row2"></input></td>
+                  <td className= {studentStyle.content}>student2</td>
+                  <td className= {studentStyle.content}>70/100</td> 
+                  <td className= {studentStyle.content}>Responsive</td>
+                  <td className= {studentStyle.content}>Click Me</td> 
+                </tr>
+                <tr className= {studentStyle.tbodyRow}>
+                  <td><input type = "checkbox" name = "row3"></input></td>
+                  <td className= {studentStyle.content}>student3</td>
+                  <td className= {studentStyle.content}>95/100</td> 
+                  <td className= {studentStyle.content}>Responsive</td>
                   <td className= {studentStyle.content}>Click Me</td> 
                 </tr>
               </tbody>
