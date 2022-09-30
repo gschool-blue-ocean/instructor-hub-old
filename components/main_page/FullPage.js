@@ -1,6 +1,5 @@
-import React from 'react'
-import CohortContainer from './CohortContainer.js'
-import NavBar from './NavBar.js'
+import CohortContainer from './CohortContainer'
+import NavBar from './NavBar'
 
 const FullPage = () => {
   return (

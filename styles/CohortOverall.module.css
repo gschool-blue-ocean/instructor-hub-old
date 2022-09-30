@@ -1,0 +1,12 @@
+.overallBorder {
+    background: linear-gradient(-180deg, rgba(255,255,255,0.13) 0%, rgba(0,0,0,0.13) 100%);
+    border-radius: 4px;
+    box-shadow: 2px 2px 10px rgb(0 0 0 / 40%);
+    color: white;
+    float: left; 
+    width: 315px;
+    height: 475px;
+    /* border: 1px solid; */
+    padding: 0px 0px;
+    margin: 0px 0px;
+}

@@ -1,8 +1,8 @@
-import React from 'react'
+import spacerStyle from '../../../styles/CohortSpacer.module.css'
 
 const CohortSpacer = () => {
   return (
-    <div>CohortSpacer</div>
+    <div className = {spacerStyle.spacerContainer}>CohortSpacer</div>
   )
 }
 
