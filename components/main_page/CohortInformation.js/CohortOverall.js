@@ -10,39 +10,45 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Filler,
+  Title,
+  Tooltip,
+  Legend
+);
+
 import { Bar } from "react-chartjs-2";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 
 const CohortOverall = () => {
+  const [techAvg, setTechAvg] = useState(0);
+  const [teamAvg, setTeamAvg] = useState(0);
+
   const randomizer = () => {
     const result = Math.floor(Math.random() * 100);
-    console.log("result is: ", result);
     return result;
   };
-  let classTechAvg = randomizer();
-  let classTeamAvg = randomizer();
 
-  // useEffect(() => {
-  //   async function getListingData() {
-  //     const res = await axios.get("/api/");
-  //     setComments(await res.data.comments);
-  //     setProperties(await res.data.properties[0]);
-  //     setReservations(await res.data.reservations);
-  //     setUsers(await res.data.users[0]);
-  //     console.log(res.data);
-  //   }
-  //   getListingData();
-  // }, []);
+  useEffect(() => {
+    setTechAvg(() => randomizer());
+    setTeamAvg(() => randomizer());
+  }, [techAvg, teamAvg]);
 
   const data = {
-    labels: ["Class Tech Avg", "Class Teamwork Avg"],
+    labels: ["Cohort Tech Avg", "Cohort Teamwork Avg"],
     datasets: [
       {
         axis: "y",
         label: "Cohort Averages",
-        data: [classTechAvg, classTeamAvg],
+        data: [techAvg, teamAvg],
         fill: false,
         backgroundColor: ["green"],
         borderColor: ["black"],
@@ -77,7 +83,7 @@ const CohortOverall = () => {
         display: false,
       },
       yAxis: {
-        max: 1,
+        max: 100,
       },
     },
     elements: {
@@ -89,16 +95,22 @@ const CohortOverall = () => {
   };
 
   return (
-    <div>
+    <div className={overallStyles.overallBorder}>
       <p>Cohort Overall</p>
       <div id="barHolder">
         <Bar data={data} height={300} options={options} />
       </div>
-      <button id="techRandomizerButton" onClick={(classTechAvg = randomizer)}>
-        Randomize Class Tech Average
+      <button
+        id="techRandomizerButton"
+        onClick={() => setTechAvg(() => randomizer)}
+      >
+        Randomize Cohort Tech Average
       </button>
-      <button id="teamRandomizerButton" onClick={(classTeamAvg = randomizer)}>
-        Randomize Class Team Average
+      <button
+        id="teamRandomizerButton"
+        onClick={() => setTeamAvg(() => randomizer)}
+      >
+        Randomize Cohort Team Average
       </button>
     </div>
   );
