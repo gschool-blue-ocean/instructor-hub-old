@@ -13,18 +13,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import { useEffect } from "react";
 import axios from "axios";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Filler,
-  Title,
-  Tooltip,
-  Legend
-);
+import overallStyles from "../../../styles/CohortOverall.module.css";
 
 const CohortOverall = () => {
   const randomizer = () => {
