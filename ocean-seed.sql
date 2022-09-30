@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS projects CASCADE;
 DROP TABLE IF EXISTS learn CASCADE;
 DROP TABLE IF EXISTS project_grades CASCADE;
 DROP TABLE IF EXISTS learn_grades CASCADE;
+DROP TABLE IF EXISTS assigned_student_groupings CASCADE;
 
 CREATE TABLE students (
 student_id SERIAL PRIMARY KEY,
@@ -103,7 +104,7 @@ INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '2', '90');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '3', '60');
 
---Trigger Test Begin--
+--Populate student ID in other tables when new student created--
 
 CREATE OR REPLACE FUNCTION student_copy() RETURNS TRIGGER AS
 $BODY$
@@ -128,21 +129,19 @@ CREATE TRIGGER trig_copy
      FOR EACH ROW
      EXECUTE PROCEDURE student_copy();
 
---Trigger Test End--
-
 
 --EXAMPLE QUERY: GET ALL LEARN GRADES FOR A STUDENT BY THEIR ID
-SELECT assessment_grade, name_first 
-FROM learn_grades
-INNER JOIN students ON students.student_id = learn_grades.student_id
-WHERE learn_grades.student_id = 1;
+-- SELECT assessment_grade, name_first 
+-- FROM learn_grades
+-- INNER JOIN students ON students.student_id = learn_grades.student_id
+-- WHERE learn_grades.student_id = 1;
 
 
 --EXAMPLE QUERY: GET ALL PROJECT SCORES FOR A STUDENT BY THEIR ID
-SELECT project_grade, name_first 
-FROM project_grades
-INNER JOIN students ON students.student_id = project_grades.student_id
-WHERE project_grades.student_id = 1;
+-- SELECT project_grade, name_first 
+-- FROM project_grades
+-- INNER JOIN students ON students.student_id = project_grades.student_id
+-- WHERE project_grades.student_id = 1;
 
 
 --CALCULATE STUDENT'S AVERAGE PROJECT SCROE/RATING
@@ -169,13 +168,13 @@ FROM grades;
 
 ---CREATE TRIGGER TO UPDATE AVG WHENEVER A NEW GRADE IS ADDED. 
 
-SELECT * FROM students;
+-- SELECT * FROM students;
 
 
-SELECT assessment_grade, name_first 
-FROM learn_grades
-INNER JOIN students ON students.student_id = learn_grades.student_id
-WHERE learn_grades.student_id = 1;
+-- SELECT assessment_grade, name_first 
+-- FROM learn_grades
+-- INNER JOIN students ON students.student_id = learn_grades.student_id
+-- WHERE learn_grades.student_id = 1;
 
 INSERT INTO students (name_first, name_last, server_side_test, client_side_test, soft_skills, cohort, ETS_date) 
   VALUES ('Bob', 'Builder', 'pass', 'pass', '2', 'MCSP13', '12/31/2022');
