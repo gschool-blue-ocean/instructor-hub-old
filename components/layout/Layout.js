@@ -12,28 +12,28 @@ import {
 import { useRecoilState } from "recoil";
 import axios from "axios";
 
-const [cohorts, setCohorts] = useRecoilState(cohortsState);
-const [learn, setLearn] = useRecoilState(learnState);
-const [notes, setNotes] = useRecoilState(notesState);
-const [pairs, setPairs] = useRecoilState(pairsState);
-const [projects, setProjects] = useRecoilState(projectsState);
-const [students, setStudents] = useRecoilState(studentsState);
-
-useEffect(() => {
-  axios.get("/api/cohorts").then((res) => setCohorts(res.data[0]));
-
-  axios.get("/api/learn").then((res) => setLearn(res.data[0]));
-
-  axios.get("/api/notes").then((res) => setNotes(res.data[0]));
-
-  axios.get("/api/pairs").then((res) => setPairs(res.data[0]));
-
-  axios.get("/api/projects").then((res) => setProjects(res.data[0]));
-
-  axios.get("/api/students").then((res) => setStudents(res.data[0]));
-}, []);
-
 const Layout = ({ children }) => {
+  const [cohorts, setCohorts] = useRecoilState(cohortsState);
+  const [learn, setLearn] = useRecoilState(learnState);
+  const [notes, setNotes] = useRecoilState(notesState);
+  const [pairs, setPairs] = useRecoilState(pairsState);
+  const [projects, setProjects] = useRecoilState(projectsState);
+  const [students, setStudents] = useRecoilState(studentsState);
+
+  useEffect(() => {
+    axios.get("/api/cohorts").then((res) => setCohorts(res.data[0]));
+
+    axios.get("/api/learn").then((res) => setLearn(res.data[0]));
+
+    axios.get("/api/notes").then((res) => setNotes(res.data[0]));
+
+    axios.get("/api/pairs").then((res) => setPairs(res.data[0]));
+
+    axios.get("/api/projects").then((res) => setProjects(res.data[0]));
+
+    axios.get("/api/students").then((res) => setStudents(res.data[0]));
+  }, []);
+
   return (
     <>
       <Header />
