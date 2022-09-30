@@ -1,5 +1,47 @@
 .navBarCon {
-    width: 900px; 
-    height: 100px;
-    border-radius: solid 1px red;
+    width: 950px; 
+
+    margin: 0px auto;
+
+}
+.worddisplay{
+    display: flex; 
+
+    height: 30px;
+    border: solid 1px red;
+    border-radius: 10px;
+
+}
+.navOptMid{
+    padding: 0px 94.5px;
+}
+.navOptMid:hover{
+    color: white; 
+    background-image: linear-gradient(to right, rgb(163, 80, 80) , rgb(239, 140, 95));
+
+
+}
+.navOptLeft{
+    padding: 0px 94.5px;
+}
+.navOptLeft:hover{
+    color: white; 
+    background-image: linear-gradient(to right, rgb(163, 80, 80) , rgb(239, 140, 95));
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+
+
+}
+.navOptRight{
+    padding: 0px 94.5px;
+}
+.navOptRight:hover{
+    color: white; 
+    background-image: linear-gradient(to right, rgb(163, 80, 80) , rgb(239, 140, 95));
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+}
+.navSpan{
+    cursor: pointer;
 }
