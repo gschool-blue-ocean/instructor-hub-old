@@ -1,9 +1,9 @@
 import overallStlyes from '../../../styles/CohortOveral.module.css'
 
-const CohortOveral = () => {
+const CohortOverall = () => {
   return (
     <div className = {overallStlyes.overalBorder}>CohortOveral</div>
   )
 }
 
-export default CohortOveral
+export default CohortOverall
