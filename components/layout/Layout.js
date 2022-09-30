@@ -8,6 +8,9 @@ import {
   codingGroupState,
   projectsState,
   studentsState,
+  assignedGroupState,
+  learnGradesState,
+  projectGradesState,
 } from "../state.js";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -20,6 +23,8 @@ const Layout = ({ children }) => {
   const [projects, setProjects] = useRecoilState(projectsState);
   const [students, setStudents] = useRecoilState(studentsState);
   const [assignedGroup, setAssignedGroup] = useRecoilState(assignedGroupState);
+  const [learnGrades, setLearnGrades] = useRecoilState(learnGradesState);
+  const [projectGrades, setProjectGrades] = useRecoilState(projectGradesState);
 
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => setCohorts(res.data[0]));
@@ -33,6 +38,12 @@ const Layout = ({ children }) => {
     axios.get("/api/projects").then((res) => setProjects(res.data[0]));
 
     axios.get("/api/students").then((res) => setStudents(res.data[0]));
+
+    axios.get("/api/learnGrades").then((res) => setLearnGrades(res.data[0]));
+
+    axios
+      .get("/api/projectGrades")
+      .then((res) => setProjectGrades(res.data[0]));
 
     axios
       .get("/api/assignedGroup")

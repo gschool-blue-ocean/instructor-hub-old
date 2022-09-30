@@ -34,3 +34,13 @@ export const studentsState = atom({
   key: "students",
   default: [],
 });
+
+export const learnGradesState = atom({
+  key: "learn grades",
+  default: [],
+});
+
+export const projectGradesState = atom({
+  key: "project grades",
+  default: [],
+});
