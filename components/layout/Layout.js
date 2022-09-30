@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
   const [students, setStudents] = useRecoilState(studentsState);
 
   useEffect(() => {
-    axios.get("/api/cohorts").then((res) => setCohorts(res));
+    axios.get("/api/cohorts").then((res) => setCohorts(res.data[0]));
 
     axios.get("/api/learn").then((res) => setLearn(res.data[0]));
 
