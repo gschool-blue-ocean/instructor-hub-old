@@ -104,7 +104,8 @@ INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '2', '90');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '3', '60');
 
---Populate student ID in other tables when new student created--
+
+--Populate student ID in other tables when new student created
 
 CREATE OR REPLACE FUNCTION student_copy() RETURNS TRIGGER AS
 $BODY$
@@ -166,15 +167,13 @@ SET learn_avg = grades.avg
 FROM grades;
 
 
----CREATE TRIGGER TO UPDATE AVG WHENEVER A NEW GRADE IS ADDED. 
-
 -- SELECT * FROM students;
-
-
 -- SELECT assessment_grade, name_first 
 -- FROM learn_grades
 -- INNER JOIN students ON students.student_id = learn_grades.student_id
 -- WHERE learn_grades.student_id = 1;
 
+
+-- Test for student_id population across tables in the db when new student created
 INSERT INTO students (name_first, name_last, server_side_test, client_side_test, soft_skills, cohort, ETS_date) 
   VALUES ('Bob', 'Builder', 'pass', 'pass', '2', 'MCSP13', '12/31/2022');
