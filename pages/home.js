@@ -1,6 +1,6 @@
 import FullPage from "../components/main_page/FullPage.js";
 
-const Home = () => {
+const home = () => {
   return (
     <div>
       Home Page
@@ -9,4 +9,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default home;
