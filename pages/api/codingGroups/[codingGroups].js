@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import postgres from "postgres";
 
 const { DB_CONNECTION_URL, PORT, NODE_ENV } = process.env;
@@ -12,14 +11,16 @@ const sql = postgres(
     : {}
 );
 
-export default async function studentsHandler(req, res) {
-  if (req.method === "GET") {
+export default async function codingGroups(req, res) {
+  if (req.method === "POST") {
     try {
-      const students = await sql`
-      SELECT * FROM students`;
-      res.status(200).json({ students });
-    } catch (err) {
-      console.error(err);
+      const { group_id } = req.body;
+      console.log(req.body);
+      const createGroup = await sql`
+               INSERT INTO pairs ( group_id ) VALUES (${group_id}) RETURNING *`;
+      res.status(200).json({ createGroup });
+    } catch (error) {
+      console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
   } else {

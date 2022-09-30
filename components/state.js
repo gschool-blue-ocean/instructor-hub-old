@@ -15,8 +15,8 @@ export const notesState = atom({
   default: [],
 });
 
-export const pairsState = atom({
-  key: "pairs",
+export const codingGroupState = atom({
+  key: "coding group",
   default: [],
 });
 

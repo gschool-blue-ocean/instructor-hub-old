@@ -5,7 +5,7 @@ import {
   cohortsState,
   learnState,
   notesState,
-  pairsState,
+  codingGroupState,
   projectsState,
   studentsState,
 } from "../state.js";
@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [learn, setLearn] = useRecoilState(learnState);
   const [notes, setNotes] = useRecoilState(notesState);
-  const [pairs, setPairs] = useRecoilState(pairsState);
+  const [codingGroup, setCodingGroup] = useRecoilState(codingGroupState);
   const [projects, setProjects] = useRecoilState(projectsState);
   const [students, setStudents] = useRecoilState(studentsState);
 
@@ -27,7 +27,7 @@ const Layout = ({ children }) => {
 
     axios.get("/api/notes").then((res) => setNotes(res.data[0]));
 
-    axios.get("/api/pairs").then((res) => setPairs(res.data[0]));
+    axios.get("/api/codingGroup").then((res) => setCodingGroup(res.data[0]));
 
     axios.get("/api/projects").then((res) => setProjects(res.data[0]));
 
