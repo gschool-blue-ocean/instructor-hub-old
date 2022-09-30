@@ -13,6 +13,8 @@
 
 }
 .navOptMid{
+    display: flex;
+    align-items: center;
     padding: 0px 94.5px;
 }
 .navOptMid:hover{
@@ -22,6 +24,8 @@
 
 }
 .navOptLeft{
+    display: flex;
+    align-items: center;
     padding: 0px 94.5px;
 }
 .navOptLeft:hover{
@@ -33,6 +37,8 @@
 
 }
 .navOptRight{
+    display: flex;
+    align-items: center;
     padding: 0px 94.5px;
 }
 .navOptRight:hover{
