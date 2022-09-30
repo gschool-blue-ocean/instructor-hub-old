@@ -1,10 +1,10 @@
-import StudentNavBar from './StudentNavBar'
+import NavBar from '../main_page/NavBar.js'
 import StudentProfile from './student_stats/StudentProfile'
 
 const StudentMainBody = () => {
   return (
     <div>
-      <StudentNavBar />
+      <NavBar/>
       <StudentProfile />
     </div>
   )
