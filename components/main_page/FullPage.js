@@ -1,14 +1,14 @@
-import CohortContainer from './CohortContainer'
-import NavBar from './NavBar'
+import CohortContainer from "./CohortContainer";
+import NavBar from "./NavBar";
 
 const FullPage = () => {
   return (
     <div>
       FullPage
-      <NavBar/>
-      <CohortContainer/>
+      <NavBar />
+      <CohortContainer />
     </div>
-  )
-}
+  );
+};
 
-export default FullPage
+export default FullPage;
