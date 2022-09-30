@@ -29,18 +29,18 @@ import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 
 const CohortOverall = () => {
-  const [techAvg, setTechAvg] = useState(0);
-  const [teamAvg, setTeamAvg] = useState(0);
+  const [techAvg, setTechAvg] = useState(90);
+  const [teamAvg, setTeamAvg] = useState(60);
 
   const randomizer = () => {
     const result = Math.floor(Math.random() * 100);
     return result;
   };
 
-  useEffect(() => {
-    setTechAvg(() => randomizer());
-    setTeamAvg(() => randomizer());
-  }, [techAvg, teamAvg]);
+  // useEffect(() => {
+  //   setTechAvg(() => randomizer());
+  //   setTeamAvg(() => randomizer());
+  // }, [techAvg, teamAvg]);
 
   const data = {
     labels: ["Cohort Tech Avg", "Cohort Teamwork Avg"],
