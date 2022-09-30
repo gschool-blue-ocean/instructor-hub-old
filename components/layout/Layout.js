@@ -19,6 +19,7 @@ const Layout = ({ children }) => {
   const [codingGroup, setCodingGroup] = useRecoilState(codingGroupState);
   const [projects, setProjects] = useRecoilState(projectsState);
   const [students, setStudents] = useRecoilState(studentsState);
+  const [assignedGroup, setAssignedGroup] = useRecoilState(assignedGroupState);
 
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => setCohorts(res.data[0]));
@@ -32,6 +33,10 @@ const Layout = ({ children }) => {
     axios.get("/api/projects").then((res) => setProjects(res.data[0]));
 
     axios.get("/api/students").then((res) => setStudents(res.data[0]));
+
+    axios
+      .get("/api/assignedGroup")
+      .then((res) => setAssignedGroup(res.data[0]));
   }, []);
 
   return (

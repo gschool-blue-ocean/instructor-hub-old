@@ -20,6 +20,11 @@ export const codingGroupState = atom({
   default: [],
 });
 
+export const assignedGroupState = atom({
+  key: "assigned group",
+  default: [],
+});
+
 export const projectsState = atom({
   key: "projects",
   default: [],
