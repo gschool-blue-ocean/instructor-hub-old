@@ -1,8 +1,8 @@
-import React from 'react'
+import overallStyles from '../../../styles/CohortOverall.module.css'
 
 const CohortOverall = () => {
   return (
-    <div>CohortOveral</div>
+    <div className = {overallStyles.overallBorder}>CohortOverall</div>
   )
 }
 
