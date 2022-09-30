@@ -5,7 +5,7 @@
     width: 625px;
     height:475px;
     margin-left: 0px;
-    border-radius: 4px;
+    border-radius: 10px;
     box-shadow: 2px 2px 10px rgb(0 0 0 / 40%);
     color: white;
 }
@@ -18,6 +18,8 @@
     justify-content: space-between;
     margin: 0 0px 0 0!important;
     padding: 0 16px 0 16px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
 }
 
 .selectRow {
@@ -47,19 +49,19 @@
 }
 
 .gitBtn {
-    border-radius: 2px;
+    border-radius: 50px;
     border: none;
     padding: 1px;
     display: inline-block;
     cursor: pointer;
     text-decoration: none !important;
     color: white !important;
-    background: black;
+    background: radial-gradient(circle at -1% 57.5%, rgb(19, 170, 82) 0%, rgb(0, 102, 43) 90%);
     margin-right: 3px;
 }
 
 .gitBtn:hover {
-    background: radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgb(0, 0, 0) 99.4%);
+    background: linear-gradient(107deg, rgb(13, 198, 180) 8.1%, rgb(33, 198, 138) 79.5%);
 }
 
 .gitBtn_medium {
@@ -135,6 +137,15 @@
     font-size: 16px;
     border: 0px solid;
     /* padding: 8px 0px 8px 0px; */
+}
+
+.dot {
+    display: inline-block;
+    overflow: visible !important;
+    vertical-align: text-bottom;
+    fill: currentColor;
+    width: 16px;
+    height: 16px;
 }
 
 
