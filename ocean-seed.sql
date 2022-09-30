@@ -89,15 +89,19 @@ INSERT INTO students (name_first, name_last, server_side_test, client_side_test,
 INSERT INTO cohorts (cohort, begin_date, end_date, instructor, SEIR1, SEIR2) 
   VALUES ('MCSP13', '01/01/2022', '04/04/2022', 'Egg', 'May', 'Growl');
 INSERT INTO projects (project_name) VALUES ('Twiddler');
-INSERT INTO learn (assessment_name) VALUES('Ajax');
+INSERT INTO projects (project_name) VALUES ('PixelArtMaker');
+INSERT INTO projects (project_name) VALUES ('ReactMVP');
+INSERT INTO learn (assessment_name) VALUES('Functions');
+INSERT INTO learn (assessment_name) VALUES ('Objects');
+INSERT INTO learn (assessment_name) VALUES ('Arrays'); 
 
 
 INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '4');
-INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '4');
-INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '2');
+INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '2', '4');
+INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '3', '2');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '99');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '90');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '60');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '2', '90');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '3', '60');
 
 
 --EXAMPLE QUERY: GET ALL LEARN GRADES FOR A STUDENT BY THEIR ID
@@ -136,11 +140,10 @@ SET learn_avg = grades.avg
 FROM grades;
 
 
+
 ---CREATE TRIGGER TO UPDATE AVG WHENEVER A NEW GRADE IS ADDED. 
 
 SELECT * FROM students;
-
-
 
 
 SELECT assessment_grade, name_first 
