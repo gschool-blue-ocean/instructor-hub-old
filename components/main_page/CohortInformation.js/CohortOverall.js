@@ -35,6 +35,18 @@ const CohortOverall = () => {
   let classTechAvg = randomizer();
   let classTeamAvg = randomizer();
 
+  useEffect(() => {
+    async function getListingData() {
+      const res = await axios.get("/api/");
+      setComments(await res.data.comments);
+      setProperties(await res.data.properties[0]);
+      setReservations(await res.data.reservations);
+      setUsers(await res.data.users[0]);
+      console.log(res.data);
+    }
+    getListingData();
+  }, []);
+
   const data = {
     labels: ["Class Tech Avg", "Class Teamwork Avg"],
     datasets: [
@@ -90,7 +102,9 @@ const CohortOverall = () => {
   return (
     <div>
       <p>Cohort Overall</p>
-      <Bar data={data} height={300} options={options} />
+      <div id="barHolder">
+        <Bar data={data} height={300} options={options} />
+      </div>
       <button id="techRandomizerButton" onClick={(classTechAvg = randomizer)}>
         Randomize Class Tech Average
       </button>
