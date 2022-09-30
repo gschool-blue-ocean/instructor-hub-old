@@ -103,6 +103,33 @@ INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '2', '90');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '3', '60');
 
+--Trigger Test Begin--
+
+CREATE OR REPLACE FUNCTION student_copy() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    INSERT INTO
+        learn_grades(student_id)
+        VALUES(new.student_id);
+    INSERT INTO
+        project_grades(student_id)
+        VALUES(new.student_id);
+    INSERT INTO
+        notes(student_id)
+        VALUES(new.student_id);
+
+           RETURN new;
+END;
+$BODY$
+language plpgsql;
+
+CREATE TRIGGER trig_copy
+     AFTER INSERT ON students
+     FOR EACH ROW
+     EXECUTE PROCEDURE student_copy();
+
+--Trigger Test End--
+
 
 --EXAMPLE QUERY: GET ALL LEARN GRADES FOR A STUDENT BY THEIR ID
 SELECT assessment_grade, name_first 
@@ -140,7 +167,6 @@ SET learn_avg = grades.avg
 FROM grades;
 
 
-
 ---CREATE TRIGGER TO UPDATE AVG WHENEVER A NEW GRADE IS ADDED. 
 
 SELECT * FROM students;
@@ -151,3 +177,5 @@ FROM learn_grades
 INNER JOIN students ON students.student_id = learn_grades.student_id
 WHERE learn_grades.student_id = 1;
 
+INSERT INTO students (name_first, name_last, server_side_test, client_side_test, soft_skills, cohort, ETS_date) 
+  VALUES ('Bob', 'Builder', 'pass', 'pass', '2', 'MCSP13', '12/31/2022');
