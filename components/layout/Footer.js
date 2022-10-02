@@ -1,13 +1,16 @@
 import React from 'react'
 import footerStyle from '../../styles/Footer.module.css'
 import Link from 'next/link'
+import { useRecoilState } from 'recoil'
+import { colorArrState } from '../state'
 
 
 const Footer = () => {
+    const [colorArray, setColorArray] = useRecoilState(colorArrState)
   return (
     <>
         <div className={footerStyle.footerSpacer}></div>
-        <footer className={footerStyle.footer}>
+        <footer className={footerStyle.footer} style={{backgroundImage: colorArray}}>
             <div className={footerStyle.textWrapper}>
                 <div className={footerStyle.techAbout}>
                     <Link href="/technologies">

@@ -4,6 +4,9 @@
     align-items: center;
     width: 100%;
     height: 50px;
+    font-size: 30px; 
+    color: white;  
+    /* background-color: rgb(234, 233, 228); */
 }
 
 .wrapper {
@@ -20,18 +23,20 @@
     border: none;
     background-color: transparent;
     cursor: pointer;
+    color: white; 
 }
 
 .dropDown {
     flex-direction: column;
     vertical-align: top;
     position: absolute;
-    background-color: green;    
+    background-image: linear-gradient(to right, #445278, #2b66a8);
 }
 
 .dropDown a {
     cursor: pointer;
     padding: 1px;
+    color: #002d02;
 }
 
 .spacer {

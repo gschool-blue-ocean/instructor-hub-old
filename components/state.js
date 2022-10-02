@@ -29,3 +29,8 @@ export const studentsState = atom({
   key: "students",
   default: [],
 });
+
+export const colorArrState = atom ({
+  key: 'color',
+  default: '',
+})

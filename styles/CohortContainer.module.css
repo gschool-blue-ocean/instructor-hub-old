@@ -1,7 +1,7 @@
 .container {
-    background: linear-gradient(60deg, #29323c 0%, #485563 100%);
+    /* background: linear-gradient(60deg, #29323c 0%, #485563 100%); */
     border-radius: 4px;
     width: 950px;
     height: 550px;
-    margin: 0px auto;
+    margin: 10px auto;
 }

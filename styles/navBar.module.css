@@ -1,36 +1,42 @@
 .navBarCon {
     width: 950px; 
     min-width: 450px;
-    margin: 0px auto;
-
+    margin: 25px auto;
 }
 .worddisplay{
     display: flex; 
 
     height: 30px;
-    border: solid 1px red;
+    /* background: rgba(128, 128, 128, 0.59); */
+    background: rgba(69, 78, 106, 0.399) ;
     border-radius: 10px;
+    box-shadow: 2px 2px 10px rgb(0 0 0 / 40%);
 
 }
 .navOptMid{
     display: flex;
     align-items: center;
     padding: 0px 94.5px;
+    color: white; 
 }
 .navOptMid:hover{
     color: white; 
-    background-image: linear-gradient(to right, rgb(163, 80, 80) , rgb(239, 140, 95));
-
-
+    /* background-image: linear-gradient(to right, #16213E, #002B5B); */
+    /* background-image: linear-gradient(to right, #445278, #2b66a8); */
+   /* background-color: rgba(33, 48, 33, 0.781); */
+   background: rgb(13, 13, 57);
 }
 .navOptLeft{
     display: flex;
     align-items: center;
     padding: 0px 94.5px;
+    color: white;
 }
 .navOptLeft:hover{
     color: white; 
-    background-image: linear-gradient(to right, rgb(163, 80, 80) , rgb(239, 140, 95));
+    /* background-image: linear-gradient(to right, #445278, #2b66a8); */
+    /* background-color: rgba(33, 48, 33, 0.781); */
+    background: rgb(13, 13, 57);
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 
@@ -40,12 +46,15 @@
     display: flex;
     align-items: center;
     padding: 0px 94.5px;
+    color: white;
 }
 .navOptRight:hover{
     color: white; 
-    background-image: linear-gradient(to right, rgb(163, 80, 80) , rgb(239, 140, 95));
+    /* background-image: linear-gradient(to right, #445278, #2b66a8); */
     border-top-right-radius: 10px;
+    /* background-color: rgba(33, 48, 33, 0.781); */
     border-bottom-right-radius: 10px;
+    background: rgb(13, 13, 57);
 
 }
 .navSpan{

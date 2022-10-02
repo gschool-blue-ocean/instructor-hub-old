@@ -6,7 +6,6 @@ const NavBar = () => {
   return (
     <>
       <div>
-        Changes
         <div className={styles.navBarCon} >
           <div className={styles.worddisplay}>
             <div className={styles.navOptLeft}>

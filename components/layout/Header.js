@@ -1,28 +1,43 @@
 import React from 'react'
 import headerStyle from '../../styles/Header.module.css'
 import { useState } from 'react'
+import { useRecoilState } from 'recoil'
+import { colorArrState } from '../state'
+import Image from 'next/image'
+import img from '../../image/logo.png'
 
 const Header = () => {
   const [dropDown, showDropDown] = useState(false);
 
-  const colorArray = ['green', 'black', 'orange', 'grey']
-  const [index, changeIndex] = useState(0);
-  const [color, changeColor] = useState(colorArray[index])
+  // const colorArr = ['linear-gradient(to right, rgb(27, 178, 183) , rgb(42, 109, 172))', 'linear-gradient(to right, rgb(40, 86, 47) , rgb(91, 184, 127))', 'linear-gradient(to right, rgb(27, 178, 183) , rgb(42, 109, 172))']
+  // const [colorArray, setColorArray] = useRecoilState(colorArrState)
+  // const [index, changeIndex] = useState(0);
+  // const [color, changeColor] = useState(colorArr[index])
 
-  const clickColor = () => {
-    if (index != 3) {
-      changeIndex(index => index + 1)
-    } else {
-      changeIndex(0);
-    }
-    changeColor(colorArray[index])
-  }
+
+
+  // const clickColor = () => {
+  //   if (index != 3) {
+  //     changeIndex(index => index + 1)
+  //   } else {
+  //     changeIndex(0);
+  //   }
+  //   changeColor(colorArr[index])
+  //   setColorArray(colorArr[index])
+  // }
+
 
   return (
     <>
-    <header className={headerStyle.header} style={{backgroundColor: color}}>
+    <header className={headerStyle.header}>
       <div className={headerStyle.wrapper}>
-        <div className={headerStyle.logoDiv}>logo</div>
+        <div className={headerStyle.logoDiv}>
+       {/* <Image src='/logo.png' layout='fill'sizes="(max-width: 768px) 100vw,
+              (max-width: 1200px) 50vw,
+              33vw"/> */}
+              {/* <img src={img} alt='logo'></img> */}
+              LOGO
+        </div>
         <div className={headerStyle.userDropDown}>
           <button onClick={() => showDropDown(!dropDown)} className={headerStyle.userButton}>
             username
@@ -31,7 +46,7 @@ const Header = () => {
           <div className={headerStyle.dropDown} style={dropDown ? {display: 'flex'} : {display: 'none'}}>
             <a>Logout</a>
             <a>Settings</a>
-            <a onClick={clickColor}>color</a>
+            <a >color</a>
           </div>
         </div>
       </div>
