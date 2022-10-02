@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { colorArrState } from '../state'
 import Image from 'next/image'
-import img from '../../image/logo.png'
+
 
 const Header = () => {
   const [dropDown, showDropDown] = useState(false);
@@ -32,10 +32,7 @@ const Header = () => {
     <header className={headerStyle.header}>
       <div className={headerStyle.wrapper}>
         <div className={headerStyle.logoDiv}>
-       {/* <Image src='/logo.png' layout='fill'sizes="(max-width: 768px) 100vw,
-              (max-width: 1200px) 50vw,
-              33vw"/> */}
-              {/* <img src={img} alt='logo'></img> */}
+       {/* <Image src='/logo2.png' width={80} height={80}/> */}
               LOGO
         </div>
         <div className={headerStyle.userDropDown}>

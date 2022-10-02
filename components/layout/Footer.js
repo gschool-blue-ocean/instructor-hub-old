@@ -17,7 +17,7 @@ const Footer = () => {
                         Technologies
                     </Link>
                     <Link href="/about">
-                        about
+                       ABOUT
                     </Link>
                 </div>
                 <a className={footerStyle.copyright}>
