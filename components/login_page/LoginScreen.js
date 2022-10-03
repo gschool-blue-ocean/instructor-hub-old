@@ -36,7 +36,9 @@ const LoginScreen = () => {
                                             </div>
                                         </div>
                                         <div className={styles.signInBtnContainer}>
-                                            <button type='submit' className={styles.signInBtn}>Sign in</button>
+                                            <Link href='/home'>
+                                            <button type='submit'  className={styles.signInBtn}>Sign in</button>
+                                            </Link>
                                         </div>
                                         <div>
                                             {"Don't have an account? Click "}
