@@ -15,8 +15,13 @@ export const notesState = atom({
   default: [],
 });
 
-export const pairsState = atom({
-  key: "pairs",
+export const codingGroupState = atom({
+  key: "coding group",
+  default: [],
+});
+
+export const assignedGroupState = atom({
+  key: "assigned group",
   default: [],
 });
 
@@ -27,5 +32,15 @@ export const projectsState = atom({
 
 export const studentsState = atom({
   key: "students",
+  default: [],
+});
+
+export const learnGradesState = atom({
+  key: "learn grades",
+  default: [],
+});
+
+export const projectGradesState = atom({
+  key: "project grades",
   default: [],
 });

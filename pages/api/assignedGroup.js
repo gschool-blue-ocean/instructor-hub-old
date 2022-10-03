@@ -11,12 +11,12 @@ const sql = postgres(
     : {}
 );
 
-export default async function pairsHandler(req, res) {
+export default async function assignedGroupingsHandler(req, res) {
   if (req.method === "GET") {
     try {
-      const pairs = await sql`
-      SELECT * FROM pairs`;
-      res.status(200).json({ pairs });
+      const studentGroupings = await sql`
+      SELECT * FROM assigned_student_groupings`;
+      res.status(200).json({ studentGroupings });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
