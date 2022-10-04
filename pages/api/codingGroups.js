@@ -11,6 +11,21 @@ const sql = postgres(
     : {}
 );
 
+// export default async function codingGroupsHandler(req, res) {
+//   if (req.method === "GET") {
+//     try {
+//       const codingGroups = await sql`
+//       SELECT * FROM coding_groups`;
+//       res.status(200).json({ codingGroups });
+//     } catch (err) {
+//       console.error(err);
+//       return res.status(500).json({ msg: "Messed up on our end" });
+//     }
+//   } else {
+//     res.status(400).json({ msg: "You messed up" });
+//   }
+// }
+
 export default async function codingGroupsHandler(req, res) {
   if (req.method === "GET") {
     try {
@@ -19,6 +34,17 @@ export default async function codingGroupsHandler(req, res) {
       res.status(200).json({ codingGroups });
     } catch (err) {
       console.error(err);
+      return res.status(500).json({ msg: "Messed up on our end" });
+    }
+  } else if (req.method === "POST") {
+    try {
+      const { group_id } = req.body;
+      console.log(req.body);
+      const createGroup = await sql`
+               INSERT INTO pairs ( group_id ) VALUES (${group_id}) RETURNING *`;
+      res.status(200).json({ createGroup });
+    } catch (error) {
+      console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
   } else {
