@@ -4,6 +4,24 @@ import styles from "../../../styles/UpdateModal.module.css";
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [modal, setModal] = useState(false);
 
+  // This will likely be replaced by some value grabbed from state/Recoil.
+  const cohort = {};
+
+  // In addition, it will be necessary to grab
+  // "current student" from state.
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    const target = e.target;
+    let formData = new FormData(target);
+    let student = { studentName: {} };
+    for (const pair of formData.entries()) {
+      student.studentName[pair[0]] = pair[1];
+    }
+    cohort = { ...student };
+    console.log("Update Modal: submitHandler returns: ", cohort);
+  };
+
   return (
     <>
       {showUpdateModal ? (
@@ -23,8 +41,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                 Notes. Use number keys to select aptitude, hit Enter to move to
                 next student.
               </p>
-              <form>
-                <label htmlFor="Tech">Technical Aptitude</label>
+              <form onSubmit={submitHandler}>
+                <label htmlFor="Tech">Technical Aptitude</label> <br />
                 <select id="Tech" name="Tech" required>
                   <option value="none" selected disabled hidden>
                     Select an Option
@@ -39,9 +57,9 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                   <option value="4 - Exceeds standard">
                     4 - Exceeds standard
                   </option>
-                </select>
-
-                <label htmlFor="Team">Teamwork Aptitude</label>
+                </select>{" "}
+                <br />
+                <label htmlFor="Team">Teamwork Aptitude</label> <br />
                 <select id="Team" name="Team" required>
                   <option value="none" selected disabled hidden>
                     Select an Option
@@ -56,16 +74,18 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                   <option value="4 - Exceeds standard">
                     4 - Exceeds standard
                   </option>
-                </select>
-
-                <label htmlFor="Notes">Notes</label>
+                </select>{" "}
+                <br />
+                <label htmlFor="Notes">Notes</label> <br />
                 <textarea
                   id="Notes"
                   name="Notes"
                   rows="10"
                   cols="30"
                   required
-                ></textarea>
+                ></textarea>{" "}
+                <br />
+                <input type="submit" value="Submit" />
               </form>
             </div>
           </div>
