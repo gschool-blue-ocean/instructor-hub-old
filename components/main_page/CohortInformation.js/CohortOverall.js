@@ -32,16 +32,18 @@ const CohortOverall = () => {
   const [techAvg, setTechAvg] = useState(90);
   const [teamAvg, setTeamAvg] = useState(60);
 
-
   const randomizer = () => {
     const result = Math.floor(Math.random() * 100);
     return result;
   };
 
-  // useEffect(() => {
-  //   setTechAvg(() => randomizer());
-  //   setTeamAvg(() => randomizer());
-  // }, [techAvg, teamAvg]);
+  // The GRAPH - using ChartJS, we want it to be
+  // dynamic, responsive to changes in the
+  // cohort averages.
+  // Would probably be best if the graph were horizontal
+  // so that it fits nicer in the panel.
+  // Also, what's up with the title being cut off? Need
+  // to figure out cohesive styling
 
   const data = {
     labels: ["Cohort Tech Avg", "Cohort Teamwork Avg"],
@@ -101,7 +103,7 @@ const CohortOverall = () => {
       <div id="barHolder">
         <Bar data={data} height={300} options={options} />
       </div>
-      <button
+      {/* <button
         id="techRandomizerButton"
         onClick={() => setTechAvg(() => randomizer)}
       >
@@ -112,7 +114,7 @@ const CohortOverall = () => {
         onClick={() => setTeamAvg(() => randomizer)}
       >
         Randomize Cohort Team Average
-      </button>
+      </button> */}
     </div>
   );
 };
