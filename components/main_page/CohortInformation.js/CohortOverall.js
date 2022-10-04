@@ -113,16 +113,18 @@ const CohortOverall = () => {
       >
         Randomize Cohort Team Average
       </button> */}
-      <div className={overallStyles.link}>
-        <u onClick={openUpdateModal}>Weekly Update</u>
+      <div className={overallStyles.textContent}>
+        <div className={overallStyles.link}>
+          <u onClick={openUpdateModal}>Weekly Update</u>
+        </div>
+        <UpdateModal
+          showUpdateModal={showUpdateModal}
+          setShowUpdateModal={setShowUpdateModal}
+          onClose={() => {
+            setShowUpdateModal(false);
+          }}
+        />
       </div>
-      <UpdateModal
-        showUpdateModal={showUpdateModal}
-        setShowUpdateModal={setShowUpdateModal}
-        onClose={() => {
-          setShowUpdateModal(false);
-        }}
-      />
     </div>
   );
 };

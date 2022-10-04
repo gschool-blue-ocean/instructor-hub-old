@@ -9,13 +9,25 @@
   width: 315px;
   height: 475px;
   /* border: 1px solid; */
-  padding: 0px 0px;
+  padding: 0px;
   margin: 0px 0px;
+}
+
+.barHolder {
+  padding: 5px;
+}
+
+.textContent {
+  background: #0b131b61;
 }
 
 .link {
   border-bottom: 1px solid lightgray;
-  padding-bottom: 30px;
+  padding: 5px;
+}
+
+.link:hover {
+  background: rgba(3, 29, 52, 0.776);
 }
 
 .link u {
