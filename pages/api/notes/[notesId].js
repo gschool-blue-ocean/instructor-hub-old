@@ -13,7 +13,7 @@ const sql = postgres(
 
 export default async function getNotes(req, res) {
   const id = req.query.notesId;
-  console.log(`Here is ${id}`);
+
   if (req.method === "DELETE") {
     try {
       const deleteNotes = await sql`
@@ -26,9 +26,9 @@ export default async function getNotes(req, res) {
   } else if (req.method === "PATCH") {
     try {
       const { instructor_notes, SEIR_notes } = req.body;
-      const patchStudents = await sql`
+      const patchNotes = await sql`
             UPDATE notes SET instructor_notes = ${instructor_notes}, SEIR_notes = ${SEIR_notes} WHERE student_id = ${id}`;
-      res.status(200).json({ patchStudents });
+      res.status(200).json({ patchNotes });
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });

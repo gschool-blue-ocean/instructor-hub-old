@@ -12,7 +12,7 @@ const sql = postgres(
 );
 
 export default async function getStudents(req, res) {
-  // const id = req.query.studentsid;
+  const id = req.query.studentsId;
 
   if (req.method === "DELETE") {
     try {
@@ -25,8 +25,19 @@ export default async function getStudents(req, res) {
     }
   } else if (req.method === "PATCH") {
     try {
+      const {
+        name_first,
+        name_last,
+        learn_avg,
+        project_avg,
+        server_side_test,
+        client_side_test,
+        soft_skills,
+        cohort,
+        ETS_date,
+      } = req.body;
       const patchStudents = await sql`
-            UPDATE students SET name_first = ${req.body.name_first} WHERE student_id = ${id}`;
+            UPDATE students SET name_first = ${name_first}, name_last = ${name_last}, learn_avg = ${learn_avg}, project_avg = ${project_avg}, server_side_test = ${server_side_test}, client_side_test = ${client_side_test}, soft_skills = ${soft_skills}, cohort = ${cohort}, ETS_date = ${ETS_date} WHERE student_id = ${id}`;
       res.status(200).json({ patchStudents });
     } catch (error) {
       console.error("Bad news in index api: ", error);
