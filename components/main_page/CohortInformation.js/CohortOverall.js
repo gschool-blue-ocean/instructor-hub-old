@@ -32,10 +32,10 @@ const CohortOverall = () => {
   const [techAvg, setTechAvg] = useState(90);
   const [teamAvg, setTeamAvg] = useState(60);
 
-  const randomizer = () => {
-    const result = Math.floor(Math.random() * 100);
-    return result;
-  };
+  // const randomizer = () => {
+  //   const result = Math.floor(Math.random() * 100);
+  //   return result;
+  // };
 
   // The GRAPH - using ChartJS, we want it to be
   // dynamic, responsive to changes in the
