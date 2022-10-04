@@ -14,6 +14,7 @@ import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
+import UpdateModal from "./UpdateModal";
 
 ChartJS.register(
   CategoryScale,
@@ -30,6 +31,12 @@ ChartJS.register(
 const CohortOverall = () => {
   const [techAvg, setTechAvg] = useState(70);
   const [teamAvg, setTeamAvg] = useState(30);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [selectedStudents, setSelectedStudents] = useState({});
+
+  const openUpdateModal = () => {
+    setShowUpdateModal((prev) => !prev);
+  };
 
   // const randomizer = () => {
   //   const result = Math.floor(Math.random() * 100);
@@ -106,6 +113,18 @@ const CohortOverall = () => {
       >
         Randomize Cohort Team Average
       </button> */}
+      <div className={overallStyles.textContent}>
+        <div className={overallStyles.link}>
+          <u onClick={openUpdateModal}>Weekly Update</u>
+        </div>
+        <UpdateModal
+          showUpdateModal={showUpdateModal}
+          setShowUpdateModal={setShowUpdateModal}
+          onClose={() => {
+            setShowUpdateModal(false);
+          }}
+        />
+      </div>
     </div>
   );
 };
