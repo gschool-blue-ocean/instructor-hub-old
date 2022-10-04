@@ -7,6 +7,7 @@ const StudentSummary = () => {
   const [showGitHub, setShowGitHub] = useState(false);
 
   return (
+
     <div className = {studentStyle.border}>
       <div>
         <div className = {studentStyle.topBorder}>
@@ -29,25 +30,23 @@ const StudentSummary = () => {
                 <tr className= {studentStyle.headerRow}>
                   <th></th>
                   <th className= {studentStyle.header} scope= "col">Name
-                    <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/>
+                    {/* <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/> */}
                   </th>
                   <th className= {studentStyle.header} scope= "col">Technical Skills
-                    <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/>
+                    {/* <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/> */}
                   </th>
                   <th className= {studentStyle.header} scope= "col">Progress
-                    <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/>
+                    {/* <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/> */}
                   </th>
                   <th className= {studentStyle.header} scope= "col">Comments
-                    <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/>
+                    {/* <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/> */}
                   </th>
                   <th className= {studentStyle.header} scope= "col"></th>
                 </tr>
               </thead>
               <tbody className= {studentStyle.tbody}>
-                <tr className= {studentStyle.tbodyRow}>
-                  <td>
-                    <input type = "checkbox" name = "row1"></input>
-                  </td>
+                <tr className= {studentStyle.tbodyRow} >
+                  <td><input type = "checkbox" name = "row1"></input></td>
                   <td className= {studentStyle.content}>student1</td>
                   <td className= {studentStyle.content}>04/100</td> 
                   <td className= {studentStyle.content}>Responsive</td>
@@ -60,10 +59,9 @@ const StudentSummary = () => {
                     </svg>
                   </td> 
                 </tr>
-                <tr className= {studentStyle.tbodyRow}>
-                  <td>
-                    <input type = "checkbox" name = "row2"></input>
-                  </td>
+                
+                <tr className= {studentStyle.tbodyRow} >
+                  <td><input type = "checkbox" name = "row2"></input></td>
                   <td className= {studentStyle.content}>student2</td>
                   <td className= {studentStyle.content}>70/100</td> 
                   <td className= {studentStyle.content}>Responsive</td>
@@ -76,21 +74,33 @@ const StudentSummary = () => {
                     </svg>
                   </td> 
                 </tr>
-                <tr className= {studentStyle.tbodyRow}>
-                  <td>
-                    <input type = "checkbox" name = "row3"></input>
-                  </td>
+                <tr className= {studentStyle.tbodyRow} >
+                  <td><input type = "checkbox" name = "row3"></input></td>
                   <td className= {studentStyle.content}>student3</td>
                   <td className= {studentStyle.content}>95/100</td> 
-                  <td className= {studentStyle.content}>Responsive</td>
-                  <td className= {studentStyle.content}>
-                    <img src="https://flyclipart.com/transparent-homework-png-homework-clipart-transparent-866722"/>
-                  </td>
-                  <td>
-                    <svg className= {studentStyle.dot}>
-                      <path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                    </svg>
-                  </td>  
+                  <td className= {studentStyle.content}><div className={studentStyle.color2}>On Track</div></td>
+                  <td className= {studentStyle.content}>Click Me</td> 
+                </tr>
+                <tr className= {studentStyle.tbodyRow} >
+                  <td><input type = "checkbox" name = "row3"></input></td>
+                  <td className= {studentStyle.content}>student4</td>
+                  <td className= {studentStyle.content}>95/100</td> 
+                  <td className= {studentStyle.content}><div className={studentStyle.color3}>At Risk</div></td>
+                  <td className= {studentStyle.content}>Click Me</td> 
+                </tr>
+                <tr className= {studentStyle.tbodyRow} >
+                  <td><input type = "checkbox" name = "row3"></input></td>
+                  <td className= {studentStyle.content}>student5</td>
+                  <td className= {studentStyle.content}>95/100</td> 
+                  <td className= {studentStyle.content}><div className={studentStyle.color}>Behind</div></td>
+                  <td className= {studentStyle.content}>Click Me</td> 
+                </tr>
+                <tr className= {studentStyle.tbodyRow} >
+                  <td><input type = "checkbox" name = "row3"></input></td>
+                  <td className= {studentStyle.content}>student6</td>
+                  <td className= {studentStyle.content}>95/100</td> 
+                  <td className= {studentStyle.content}><div className={studentStyle.color2}>On Track</div></td>
+                  <td className= {studentStyle.content}>Click Me</td> 
                 </tr>
               </tbody>
             </table>

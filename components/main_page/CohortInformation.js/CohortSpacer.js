@@ -2,6 +2,7 @@ import spacerStyle from '../../../styles/CohortSpacer.module.css'
 
 const CohortSpacer = () => {
   return (
+<<<<<<< HEAD
     <div className = {spacerStyle.spacerContainer}>
       <div>
         <div className = {spacerStyle.centerContainer}>
@@ -15,6 +16,9 @@ const CohortSpacer = () => {
         </div>
       </div>
     </div>
+=======
+    <div className = {spacerStyle.spacerContainer}></div>
+>>>>>>> 015b8a71f32b99237c19b6d02dc6fc3fe49b75c2
   )
 }
 
