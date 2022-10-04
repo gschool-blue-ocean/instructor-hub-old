@@ -70,8 +70,6 @@ const CohortOverall = () => {
     },
   };
 
-  // const labels = ["Tech Avg", "Team Avg"];
-
   const data = {
     labels: ["Cohort Averages"],
     datasets: [
@@ -90,8 +88,6 @@ const CohortOverall = () => {
     ],
     hoverOffset: 4,
   };
-
-  console.log("Data is: ", data);
 
   return (
     <div className={overallStyles.overallBorder}>
