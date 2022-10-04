@@ -18,7 +18,7 @@ export default async function getNotes(req, res) {
     try {
       const deleteNotes = await sql`
                DELETE FROM notes WHERE student_id = ${id}`;
-      res.status(200).json({ deleteStudents });
+      res.status(200).json({ deleteNotes });
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
