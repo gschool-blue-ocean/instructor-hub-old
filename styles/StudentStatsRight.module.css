@@ -1,0 +1,45 @@
+.rightMainDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    border-left: solid black 1px;
+}
+
+.progress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 200px;
+    width: 80%;
+    border: solid black 1px;
+}
+.pot {
+    font-size: 12px;
+    margin-top: 8px;
+    height: 10%;
+}
+
+.graph {
+    height: 90%;
+}
+
+.learnAverage {
+    width: 80%;
+    height: 30px;
+    border: solid black 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.projAverage {
+    margin-top: 10px;
+    width: 80%;
+    height: 30px;
+    border: solid black 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
