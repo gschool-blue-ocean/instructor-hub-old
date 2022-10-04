@@ -12,7 +12,7 @@ const sql = postgres(
 );
 
 export default async function getStudents(req, res) {
-  const id = req.query.studentsid;
+  // const id = req.query.studentsid;
 
   if (req.method === "DELETE") {
     try {
