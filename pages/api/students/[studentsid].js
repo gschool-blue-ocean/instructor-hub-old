@@ -37,7 +37,8 @@ export default async function getStudents(req, res) {
         ETS_date,
       } = req.body;
       const patchStudents = await sql`
-            UPDATE students SET name_first = ${name_first}, name_last = ${name_last}, learn_avg = ${learn_avg}, project_avg = ${project_avg}, server_side_test = ${server_side_test}, client_side_test = ${client_side_test}, soft_skills = ${soft_skills}, cohort = ${cohort}, ETS_date = ${ETS_date} WHERE student_id = ${id}`;
+            UPDATE students SET name_first = ${name_first}, name_last = ${name_last}, learn_avg = ${learn_avg}, project_avg = ${project_avg}, server_side_test = ${server_side_test}, client_side_test = ${client_side_test}, soft_skills = ${soft_skills}, cohort = ${cohort}, ETS_date = ${ETS_date} 
+            WHERE student_id = ${id}`;
       res.status(200).json({ patchStudents });
     } catch (error) {
       console.error("Bad news in index api: ", error);
