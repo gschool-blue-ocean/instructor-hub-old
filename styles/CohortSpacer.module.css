@@ -25,12 +25,13 @@
 }
 
 .newCohort_btn {
+    cursor: pointer;
     line-height: 42px;
     font-size: 15px;    
     padding: 1px 15px;
-    border-radius: 40px;
-    
+    border-radius: 10px;
     display: inline-block;
-    color: white;
-    background: radial-gradient(circle at -1% 57.5%, rgb(19, 170, 82) 0%, rgb(0, 102, 43) 90%);
+    text-decoration: none !important;
+    color: white !important;
+    background: #0b131b61;
 }
