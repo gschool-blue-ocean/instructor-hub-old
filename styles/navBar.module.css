@@ -21,10 +21,8 @@
 }
 .navOptMid:hover{
     color: white; 
-    /* background-image: linear-gradient(to right, #16213E, #002B5B); */
-    /* background-image: linear-gradient(to right, #445278, #2b66a8); */
-   /* background-color: rgba(33, 48, 33, 0.781); */
-   background: rgb(13, 13, 57);
+   /* background: rgb(13, 13, 57); */
+   background: rgba(3, 29, 52, 0.776);
 }
 .navOptLeft{
     display: flex;
@@ -34,9 +32,8 @@
 }
 .navOptLeft:hover{
     color: white; 
-    /* background-image: linear-gradient(to right, #445278, #2b66a8); */
-    /* background-color: rgba(33, 48, 33, 0.781); */
-    background: rgb(13, 13, 57);
+    /* background: rgb(13, 13, 57); */
+    background: rgba(3, 29, 52, 0.776);
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 
@@ -50,11 +47,10 @@
 }
 .navOptRight:hover{
     color: white; 
-    /* background-image: linear-gradient(to right, #445278, #2b66a8); */
     border-top-right-radius: 10px;
-    /* background-color: rgba(33, 48, 33, 0.781); */
     border-bottom-right-radius: 10px;
-    background: rgb(13, 13, 57);
+    /* background: rgb(13, 13, 57); */
+    background: rgba(3, 29, 52, 0.776);
 
 }
 .navSpan{
