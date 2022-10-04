@@ -28,81 +28,75 @@ ChartJS.register(
 );
 
 const CohortOverall = () => {
-  const [techAvg, setTechAvg] = useState(90);
-  const [teamAvg, setTeamAvg] = useState(60);
+  const [techAvg, setTechAvg] = useState(70);
+  const [teamAvg, setTeamAvg] = useState(30);
 
   // const randomizer = () => {
   //   const result = Math.floor(Math.random() * 100);
   //   return result;
   // };
 
-  // The GRAPH - using ChartJS, we want it to be
+  // *The GRAPH - using ChartJS, we want it to be
   // dynamic, responsive to changes in the
   // cohort averages.
-  // Need to make sure I'm bringing in averaged data
-  // for cohorts as state, I think
-  // Would probably be best if the graph were horizontal
-  // so that it fits nicer in the panel.
-  // Also, what's up with the title being cut off? Need
-  // to figure out cohesive styling.
-
-  const data = {
-    labels: ["Cohort Tech Avg", "Cohort Teamwork Avg"],
-    datasets: [
-      {
-        axis: "y",
-        label: "Cohort Averages",
-        data: [techAvg, teamAvg],
-        fill: false,
-        backgroundColor: ["green"],
-        borderColor: ["black"],
-        barThickness: 10,
-        borderWidth: 1,
-      },
-    ],
-  };
+  // *Need to make sure I'm bringing in averaged data
+  // for cohorts as state, I think.
+  // *Graph as its own sub-component?
 
   const options = {
-    plugins: {
-      legend: {
-        position: "top",
-        align: "start",
-        labels: {
-          boxWidth: 7,
-          usePointStyle: true,
-          pointStyle: "circle",
-        },
-        title: {
-          text: "Cohort Averages",
-          display: true,
-          color: "#000",
-          font: {
-            size: 18,
-          },
-        },
+    indexAxis: "y",
+    elements: {
+      bar: {
+        borderWidth: 2,
       },
     },
     scales: {
-      xAxis: {
-        display: false,
-      },
-      yAxis: {
-        max: 100,
+      x: {
+        suggestedMin: 0,
+        suggestedMax: 100,
       },
     },
-    elements: {
-      bar: {
-        barPercentage: 0.3,
-        categoryPercentage: 1,
+    maintainAspectRatio: false,
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom",
+        display: true,
+      },
+      title: {
+        display: false,
+        text: "Cohort Averages",
       },
     },
   };
 
+  // const labels = ["Tech Avg", "Team Avg"];
+
+  const data = {
+    labels: ["Cohort Averages"],
+    datasets: [
+      {
+        label: "Tech Avg",
+        data: [techAvg],
+        borderColor: "black",
+        backgroundColor: ["rgba(53, 162, 235, 0.5"],
+      },
+      {
+        label: "Team Avg",
+        data: [teamAvg],
+        borderColor: "black",
+        backgroundColor: ["rgba(255, 99, 132, 0.5)"],
+      },
+    ],
+    hoverOffset: 4,
+  };
+
+  console.log("Data is: ", data);
+
   return (
     <div className={overallStyles.overallBorder}>
-      <p>Cohort Overall</p>
       <div id="barHolder">
-        <Bar data={data} height={300} options={options} />
+        <Bar data={data} options={options} width={100} height={200} />
       </div>
       {/* <button
         id="techRandomizerButton"
