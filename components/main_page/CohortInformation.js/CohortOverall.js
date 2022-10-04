@@ -10,6 +10,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { Bar } from "react-chartjs-2";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import overallStyles from "../../../styles/CohortOverall.module.css";
 
 ChartJS.register(
   CategoryScale,
@@ -23,11 +27,6 @@ ChartJS.register(
   Legend
 );
 
-import { Bar } from "react-chartjs-2";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import overallStyles from "../../../styles/CohortOverall.module.css";
-
 const CohortOverall = () => {
   const [techAvg, setTechAvg] = useState(90);
   const [teamAvg, setTeamAvg] = useState(60);
@@ -40,10 +39,12 @@ const CohortOverall = () => {
   // The GRAPH - using ChartJS, we want it to be
   // dynamic, responsive to changes in the
   // cohort averages.
+  // Need to make sure I'm bringing in averaged data
+  // for cohorts as state, I think
   // Would probably be best if the graph were horizontal
   // so that it fits nicer in the panel.
   // Also, what's up with the title being cut off? Need
-  // to figure out cohesive styling
+  // to figure out cohesive styling.
 
   const data = {
     labels: ["Cohort Tech Avg", "Cohort Teamwork Avg"],
