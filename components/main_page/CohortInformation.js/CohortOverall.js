@@ -32,6 +32,7 @@ const CohortOverall = () => {
   const [techAvg, setTechAvg] = useState(90);
   const [teamAvg, setTeamAvg] = useState(60);
 
+
   const randomizer = () => {
     const result = Math.floor(Math.random() * 100);
     return result;
