@@ -32,16 +32,15 @@ CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
   username VARCHAR (20) UNIQUE,
   password TEXT NOT NULL,
-  default_cohort TEXT
+  default_cohort TEXT,
+  asana_access_token TEXT
 );
 CREATE TABLE cohorts (
   cohort_id SERIAL PRIMARY KEY,
   cohort TEXT,
   begin_date DATE,
   end_date DATE,
-  instructor TEXT,
-  SEIR1 TEXT,
-  SEIR2 TEXT
+  instructor TEXT
 );
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS
 CREATE TABLE coding_groups (
@@ -116,17 +115,13 @@ INSERT INTO cohorts (
     cohort,
     begin_date,
     end_date,
-    instructor,
-    SEIR1,
-    SEIR2
+    instructor
   )
 VALUES (
     'MCSP13',
     '01/01/2022',
     '04/04/2022',
-    'Egg',
-    'May',
-    'Growl'
+    'Egg'
   );
 INSERT INTO projects (project_name)
 VALUES ('Twiddler');
@@ -152,6 +147,7 @@ INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '2', '90');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '3', '60');
+INSERT INTO notes (student_id, note_date) VALUES ('1', NOW());
 
 --Populate student ID in other tables when new student created
 CREATE OR REPLACE FUNCTION student_copy() RETURNS TRIGGER AS $BODY$ BEGIN
@@ -244,6 +240,21 @@ INSERT
   OR
 UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 
+-- Auto change date when a comment is made (creates an update loop)
+-- CREATE OR REPLACE FUNCTION curr_date() RETURNS TRIGGER AS $BODY$ BEGIN
+-- UPDATE notes
+-- SET note_date = current_timestamp
+-- WHERE instructor_notes = new.instructor_notes OR SEIR_notes = new.SEIR_notes;
+-- RETURN new;
+-- END;
+-- $BODY$ language plpgsql;
+
+-- CREATE TRIGGER note_date
+-- AFTER
+-- INSERT
+--   OR
+-- UPDATE ON notes FOR EACH ROW EXECUTE PROCEDURE curr_date();
+
 -- Test for student_id population across tables in the db when new student created
 INSERT INTO students (
     name_first,
@@ -271,17 +282,13 @@ VALUES (
     cohort,
     begin_date,
     end_date,
-    instructor,
-    SEIR1,
-    SEIR2
+    instructor
   )
 VALUES (
     'MCSP15',
     '01/01/2022',
     '04/04/2022',
-    'Patsiukovich',
-    'May',
-    'Growl'
+    'Patsiukovich'
   );
 
 -- Test for triggers to recalc average on update
@@ -296,5 +303,10 @@ VALUES ('1', '4', '100');
 
 -- Test of users password MD5 hash
 INSERT INTO users (
-  username, password,
-  default_cohort) VALUES ('testuser', crypt('12345', gen_salt('bf')), 'MCSP13');
+  username, password, 
+  default_cohort, 
+  asana_access_token) VALUES ('testuser', crypt('12345', gen_salt('bf')), 'MCSP13', 'here_goes_an_asana_access_token');
+
+-- Test of date update for notes
+UPDATE notes SET SEIR_notes = 'this is a test of the change date on note update feature' WHERE student_id = '1';
+UPDATE notes SET note_date = NOW() WHERE student_id = '2';
