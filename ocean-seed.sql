@@ -89,15 +89,13 @@ INSERT INTO students (name_first, name_last, server_side_test, client_side_test,
 INSERT INTO cohorts (cohort, begin_date, end_date, instructor, SEIR1, SEIR2) 
   VALUES ('MCSP13', '01/01/2022', '04/04/2022', 'Egg', 'May', 'Growl');
 INSERT INTO projects (project_name) VALUES ('Twiddler');
+INSERT INTO projects (project_name) VALUES ('Pixel Art Maker');
+INSERT INTO projects (project_name) VALUES ('Dancers');
 INSERT INTO learn (assessment_name) VALUES ('Ajax');
+INSERT INTO learn (assessment_name) VALUES ('Objects');
+INSERT INTO learn (assessment_name) VALUES('SQL');
 
 
-INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '4');
-INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '4');
-INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '2');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '99');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '90');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '60');
 
 
 --EXAMPLE QUERY: GET ALL LEARN GRADES FOR A STUDENT BY THEIR ID
@@ -114,7 +112,7 @@ INNER JOIN students ON students.student_id = project_grades.student_id
 WHERE project_grades.student_id = 1;
 
 
---CALCULATE STUDENT'S AVERAGE PROJECT SCROE/RATING
+--EXAMPLE UPDATE: CALCULATE STUDENT'S AVERAGE PROJECT SCROE/RATING
 WITH grades AS (
    SELECT AVG(project_grades.project_grade) as avg
     FROM project_grades
@@ -125,7 +123,7 @@ SET project_avg = grades.avg
 FROM grades;
 
 
---CALCULATE STUDENT'S LEARN AVERAGE
+--EXAMPLE UPDATE: CALCULATE STUDENT'S LEARN AVERAGE
 WITH grades AS (
    SELECT AVG(learn_grades.assessment_grade) as avg
     FROM learn_grades
@@ -137,13 +135,15 @@ FROM grades;
 
 SELECT * FROM students;
 
----UPDATE PROJECTS AVG WHEN NEW GRADE IS ADDED OR UPDATED TO PROJECTS. 
+
+
+--UPDATE PROJECT AVG WHEN NEW GRADE IS ADDED OR UPDATED TO PROJECTS. 
+-------------------------------------------------------------------------
 
 --FUNCTION: UPDATE STUDENT'S PROJECT AVG SCORE
 CREATE OR REPLACE FUNCTION calc_projavg()
   RETURNS trigger AS $$
 BEGIN
-    raise notice 'what should be returned?';
 WITH grades AS (
    SELECT AVG(project_grades.project_grade) as avg
     FROM project_grades
@@ -167,12 +167,12 @@ CREATE OR REPLACE TRIGGER project
 
 
 ---UPDATE LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN. 
+-------------------------------------------------------------------------
 
 --FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
 CREATE OR REPLACE FUNCTION calc_learnavg()
   RETURNS trigger AS $$
 BEGIN
-    raise notice 'what should be returned?';
 WITH grades AS (
    SELECT AVG(learn_grades.assessment_grade) as avg
     FROM learn_grades
@@ -193,23 +193,52 @@ CREATE OR REPLACE TRIGGER project
   EXECUTE PROCEDURE calc_learnavg();
 
 
-INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '1');
-INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '1');
-INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '1');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '100');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '100');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '100');
-
-
 SELECT * FROM students;
 
+INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '1', '4');
+INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '2', '4');
+INSERT INTO project_grades (student_id, project_id, project_grade) VALUES ('1', '3', '2');
 
 SELECT project_grade, name_first 
 FROM project_grades
 INNER JOIN students ON students.student_id = project_grades.student_id
 WHERE project_grades.student_id = 1;
 
+
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '1', '99');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '2', '90');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade) VALUES ('1', '3', '60');
+
 SELECT assessment_grade, name_first 
 FROM learn_grades
 INNER JOIN students ON students.student_id = learn_grades.student_id
 WHERE learn_grades.student_id = 1;
+
+
+SELECT * FROM students;
+
+UPDATE project_grades SET project_grade = 1 WHERE (student_id = 1 AND project_id = 1);
+UPDATE learn_grades SET assessment_grade = 60 WHERE (student_id = 1 AND assessment_id = 1);
+
+SELECT project_grade, name_first 
+FROM project_grades
+INNER JOIN students ON students.student_id = project_grades.student_id
+WHERE project_grades.student_id = 1;
+
+
+
+SELECT 
+  learn.assessment_name AS assessment_name, 
+  students.name_first AS first_name,
+  assessment_grade
+FROM learn_grades
+INNER JOIN learn ON learn.assessment_id = learn_grades.assessment_id
+INNER JOIN students ON students.student_id = learn_grades.student_id
+WHERE learn_grades.student_id = 1;
+
+
+SELECT * FROM students;
+
+
+
+
