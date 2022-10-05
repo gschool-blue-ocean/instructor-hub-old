@@ -11,30 +11,26 @@ const sql = postgres(
     : {}
 );
 
-export default async function cohortsHandler(req, res) {
+export default async function usersHandler(req, res) {
   if (req.method === "GET") {
     try {
-      const cohorts = await sql`
-      SELECT * FROM cohorts`;
-      res.status(200).json({ cohorts });
+      const students = await sql`
+      SELECT * FROM users`;
+      res.status(200).json({ students });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
   } else if (req.method === "POST") {
     try {
-      const { cohort, begin_date, end_date, instructor } = req.body;
-
-      const createCohort = await sql`
-               INSERT INTO cohorts ( 
-                cohort,
-                begin_date,
-                end_date,
-                instructor
-                )
-               VALUES (${cohort}, ${begin_date}, ${end_date}, ${instructor}) 
+      const { username, password, default_cohort, asana_access_token } =
+        req.body;
+      console.log(req.body);
+      const createStudent = await sql`
+               INSERT INTO users (  username, password, default_cohort, asana_access_token )
+               VALUES ( ${username}, ${password}, ${default_cohort}, ${asana_access_token}) 
                RETURNING *`;
-      res.status(200).json({ createCohort });
+      res.status(200).json(req.body);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
