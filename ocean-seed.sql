@@ -300,3 +300,6 @@ INSERT INTO users (
 -- Test of date update for notes
 UPDATE notes SET SEIR_notes = 'this is a test of the change date on note update feature' WHERE student_id = '1';
 UPDATE notes SET note_date = NOW() WHERE student_id = '2';
+
+-- Database statistics collector:
+-- SELECT * FROM pg_stat_activity
