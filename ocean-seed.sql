@@ -308,3 +308,11 @@ UPDATE notes SET note_date = NOW() WHERE student_id = '2';
 --select avg(learn_avg) from students;
 --select min(learn_avg) as min from students;
 --select max(learn_avg) as max from students;
+
+-- by cohort:
+-- learn avg
+-- learn max
+-- learn min
+
+-- - trigger: change to student learn_avg
+-- - function: recalculate average of learn average, where cohort_id = ?
