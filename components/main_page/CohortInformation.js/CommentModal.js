@@ -23,7 +23,7 @@ const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
                         <textarea className= {commentStyle.app_notes} placeholder= "Type your comment here"></textarea>
                     </div>
                     <div className= {commentStyle.oldComment}>If you wish to see your previous comment please click
-                        <a> here </a>
+                        <a> here</a>
                     </div>
                     </div>
                 </div>
