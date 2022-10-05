@@ -303,3 +303,8 @@ UPDATE notes SET note_date = NOW() WHERE student_id = '2';
 
 -- Database statistics collector:
 -- SELECT * FROM pg_stat_activity
+
+-- add to cohort?
+--select avg(learn_avg) from students;
+--select min(learn_avg) as min from students;
+--select max(learn_avg) as max from students;
