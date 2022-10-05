@@ -63,7 +63,7 @@ CREATE TABLE notes (
   name_last TEXT,
   instructor_notes TEXT,
   SEIR_notes TEXT,
-  note_date DATE,
+  note_date TIMESTAMPTZ,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 );
 --THIS ALLOWS TRACKIJNG STUDENTS' PROJECT RATINGS/SCORES
