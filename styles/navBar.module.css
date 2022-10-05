@@ -1,5 +1,58 @@
 .navBarCon {
-    width: 900px; 
-    height: 100px;
-    border-radius: solid 1px red;
+    width: 950px; 
+    min-width: 450px;
+    margin: 25px auto;
+}
+.worddisplay{
+    display: flex; 
+
+    height: 30px;
+    /* background: rgba(128, 128, 128, 0.59); */
+    background: rgba(69, 78, 106, 0.399) ;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgb(0 0 0 / 40%);
+
+}
+.navOptMid{
+    display: flex;
+    align-items: center;
+    padding: 0px 94.5px;
+    color: white; 
+}
+.navOptMid:hover{
+    color: white; 
+   /* background: rgb(13, 13, 57); */
+   background: rgba(3, 29, 52, 0.776);
+}
+.navOptLeft{
+    display: flex;
+    align-items: center;
+    padding: 0px 94.5px;
+    color: white;
+}
+.navOptLeft:hover{
+    color: white; 
+    /* background: rgb(13, 13, 57); */
+    background: rgba(3, 29, 52, 0.776);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+
+
+}
+.navOptRight{
+    display: flex;
+    align-items: center;
+    padding: 0px 94.5px;
+    color: white;
+}
+.navOptRight:hover{
+    color: white; 
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    /* background: rgb(13, 13, 57); */
+    background: rgba(3, 29, 52, 0.776);
+
+}
+.navSpan{
+    cursor: pointer;
 }
