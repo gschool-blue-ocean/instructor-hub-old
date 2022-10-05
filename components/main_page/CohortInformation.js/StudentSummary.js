@@ -159,10 +159,16 @@ const StudentSummary = () => {
           <div>
             <div className= {commentStyle.commentHeader}>
               <div>
-                <div className= {commentStyle.studentName}> Student 1 </div>
                 <div onClick={() => SetShowComment(false)} className= {commentStyle.close}></div>
+                <div className= {commentStyle.studentName}> Student 1 </div>
               </div>
             </div>
+              <div className= {commentStyle.content_container}>
+                <div className= {commentStyle.content}>
+                  <div className= {commentStyle.introSentence}> Please enter comments that you feel are relevant here:</div>
+                    <textarea className= {commentStyle.app_notes} placeholder= "Type your comment here"></textarea>
+                </div>
+              </div>
           </div>
         </div>
     </div>

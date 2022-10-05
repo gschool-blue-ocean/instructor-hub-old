@@ -27,17 +27,20 @@
 }
 
 .commentHeader {
-    position: sticky;
-    top: 0;
-    z-index: 32;
-    height: 50px;
-    border-radius: 10px 10px 0 0;
+    padding: 0px 0px 0px 0px;
+    text-align: left;
+    font-weight: 300;
+    font-size: 32px;
+    line-height: 36px;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-transform: uppercase;
+    flex-shrink: 0; 
 }
 
 .studentName {
-    text-align: center;
-    font-size: 30px;
-    color: black;
+    padding: 32px 32px 0px 32px;
+    display: block;
 }
 
 .close {
@@ -52,3 +55,41 @@
     width: 16px;
     opacity: 0.7;
 } 
+
+.content_container {
+    padding: 0 1px 1px 1px;
+    display: flex;
+}
+
+.content {
+    width: 100%;
+    overflow: auto;
+    word-wrap: break-word;
+    padding: 32px;
+    font-size: 14px;
+    color: white;
+    position: relative;
+    max-height: 594px;
+}
+
+.introSentence {
+    margin-bottom: 20px;
+    font-size: 14px;
+    word-wrap: break-word;
+    color: white;
+}
+
+.app_notes {
+    background-color: rgba( 0, 0, 0, 0.2 );
+    border-radius: 3px;
+    border: 1px solid #000;
+    box-shadow: 1px 1px 0 0 rgb(91 132 181 / 20%);
+    color: #C6D4DF;
+    margin-bottom: 6px;
+    outline: none;
+    padding: 4px 6px;
+    display: block;
+    width: calc(100% - 12px);
+    height: 100px;
+}
+
