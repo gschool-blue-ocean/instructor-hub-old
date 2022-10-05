@@ -1,37 +1,57 @@
 import { useState } from "react";
-import commentStyle from '../../../styles/CommentModal.module.css'
+import commentStyle from "../../../styles/CommentModal.module.css";
 
 const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
-  
-    return (
-      <>
-  {showCommentModal ? (
+  return (
+    <>
+      {showCommentModal ? (
         <div>
-        <div className={commentStyle.background} onClick={onClose}></div>
-            <div className= {commentStyle.container}>
-            <div className = {commentStyle.top_bar}></div>
+          <div className={commentStyle.background} onClick={onClose}></div>
+          <div className={commentStyle.container}>
+            <div className={commentStyle.top_bar}></div>
+            <div>
+              <div className={commentStyle.commentHeader}>
                 <div>
-                <div className= {commentStyle.commentHeader}>
-                    <div>
-                    <div onClick={onClose} className= {commentStyle.close}></div>
-                    <div className= {commentStyle.studentName}> Student 1 </div>
-                    </div>
+                  <div onClick={onClose} className={commentStyle.close}></div>
+                  <div className={commentStyle.studentName}> Student 1 </div>
                 </div>
-                    <div className= {commentStyle.content_container}>
-                    <div className= {commentStyle.content}>
-                        <div className= {commentStyle.introSentence}> Please enter comments that you feel are relevant below:</div>
-                        <textarea className= {commentStyle.app_notes} placeholder= "Type your comment here"></textarea>
+              </div>
+              <div className={commentStyle.content_container}>
+                <div className={commentStyle.content}>
+                    <div className= {commentStyle.commentBorder}>
+                        <div className= {commentStyle.instructorIcon}></div>
+                        <div className= {commentStyle.headerContainer}>
+                            <div className= {commentStyle.headerLayout}>
+                                <div className= {commentStyle.textColor}>
+                                    <div className= {commentStyle.inlineBlock}>
+                                        <h4 className= {commentStyle.userName}>Danny Boy</h4>
+                                    </div> 
+                                    <span className= {commentStyle.time}> Time</span>
+                                    <p className= {commentStyle.commentSection}>Danny Boy the Pipes are Calling Danny Boyyyyyy</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className= {commentStyle.oldComment}>If you wish to see your previous comment please click
-                        <a> here </a>
                     </div>
+                  </div>
+                  <div className={commentStyle.btn_container}>
+                    <div onClick={onClose} className={commentStyle.close_btn}>
+                      <div className={commentStyle.close_btn_medium}>
+                        <span className={commentStyle.cancel}> Close</span>
+                      </div>
                     </div>
+                    {/* <div className= {commentStyle.post_btn}>
+                        <div className= {commentStyle.post_btn_medium}>
+                            <span className= {commentStyle.post}>Post</span>
+                        </div>
+                    </div> */}
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-        ) : null}
-      </>
-    );
-  };
-  
-  export default CommentModal;
+      ) : null}
+    </>
+  );
+};
+
+export default CommentModal;

@@ -12,7 +12,7 @@
 .container {
     position: fixed;
     max-width: 1442px;
-    min-width: 700px;
+    min-width: 600px;
     z-index:1000;
     top: 50%;
     left: 50%;
@@ -46,6 +46,7 @@
 .studentName {
     padding: 32px 32px 0px 32px;
     display: block;
+    /* text-align: center; */
 }
 
 .close {
@@ -77,24 +78,90 @@
     max-height: 594px;
 }
 
-.introSentence {
-    margin-bottom: 20px;
-    font-size: 14px;
-    word-wrap: break-word;
-    color: white;
+.commentBorder {
+    border: 1px solid;
+    display: flex;
+    cursor: pointer;
 }
 
-.app_notes {
-    background-color: rgba( 0, 0, 0, 0.2 );
-    border-radius: 3px;
-    border: 1px solid #000;
-    box-shadow: 1px 1px 0 0 rgb(91 132 181 / 20%);
-    color: #C6D4DF;
-    margin-bottom: 6px;
-    outline: none;
-    padding: 4px 6px;
+.instructorIcon {
+    height: 44px;
+    width: 44px;
+    border-radius: 50%;
+    border: 1px solid;
+    margin-top: 17px;
+    margin-left: 5px;
+}
+
+.headerContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    width: 100%;
+}
+
+.headerLayout {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 10px;
+}
+
+.textColor {
+    color: #6e767d;
+}
+
+.inlineBlock {
+    display:inline-block;
+}
+
+.userName {
+    font-weight: 700;
+    color: #d9d9d9;
+    font-size: 15px;
+    display: inline-block;
+}
+
+.time {
+    font-size: 15px;
+}
+
+.commentSection {
+    font-size: 15px;
+    color: #d9d9d9;
+    margin-top: 2px;
+    max-width: 1024px;
+}
+
+.btn_container {
+    text-align: right;
+    margin: 0px 42px 16px 0px;
+}
+
+.close_btn {
+    border-radius: 5px;
+    border: none;
+    padding: 1px;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none !important;
+    color: white !important;
+    margin-right: 3px;
+    background: #0b131b61;
+}
+
+.close_btn_medium {
+    padding: 0 15px;
+    font-size: 15px;
+    line-height: 30px;
+}
+
+.cancel {
+    border-radius: 2px;
     display: block;
-    width: calc(100% - 12px);
-    height: 100px;
+    background: transparent;
+}
+
+.close_btn:hover {
+    background: rgba(3, 29, 52, 0.776);
 }
 
