@@ -19,7 +19,7 @@ const LoginScreen = () => {
                                     <form className={styles.signUpForm}>
                                         <div className={styles.accountInputContainer}>
                                             <div className={styles.signUp}>
-                                                Email Address
+                                                Username
                                             </div>
                                             <input className={styles.inputFields} type='email'></input>
                                         </div>

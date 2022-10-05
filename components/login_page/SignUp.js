@@ -18,7 +18,7 @@ const SignUp = () => {
                             <form className={styles.signUpForm}>
                                 <div className={styles.accountInputContainer}>
                                     <div className={styles.signUp}>
-                                        Email Address
+                                        Username
                                     </div>
                                     <input className={styles.inputFields} type='email'></input>
                                 </div>
@@ -34,12 +34,20 @@ const SignUp = () => {
                                     </div>
                                     <input className={styles.inputFields} type='password'></input>
                                 </div>
-                                {/* <div className='flex flex-row items-center cursor-pointer font-serif font-normal text-[12px]'>
-                                    <input type='checkbox' className='pt-[80px] pb-[150px] flex flex-col items-center font-normal font-serif text-[12px] cursor-pointer'></input>
-                                    <div className='text-[12px] select-none pl-[6px] block cursor-pointer font-normal font-serif'>
-                                        Remember me
-                                    </div>
-                                </div> */}
+                                
+                                <div className={styles.cohortSelectorDiv}>{'Select Cohort: '}
+                                    <select className={styles.cohortSelector}>
+                                        {/* add a for each so that it will auto create the options for us*/}
+                                        <option value="volvo">MCSP-13 Bravo</option>
+                                        <option value="saab">MCSP-13 Alpha</option>
+                                        <option value="fiat">MCSP-12</option>
+                                        <option value="audi">MCSP-11</option>
+                                    </select>
+                                </div>
+                                <div className={styles.accessTokenDiv}>
+                                    {'Asana API KEY: '}
+                                    <input type='text' className={styles.inputTokenField} placeholder='Optional'></input>
+                                </div>
                                 <div className={styles.signInBtnContainer}>
                                     <button type='submit' className={styles.signInBtn}>Create Account</button>
                                 </div>
