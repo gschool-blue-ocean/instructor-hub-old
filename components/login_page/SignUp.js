@@ -20,7 +20,7 @@ const SignUp = () => {
                                     <div className={styles.signUp}>
                                         Username
                                     </div>
-                                    <input className={styles.inputFields} type='email'></input>
+                                    <input className={styles.inputFields} type='text'></input>
                                 </div>
                                 <div className={styles.accountInputContainer}>
                                     <div className={styles.signUp}>
@@ -53,8 +53,8 @@ const SignUp = () => {
                                 </div>
                                 <div>
                                     {"Already have an account? Click "}
-                                    <Link href='/'>here</Link>
-                                    {" to sign in"}
+                                    <a href='/' className={styles.linkText}>here</a>
+                                    {" to sign in."}
                                 </div>
                             </form>
                         </div>
