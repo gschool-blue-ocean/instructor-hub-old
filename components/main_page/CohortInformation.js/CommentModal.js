@@ -22,6 +22,9 @@ const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
                         <div className= {commentStyle.introSentence}> Please enter comments that you feel are relevant below:</div>
                         <textarea className= {commentStyle.app_notes} placeholder= "Type your comment here"></textarea>
                     </div>
+                    <div className= {commentStyle.oldComment}>If you wish to see your previous comment please click
+                        <a> here </a>
+                    </div>
                     </div>
                 </div>
             </div>

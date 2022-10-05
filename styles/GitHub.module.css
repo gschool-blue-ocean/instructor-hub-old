@@ -15,7 +15,7 @@
     z-index:1000;
     top: 50%;
     left: 50%;
-    height: 80%;
+    /* height: 80%; */
     font-weight: normal;
     background: rgb(69, 78, 106);
     transform: translate(-50%, -50%);
@@ -89,6 +89,8 @@
 .tableListItem {
     position: relative;
     border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
     /* display: table-row; */
     list-style: none;
 }
