@@ -21,13 +21,13 @@ const LoginScreen = () => {
                                             <div className={styles.signUp}>
                                                 Username
                                             </div>
-                                            <input className={styles.inputFields} type='email'></input>
+                                            <input className={styles.inputFields} type='text' required></input>
                                         </div>
                                         <div className={styles.accountInputContainer}>
                                             <div className={styles.signUp}>
                                                 Password
                                             </div>
-                                            <input className={styles.inputFields} type='password'></input>
+                                            <input className={styles.inputFields} type='password' required></input>
                                         </div>
                                         <div className={styles.rememberMeContainer}>
                                             <input type='checkbox' className={styles.rememberMeCheckBox}></input>
@@ -42,7 +42,7 @@ const LoginScreen = () => {
                                         </div>
                                         <div>
                                             {"Don't have an account? Click "}
-                                            <Link href='/signup'>here!</Link>
+                                            <a href='/signup' className={styles.linkText}>here!</a>
                                         </div>
                                         {/* <div className='text-[12px] font-[500] text-center'>&nbsp;</div> */}
                                     </form>
