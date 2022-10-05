@@ -240,21 +240,6 @@ INSERT
   OR
 UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 
--- Auto change date when a comment is made (creates an update loop)
--- CREATE OR REPLACE FUNCTION curr_date() RETURNS TRIGGER AS $BODY$ BEGIN
--- UPDATE notes
--- SET note_date = current_timestamp
--- WHERE instructor_notes = new.instructor_notes OR SEIR_notes = new.SEIR_notes;
--- RETURN new;
--- END;
--- $BODY$ language plpgsql;
-
--- CREATE TRIGGER note_date
--- AFTER
--- INSERT
---   OR
--- UPDATE ON notes FOR EACH ROW EXECUTE PROCEDURE curr_date();
-
 -- Test for student_id population across tables in the db when new student created
 INSERT INTO students (
     name_first,
