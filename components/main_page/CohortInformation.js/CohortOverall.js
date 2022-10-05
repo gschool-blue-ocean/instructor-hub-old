@@ -10,6 +10,11 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { Bar } from "react-chartjs-2";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import overallStyles from "../../../styles/CohortOverall.module.css";
+import UpdateModal from "./UpdateModal";
 
 ChartJS.register(
   CategoryScale,
@@ -23,85 +28,80 @@ ChartJS.register(
   Legend
 );
 
-import { Bar } from "react-chartjs-2";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import overallStyles from "../../../styles/CohortOverall.module.css";
-
 const CohortOverall = () => {
-  const [techAvg, setTechAvg] = useState(90);
-  const [teamAvg, setTeamAvg] = useState(60);
+  const [techAvg, setTechAvg] = useState(70);
+  const [teamAvg, setTeamAvg] = useState(30);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [selectedStudents, setSelectedStudents] = useState({});
 
-
-  const randomizer = () => {
-    const result = Math.floor(Math.random() * 100);
-    return result;
+  const openUpdateModal = () => {
+    setShowUpdateModal((prev) => !prev);
   };
 
-  // useEffect(() => {
-  //   setTechAvg(() => randomizer());
-  //   setTeamAvg(() => randomizer());
-  // }, [techAvg, teamAvg]);
+  // const randomizer = () => {
+  //   const result = Math.floor(Math.random() * 100);
+  //   return result;
+  // };
 
-  const data = {
-    labels: ["Cohort Tech Avg", "Cohort Teamwork Avg"],
-    datasets: [
-      {
-        axis: "y",
-        label: "Cohort Averages",
-        data: [techAvg, teamAvg],
-        fill: false,
-        backgroundColor: ["green"],
-        borderColor: ["black"],
-        barThickness: 10,
-        borderWidth: 1,
-      },
-    ],
-  };
+  // *The GRAPH - using ChartJS, we want it to be
+  // dynamic, responsive to changes in the
+  // cohort averages.
+  // *Need to make sure I'm bringing in averaged data
+  // for cohorts as state, I think.
+  // *Graph as its own sub-component?
 
   const options = {
-    plugins: {
-      legend: {
-        position: "top",
-        align: "start",
-        labels: {
-          boxWidth: 7,
-          usePointStyle: true,
-          pointStyle: "circle",
-        },
-        title: {
-          text: "Cohort Averages",
-          display: true,
-          color: "#000",
-          font: {
-            size: 18,
-          },
-        },
+    indexAxis: "y",
+    elements: {
+      bar: {
+        borderWidth: 2,
       },
     },
     scales: {
-      xAxis: {
+      x: {
+        suggestedMin: 0,
+        suggestedMax: 100,
+      },
+    },
+    maintainAspectRatio: false,
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom",
+        display: true,
+      },
+      title: {
         display: false,
-      },
-      yAxis: {
-        max: 100,
+        text: "Cohort Averages",
       },
     },
-    elements: {
-      bar: {
-        barPercentage: 0.3,
-        categoryPercentage: 1,
+  };
+
+  const data = {
+    labels: ["Cohort Averages"],
+    datasets: [
+      {
+        label: "Tech Avg",
+        data: [techAvg],
+        borderColor: "black",
+        backgroundColor: ["rgba(53, 162, 235, 0.5"],
       },
-    },
+      {
+        label: "Team Avg",
+        data: [teamAvg],
+        borderColor: "black",
+        backgroundColor: ["rgba(255, 99, 132, 0.5)"],
+      },
+    ],
+    hoverOffset: 4,
   };
 
   return (
     <div className={overallStyles.overallBorder}>
-      <p>Cohort Overall</p>
       <div id="barHolder">
-        <Bar data={data} height={300} options={options} />
+        <Bar data={data} options={options} width={100} height={200} />
       </div>
-      <button
+      {/* <button
         id="techRandomizerButton"
         onClick={() => setTechAvg(() => randomizer)}
       >
@@ -112,7 +112,19 @@ const CohortOverall = () => {
         onClick={() => setTeamAvg(() => randomizer)}
       >
         Randomize Cohort Team Average
-      </button>
+      </button> */}
+      <div className={overallStyles.textContent}>
+        <div className={overallStyles.link}>
+          <u onClick={openUpdateModal}>Weekly Update</u>
+        </div>
+        <UpdateModal
+          showUpdateModal={showUpdateModal}
+          setShowUpdateModal={setShowUpdateModal}
+          onClose={() => {
+            setShowUpdateModal(false);
+          }}
+        />
+      </div>
     </div>
   );
 };

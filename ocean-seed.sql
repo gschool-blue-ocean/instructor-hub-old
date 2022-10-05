@@ -1,4 +1,6 @@
+-- Clean the slate
 DROP TABLE IF EXISTS students CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS cohorts CASCADE;
 DROP TABLE IF EXISTS coding_groups CASCADE;
 DROP TABLE IF EXISTS notes CASCADE;
@@ -7,6 +9,12 @@ DROP TABLE IF EXISTS learn CASCADE;
 DROP TABLE IF EXISTS project_grades CASCADE;
 DROP TABLE IF EXISTS learn_grades CASCADE;
 DROP TABLE IF EXISTS assigned_student_groupings CASCADE;
+DROP TABLE IF EXISTS pairs CASCADE;
+DROP EXTENSION IF EXISTS pgcrypto;
+
+CREATE EXTENSION pgcrypto;
+
+-- Create tables and relations
 CREATE TABLE students (
   student_id SERIAL PRIMARY KEY,
   name_first TEXT,
@@ -17,19 +25,31 @@ CREATE TABLE students (
   client_side_test TEXT,
   soft_skills TEXT,
   cohort TEXT,
-  ETS_date DATE
+  ETS_date DATE,
+  github TEXT
+);
+CREATE TABLE users (
+  user_id SERIAL PRIMARY KEY,
+  username VARCHAR (20) UNIQUE,
+  password TEXT NOT NULL,
+  default_cohort TEXT,
+  asana_access_token TEXT
 );
 CREATE TABLE cohorts (
   cohort_id SERIAL PRIMARY KEY,
   cohort TEXT,
   begin_date DATE,
   end_date DATE,
-  instructor TEXT,
-  SEIR1 TEXT,
-  SEIR2 TEXT
+  instructor TEXT
 );
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS
-CREATE TABLE coding_groups (group_id SERIAL PRIMARY KEY);
+CREATE TABLE coding_groups (
+  group_id SERIAL PRIMARY KEY,
+  group_name TEXT,
+  cohort_id INT,
+  FOREIGN KEY (cohort_id) REFERENCES cohorts(cohort_id) ON DELETE CASCADE
+  );
+
 CREATE TABLE assigned_student_groupings (
   group_assignment_id SERIAL PRIMARY KEY,
   student_id INT,
@@ -69,6 +89,8 @@ CREATE TABLE learn_grades (
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE CASCADE
 );
+
+-- Fake Data for testing
 INSERT INTO students (
     name_first,
     name_last,
@@ -76,7 +98,8 @@ INSERT INTO students (
     client_side_test,
     soft_skills,
     cohort,
-    ETS_date
+    ETS_date,
+    github
   )
 VALUES (
     'John',
@@ -85,23 +108,20 @@ VALUES (
     'pass',
     '2',
     'MCSP13',
-    '12/31/2022'
+    '12/31/2022',
+    'bronzedog'
   );
 INSERT INTO cohorts (
     cohort,
     begin_date,
     end_date,
-    instructor,
-    SEIR1,
-    SEIR2
+    instructor
   )
 VALUES (
     'MCSP13',
     '01/01/2022',
     '04/04/2022',
-    'Egg',
-    'May',
-    'Growl'
+    'Egg'
   );
 INSERT INTO projects (project_name)
 VALUES ('Twiddler');
@@ -127,6 +147,8 @@ INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '2', '90');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '3', '60');
+INSERT INTO notes (student_id, note_date) VALUES ('1', NOW());
+
 --Populate student ID in other tables when new student created
 CREATE OR REPLACE FUNCTION student_copy() RETURNS TRIGGER AS $BODY$ BEGIN
 INSERT INTO learn_grades(student_id)
@@ -141,16 +163,19 @@ $BODY$ language plpgsql;
 CREATE TRIGGER trig_copy
 AFTER
 INSERT ON students FOR EACH ROW EXECUTE PROCEDURE student_copy();
---EXAMPLE QUERY: GET ALL LEARN GRADES FOR A STUDENT BY THEIR ID
--- SELECT assessment_grade, name_first 
--- FROM learn_grades
--- INNER JOIN students ON students.student_id = learn_grades.student_id
--- WHERE learn_grades.student_id = 1;
---EXAMPLE QUERY: GET ALL PROJECT SCORES FOR A STUDENT BY THEIR ID
--- SELECT project_grade, name_first 
--- FROM project_grades
--- INNER JOIN students ON students.student_id = project_grades.student_id
--- WHERE project_grades.student_id = 1;
+
+-- Populate cohort ID in coding groups when a new cohort is created
+CREATE OR REPLACE FUNCTION cohort_copy() RETURNS TRIGGER AS $BODY$ BEGIN
+INSERT INTO coding_groups(cohort_id)
+VALUES(new.cohort_id);
+RETURN new;
+END;
+$BODY$ language plpgsql;
+CREATE TRIGGER trig_copy
+AFTER
+INSERT ON cohorts FOR EACH ROW EXECUTE PROCEDURE cohort_copy();
+
+
 --CALCULATE STUDENT'S AVERAGE PROJECT SCROE/RATING
 WITH grades AS (
   SELECT AVG(project_grades.project_grade) as avg
@@ -169,10 +194,11 @@ WITH grades AS (
 UPDATE students
 SET learn_avg = grades.avg
 FROM grades;
--- SELECT * FROM students;
+
+
 ---UPDATE PROJECTS AVG WHEN NEW GRADE IS ADDED OR UPDATED TO PROJECTS. 
 --FUNCTION: UPDATE STUDENT'S PROJECT AVG SCORE
-CREATE OR REPLACE FUNCTION calc_projavg() RETURNS trigger AS $$ BEGIN -- raise notice 'what should be returned?';
+CREATE OR REPLACE FUNCTION calc_projavg() RETURNS trigger AS $$ BEGIN
   WITH grades AS (
     SELECT AVG(project_grades.project_grade) as avg
     FROM project_grades
@@ -184,15 +210,17 @@ FROM grades;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
+
 --TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER project
 AFTER
 INSERT
   OR
 UPDATE ON project_grades FOR EACH ROW EXECUTE PROCEDURE calc_projavg();
+
 ---UPDATE LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN. 
 --FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
-CREATE OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $$ BEGIN -- raise notice 'what should be returned?';
+CREATE OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $$ BEGIN 
   WITH grades AS (
     SELECT AVG(learn_grades.assessment_grade) as avg
     FROM learn_grades
@@ -204,21 +232,29 @@ FROM grades;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
+
 --TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
 CREATE TRIGGER learn
 AFTER
 INSERT
   OR
 UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
--- SELECT * FROM students;
--- SELECT project_grade, name_first 
--- FROM project_grades
--- INNER JOIN students ON students.student_id = project_grades.student_id
--- WHERE project_grades.student_id = 1;
--- SELECT assessment_grade, name_first 
--- FROM learn_grades
--- INNER JOIN students ON students.student_id = learn_grades.student_id
--- WHERE learn_grades.student_id = 1;
+
+-- Auto change date when a comment is made (creates an update loop)
+-- CREATE OR REPLACE FUNCTION curr_date() RETURNS TRIGGER AS $BODY$ BEGIN
+-- UPDATE notes
+-- SET note_date = current_timestamp
+-- WHERE instructor_notes = new.instructor_notes OR SEIR_notes = new.SEIR_notes;
+-- RETURN new;
+-- END;
+-- $BODY$ language plpgsql;
+
+-- CREATE TRIGGER note_date
+-- AFTER
+-- INSERT
+--   OR
+-- UPDATE ON notes FOR EACH ROW EXECUTE PROCEDURE curr_date();
+
 -- Test for student_id population across tables in the db when new student created
 INSERT INTO students (
     name_first,
@@ -227,7 +263,8 @@ INSERT INTO students (
     client_side_test,
     soft_skills,
     cohort,
-    ETS_date
+    ETS_date,
+    github
   )
 VALUES (
     'Bob',
@@ -236,8 +273,24 @@ VALUES (
     'pass',
     '2',
     'MCSP13',
-    '12/31/2022'
+    '12/31/2022',
+    'platypus66'
   );
+
+-- Test for cohort_id population into coding groups when cohort created
+  INSERT INTO cohorts (
+    cohort,
+    begin_date,
+    end_date,
+    instructor
+  )
+VALUES (
+    'MCSP15',
+    '01/01/2022',
+    '04/04/2022',
+    'Patsiukovich'
+  );
+
 -- Test for triggers to recalc average on update
 INSERT INTO projects (project_name)
 VALUES ('FoodTruck');
@@ -247,3 +300,13 @@ INSERT INTO project_grades (student_id, project_id, project_grade)
 VALUES ('1', '4', '1');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '4', '100');
+
+-- Test of users password MD5 hash
+INSERT INTO users (
+  username, password, 
+  default_cohort, 
+  asana_access_token) VALUES ('testuser', crypt('12345', gen_salt('bf')), 'MCSP13', 'here_goes_an_asana_access_token');
+
+-- Test of date update for notes
+UPDATE notes SET SEIR_notes = 'this is a test of the change date on note update feature' WHERE student_id = '1';
+UPDATE notes SET note_date = NOW() WHERE student_id = '2';
