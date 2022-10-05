@@ -3,6 +3,7 @@ import styles from "../../../styles/UpdateModal.module.css";
 
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [modal, setModal] = useState(false);
+  const [stagedCohort, setStagedCohort] = useState({});
 
   // This will likely be replaced by some value grabbed from state/Recoil.
   const cohort = {};
@@ -12,14 +13,31 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const target = e.target;
-    let formData = new FormData(target);
-    let student = { studentName: {} };
-    for (const pair of formData.entries()) {
-      student.studentName[pair[0]] = pair[1];
+    console.log("What is the submit 'e'?", e);
+    const stagedStudent = formGetter(e.target);
+    setStagedCohort((prev) => ({
+      ...stagedStudent,
+    }));
+  };
+
+  const enterListener = (e) => {
+    if (e.key === "Enter" && e.shiftKey === false) {
+      e.preventDefault();
+      console.log("Compare context of this 'e' with the submit 'e'", e);
+      const stagedStudent = formGetter(e.target.form);
+      setStagedCohort((prev) => ({
+        ...stagedStudent,
+      }));
     }
-    cohort = { ...student };
-    console.log("Update Modal: submitHandler returns: ", cohort);
+  };
+
+  const formGetter = (form) => {
+    let stagedStudent = { studentName: {} };
+    let formData = new FormData(form);
+    for (const pair of formData.entries()) {
+      stagedStudent.studentName[pair[0]] = pair[1];
+    }
+    return stagedStudent;
   };
 
   return (
@@ -41,7 +59,11 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                 Notes. Use number keys to select aptitude, hit Enter to move to
                 next student.
               </p>
-              <form onSubmit={submitHandler}>
+              <form
+                id="updateForm"
+                onSubmit={submitHandler}
+                onKeyDown={enterListener}
+              >
                 <label htmlFor="Tech">Technical Aptitude</label> <br />
                 <select id="Tech" name="Tech" required>
                   <option value="none" selected disabled hidden>
