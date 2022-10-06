@@ -10,9 +10,15 @@ DROP TABLE IF EXISTS project_grades CASCADE;
 DROP TABLE IF EXISTS learn_grades CASCADE;
 DROP TABLE IF EXISTS assigned_student_groupings CASCADE;
 DROP TABLE IF EXISTS pairs CASCADE;
+DROP FUNCTION IF EXISTS calc_projavg() CASCADE;
+DROP TRIGGER IF EXISTS project CASCADE;
 DROP EXTENSION IF EXISTS pgcrypto;
 
 CREATE EXTENSION pgcrypto;
+
+--technical skills int 1-4
+--teamwork skills int 1-4
+
 
 -- Create tables and relations
 CREATE TABLE students (
@@ -20,17 +26,16 @@ CREATE TABLE students (
   name_first TEXT,
   name_last TEXT,
   learn_avg INT,
-  project_avg INT,
   server_side_test TEXT,
   client_side_test TEXT,
-  soft_skills TEXT,
+  team_skills TEXT, --rename to teamwork
   cohort TEXT,
   ETS_date DATE,
   github TEXT
 );
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
-  username VARCHAR (20) UNIQUE,
+  username VARCHAR (20) UNIQUE, --should this be longer
   password TEXT NOT NULL,
   default_cohort TEXT,
   asana_access_token TEXT
@@ -40,12 +45,14 @@ CREATE TABLE cohorts (
   cohort TEXT,
   begin_date DATE,
   end_date DATE,
-  instructor TEXT
+  instructor TEXT  --this may need to be foreign key
+  --cohort_avg score
+  --cohort min score
+  --cohort max score
 );
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS
 CREATE TABLE coding_groups (
-  group_id SERIAL PRIMARY KEY,
-  group_name TEXT,
+  group_id SERIAL PRIMARY KEY, --got rid of group names
   cohort_id INT,
   FOREIGN KEY (cohort_id) REFERENCES cohorts(cohort_id) ON DELETE CASCADE
   );
@@ -66,6 +73,8 @@ CREATE TABLE notes (
   note_date DATE,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 );
+
+
 --THIS ALLOWS TRACKIJNG STUDENTS' PROJECT RATINGS/SCORES
 CREATE TABLE projects (
   project_id SERIAL PRIMARY KEY,
@@ -74,7 +83,8 @@ CREATE TABLE projects (
 CREATE TABLE project_grades (
   student_id INT,
   project_id INT,
-  project_grade INT,
+  project_passed BOOLEAN,
+  notes TEXT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
 );
@@ -88,6 +98,27 @@ CREATE TABLE learn_grades (
   assessment_grade INT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE CASCADE
+);
+
+CREATE TABLE student_tech_skills (
+  student_id INT,
+  score INT,
+  record_date DATE,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE CASCADE
+);
+
+CREATE TABLE student_teamwork_skills (
+  student_id INT,
+  score INT,
+  record_date DATE,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE CASCADE
+);
+
+CREATE TABLE proficiency_rates (
+  skill_id INT UNIQUE,
+  skill_descr TEXT NOT NULL
 );
 
 -- Fake Data for testing
@@ -135,12 +166,12 @@ INSERT INTO learn (assessment_name)
 VALUES ('Objects');
 INSERT INTO learn (assessment_name)
 VALUES ('Arrays');
-INSERT INTO project_grades (student_id, project_id, project_grade)
-VALUES ('1', '1', '4');
-INSERT INTO project_grades (student_id, project_id, project_grade)
-VALUES ('1', '2', '4');
-INSERT INTO project_grades (student_id, project_id, project_grade)
-VALUES ('1', '3', '2');
+INSERT INTO project_grades (student_id, project_id, project_passed, notes)
+VALUES ('1', '1', 'TRUE', 'Great job. They are so smart');
+INSERT INTO project_grades (student_id, project_id, project_passed, notes)
+VALUES ('1', '2', 'TRUE', );
+INSERT INTO project_grades (student_id, project_id, project_passed, notes)
+VALUES ('1', '3', 'FALSE');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '1', '99');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
@@ -148,6 +179,16 @@ VALUES ('1', '2', '90');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '3', '60');
 INSERT INTO notes (student_id, note_date) VALUES ('1', NOW());
+
+INSERT INTO proficiency_rates (skill_id, skill_descr)
+VALUES(1, 'Needs improvement');
+INSERT INTO proficiency_rates (skill_id, skill_descr)
+VALUES(2, 'Approaching standard');
+INSERT INTO proficiency_rates (skill_id, skill_descr)
+VALUES(3, 'Meets standard');
+INSERT INTO proficiency_rates (skill_id, skill_descr)
+VALUES(4, 'Exceeds standard');
+
 
 --Populate student ID in other tables when new student created
 CREATE OR REPLACE FUNCTION student_copy() RETURNS TRIGGER AS $BODY$ BEGIN
@@ -171,20 +212,13 @@ VALUES(new.cohort_id);
 RETURN new;
 END;
 $BODY$ language plpgsql;
+
+
 CREATE TRIGGER trig_copy
 AFTER
 INSERT ON cohorts FOR EACH ROW EXECUTE PROCEDURE cohort_copy();
 
 
---CALCULATE STUDENT'S AVERAGE PROJECT SCROE/RATING
-WITH grades AS (
-  SELECT AVG(project_grades.project_grade) as avg
-  FROM project_grades
-  WHERE student_id = 1
-)
-UPDATE students
-SET project_avg = grades.avg
-FROM grades;
 --CALCULATE STUDENT'S LEARN AVERAGE
 WITH grades AS (
   SELECT AVG(learn_grades.assessment_grade) as avg
@@ -195,28 +229,6 @@ UPDATE students
 SET learn_avg = grades.avg
 FROM grades;
 
-
----UPDATE PROJECTS AVG WHEN NEW GRADE IS ADDED OR UPDATED TO PROJECTS. 
---FUNCTION: UPDATE STUDENT'S PROJECT AVG SCORE
-CREATE OR REPLACE FUNCTION calc_projavg() RETURNS trigger AS $$ BEGIN
-  WITH grades AS (
-    SELECT AVG(project_grades.project_grade) as avg
-    FROM project_grades
-    WHERE student_id = NEW.student_id
-  )
-UPDATE students
-SET project_avg = grades.avg
-FROM grades;
-RETURN NEW;
-END;
-$$ LANGUAGE 'plpgsql';
-
---TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
-CREATE TRIGGER project
-AFTER
-INSERT
-  OR
-UPDATE ON project_grades FOR EACH ROW EXECUTE PROCEDURE calc_projavg();
 
 ---UPDATE LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN. 
 --FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
