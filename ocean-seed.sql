@@ -23,6 +23,7 @@ CREATE TABLE students (
   project_avg INT,
   server_side_test TEXT,
   client_side_test TEXT,
+  tech_skills INT,
   soft_skills TEXT,
   cohort TEXT,
   ETS_date DATE,
@@ -63,7 +64,7 @@ CREATE TABLE notes (
   name_last TEXT,
   instructor_notes TEXT,
   SEIR_notes TEXT,
-  note_date DATE,
+  note_date TIMESTAMPTZ,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 );
 --THIS ALLOWS TRACKIJNG STUDENTS' PROJECT RATINGS/SCORES
@@ -96,6 +97,7 @@ INSERT INTO students (
     name_last,
     server_side_test,
     client_side_test,
+    tech_skills,
     soft_skills,
     cohort,
     ETS_date,
@@ -106,6 +108,7 @@ VALUES (
     'Testor',
     'pass',
     'pass',
+    '3',
     '2',
     'MCSP13',
     '12/31/2022',
@@ -240,27 +243,13 @@ INSERT
   OR
 UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 
--- Auto change date when a comment is made (creates an update loop)
--- CREATE OR REPLACE FUNCTION curr_date() RETURNS TRIGGER AS $BODY$ BEGIN
--- UPDATE notes
--- SET note_date = current_timestamp
--- WHERE instructor_notes = new.instructor_notes OR SEIR_notes = new.SEIR_notes;
--- RETURN new;
--- END;
--- $BODY$ language plpgsql;
-
--- CREATE TRIGGER note_date
--- AFTER
--- INSERT
---   OR
--- UPDATE ON notes FOR EACH ROW EXECUTE PROCEDURE curr_date();
-
 -- Test for student_id population across tables in the db when new student created
 INSERT INTO students (
     name_first,
     name_last,
     server_side_test,
     client_side_test,
+    tech_skills,
     soft_skills,
     cohort,
     ETS_date,
@@ -271,6 +260,7 @@ VALUES (
     'Builder',
     'pass',
     'pass',
+    '4',
     '2',
     'MCSP13',
     '12/31/2022',
@@ -310,3 +300,19 @@ INSERT INTO users (
 -- Test of date update for notes
 UPDATE notes SET SEIR_notes = 'this is a test of the change date on note update feature' WHERE student_id = '1';
 UPDATE notes SET note_date = NOW() WHERE student_id = '2';
+
+-- Database statistics collector:
+-- SELECT * FROM pg_stat_activity
+
+-- add to cohort?
+--select avg(learn_avg) from students;
+--select min(learn_avg) as min from students;
+--select max(learn_avg) as max from students;
+
+-- by cohort:
+-- learn avg
+-- learn max
+-- learn min
+
+-- - trigger: change to student learn_avg
+-- - function: recalculate average of learn average, where cohort_id = ?
