@@ -131,7 +131,6 @@
 }
 
 .content {
-    
     font-weight: 400;
     display: table-cell;
     vertical-align: inherit;
@@ -193,4 +192,41 @@
     overflow: visible !important;
     vertical-align: text-bottom;
     fill: currentColor;
+}
+
+.box {
+    display: block;
+    top: auto;
+    left: 1000px !important;
+    width: 220px;
+    list-style: none;
+    position: absolute;
+    background: white;
+    padding: 5px 0px;
+    border-radius: 10px;
+    z-index: 900;
+    margin-top: 1px;
+}
+
+.tag {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 8px 5px;
+    color: black;
+    cursor:pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tag:hover {
+    background: rgba(3, 29, 52, 0.776); 
+}
+
+
+.tagIcon {
+    color: black;
+    margin-right: 3px;
+    width:16px;
 }
