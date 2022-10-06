@@ -14,9 +14,9 @@ const sql = postgres(
 export default async function usersHandler(req, res) {
   if (req.method === "GET") {
     try {
-      const students = await sql`
+      const users = await sql`
       SELECT * FROM users`;
-      res.status(200).json({ students });
+      res.status(200).json({ users });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
@@ -26,7 +26,7 @@ export default async function usersHandler(req, res) {
       const { username, password, default_cohort, asana_access_token } =
         req.body;
       console.log(req.body);
-      const createStudent = await sql`
+      const createUsers = await sql`
                INSERT INTO users (  username, password, default_cohort, asana_access_token )
                VALUES ( ${username}, ${password}, ${default_cohort}, ${asana_access_token}) 
                RETURNING *`;
