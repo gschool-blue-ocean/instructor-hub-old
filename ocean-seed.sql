@@ -22,7 +22,8 @@ CREATE TABLE cohorts (
   instructor TEXT,
   cohort_avg INT,
   cohort_min INT,
-  cohort_max INT
+  cohort_max INT,
+  ASANA_GID TEXT
 );
 
 -- Fake Data
@@ -55,6 +56,7 @@ CREATE TABLE students (
   cohort_id INT,
   ETS_date DATE,
   github TEXT,
+  ASANA_GID TEXT,
   FOREIGN KEY (cohort_id) REFERENCES cohorts(cohort_id) ON DELETE CASCADE
 );
 
@@ -125,7 +127,8 @@ VALUES ('1', NOW());
 --THIS ALLOWS TRACKIJNG STUDENTS' PROJECT RATINGS/SCORES
 CREATE TABLE projects (
   project_id SERIAL PRIMARY KEY,
-  project_name TEXT
+  project_name TEXT,
+  ASANA_GID TEXT
 );
 
 -- Fake Data
@@ -193,7 +196,7 @@ END;
 $BODY$ language plpgsql;
 CREATE TRIGGER trig_copy
 AFTER
-INSERT ON students FOR EACH ROW EXECUTE PROCEDURE student_copy();
+INSERT OR UPDATE OF name_first ON students FOR EACH ROW EXECUTE PROCEDURE student_copy();
 
 -- Populate cohort ID in tables when a new cohort is created
 CREATE OR REPLACE FUNCTION cohort_copy() RETURNS TRIGGER AS $BODY$ BEGIN
@@ -210,27 +213,27 @@ CREATE TRIGGER trig_copy
 AFTER
 INSERT
   OR
-UPDATE ON cohorts FOR EACH ROW EXECUTE PROCEDURE cohort_copy();
+UPDATE OF cohort ON cohorts FOR EACH ROW EXECUTE PROCEDURE cohort_copy();
 
 --CALCULATE STUDENT'S AVERAGE PROJECT SCROE/RATING
-WITH grades AS (
-  SELECT AVG(project_grades.project_grade) as avg
-  FROM project_grades
-  WHERE student_id = 1
-)
-UPDATE students
-SET project_avg = grades.avg
-FROM grades;
+-- WITH grades AS (
+--   SELECT AVG(project_grades.project_grade) as avg
+--   FROM project_grades
+--   WHERE student_id = 1
+-- )
+-- UPDATE students
+-- SET project_avg = grades.avg
+-- FROM grades;
 
 --CALCULATE STUDENT'S LEARN AVERAGE
-WITH grades AS (
-  SELECT AVG(learn_grades.assessment_grade) as avg
-  FROM learn_grades
-  WHERE student_id = 1
-)
-UPDATE students
-SET learn_avg = grades.avg
-FROM grades;
+-- WITH grades AS (
+--   SELECT AVG(learn_grades.assessment_grade) as avg
+--   FROM learn_grades
+--   WHERE student_id = 1
+-- )
+-- UPDATE students
+-- SET learn_avg = grades.avg
+-- FROM grades;
 
 ---UPDATE PROJECTS AVG WHEN NEW GRADE IS ADDED OR UPDATED TO PROJECTS. 
 --FUNCTION: UPDATE STUDENT'S PROJECT AVG SCORE
@@ -241,7 +244,8 @@ CREATE OR REPLACE FUNCTION calc_projavg() RETURNS trigger AS $$ BEGIN WITH grade
   )
 UPDATE students
 SET project_avg = grades.avg
-FROM grades;
+FROM grades
+WHERE student_id = NEW.student_id;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -251,7 +255,7 @@ CREATE TRIGGER project
 AFTER
 INSERT
   OR
-UPDATE ON project_grades FOR EACH ROW EXECUTE PROCEDURE calc_projavg();
+UPDATE OF project_grade ON project_grades FOR EACH ROW EXECUTE PROCEDURE calc_projavg();
 
 ---UPDATE LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN. 
 --FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
@@ -262,7 +266,8 @@ CREATE OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $$ BEGIN WITH grad
   )
 UPDATE students
 SET learn_avg = grades.avg
-FROM grades;
+FROM grades
+WHERE student_id = NEW.student_id;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -272,28 +277,67 @@ CREATE TRIGGER learn
 AFTER
 INSERT
   OR
-UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
+UPDATE OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 
--- Update cohort stats (min, max, avg
+-- Update cohort min
 
-CREATE OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
-    SELECT AVG(students.learn_avg) as avg
+CREATE OR REPLACE FUNCTION calc_cohortmin() RETURNS trigger AS $$ BEGIN WITH grades AS (
+    SELECT MIN(students.learn_avg) as min
     FROM students
-    WHERE cohort_id = 1
+    WHERE cohort_id = new.cohort_id
   )
 UPDATE cohorts
-SET cohort_avg = grades.avg
-FROM grades;
+SET cohort_min = grades.min
+FROM grades
+WHERE cohort_id = new.cohort_id;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
-
---TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
-CREATE TRIGGER cohortstatavg
+CREATE TRIGGER cohortmin
 AFTER
 INSERT
   OR
-UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
+UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmin();
+
+-- Update cohort max
+
+CREATE OR REPLACE FUNCTION calc_cohortmax() RETURNS trigger AS $$ BEGIN WITH grades AS (
+    SELECT MAX(students.learn_avg) as max
+    FROM students
+    WHERE cohort_id = new.cohort_id
+  )
+UPDATE cohorts
+SET cohort_max = grades.max
+FROM grades
+WHERE cohort_id = new.cohort_id;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+CREATE TRIGGER cohortmax
+AFTER
+INSERT
+  OR
+UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmax();
+
+-- Update cohort avg
+
+CREATE OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
+    SELECT MAX(students.learn_avg) as avg
+    FROM students
+    WHERE cohort_id = new.cohort_id
+  )
+UPDATE cohorts
+SET cohort_avg = grades.avg
+FROM grades
+WHERE cohort_id = new.cohort_id;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+CREATE TRIGGER cohortavg
+AFTER
+INSERT
+  OR
+UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
 
 -- Test for student_id population across tables in the db when new student created
 INSERT INTO students (
@@ -320,6 +364,14 @@ VALUES (
     '12/31/2022',
     'platypus66'
   );
+
+  -- Fake Data
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('2', '1', '55');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('2', '2', '95');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('2', '3', '87');
 
 -- Test for cohort_id population into coding groups when cohort created
 INSERT INTO cohorts (
@@ -390,7 +442,7 @@ VALUES (
     '4',
     '2',
     'MCSP15',
-    '1',
+    '2',
     '12/31/2022',
     'catman57'
   );
@@ -400,17 +452,15 @@ VALUES ('Hackathon');
 INSERT INTO learn (assessment_name)
 VALUES('JQUERY');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
-VALUES ('1', '4', '60');
+VALUES ('1', '4', '40');
+
+-- Fake Data
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('4', '1', '88');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('4', '2', '97');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('4', '3', '89');
 
 -- Database statistics collector:
 -- SELECT * FROM pg_stat_activity
--- add to cohort?
---select avg(learn_avg) from students;
---select min(learn_avg) as min from students;
---select max(learn_avg) as max from students;
--- by cohort:
--- learn avg
--- learn max
--- learn min
--- - trigger: change to student learn_avg
--- - function: recalculate average of learn average, where cohort_id = ?
