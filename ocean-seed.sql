@@ -272,6 +272,26 @@ INSERT
   OR
 UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 
+--Function: Update cohort stats (min, max, avg)
+CREATE OR REPLACE FUNCTION calc_cohort() RETURNS trigger AS $$ BEGIN WITH average AS (
+    SELECT AVG(students.learn_avg) as avg
+    FROM students
+    WHERE cohort_id = new.cohort_id
+  )
+UPDATE cohort
+SET cohort_avg = average.avg
+FROM grades;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- Trigger for the max, min, and avg for cohort
+CREATE TRIGGER cohort_stats
+AFTER
+INSERT
+  OR
+UPDATE ON students.learn_avg FOR EACH ROW EXECUTE PROCEDURE calc_cohort();
+
 -- Test for student_id population across tables in the db when new student created
 INSERT INTO students (
     name_first,
@@ -343,6 +363,32 @@ WHERE student_id = '1';
 UPDATE notes
 SET note_date = NOW()
 WHERE student_id = '2';
+
+-- Test of cohort avergage, to make sure only one coohort is averaged
+INSERT INTO students (
+    name_first,
+    name_last,
+    server_side_test,
+    client_side_test,
+    tech_skills,
+    soft_skills,
+    cohort,
+    cohort_id,
+    ETS_date,
+    github
+  )
+VALUES (
+    'Anna',
+    'Contanna',
+    'pass',
+    'pass',
+    '4',
+    '2',
+    'MCSP15',
+    '1',
+    '12/31/2022',
+    'catman57'
+  );
 
 -- Database statistics collector:
 -- SELECT * FROM pg_stat_activity
