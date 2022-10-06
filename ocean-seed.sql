@@ -9,12 +9,9 @@ DROP TABLE IF EXISTS learn CASCADE;
 DROP TABLE IF EXISTS project_grades CASCADE;
 DROP TABLE IF EXISTS learn_grades CASCADE;
 DROP TABLE IF EXISTS assigned_student_groupings CASCADE;
-<<<<<<< HEAD
 DROP TABLE IF EXISTS pairs CASCADE;
 DROP FUNCTION IF EXISTS calc_projavg() CASCADE;
 DROP TRIGGER IF EXISTS project CASCADE;
-=======
->>>>>>> 4cf4ceb125a3de295acda2824f265eb0ef92abd6
 DROP EXTENSION IF EXISTS pgcrypto;
 
 CREATE EXTENSION pgcrypto;
@@ -58,7 +55,6 @@ CREATE TABLE students (
   learn_avg INT,
   server_side_test TEXT,
   client_side_test TEXT,
-<<<<<<< HEAD
   team_skills TEXT, --rename to teamwork
   cohort TEXT,
   ETS_date DATE,
@@ -84,16 +80,10 @@ CREATE TABLE cohorts (
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS
 CREATE TABLE coding_groups (
   group_id SERIAL PRIMARY KEY, --got rid of group names
-=======
-  tech_skills INT,
-  soft_skills TEXT,
-  cohort TEXT,
->>>>>>> 4cf4ceb125a3de295acda2824f265eb0ef92abd6
   cohort_id INT,
   ETS_date DATE,
   github TEXT,
   FOREIGN KEY (cohort_id) REFERENCES cohorts(cohort_id) ON DELETE CASCADE
-<<<<<<< HEAD
   );
 
 CREATE TABLE assigned_student_groupings (
@@ -161,11 +151,6 @@ CREATE TABLE proficiency_rates (
 );
 
 -- Fake Data for testing
-=======
-);
-
--- Fake Data
->>>>>>> 4cf4ceb125a3de295acda2824f265eb0ef92abd6
 INSERT INTO students (
     name_first,
     name_last,
@@ -242,56 +227,18 @@ INSERT INTO projects (project_name)
 VALUES ('PixelArtMaker');
 INSERT INTO projects (project_name)
 VALUES ('ReactMVP');
-<<<<<<< HEAD
-=======
-
-CREATE TABLE project_grades (
-  student_id INT,
-  project_id INT,
-  project_grade INT,
-  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
-);
-
---Fake Data
-INSERT INTO project_grades (student_id, project_id, project_grade)
-VALUES ('1', '1', '4');
-INSERT INTO project_grades (student_id, project_id, project_grade)
-VALUES ('1', '2', '4');
-INSERT INTO project_grades (student_id, project_id, project_grade)
-VALUES ('1', '3', '2');
-
-CREATE TABLE learn (
-  assessment_id SERIAL PRIMARY KEY,
-  assessment_name TEXT
-);
-
--- Fake Data
->>>>>>> 4cf4ceb125a3de295acda2824f265eb0ef92abd6
 INSERT INTO learn (assessment_name)
 VALUES('Functions');
 INSERT INTO learn (assessment_name)
 VALUES ('Objects');
 INSERT INTO learn (assessment_name)
 VALUES ('Arrays');
-<<<<<<< HEAD
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
 VALUES ('1', '1', 'TRUE', 'Great job. They are so smart');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
 VALUES ('1', '2', 'TRUE', );
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
 VALUES ('1', '3', 'FALSE');
-=======
-
-CREATE TABLE learn_grades (
-  student_id INT,
-  assessment_id INT,
-  assessment_grade INT,
-  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE CASCADE
-);
--- Fake Data
->>>>>>> 4cf4ceb125a3de295acda2824f265eb0ef92abd6
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '1', '99');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
@@ -343,19 +290,6 @@ INSERT
   OR
 UPDATE ON cohorts FOR EACH ROW EXECUTE PROCEDURE cohort_copy();
 
-<<<<<<< HEAD
-=======
---CALCULATE STUDENT'S AVERAGE PROJECT SCROE/RATING
-WITH grades AS (
-  SELECT AVG(project_grades.project_grade) as avg
-  FROM project_grades
-  WHERE student_id = 1
-)
-UPDATE students
-SET project_avg = grades.avg
-FROM grades;
-
->>>>>>> 4cf4ceb125a3de295acda2824f265eb0ef92abd6
 --CALCULATE STUDENT'S LEARN AVERAGE
 WITH grades AS (
   SELECT AVG(learn_grades.assessment_grade) as avg
@@ -366,29 +300,6 @@ UPDATE students
 SET learn_avg = grades.avg
 FROM grades;
 
-<<<<<<< HEAD
-=======
----UPDATE PROJECTS AVG WHEN NEW GRADE IS ADDED OR UPDATED TO PROJECTS. 
---FUNCTION: UPDATE STUDENT'S PROJECT AVG SCORE
-CREATE OR REPLACE FUNCTION calc_projavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
-    SELECT AVG(project_grades.project_grade) as avg
-    FROM project_grades
-    WHERE student_id = NEW.student_id
-  )
-UPDATE students
-SET project_avg = grades.avg
-FROM grades;
-RETURN NEW;
-END;
-$$ LANGUAGE 'plpgsql';
-
---TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
-CREATE TRIGGER project
-AFTER
-INSERT
-  OR
-UPDATE ON project_grades FOR EACH ROW EXECUTE PROCEDURE calc_projavg();
->>>>>>> 4cf4ceb125a3de295acda2824f265eb0ef92abd6
 
 ---UPDATE LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN. 
 --FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
@@ -499,10 +410,6 @@ VALUES (
   );
 
 -- Test of date update for notes
-<<<<<<< HEAD
-UPDATE notes SET SEIR_notes = 'this is a test of the change date on note update feature' WHERE student_id = '1';
-UPDATE notes SET note_date = NOW() WHERE student_id = '2';
-=======
 UPDATE notes
 SET SEIR_notes = 'this is a test of the change date on note update feature'
 WHERE student_id = '1';
@@ -555,4 +462,3 @@ VALUES ('1', '4', '60');
 -- learn min
 -- - trigger: change to student learn_avg
 -- - function: recalculate average of learn average, where cohort_id = ?
->>>>>>> 4cf4ceb125a3de295acda2824f265eb0ef92abd6
