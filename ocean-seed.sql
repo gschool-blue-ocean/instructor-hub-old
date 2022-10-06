@@ -53,13 +53,17 @@ CREATE TABLE students (
   name_first TEXT,
   name_last TEXT,
   learn_avg INT,
+  tech_avg INT,
+  teamwork_avg INT,
   server_side_test TEXT,
   client_side_test TEXT,
-  team_skills TEXT, --rename to teamwork
+  team_skills TEXT,
   cohort TEXT,
   ETS_date DATE,
   github TEXT
 );
+
+
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
   username VARCHAR (20) UNIQUE, --should this be longer
@@ -93,6 +97,7 @@ CREATE TABLE assigned_student_groupings (
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (group_id) REFERENCES coding_groups(group_id) ON DELETE CASCADE
 );
+
 CREATE TABLE notes (
   student_id INT,
   name_first TEXT,
@@ -321,6 +326,52 @@ AFTER
 INSERT
   OR
 UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
+
+
+--UPDATE TECH SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED. 
+--FUNCTION: UPDATE STUDENT'S TECH AVG SCORE
+CREATE OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
+    SELECT AVG(student_tech_skills.score) as avg
+    FROM student_tech_skills
+    WHERE student_id = NEW.student_id
+  )
+UPDATE students
+SET tech_avg = scores.avg
+FROM scores;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
+CREATE TRIGGER tech_skills_trigger
+AFTER
+INSERT
+  OR
+UPDATE ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
+
+
+--UPDATE TEAMWORK SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED. 
+--FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
+CREATE OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
+    SELECT AVG(student_teamwork_skills.score) as avg
+    FROM student_teamwork_skills
+    WHERE student_id = NEW.student_id
+  )
+UPDATE students
+SET teamwork_avg = scores.avg
+FROM scores;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+--TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
+CREATE TRIGGER teamwrk_skills_trigger
+AFTER
+INSERT
+  OR
+UPDATE ON student_teamwork_skills FOR EACH ROW EXECUTE PROCEDURE calc_teamwrkavg();
+
+
 
 -- Update cohort stats (min, max, avg
 
