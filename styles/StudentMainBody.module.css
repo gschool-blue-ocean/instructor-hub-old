@@ -1,7 +1,39 @@
-.studentMainBody {
+.container{
+    max-width: 950px;
+    background: rgba(72, 72, 130, 0.456);
+    margin: 0 auto;
+    padding: 25px 15px;
+}
+.containerTitle {
+    display: flex;
+    flex-direction: row;
+    color: white;
+}
+.picture{
+    border-radius: 50px;
+}
+.title{
     display: flex;
     flex-direction: column;
-    width: 950px; 
-    min-width: 450px;
-    margin: 0px auto;
+    justify-content: flex-end ;
+    margin-left: 20px;
+}
+.studentName{
+    font-size: 20px;
+    text-decoration: uppercase;
+}
+.gitTransCon{
+    display: flex;
+    flex-direction: row;
+    font-size: 10px;
+}
+.etsDate {
+    padding-right: 20px;
+}
+.notesContainer{
+    background: lightsteelblue;
+    padding: 20px;
+}
+.notesTitle{
+    border-bottom: 1px dashed blue;
 }
