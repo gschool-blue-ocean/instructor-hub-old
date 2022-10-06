@@ -52,34 +52,34 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/projects").then((res) => {
-      setProjects(res.data.projects[0]);
-      // console.log(res.data.projects[0]);
+      setProjects(res.data.projects);
+      // console.log(res.data.projects);
     });
 
     axios.get("/api/students").then((res) => {
-      setStudents(res.data.students[0]);
-      // console.log(res.data.students[0]);
+      setStudents(res.data.students);
+      // console.log(res.data.students);
     });
 
     axios.get("/api/learnGrades").then((res) => {
-      setLearnGrades(res.data.learnGrades[0]);
-      // console.log(res.data.learnGrades[0]);
+      setLearnGrades(res.data.learnGrades);
+      // console.log(res.data.learnGrades);
     });
 
     axios.get("/api/projectGrades").then((res) => {
-      setProjectGrades(res.data.projectGrades[0]);
-      // console.log(res.data.projectGrades[0]);
+      setProjectGrades(res.data.projectGrades);
+      // console.log(res.data.projectGrades);
     });
 
     axios.get("/api/assignedGroup").then((res) => {
       // console.log(res);
-      setAssignedGroup(res.data.studentGroupings[0]);
-      // console.log(res.data.studentGroupings[0]);
+      setAssignedGroup(res.data.studentGroupings);
+      // console.log(res.data.studentGroupings);
     });
 
     axios.get("/api/users").then((res) => {
-      setUsers(res.data.users[0]);
-      console.log(res.data.users[0]);
+      setUsers(res.data.users);
+      // console.log(res.data.users);
     });
   }, []);
 
