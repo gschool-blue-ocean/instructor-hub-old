@@ -10,8 +10,12 @@ DROP TABLE IF EXISTS project_grades CASCADE;
 DROP TABLE IF EXISTS learn_grades CASCADE;
 DROP TABLE IF EXISTS assigned_student_groupings CASCADE;
 DROP TABLE IF EXISTS pairs CASCADE;
+DROP TABLE IF EXISTS proficiency_rates CASCADE;
+DROP TABLE IF EXISTS student_teamwork_skills CASCADE;
+DROP TABLE IF EXISTS student_tech_skills CASCADE;
 DROP FUNCTION IF EXISTS calc_projavg() CASCADE;
-DROP TRIGGER IF EXISTS project CASCADE;
+DROP TRIGGER IF EXISTS project ON project_grades CASCADE;
+DROP TRIGGER IF EXISTS cohortavg ON students CASCADE;
 DROP EXTENSION IF EXISTS pgcrypto;
 
 CREATE EXTENSION pgcrypto;
@@ -68,8 +72,8 @@ INSERT INTO students (
     name_last,
     server_side_test,
     client_side_test,
-    tech_skills,
-    soft_skills,
+    tech_avg,
+    teamwork_avg,
     cohort,
     cohort_id,
     ETS_date,
@@ -122,6 +126,27 @@ CREATE TABLE notes (
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 );
 
+CREATE TABLE proficiency_rates (
+  skill_id INT UNIQUE,
+  skill_descr TEXT NOT NULL
+);
+
+CREATE TABLE student_tech_skills (
+  student_id INT,
+  score INT,
+  record_date DATE,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE CASCADE
+);
+
+CREATE TABLE student_teamwork_skills (
+  student_id INT,
+  score INT,
+  record_date DATE,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE CASCADE
+);
+
 -- Fake Data
 INSERT INTO notes (student_id, note_date, instructor_notes)
 VALUES ('1', NOW(), 'Ой у лузі червона калина похилилася,
@@ -155,20 +180,13 @@ CREATE TABLE project_grades (
   FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
 );
 
---Fake Data
-INSERT INTO project_grades (student_id, project_id, project_grade)
-VALUES ('1', '1', '4');
-INSERT INTO project_grades (student_id, project_id, project_grade)
-VALUES ('1', '2', '4');
-INSERT INTO project_grades (student_id, project_id, project_grade)
-VALUES ('1', '3', '2');
-
 CREATE TABLE learn (
   assessment_id SERIAL PRIMARY KEY,
   assessment_name TEXT
 );
 
 
+--Fake Data
 INSERT INTO learn (assessment_name)
 VALUES('Functions');
 INSERT INTO learn (assessment_name)
@@ -180,9 +198,18 @@ VALUES ('Arrays');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
 VALUES ('1', '1', 'TRUE', 'Great job. They are so smart');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '2', 'TRUE', );
+VALUES ('1', '2', 'TRUE', 'not very good');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '3', 'FALSE');
+VALUES ('1', '3', 'FALSE', 'good effort but missed the mark');
+
+CREATE TABLE learn_grades (
+  student_id INT,
+  assessment_id INT,
+  assessment_grade INT,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE CASCADE
+);
+-- Fake Data
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '1', '99');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
@@ -190,14 +217,15 @@ VALUES ('1', '2', '90');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '3', '60');
 
+
 INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES(1, 'Needs improvement');
+VALUES('1', 'Needs improvement');
 INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES(2, 'Approaching standard');
+VALUES('2', 'Approaching standard');
 INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES(3, 'Meets standard');
+VALUES('3', 'Meets standard');
 INSERT INTO proficiency_rates (skill_id, skill_descr)
-VALUES(4, 'Exceeds standard');
+VALUES('4', 'Exceeds standard');
 
 
 --Populate student ID in other tables when new student created
@@ -303,7 +331,7 @@ UPDATE ON student_teamwork_skills FOR EACH ROW EXECUTE PROCEDURE calc_teamwrkavg
 CREATE OR REPLACE FUNCTION calc_cohortmin() RETURNS trigger AS $$ BEGIN WITH grades AS (
     SELECT MIN(students.learn_avg) as min
     FROM students
-    WHERE cohort_id = new.cohort_id
+    WHERE cohort_id = NEW.cohort_id
   )
 UPDATE cohorts
 SET cohort_min = grades.min
@@ -341,7 +369,7 @@ UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmax();
 -- Update cohort avg
 
 CREATE OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
-    SELECT MAX(students.learn_avg) as avg
+    SELECT AVG(students.learn_avg) as avg
     FROM students
     WHERE cohort_id = new.cohort_id
   )
@@ -371,8 +399,8 @@ INSERT INTO students (
     name_last,
     server_side_test,
     client_side_test,
-    tech_skills,
-    soft_skills,
+    tech_avg,
+    teamwork_avg,
     cohort,
     cohort_id,
     ETS_date,
@@ -391,24 +419,15 @@ VALUES (
     'platypus66'
   );
 
-  -- Fake Data
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
-VALUES ('2', '1', '55');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
-VALUES ('2', '2', '95');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
-VALUES ('2', '3', '87');
 
 -- Test for cohort_id population into coding groups when cohort created
 INSERT INTO cohorts (
-    cohort_id,
     cohort,
     begin_date,
     end_date,
     instructor
   )
 VALUES (
-    '2',
     'MCSP15',
     '01/01/2022',
     '04/04/2022',
@@ -420,8 +439,8 @@ INSERT INTO projects (project_name)
 VALUES ('FoodTruck');
 INSERT INTO learn (assessment_name)
 VALUES('DOM_API');
-INSERT INTO project_grades (student_id, project_id, project_grade)
-VALUES ('1', '4', '1');
+INSERT INTO project_grades (student_id, project_id, project_passed)
+VALUES ('1', '4', 'FALSE');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '4', '100');
 
@@ -448,13 +467,14 @@ SET note_date = NOW()
 WHERE student_id = '2';
 
 -- Test of cohort avergage, to make sure only one coohort is averaged
+
 INSERT INTO students (
     name_first,
     name_last,
     server_side_test,
     client_side_test,
-    tech_skills,
-    soft_skills,
+    tech_avg,
+    teamwork_avg,
     cohort,
     cohort_id,
     ETS_date,
@@ -472,6 +492,7 @@ VALUES (
     '12/31/2022',
     'catman57'
   );
+
 
 INSERT INTO projects (project_name)
 VALUES ('Hackathon');
