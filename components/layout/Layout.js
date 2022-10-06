@@ -83,6 +83,7 @@ const Layout = ({ children }) => {
     });
   }, []);
 
+  console.log(students);
   return (
     <>
       <Header />
