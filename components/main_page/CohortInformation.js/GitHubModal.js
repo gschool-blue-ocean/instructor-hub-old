@@ -2,10 +2,21 @@ import { useState } from "react";
 import gitStyle from "../../../styles/GitHub.module.css";
 import { studentsState } from "../../state";
 import { useRecoilState } from "recoil";
+import axios from "axios";
 
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [gitHubAccount, setGitHubAccount] = useRecoilState(studentsState);
   console.log(gitHubAccount[0].github);
+
+  // not complete
+  const editGitHubAccount = () => {
+    axios({
+      method: "patch",
+      url: `/api/students/${id}`,
+      data: {},
+    });
+  };
+
   return (
     <>
       {showGitHubModal ? (
