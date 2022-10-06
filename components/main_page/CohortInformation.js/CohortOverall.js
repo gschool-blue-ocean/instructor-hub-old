@@ -15,8 +15,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
-// import { useRecoilState } from "recoil";
-// import studentsState from "../../state";
+import { studentsState } from "../../state.js";
+import { useRecoilState } from "recoil";
+
 
 ChartJS.register(
   CategoryScale,
@@ -30,9 +31,9 @@ ChartJS.register(
   Legend
 );
 
-const CohortOverall = () => {
-  const [techAvg, setTechAvg] = useState(70);
-  const [teamAvg, setTeamAvg] = useState(30);
+const CohortOverall = ({ children }) => {
+  const [techAvg, setTechAvg] = useRecoilState(studentsState);
+  const [teamAvg, setTeamAvg] = useRecoilState(studentsState);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
   // const [students, setStudentsState] = useRecoilState(studentsState);
@@ -85,13 +86,13 @@ const CohortOverall = () => {
     datasets: [
       {
         label: "Tech Avg",
-        data: [techAvg],
+        data: [techAvg.learn_avg],
         borderColor: "black",
         backgroundColor: ["rgba(53, 162, 235, 0.5"],
       },
       {
         label: "Team Avg",
-        data: [teamAvg],
+        data: [teamAvg.soft_skills],
         borderColor: "black",
         backgroundColor: ["rgba(255, 99, 132, 0.5)"],
       },
