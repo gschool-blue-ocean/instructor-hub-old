@@ -89,7 +89,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
           <div className={styles.UpdateModal}>
             <div className={styles.header}>
-              Update - Student's Name
+              Update - Students Name
               <button className={styles.button} onClick={onClose}>
                 X
               </button>

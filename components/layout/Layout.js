@@ -11,6 +11,7 @@ import {
   assignedGroupState,
   learnGradesState,
   projectGradesState,
+  usersState,
 } from "../state.js";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -25,6 +26,7 @@ const Layout = ({ children }) => {
   const [assignedGroup, setAssignedGroup] = useRecoilState(assignedGroupState);
   const [learnGrades, setLearnGrades] = useRecoilState(learnGradesState);
   const [projectGrades, setProjectGrades] = useRecoilState(projectGradesState);
+  const [users, setUsers] = useRecoilState(usersState);
 
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
@@ -73,6 +75,11 @@ const Layout = ({ children }) => {
       // console.log(res);
       setAssignedGroup(res.data.studentGroupings[0]);
       // console.log(res.data.studentGroupings[0]);
+    });
+
+    axios.get("/api/users").then((res) => {
+      setUsers(res.data.students[0]);
+      // console.log(res.data.students[0]);
     });
   }, []);
 

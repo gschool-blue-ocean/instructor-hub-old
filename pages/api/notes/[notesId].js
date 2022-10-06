@@ -25,9 +25,9 @@ export default async function getNotes(req, res) {
     }
   } else if (req.method === "PATCH") {
     try {
-      const { instructor_notes, SEIR_notes } = req.body;
+      const { instructor_notes, SEIR_note } = req.body;
       const patchNotes = await sql`
-            UPDATE notes SET instructor_notes = ${instructor_notes}, SEIR_notes = ${SEIR_notes} WHERE student_id = ${id}`;
+            UPDATE notes SET instructor_notes = ${instructor_notes}, SEIR_notes = ${SEIR_notes}, note_date = NOW() WHERE student_id = ${id}`;
       res.status(200).json({ patchNotes });
     } catch (error) {
       console.error("Bad news in index api: ", error);

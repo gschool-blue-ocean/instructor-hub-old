@@ -35,10 +35,10 @@ export const studentsState = atom({
   default: [],
 });
 
-export const colorArrState = atom ({
-  key: 'color',
-  default: '',
-})
+export const colorArrState = atom({
+  key: "color",
+  default: "",
+});
 
 export const learnGradesState = atom({
   key: "learn grades",
@@ -46,6 +46,11 @@ export const learnGradesState = atom({
 });
 
 export const projectGradesState = atom({
+  key: "project grades",
+  default: [],
+});
+
+export const usersState = atom({
   key: "project grades",
   default: [],
 });
