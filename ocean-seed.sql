@@ -27,12 +27,14 @@ CREATE TABLE cohorts (
 
 -- Fake Data
 INSERT INTO cohorts (
+    cohort_id,
     cohort,
     begin_date,
     end_date,
     instructor
   )
 VALUES (
+    '1',
     'MCSP13',
     '01/01/2022',
     '04/04/2022',
@@ -272,22 +274,26 @@ INSERT
   OR
 UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 
--- Update cohort stats (min, max, avg)
+-- Update cohort stats (min, max, avg
 
-CREATE OR REPLACE FUNCTION calculate_avg() RETURNS TRIGGER AS $BODY$
-  BEGIN
-  cohorts.cohort_avg := ( SELECT AVG(learn_avg)
-                        FROM students
-                        WHERE new.cohort_id=cohort_id);
-  RETURN NEW;
-  END;
-  $BODY$
- LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
+    SELECT AVG(students.learn_avg) as avg
+    FROM students
+    WHERE cohort_id = NEW.cohort_id
+  )
+UPDATE cohorts
+SET cohort_avg = grades.avg
+FROM grades;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
 
-
-CREATE TRIGGER calculate_avg_trigger AFTER INSERT OR UPDATE 
-    ON students FOR EACH ROW 
-    EXECUTE PROCEDURE calculate_avg();
+--TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
+CREATE TRIGGER cohortstatavg
+AFTER
+INSERT
+  OR
+UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 
 -- Test for student_id population across tables in the db when new student created
 INSERT INTO students (
@@ -317,12 +323,14 @@ VALUES (
 
 -- Test for cohort_id population into coding groups when cohort created
 INSERT INTO cohorts (
+    cohort_id,
     cohort,
     begin_date,
     end_date,
     instructor
   )
 VALUES (
+    '2',
     'MCSP15',
     '01/01/2022',
     '04/04/2022',
