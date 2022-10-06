@@ -91,7 +91,7 @@ const StudentSummary = () => {
         </div>
         <div className={studentStyle.middleBorder}>
           <div>
-            <table className={studentStyle.table} border= "1">
+            <table className={studentStyle.table}>
               <thead className={studentStyle.thead}>
                 <tr className={studentStyle.headerRow}>
                   <th></th>
