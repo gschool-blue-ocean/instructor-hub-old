@@ -51,6 +51,6 @@ export const projectGradesState = atom({
 });
 
 export const usersState = atom({
-  key: "project grades",
+  key: "users",
   default: [],
 });

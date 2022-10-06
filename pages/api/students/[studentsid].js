@@ -12,8 +12,8 @@ const sql = postgres(
 );
 
 export default async function getStudents(req, res) {
-  const id = req.query.studentsId;
-
+  const id = req.query.studentsid;
+  console.log(id);
   if (req.method === "DELETE") {
     try {
       const deleteStudents = await sql`

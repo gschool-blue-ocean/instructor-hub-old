@@ -78,8 +78,8 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/users").then((res) => {
-      setUsers(res.data.students[0]);
-      // console.log(res.data.students[0]);
+      setUsers(res.data.users[0]);
+      console.log(res.data.users[0]);
     });
   }, []);
 
