@@ -18,6 +18,7 @@ import UpdateModal from "./UpdateModal";
 import { studentsState } from "../../state.js";
 import { useRecoilState } from "recoil";
 
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -35,6 +36,7 @@ const CohortOverall = ({ children }) => {
   const [teamAvg, setTeamAvg] = useRecoilState(studentsState);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
+  // const [students, setStudentsState] = useRecoilState(studentsState);
 
   const openUpdateModal = () => {
     setShowUpdateModal((prev) => !prev);
