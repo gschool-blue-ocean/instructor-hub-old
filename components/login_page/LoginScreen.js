@@ -6,6 +6,7 @@ import { usersState } from "../state.js";
 
 const LoginScreen = () => {
   const [user, setUser] = useRecoilState(usersState);
+  // get request from asana then post request to our database
   console.log(user);
   return (
     <div>
