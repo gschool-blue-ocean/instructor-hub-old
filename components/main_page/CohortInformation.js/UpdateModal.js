@@ -1,4 +1,5 @@
 import { useState } from "react";
+import StatusRight from "../../student_page/student_stats/StatusRight";
 import styles from "../../../styles/UpdateModal.module.css";
 
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
@@ -109,6 +110,9 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                 <br />
                 <input type="submit" value="Submit" />
               </form>
+            </div>
+            <div className={styles.graph}>
+              <StatusRight />
             </div>
           </div>
         </>

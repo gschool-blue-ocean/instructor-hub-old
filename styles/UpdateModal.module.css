@@ -1,12 +1,12 @@
 .modalOverlay {
   display: flex;
   position: fixed;
-  opacity: 0.3;
+  /* opacity: 0.3; */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: grey;
+  background-color: rgba(0, 0, 0, 0.8);
   z-index: 1000;
 }
 
@@ -15,7 +15,12 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgb(255, 255, 255);
+  background: linear-gradient(
+    145deg,
+    rgba(0, 53, 69, 1) 2%,
+    rgba(0, 69, 74, 1) 31%,
+    rgba(60, 101, 98, 1) 89%
+  );
   color: rgb(0, 0, 0);
   padding: 50px;
   z-index: 1000;
@@ -47,18 +52,22 @@
   display: block;
   text-align: center;
   text-decoration: none;
-  background-color: white;
-  border-radius: 15px;
+  background-color: rgba(92, 92, 92, 0.1);
+  border-radius: 5px;
   border: none;
 }
 
 .button:hover {
   cursor: pointer;
-  background-color: rgba(92, 92, 92, 0.15);
+  background-color: rgba(92, 92, 92, 0.5);
 }
 
 .update {
   max-height: 100%;
   margin-left: 15px;
   overflow: auto;
+}
+
+.graph {
+  float: right;
 }

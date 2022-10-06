@@ -18,7 +18,6 @@ import UpdateModal from "./UpdateModal";
 import { studentsState } from "../../state.js";
 import { useRecoilState } from "recoil";
 
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -36,16 +35,10 @@ const CohortOverall = ({ children }) => {
   const [teamAvg, setTeamAvg] = useRecoilState(studentsState);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
-  // const [students, setStudentsState] = useRecoilState(studentsState);
 
   const openUpdateModal = () => {
     setShowUpdateModal((prev) => !prev);
   };
-
-  // const randomizer = () => {
-  //   const result = Math.floor(Math.random() * 100);
-  //   return result;
-  // };
 
   // *The GRAPH - using ChartJS, we want it to be
   // dynamic, responsive to changes in the
@@ -55,18 +48,21 @@ const CohortOverall = ({ children }) => {
   // *Graph as its own sub-component?
 
   const options = {
+    // "x" by default, setting to "y" makes the graph horizontal
     indexAxis: "y",
     elements: {
       bar: {
         borderWidth: 2,
       },
     },
+    // auto-scales by default, defining min max to not be stupid
     scales: {
       x: {
         suggestedMin: 0,
         suggestedMax: 100,
       },
     },
+    //"responsive" graph
     maintainAspectRatio: false,
     responsive: true,
     plugins: {
@@ -105,18 +101,6 @@ const CohortOverall = ({ children }) => {
       <div id="barHolder">
         <Bar data={data} options={options} width={100} height={200} />
       </div>
-      {/* <button
-        id="techRandomizerButton"
-        onClick={() => setTechAvg(() => randomizer)}
-      >
-        Randomize Cohort Tech Average
-      </button>
-      <button
-        id="teamRandomizerButton"
-        onClick={() => setTeamAvg(() => randomizer)}
-      >
-        Randomize Cohort Team Average
-      </button> */}
       <div className={overallStyles.textContent}>
         <div className={overallStyles.link}>
           <u onClick={openUpdateModal}>Weekly Update</u>
