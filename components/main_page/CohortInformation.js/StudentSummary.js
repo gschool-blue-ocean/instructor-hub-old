@@ -13,7 +13,8 @@ const StudentSummary = () => {
   const [checkedAll, setCheckAll] = useState(false);
   const [checked, setChecked] = useState({ row1: false, row2: false, row3: false, row4: false, row5: false, row6: false });
 
-  // console.log(students);
+  console.log(students);
+  
   const toggle = () => {
     setShowBox(!showBox);
   };
@@ -90,7 +91,7 @@ const StudentSummary = () => {
         </div>
         <div className={studentStyle.middleBorder}>
           <div>
-            <table className={studentStyle.table}>
+            <table className={studentStyle.table} border= "1">
               <thead className={studentStyle.thead}>
                 <tr className={studentStyle.headerRow}>
                   <th></th>
@@ -99,11 +100,11 @@ const StudentSummary = () => {
                     {/* <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/> */}
                   </th>
                   <th className={studentStyle.header} scope="col">
-                    Technical Skills
+                    Assessment Average
                     {/* <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/> */}
                   </th>
                   <th className={studentStyle.header} scope="col">
-                    Progress
+                    Technical Skills
                     {/* <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png"/> */}
                   </th>
                   <th className={studentStyle.header} scope="col">
@@ -113,20 +114,15 @@ const StudentSummary = () => {
                   <th className={studentStyle.header} scope="col"></th>
                 </tr>
               </thead>
-              <tbody className={studentStyle.tbody}>
+              <tbody className= {`${studentStyle.tbody} ${studentStyle.tableBody}`}>
                 <tr className={studentStyle.tbodyRow}>
                   <td>
-                    <input
-                      type="checkbox"
-                      name="name"
-                      onChange={() => toggleCheck("row1")}
-                      checked={checked["row1"]}
-                    ></input>
+                    <input type="checkbox" name="name" onChange={() => toggleCheck("row1")} checked={checked["row1"]}></input>
                   </td>
                   <td className={studentStyle.content}>
-                    <a href="#">Student 1</a>
+                    <a href="#">{students.name_first +" "+students.name_last}</a>
                   </td>
-                  <td className={studentStyle.content}>04/100</td>
+                  <td className={studentStyle.content}>{students.learn_avg}%</td>
                   <td className={studentStyle.content}>
                     <div className={studentStyle.color3}>At Risk</div>
                   </td>
@@ -148,6 +144,7 @@ const StudentSummary = () => {
                     <menu
                       className={studentStyle.box}
                       style={{ display: showBox ? "block" : "none" }}
+                      onMouseLeave={() => setShowBox(false)}
                     >
                       <li>
                         <span className={studentStyle.tag}>
@@ -313,7 +310,9 @@ const StudentSummary = () => {
                       checked={checked["row6"]}
                     ></input>
                   </td>
-                  <td className={studentStyle.content}>student6</td>
+                  <td className={studentStyle.content}>
+                    <a href="#">student6</a>
+                  </td>
                   <td className={studentStyle.content}>95/100</td>
                   <td className={studentStyle.content}>
                     <div className={studentStyle.color2}>On Track</div>

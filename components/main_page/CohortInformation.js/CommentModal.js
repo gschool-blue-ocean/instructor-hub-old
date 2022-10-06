@@ -1,8 +1,13 @@
 import { useState } from "react";
-import commentStyle from "../../../styles/CommentModal.module.css";
+import { useRecoilState } from "recoil";
+import { studentsState, notesState } from "../../state.js";
 import Image from 'next/image'
+import commentStyle from "../../../styles/CommentModal.module.css";
 
 const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
+  const [students, setStudents] = useRecoilState(studentsState);
+  const [notes, setNotes] = useRecoilState(notesState);
+
   return (
     <>
       {showCommentModal ? (
@@ -14,13 +19,17 @@ const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
               <div className={commentStyle.commentHeader}>
                 <div>
                   <div onClick={onClose} className={commentStyle.close}></div>
-                  <div className={commentStyle.studentName}> Student 1 </div>
+                  <div className={commentStyle.studentName}> {students.name_first +" "+students.name_last} </div>
                 </div>
               </div>
               <div className={commentStyle.content_container}>
                 <div className={commentStyle.content}>
                     <div className= {commentStyle.commentBorder}>
-                        <div className= {commentStyle.instructorIcon}></div>
+                        <div className= {commentStyle.rightBorder}>
+                            <div className= {commentStyle.rightInline}>
+                            <Image src= "/pic1.jpg" width= "44" height= "44" className= {commentStyle.instructorIcon}/>
+                            </div>
+                        </div>
                         <div className= {commentStyle.headerContainer}>
                             <div className= {commentStyle.headerLayout}>
                                 <div className= {commentStyle.textColor}>
