@@ -121,8 +121,13 @@ CREATE TABLE notes (
 );
 
 -- Fake Data
-INSERT INTO notes (student_id, note_date)
-VALUES ('1', NOW());
+INSERT INTO notes (student_id, note_date, SEIR_notes)
+VALUES ('1', NOW(), 'Ой у лузі червона калина похилилася,
+Чогось наша славна Україна зажурилася.
+А ми тую червону калину підіймемо,
+А ми нашу славну Україну, гей-гей, розвеселимо!
+А ми тую червону калину підіймемо,
+А ми нашу славну Україну, гей-гей, розвеселимо!');
 
 --THIS ALLOWS TRACKIJNG STUDENTS' PROJECT RATINGS/SCORES
 CREATE TABLE projects (
