@@ -421,7 +421,7 @@ VALUES (
 -- Test of date update for notes
 UPDATE notes
 SET SEIR_notes = 'this is a test of the change date on note update feature'
-WHERE student_id = '1';
+WHERE student_id = '2';
 UPDATE notes
 SET note_date = NOW()
 WHERE student_id = '2';
