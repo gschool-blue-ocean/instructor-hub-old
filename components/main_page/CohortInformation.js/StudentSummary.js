@@ -1,9 +1,8 @@
 import studentStyle from '../../../styles/StudentSummary.module.css'
 import commentStyle from '../../../styles/CommentModal.module.css'
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
-
 
 
 const StudentSummary = () => {
