@@ -279,7 +279,7 @@ UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 CREATE OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
     SELECT AVG(students.learn_avg) as avg
     FROM students
-    WHERE cohort_id = NEW.cohort_id
+    WHERE cohort_id = 1
   )
 UPDATE cohorts
 SET cohort_avg = grades.avg
@@ -293,7 +293,7 @@ CREATE TRIGGER cohortstatavg
 AFTER
 INSERT
   OR
-UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
+UPDATE ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_cohortavg();
 
 -- Test for student_id population across tables in the db when new student created
 INSERT INTO students (
@@ -394,6 +394,13 @@ VALUES (
     '12/31/2022',
     'catman57'
   );
+
+INSERT INTO projects (project_name)
+VALUES ('Hackathon');
+INSERT INTO learn (assessment_name)
+VALUES('JQUERY');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('1', '4', '60');
 
 -- Database statistics collector:
 -- SELECT * FROM pg_stat_activity
