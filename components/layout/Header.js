@@ -8,7 +8,6 @@ import Image from "next/image";
 const Header = () => {
   const [dropDown, showDropDown] = useState(false);
   const [users, setUsers] = useRecoilState(usersState);
-  console.log(users);
 
   // const colorArr = ['linear-gradient(to right, rgb(27, 178, 183) , rgb(42, 109, 172))', 'linear-gradient(to right, rgb(40, 86, 47) , rgb(91, 184, 127))', 'linear-gradient(to right, rgb(27, 178, 183) , rgb(42, 109, 172))']
   // const [colorArray, setColorArray] = useRecoilState(colorArrState)
