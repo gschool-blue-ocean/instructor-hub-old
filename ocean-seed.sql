@@ -121,7 +121,7 @@ CREATE TABLE notes (
 );
 
 -- Fake Data
-INSERT INTO notes (student_id, note_date, SEIR_notes)
+INSERT INTO notes (student_id, note_date, instructor_notes)
 VALUES ('1', NOW(), 'Ой у лузі червона калина похилилася,
 Чогось наша славна Україна зажурилася.
 А ми тую червону калину підіймемо,
