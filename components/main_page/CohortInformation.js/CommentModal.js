@@ -1,5 +1,6 @@
 import { useState } from "react";
 import commentStyle from "../../../styles/CommentModal.module.css";
+import Image from 'next/image'
 
 const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
   return (
@@ -27,7 +28,7 @@ const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
                                         <h4 className= {commentStyle.userName}>Danny Boy</h4>
                                     </div> 
                                     <span className= {commentStyle.time}> Time</span>
-                                    <p className= {commentStyle.commentSection}>Danny Boy the Pipes are Calling Danny Boyyyyyy</p>
+                                    <p className= {commentStyle.commentSection}>I have never seen anyone so BAD at coding or spelling......Expelled</p>
                                 </div>
                             </div>
                         </div>
