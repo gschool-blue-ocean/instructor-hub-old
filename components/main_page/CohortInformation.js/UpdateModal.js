@@ -65,7 +65,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                 onKeyDown={enterListener}
               >
                 <label htmlFor="Tech">Technical Aptitude</label> <br />
-                <select id="Tech" name="Tech" required>
+                <select id="Tech" name="Tech" required autoFocus="true">
                   <option value="none" selected disabled hidden>
                     Select an Option
                   </option>
