@@ -1,10 +1,13 @@
 import { useState } from "react";
 import styles from "../../../styles/UpdateModal.module.css";
+import { useRecoilState } from "recoil";
+import { studentsState } from "../../state";
 
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [modal, setModal] = useState(false);
   const [stagedCohort, setStagedCohort] = useState({});
-
+  const [student, setStudent] = useRecoilState(studentsState);
+  console.log(student);
   // This will likely be replaced by some value grabbed from state/Recoil.
   const cohort = {};
 
