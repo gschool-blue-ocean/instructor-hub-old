@@ -97,7 +97,6 @@ CREATE TABLE users (
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS
 CREATE TABLE coding_groups (
   group_id SERIAL PRIMARY KEY,
-  group_name TEXT,
   cohort_id INT,
   FOREIGN KEY (cohort_id) REFERENCES cohorts(cohort_id) ON DELETE CASCADE
 );
@@ -112,8 +111,6 @@ CREATE TABLE assigned_student_groupings (
 
 CREATE TABLE notes (
   student_id INT,
-  name_first TEXT,
-  name_last TEXT,
   instructor_notes TEXT,
   SEIR_notes TEXT,
   note_date TIMESTAMPTZ,
