@@ -379,7 +379,7 @@ INSERT INTO students (
   )
 VALUES (
     'Anna',
-    'Contanna',
+    'Cortana',
     'pass',
     'pass',
     '4',
