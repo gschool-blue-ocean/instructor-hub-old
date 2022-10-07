@@ -15,6 +15,8 @@ import {
   learnAndLearnGradesState,
   projectsAndProjectGradesState,
   proficiencyRatesState,
+  studentTeamworkSkillsState,
+  studentTechSkillsState,
 } from "../state.js";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -38,7 +40,12 @@ const Layout = ({ children }) => {
   const [proficiencyRates, setProficiencyRates] = useRecoilState(
     proficiencyRatesState
   );
-
+  const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(
+    studentTeamworkSkillsState
+  );
+  const [studentTechSkills, setStudentTechSkills] = useRecoilState(
+    studentTechSkillsState
+  );
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
       setCohorts(res.data.cohorts);
@@ -106,6 +113,16 @@ const Layout = ({ children }) => {
     axios.get("/api/proficiencyRates").then((res) => {
       setLearnAndLearnGrades(res.data.proficiencyRates);
       // console.log(res.data.proficiencyRates);
+    });
+
+    axios.get("/api/studentTeamworkSkills").then((res) => {
+      setLearnAndLearnGrades(res.data.studentTeamworkSkills);
+      // console.log(res.data.studentTeamworkSkills);
+    });
+
+    axios.get("/api/studentTechSkills").then((res) => {
+      setLearnAndLearnGrades(res.data.studentTechSkills);
+      // console.log(res.data.studentTechSkills);
     });
   }, []);
 
