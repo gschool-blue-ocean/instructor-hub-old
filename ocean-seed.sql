@@ -9,7 +9,9 @@ DROP TABLE IF EXISTS learn CASCADE;
 DROP TABLE IF EXISTS project_grades CASCADE;
 DROP TABLE IF EXISTS learn_grades CASCADE;
 DROP TABLE IF EXISTS assigned_student_groupings CASCADE;
-DROP TABLE IF EXISTS proficiency_rates;
+DROP TABLE IF EXISTS proficiency_rates CASCADE;
+DROP TABLE IF EXISTS student_teamwork_skills CASCADE;
+DROP TABLE IF EXISTS student_tech_skills CASCADE;
 DROP EXTENSION IF EXISTS pgcrypto;
 
 CREATE EXTENSION pgcrypto;
@@ -184,8 +186,24 @@ INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '3', '60');
 
 CREATE TABLE proficiency_rates (
-  skill_id INT UNIQUE,
+  skill_id INT,
   skill_descr TEXT NOT NULL
+);
+
+CREATE TABLE student_tech_skills (
+  student_id INT,
+  score INT,
+  record_date DATE,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+  -- ,FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE CASCADE
+);
+
+CREATE TABLE student_teamwork_skills (
+  student_id INT,
+  score INT,
+  record_date DATE,
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+  -- ,FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE CASCADE
 );
 
 -- Fake Data
@@ -244,65 +262,48 @@ INSERT
   OR
 UPDATE OF cohort ON cohorts FOR EACH ROW EXECUTE PROCEDURE cohort_copy();
 
---FUNCTION: UPDATE STUDENT'S TECH AVG SCORE
--- CREATE OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
---     SELECT AVG(student_tech_skills.score) as avg
---     FROM student_tech_skills
---     WHERE student_id = NEW.student_id
---   )
--- UPDATE students
--- SET tech_avg = scores.avg
--- FROM scores;
--- RETURN NEW;
--- END;
--- $$ LANGUAGE 'plpgsql';
-
---TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
--- CREATE TRIGGER tech_skills_trigger
--- AFTER
--- INSERT
---   OR
--- UPDATE ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
-
-
--- --UPDATE TEAMWORK SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED. 
--- --FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
--- CREATE OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
---     SELECT AVG(student_teamwork_skills.score) as avg
---     FROM student_teamwork_skills
---     WHERE student_id = NEW.student_id
---   )
--- UPDATE students
--- SET teamwork_avg = scores.avg
--- FROM scores;
--- RETURN NEW;
--- END;
--- $$ LANGUAGE 'plpgsql';
-
-
---FUNCTION: UPDATE STUDENT'S PROJECT AVG SCORE
-
-CREATE OR REPLACE FUNCTION calc_projavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
-    SELECT AVG(project_grades.project_grade) as avg
-    FROM project_grades
+-- Update student tech average score
+CREATE OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
+    SELECT AVG(student_tech_skills.score) as avg
+    FROM student_tech_skills
     WHERE student_id = NEW.student_id
   )
 UPDATE students
-SET project_avg = grades.avg
-FROM grades
-WHERE student_id = NEW.student_id;
+SET tech_avg = scores.avg
+FROM scores;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
+CREATE TRIGGER tech_skills_trigger
+AFTER
+INSERT
+  OR
+UPDATE ON student_tech_skills FOR EACH ROW EXECUTE PROCEDURE calc_techavg();
+
+
+--FUNCTION: UPDATE STUDENT'S TEAMWORK AVG SCORE
+CREATE OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
+    SELECT AVG(student_teamwork_skills.score) as avg
+    FROM student_teamwork_skills
+    WHERE student_id = NEW.student_id
+  )
+UPDATE students
+SET teamwork_avg = scores.avg
+FROM scores;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
 
 --TRIGGER: RUNS WHEN STUDENT'S GRADE IS ADDED OR UPDATED
--- CREATE TRIGGER project
--- AFTER
--- INSERT
---   OR
--- UPDATE OF project_pass ON project_grades FOR EACH ROW EXECUTE PROCEDURE calc_projavg();
+CREATE TRIGGER teamwrk_skills_trigger
+AFTER
+INSERT
+  OR
+UPDATE ON student_teamwork_skills FOR EACH ROW EXECUTE PROCEDURE calc_teamwrkavg();
 
----UPDATE LEARN AVG WHEN NEW GRADE IS ADDED OR UPDATED TO LEARN. 
+
 --FUNCTION: UPDATE STUDENT'S LEARN AVG SCORE
 CREATE OR REPLACE FUNCTION calc_learnavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
     SELECT AVG(learn_grades.assessment_grade) as avg
