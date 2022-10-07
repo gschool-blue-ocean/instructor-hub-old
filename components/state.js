@@ -54,13 +54,3 @@ export const usersState = atom({
   key: "users",
   default: [],
 });
-
-export const learnAndLearnGradesState = atom({
-  key: "learn and learn_grades",
-  default: [],
-});
-
-export const projectsAndProjectGradesState = atom({
-  key: "learn and learn_grades",
-  default: [],
-});
