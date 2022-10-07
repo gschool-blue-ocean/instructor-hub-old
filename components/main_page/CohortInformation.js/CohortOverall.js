@@ -98,22 +98,36 @@ const CohortOverall = ({ children }) => {
 
   return (
     <div className={overallStyles.overallBorder}>
-      <div id="barHolder">
-        {/* If you need to adjust the width/height, note that chart.js renders
-         on page load and won't play nicely until you refresh */}
-        <Bar data={data} options={options} width={100} height={200} />
-      </div>
-      <div className={overallStyles.textContent}>
-        <div className={overallStyles.link}>
-          <u onClick={openUpdateModal}>Weekly Update</u>
+      <div className={overallStyles.graphContainer}>
+        <div className={overallStyles.barHolder}>
+          <Bar data={data} options={options} width={100} height={200} />
         </div>
-        <UpdateModal
-          showUpdateModal={showUpdateModal}
-          setShowUpdateModal={setShowUpdateModal}
-          onClose={() => {
-            setShowUpdateModal(false);
-          }}
-        />
+      </div>
+      {/* <button
+        id="techRandomizerButton"
+        onClick={() => setTechAvg(() => randomizer)}
+      >
+        Randomize Cohort Tech Average
+      </button>
+      <button
+        id="teamRandomizerButton"
+        onClick={() => setTeamAvg(() => randomizer)}
+      >
+        Randomize Cohort Team Average
+      </button> */}
+      <div className={overallStyles.btnContainer}>
+        <div className={overallStyles.textContent}>
+          <div className={overallStyles.link}>
+            <u onClick={openUpdateModal}>Weekly Update</u>
+          </div>
+          <UpdateModal
+            showUpdateModal={showUpdateModal}
+            setShowUpdateModal={setShowUpdateModal}
+            onClose={() => {
+              setShowUpdateModal(false);
+            }}
+          />
+        </div>
       </div>
     </div>
   );
