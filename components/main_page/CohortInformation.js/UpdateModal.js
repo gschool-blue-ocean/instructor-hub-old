@@ -21,7 +21,14 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     const stagedStudent = formGetter(e.target);
     // const id = student[0].student_id;
     // console.log(id);
-    axios.post("/api/notes", {});
+    axios.post("/api/notes", {
+      student_id: 1,
+      name_first: "TEXT",
+      name_last: "TEXT",
+      instructor_notes: "TEXT",
+      SEIR_notes: "TEXT",
+      note_date: new Date(),
+    });
     // axios
     //   .patch(`/api/students/${id}`, {
     //     tech_skills: stagedStudent,
