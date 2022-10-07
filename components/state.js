@@ -64,3 +64,8 @@ export const projectsAndProjectGradesState = atom({
   key: "learn and learn_grades",
   default: [],
 });
+
+export const proficiencyRatesState = atom({
+  key: "proficiency Rates",
+  default: [],
+});
