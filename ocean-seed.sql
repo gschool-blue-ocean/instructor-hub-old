@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS learn CASCADE;
 DROP TABLE IF EXISTS project_grades CASCADE;
 DROP TABLE IF EXISTS learn_grades CASCADE;
 DROP TABLE IF EXISTS assigned_student_groupings CASCADE;
-DROP TABLE proficiency_rates;
+DROP TABLE IF EXISTS proficiency_rates;
 DROP EXTENSION IF EXISTS pgcrypto;
 
 CREATE EXTENSION pgcrypto;
@@ -325,7 +325,6 @@ INSERT
 UPDATE OF assessment_grade ON learn_grades FOR EACH ROW EXECUTE PROCEDURE calc_learnavg();
 
 -- Update cohort min
-
 CREATE OR REPLACE FUNCTION calc_cohortmin() RETURNS trigger AS $$ BEGIN WITH grades AS (
     SELECT MIN(students.learn_avg) as min
     FROM students
@@ -345,7 +344,6 @@ INSERT
 UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmin();
 
 -- Update cohort max
-
 CREATE OR REPLACE FUNCTION calc_cohortmax() RETURNS trigger AS $$ BEGIN WITH grades AS (
     SELECT MAX(students.learn_avg) as max
     FROM students
@@ -365,7 +363,6 @@ INSERT
 UPDATE of learn_avg ON students FOR EACH ROW EXECUTE PROCEDURE calc_cohortmax();
 
 -- Update cohort avg
-
 CREATE OR REPLACE FUNCTION calc_cohortavg() RETURNS trigger AS $$ BEGIN WITH grades AS (
     SELECT AVG(students.learn_avg) as avg
     FROM students
