@@ -24,7 +24,7 @@
   color: rgb(0, 0, 0);
   padding: 50px;
   z-index: 1000;
-  width: 720px;
+  width: 840px;
   height: 680px;
   flex-wrap: wrap;
   border: 1px solid black;
@@ -44,6 +44,7 @@
   padding: 10px;
   overflow: hidden;
   text-align: center;
+  border-bottom: 2px solid silver;
 }
 
 .button {
@@ -64,10 +65,28 @@
 
 .update {
   max-height: 100%;
-  margin-left: 15px;
+  margin: 5px;
+  margin-left: 5px;
+  padding: 5px;
   overflow: auto;
+  background: #0b131b61;
+  color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.updateForm {
+  align-items: center;
+}
+
+.updateForm > select,
+.updateForm > textarea {
+  margin-bottom: 10px;
 }
 
 .graph {
   float: right;
+  display: block;
 }

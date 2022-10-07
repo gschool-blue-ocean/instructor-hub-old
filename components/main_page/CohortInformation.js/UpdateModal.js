@@ -55,13 +55,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
               </button>
             </div>
             <div className={styles.update}>
-              <p>
-                Tab select between Technical Ability, Teamwork Ability, and
-                Notes. Use number keys to select aptitude, hit Enter to move to
-                next student.
-              </p>
               <form
-                id="updateForm"
+                className={styles.updateForm}
                 onSubmit={submitHandler}
                 onKeyDown={enterListener}
               >

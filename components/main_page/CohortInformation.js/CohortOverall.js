@@ -99,6 +99,8 @@ const CohortOverall = ({ children }) => {
   return (
     <div className={overallStyles.overallBorder}>
       <div id="barHolder">
+        {/* If you need to adjust the width/height, note that chart.js renders
+         on page load and won't play nicely until you refresh */}
         <Bar data={data} options={options} width={100} height={200} />
       </div>
       <div className={overallStyles.textContent}>
