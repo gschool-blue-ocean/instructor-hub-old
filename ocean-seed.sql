@@ -489,7 +489,7 @@ VALUES (
     'MCSP15',
     '01/01/2022',
     '04/04/2022',
-    'Patsiukovich'
+    '2'
   );
 
 -- Test for triggers to recalc average on update
