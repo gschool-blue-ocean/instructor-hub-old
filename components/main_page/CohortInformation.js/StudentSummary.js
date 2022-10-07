@@ -9,15 +9,8 @@ const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCommentModal, setShowCommenttModal] = useState(false);
-  const [showBox, setShowBox] = useState(false);
   const [checkedAll, setCheckAll] = useState(false);
-  const [checked, setChecked] = useState({ students: false });
-
-  console.log(students)
-
-  const toggle = () => {
-    setShowBox(!showBox);
-  };
+  // const [checked, setChecked] = useState({ students: false });
 
   const openGitHubModal = () => {
     setShowGitHubModal((prev) => !prev);
@@ -27,38 +20,59 @@ const StudentSummary = () => {
     setShowCommenttModal((prev) => !prev);
   };
 
-  const toggleCheck = (inputName) => {
-    setChecked((prevState) => {
-      const newState = { ...prevState };
-      newState[inputName] = !prevState[inputName];
-      return newState;
-    });
-  };
-
-  const selectAll = (value) => {
-    setCheckAll(value);
-    setChecked((prevState) => {
-      const newState = { ...prevState };
-      for (const inputName in newState) {
-        newState[inputName] = value;
-      }
-      return newState;
-    });
-  };
-
   useEffect(() => {
-    let allChecked = true;
-    for (const inputName in checked) {
-      if (checked[inputName] === false) {
-        allChecked = false;
-      }
-    }
-    if (allChecked) {
-      setCheckAll(true);
+    setStudents(students)
+  }, []);
+
+  const handleChange = (e) => {
+    const { id, checked } = e.target;
+    if (id === "allSelect") {
+      let tempStudent = students.map((student) => {
+        return { ...student, isChecked: checked };
+      });
+      setStudents(tempStudent);
     } else {
-      setCheckAll(false);
+      let tempStudent = students.map((student) => 
+        student.id === id ? { ...student, isChecked: checked } : student 
+    );
+      setStudents(tempStudent);
     }
-  }, [checked]);
+  }
+
+
+  // onChange={() => toggleCheck("{student.student_id}")} checked={checked["{student.student_id}"]}
+  // const toggleCheck = (inputName) => {
+  //   setChecked((prevState) => {
+  //     const newState = { ...prevState };
+  //     newState[inputName] = !prevState[inputName];
+  //     return newState;
+  //   });
+  // };
+
+  // const selectAll = (value) => {
+  //   setCheckAll(value);
+  //   setChecked((prevState) => {
+  //     const newState = { ...prevState };
+  //     for (const inputName in newState) {
+  //       newState[inputName] = value;
+  //     }
+  //     return newState;
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   let allChecked = true;
+  //   for (const inputName in checked) {
+  //     if (checked[inputName] === false) {
+  //       allChecked = false;
+  //     }
+  //   }
+  //   if (allChecked) {
+  //     setCheckAll(true);
+  //   } else {
+  //     setCheckAll(false);
+  //   }
+  // }, [checked]);
 
   return (
 
@@ -70,11 +84,13 @@ const StudentSummary = () => {
           <div className={studentStyle.selectRow}>
             <div className={studentStyle.selectAllBox}>
               <input
-                onChange={(event) => selectAll(event.target.checked)}
-                checked={checkedAll}
+                // onChange={(event) => selectAll(event.target.checked)}
+                // checked={checkedAll}
                 className={studentStyle.checkBox}
                 type="checkbox"
-                name="selectAll"
+                name="allSelect"
+                checked={!students.some((student) => student?.isChecked !== true)}
+                onChange={handleChange}
               />
               <label htmlFor="selectMe"> Select/Deselect All</label>
             </div>
@@ -119,7 +135,7 @@ const StudentSummary = () => {
               {students.map((student) => (
                 <tr key={student.student_id} className={studentStyle.tbodyRow}>
                   <td>
-                    <input type="checkbox" name="name" onChange={() => toggleCheck("students")} checked={checked["students"]}></input>
+                    <input type="checkbox" name={student.id} checked={student?.isChecked || false} onChange={handleChange}></input>
                   </td>
                   <td className={studentStyle.content}>
                     <a href="#">{student.name_first +" "+student.name_last}</a>
@@ -149,7 +165,7 @@ const StudentSummary = () => {
                       C13.7761424,14 14,14.2238576 14,14.5 C14,14.7761424 13.7761424,15 13.5,15 L8.5,15 Z"></path>
                     </svg>
                   </td>
-                  <td onClick={toggle}>
+                  <td>
                     <svg className={studentStyle.dot}>
                       {" "}
                       <path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>{" "}
@@ -162,8 +178,8 @@ const StudentSummary = () => {
                     <input
                       type="checkbox"
                       name="name"
-                      onChange={() => toggleCheck("row2")}
-                      checked={checked["row2"]}
+                      // onChange={() => toggleCheck("row2")}
+                      // checked={checked["row2"]}
                     ></input>
                   </td>
                   <td className={studentStyle.content}>
@@ -196,8 +212,8 @@ const StudentSummary = () => {
                     <input
                       type="checkbox"
                       name="name"
-                      onChange={() => toggleCheck("row3")}
-                      checked={checked["row3"]}
+                      // onChange={() => toggleCheck("row3")}
+                      // checked={checked["row3"]}
                     ></input>
                   </td>
                   <td className={studentStyle.content}>
