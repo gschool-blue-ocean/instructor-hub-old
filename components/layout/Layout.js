@@ -12,8 +12,6 @@ import {
   learnGradesState,
   projectGradesState,
   usersState,
-  learnAndLearnGradesState,
-  projectsAndProjectGradesState,
 } from "../state.js";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -29,11 +27,6 @@ const Layout = ({ children }) => {
   const [learnGrades, setLearnGrades] = useRecoilState(learnGradesState);
   const [projectGrades, setProjectGrades] = useRecoilState(projectGradesState);
   const [users, setUsers] = useRecoilState(usersState);
-  const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(
-    learnAndLearnGradesState
-  );
-  const [projectsAndProjectGrades, setprojectsAndProjectGrades] =
-    useRecoilState(projectsAndProjectGradesState);
 
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
@@ -59,45 +52,34 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/projects").then((res) => {
-      setProjects(res.data.projects);
-      // console.log(res.data.projects);
+      setProjects(res.data.projects[0]);
+      // console.log(res.data.projects[0]);
     });
 
     axios.get("/api/students").then((res) => {
       setStudents(res.data.students);
-      // console.log(res.data.students);
-
+      // console.log(res.data.students[0]);
     });
 
     axios.get("/api/learnGrades").then((res) => {
-      setLearnGrades(res.data.learnGrades);
-      // console.log(res.data.learnGrades);
+      setLearnGrades(res.data.learnGrades[0]);
+      // console.log(res.data.learnGrades[0]);
     });
 
     axios.get("/api/projectGrades").then((res) => {
-      setProjectGrades(res.data.projectGrades);
-      // console.log(res.data.projectGrades);
+      setProjectGrades(res.data.projectGrades[0]);
+      // console.log(res.data.projectGrades[0]);
     });
 
     axios.get("/api/assignedGroup").then((res) => {
       // console.log(res);
-      setAssignedGroup(res.data.studentGroupings);
-      // console.log(res.data.studentGroupings);
+      setAssignedGroup(res.data.studentGroupings[0]);
+      // console.log(res.data.studentGroupings[0]);
     });
 
     axios.get("/api/users").then((res) => {
-      setUsers(res.data.users);
-      // console.log(res.data.users);
-    });
-
-    axios.get("/api/learnAndLearnGrades").then((res) => {
-      setLearnAndLearnGrades(res.data.learnAndLearnGrades);
-      // console.log(res.data.learnAndLearnGrades);
-    });
-
-    axios.get("/api/projectsAndProjectGrades").then((res) => {
-      setLearnAndLearnGrades(res.data.projectsAndProjectGrades);
-      // console.log(res.data.projectsAndProjectGrades);
+      setUsers(res.data.users[0]);
+      console.log(res.data.users[0]);
     });
   }, []);
 
