@@ -35,11 +35,12 @@ export default async function studentsHandler(req, res) {
         soft_skills,
         cohort,
         ETS_date,
+        github,
       } = req.body;
       console.log(req.body);
       const createStudent = await sql`
-               INSERT INTO students ( student_id, name_first, name_last, learn_avg, project_avg, server_side_test, client_side_test, soft_skills, cohort, ETS_date )
-               VALUES (${student_id}, ${name_first}, ${name_last}, ${learn_avg}, ${project_avg}, ${server_side_test}, ${client_side_test}, ${soft_skills}, ${cohort}, ${ETS_date}) 
+               INSERT INTO students ( student_id, name_first, name_last, learn_avg, project_avg, server_side_test, client_side_test, soft_skills, cohort, ETS_date, github )
+               VALUES (${student_id}, ${name_first}, ${name_last}, ${learn_avg}, ${project_avg}, ${server_side_test}, ${client_side_test}, ${soft_skills}, ${cohort}, ${ETS_date}, ${github}) 
                RETURNING *`;
       res.status(200).json(req.body);
     } catch (error) {
