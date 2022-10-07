@@ -1,20 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import StatusRight from "../../student_page/student_stats/StatusRight";
+import { usersState, studentsState } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
-import { usersState } from "../../state";
 
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [modal, setModal] = useState(false);
   const [stagedCohort, setStagedCohort] = useState({});
   const [user, setUser] = useRecoilState(usersState);
   const [students, setStudents] = useRecoilState(studentsState);
+  const [currStudent, setCurrStudent] = useState(0);
 
   // This will likely be replaced by some value grabbed from state/Recoil.
   // const cohort = {};
-
-  // In addition, it will be necessary to grab
-  // "current student" from state.
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -23,6 +20,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     setStagedCohort((prev) => ({
       ...stagedStudent,
     }));
+    e.target.reset();
   };
 
   const enterListener = (e) => {
@@ -33,15 +31,30 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       setStagedCohort((prev) => ({
         ...stagedStudent,
       }));
+      e.target.form.reset();
     }
   };
 
   const formGetter = (form) => {
-    let stagedStudent = { studentName: {} };
+    let stagedName = `${students[currStudent].name_first} ${students[currStudent].name_last}`;
+    console.log("staged student's name: ", stagedName);
+    let stagedStudent = { [stagedName]: {} };
     let formData = new FormData(form);
     for (const pair of formData.entries()) {
-      stagedStudent.studentName[pair[0]] = pair[1];
+      console.log(stagedStudent);
+      console.log(pair);
+      stagedStudent[stagedName][pair[0]] = pair[1];
     }
+
+    // In addition, it will be necessary to grab
+    // "current student" from state.
+    setCurrStudent((prev) => {
+      if (prev < students.length) {
+        currStudent++;
+      } else {
+        currStudent = 0;
+      }
+    });
     return stagedStudent;
   };
 
@@ -53,7 +66,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
           <div className={styles.UpdateModal}>
             <div className={styles.header}>
-              Update - Student's Name
+              Update -{" "}
+              {`${students[currStudent].name_first} ${students[currStudent].name_last}`}
               <button className={styles.button} onClick={onClose}>
                 X
               </button>
