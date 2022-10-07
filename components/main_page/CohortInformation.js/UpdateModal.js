@@ -15,7 +15,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("What is the submit 'e'?", e);
     const stagedStudent = formGetter(e.target);
     setStagedCohort((prev) => ({
       ...stagedStudent,
@@ -26,7 +25,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const enterListener = (e) => {
     if (e.key === "Enter" && e.shiftKey === false) {
       e.preventDefault();
-      console.log("Compare context of this 'e' with the submit 'e'", e);
       const stagedStudent = formGetter(e.target.form);
       setStagedCohort((prev) => ({
         ...stagedStudent,
@@ -55,6 +53,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
         currStudent = 0;
       }
     });
+    console.log("New currStudent is number: ", currStudent);
     return stagedStudent;
   };
 
@@ -66,8 +65,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
           <div className={styles.UpdateModal}>
             <div className={styles.header}>
-              Update -{" "}
-              {`${students[currStudent].name_first} ${students[currStudent].name_last}`}
+              Update - {students[currStudent].name_first || "Null"}
               <button className={styles.button} onClick={onClose}>
                 X
               </button>
