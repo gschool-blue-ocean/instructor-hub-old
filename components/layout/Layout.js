@@ -105,7 +105,7 @@ const Layout = ({ children }) => {
 
     axios.get("/api/proficiencyRates").then((res) => {
       setLearnAndLearnGrades(res.data.proficiencyRates);
-      console.log(res.data.proficiencyRates);
+      // console.log(res.data.proficiencyRates);
     });
   }, []);
 
