@@ -27,7 +27,8 @@ CREATE TABLE students (
   soft_skills TEXT,
   cohort TEXT,
   ETS_date DATE,
-  github TEXT
+  github TEXT,
+  ASANA_GID TEXT,
 );
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
@@ -41,7 +42,8 @@ CREATE TABLE cohorts (
   cohort TEXT,
   begin_date DATE,
   end_date DATE,
-  instructor TEXT
+  instructor TEXT,
+  ASANA_GID TEXT
 );
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS
 CREATE TABLE coding_groups (
@@ -65,7 +67,8 @@ CREATE TABLE notes (
   instructor_notes TEXT,
   SEIR_notes TEXT,
   note_date TIMESTAMPTZ,
-  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+  FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+  ASANA_GID TEXT
 );
 --THIS ALLOWS TRACKIJNG STUDENTS' PROJECT RATINGS/SCORES
 CREATE TABLE projects (

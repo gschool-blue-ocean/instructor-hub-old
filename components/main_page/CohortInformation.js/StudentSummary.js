@@ -1,8 +1,9 @@
 import studentStyle from '../../../styles/StudentSummary.module.css'
 import commentStyle from '../../../styles/CommentModal.module.css'
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
+import axios from 'axios';
 
 
 const StudentSummary = () => {
@@ -16,6 +17,8 @@ const StudentSummary = () => {
   const openCommentModel = () => {
     setShowCommenttModal((prev) => !prev);
   };
+
+
 
   return (
 

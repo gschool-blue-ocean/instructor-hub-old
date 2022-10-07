@@ -5,6 +5,9 @@ import styles from "../../../styles/UpdateModal.module.css";
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [modal, setModal] = useState(false);
   const [updatedInfo, setUpdatedInfo] = useState({})
+  const [techSkillGid, setTechSkillGid] = useState(null)
+  const [teamWorkGid, setTeamWorkGid] = useState(null)
+  const [studentList, setStudentList] = useState([])
   // This will likely be replaced by some value grabbed from state/Recoil.
   const cohort = {}; //obsolete now? oct 5th, sam chavez
  
@@ -12,21 +15,33 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // "current student" from state.
 
 
-  useEffect(() => {
-    axios.get("https://app.asana.com/api/1.0/projects?workspace=1213745087037", {
+  useEffect(() => { 
+    axios.get("https://app.asana.com/api/1.0/projects/1203082294663367" , {
       headers: {
         Authorization: "Bearer 1/1202490391764279:bea7f8d535303444d7b1aa5e74101eec",
       }
     })
     .then((res) => {
-      console.log(res)
-  })
+      setTechSkillGid(res.data.data.custom_field_settings[0].custom_field.gid)
+      setTeamWorkGid(res.data.data.custom_field_settings[1].custom_field.gid)
+    })
+    axios.get("https://app.asana.com/api/1.0/tasks/?project=1203082294663367", {
+      headers: {
+        Authorization: "Bearer 1/1202490391764279:bea7f8d535303444d7b1aa5e74101eec",
+      }
+    })
+    .then((res) => {
+      setStudentList(res.data.data)
+    })
+    console.log(studentList)
 }, [])
 
   async function submitHandler(e) {
     e.preventDefault(); 
     const target = e.target; 
-    
+    console.log(studentList, "student list in state")
+    console.log(techSkillGid, "tech gid state")
+    console.log(teamWorkGid, "team work gid state")
     let formData = new FormData(target);
     let student = { studentInfo: {} };
     for (const pair of formData.entries()) {
@@ -34,15 +49,15 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     }
     cohort = { ...student };
     setUpdatedInfo(student)
-    console.log("Update Modal: submitHandler returns: ", cohort)
     setTimeout(() => {
-      console.log(updatedInfo, "this is state")
-      console.log(updatedInfo.studentInfo)
     }, 100)
 
+
+
+const studentGid = studentList[0].gid
      axios({
-        method:"PATCH",
-        url: "https://app.asana.com/api/1.0/tasks/${taskid}", //need task id variable
+        method:"PUT",
+        url: `https://app.asana.com/api/1.0/tasks/${studentGid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this
         headers: {
           Authorization: "Bearer 1/1202490391764279:bea7f8d535303444d7b1aa5e74101eec",
         }, 
@@ -50,19 +65,17 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
             data: {
               "workspace": "1213745087037",
               "assignee_section": null,
-              "notes": `${updatedInfo.studentInfo.assessmentName}: ${updatedInfo.studentInfo.assessmentScore}`,
+              // "notes": `${updatedInfo.studentInfo.assessmentName}: ${updatedInfo.studentInfo.assessmentScore}`,
               "parent": null,
-              "projects": "1203082294663367",  //this will need to be a template literal
+              "html_notes": "<p>this is a note</p>",
               "resource_subtype": "default_task",
               "custom_fields": {
-                "1203082294663377": `${updatedInfo.studentInfo.Tech}`,
-                "1203082294663384": `${updatedInfo.studentInfo.Team}`
+                [techSkillGid]: `${updatedInfo.studentInfo.Tech}`,  //template literal
+                [teamWorkGid]: `${updatedInfo.studentInfo.Team}`   //template literal
         }
       }
       }
-    })
-
-    
+    })    
   };
 
   async function asanaPost() {
