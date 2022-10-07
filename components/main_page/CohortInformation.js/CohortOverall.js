@@ -31,8 +31,8 @@ ChartJS.register(
 );
 
 const CohortOverall = ({ children }) => {
-  const [techAvg, setTechAvg] = useRecoilState(studentsState);
-  const [teamAvg, setTeamAvg] = useRecoilState(studentsState);
+  const [techAvg, setTechAvg] = useState(60);
+  const [teamAvg, setTeamAvg] = useState(40);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
   // const [students, setStudentsState] = useRecoilState(studentsState);

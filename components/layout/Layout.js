@@ -31,7 +31,7 @@ const Layout = ({ children }) => {
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
       setCohorts(res.data.cohorts[0]);
-      // console.log(res.data.cohorts[0]);
+      console.log("Layout GET cohorts shows this data: ", res.data.cohorts[0]);
     });
 
     axios.get("/api/learn").then((res) => {

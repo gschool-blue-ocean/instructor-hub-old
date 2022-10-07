@@ -1,13 +1,17 @@
 import { useState } from "react";
+import { useRecoilState } from "recoil";
 import StatusRight from "../../student_page/student_stats/StatusRight";
 import styles from "../../../styles/UpdateModal.module.css";
+import { usersState } from "../../state";
 
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [modal, setModal] = useState(false);
   const [stagedCohort, setStagedCohort] = useState({});
+  const [user, setUser] = useRecoilState(usersState);
+  const [students, setStudents] = useRecoilState(studentsState);
 
   // This will likely be replaced by some value grabbed from state/Recoil.
-  const cohort = {};
+  // const cohort = {};
 
   // In addition, it will be necessary to grab
   // "current student" from state.
@@ -105,9 +109,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                 <br />
                 <input type="submit" value="Submit" />
               </form>
-            </div>
-            <div className={styles.graph}>
-              <StatusRight />
             </div>
           </div>
         </>
