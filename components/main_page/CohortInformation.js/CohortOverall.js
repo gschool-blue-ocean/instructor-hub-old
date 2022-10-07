@@ -18,7 +18,6 @@ import UpdateModal from "./UpdateModal";
 import { studentsState } from "../../state.js";
 import { useRecoilState } from "recoil";
 
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -105,18 +104,6 @@ const CohortOverall = ({ children }) => {
           <Bar data={data} options={options} width={100} height={200} />
         </div>
       </div>
-      {/* <button
-        id="techRandomizerButton"
-        onClick={() => setTechAvg(() => randomizer)}
-      >
-        Randomize Cohort Tech Average
-      </button>
-      <button
-        id="teamRandomizerButton"
-        onClick={() => setTeamAvg(() => randomizer)}
-      >
-        Randomize Cohort Team Average
-      </button> */}
       <div className={overallStyles.btnContainer}>
         <div className={overallStyles.textContent}>
           <div className={overallStyles.link}>
