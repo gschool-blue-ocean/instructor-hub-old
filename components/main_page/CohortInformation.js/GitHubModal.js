@@ -7,14 +7,16 @@ import Image from "next/image";
 
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [gitHubAccount, setGitHubAccount] = useRecoilState(studentsState);
-  console.log(gitHubAccount[0].github);
+  // console.log(gitHubAccount[0].github);
 
   // not complete
-  const editGitHubAccount = () => {
+  const addGitHubAccount = () => {
     axios({
-      method: "patch",
-      url: `/api/students/${id}`,
-      data: {},
+      method: "post",
+      url: `/api/students`,
+      data: {
+        github: "",
+      },
     });
   };
 

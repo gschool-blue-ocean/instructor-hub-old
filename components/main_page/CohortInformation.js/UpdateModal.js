@@ -2,12 +2,13 @@ import { useState } from "react";
 import styles from "../../../styles/UpdateModal.module.css";
 import { useRecoilState } from "recoil";
 import { studentsState } from "../../state";
+import axios from "axios";
 
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [modal, setModal] = useState(false);
   const [stagedCohort, setStagedCohort] = useState({});
   const [student, setStudent] = useRecoilState(studentsState);
-  console.log(student);
+
   // This will likely be replaced by some value grabbed from state/Recoil.
   const cohort = {};
 
@@ -18,9 +19,20 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     e.preventDefault();
     console.log("What is the submit 'e'?", e);
     const stagedStudent = formGetter(e.target);
+    // const id = student[0].student_id;
+    // console.log(id);
+    axios.post("/api/notes", {});
+    // axios
+    //   .patch(`/api/students/${id}`, {
+    //     tech_skills: stagedStudent,
+    //     soft_skills: stagedStudent,
+    //   })
+    //   .then((res) => {
     setStagedCohort((prev) => ({
       ...stagedStudent,
     }));
+    console.log("success");
+    // });
   };
 
   const enterListener = (e) => {
