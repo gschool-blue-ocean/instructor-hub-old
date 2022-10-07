@@ -36,7 +36,7 @@ const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
                                     <div className= {commentStyle.inlineBlock}>
                                         <h4 className= {commentStyle.userName}>Danny Boy</h4>
                                     </div> 
-                                    <span className= {commentStyle.time}> Time</span>
+                                    <span className= {commentStyle.time}> {notes.note_date}</span>
                                     <p className= {commentStyle.commentSection}>I have never seen anyone so BAD at coding or spelling......Expelled</p>
                                 </div>
                             </div>

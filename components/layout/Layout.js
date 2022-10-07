@@ -66,6 +66,7 @@ const Layout = ({ children }) => {
     axios.get("/api/students").then((res) => {
       setStudents(res.data.students);
       // console.log(res.data.students);
+
     });
 
     axios.get("/api/learnGrades").then((res) => {

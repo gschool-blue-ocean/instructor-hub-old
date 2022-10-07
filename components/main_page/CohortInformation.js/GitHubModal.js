@@ -1,28 +1,16 @@
 import { useState } from "react";
-import gitStyle from "../../../styles/GitHub.module.css";
-import { studentsState } from "../../state";
 import { useRecoilState } from "recoil";
-import axios from "axios";
-import Image from "next/image";
+import { studentsState } from "../../state.js";
+import gitStyle from '../../../styles/GitHub.module.css'
+import Image from 'next/image'
 
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
-  const [gitHubAccount, setGitHubAccount] = useRecoilState(studentsState);
-  // console.log(gitHubAccount[0].github);
+  const [students, setStudents] = useRecoilState(studentsState);
+  
+    return (
+      <>
+    {showGitHubModal ? (
 
-  // not complete
-  const addGitHubAccount = () => {
-    axios({
-      method: "post",
-      url: `/api/students`,
-      data: {
-        github: "",
-      },
-    });
-  };
-
-  return (
-    <>
-      {showGitHubModal ? (
         <div>
           <div className={gitStyle.background} onClick={onClose}></div>
           <div className={gitStyle.gitContainer}>
@@ -42,7 +30,36 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                     </div>
                   </div>
                 </div>
-                <div onClick={onClose} className={gitStyle.close}></div>
+
+                <ul className= {gitStyle.tableList}>
+                  <li className= {gitStyle.tableListItem}>
+                    <div className= {gitStyle.tableListCell}>
+                      <span className= {gitStyle.frameLeft}>
+                        <a className= {gitStyle.frameInline} href= "#">
+                          <Image src= '/pic1.jpg' height= "44" width= "44" className= {gitStyle.avatar}/>
+                        </a>
+                      </span>
+                    </div>
+                    <div className= {gitStyle.tableListName}>
+                      <a className= {gitStyle.frameInclineName}> {students.name_first +" "+students.name_last} </a>
+                      <span className= {gitStyle.codeName}> {students.github} </span>
+                    </div>
+                  </li>
+                  <li className= {gitStyle.tableListItem}>
+                    <div className= {gitStyle.tableListCell}>
+                      <span className= {gitStyle.frameLeft}>
+                        <a className= {gitStyle.frameInline} href= "#">
+                          <Image src= '/pic1.jpg' height= "44" width= "44" className= {gitStyle.avatar}/>
+                        </a>
+                      </span>
+                    </div>
+                    <div className= {gitStyle.tableListName}>
+                      <a className= {gitStyle.frameInclineName}> Student 2 </a>
+                      <span className= {gitStyle.codeName}> BurtMFReynolds</span>
+                    </div>
+                  </li>
+                </ul> 
+
               </div>
               <ul className={gitStyle.tableList}>
                 <li className={gitStyle.tableListItem}>
