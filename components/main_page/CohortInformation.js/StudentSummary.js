@@ -1,15 +1,44 @@
 import studentStyle from "../../../styles/StudentSummary.module.css";
+import commentStyle from "../../../styles/CommentModal.module.css";
 import React, { useState, useEffect } from "react";
-import { useRecoilState } from "recoil";
-import data, { studentsState } from "../../state.js";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
+import { useRecoilState } from "recoil";
+import { studentsState, notesState } from "../../state";
+import axios from "axios";
 
 const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCommentModal, setShowCommenttModal] = useState(false);
+
+  const [notes, setNotes] = useRecoilState(notesState);
+
+  const [showBox, setShowBox] = useState(false);
   const [checkedAll, setCheckAll] = useState(false);
+  const [checked, setChecked] = useState({
+    row1: false,
+    row2: false,
+    row3: false,
+    row4: false,
+    row5: false,
+    row6: false,
+  });
+
+  const deleteHandler = (e) => {
+    e.preventDefault();
+    let id = e.currentTarget.id;
+    console.log(id);
+    axios.delete(`/api/students/${id}`).then(() => {
+      setStudents({ studentsState });
+    });
+  };
+
+  const toggle = () => {
+    setShowBox(!showBox);
+  };
+
+  // const [checkedAll, setCheckAll] = useState(false);
   // const [checked, setChecked] = useState({ students: false });
 
   const openGitHubModal = () => {
@@ -143,6 +172,7 @@ const StudentSummary = () => {
                   <th className={studentStyle.header} scope="col"></th>
                 </tr>
               </thead>
+
               <tbody
                 className={`${studentStyle.tbody} ${studentStyle.tableBody}`}
               >
@@ -167,6 +197,7 @@ const StudentSummary = () => {
                     <td className={studentStyle.content}>
                       {student.learn_avg}%
                     </td>
+
                     <td className={studentStyle.content}>
                       <div className={studentStyle.color3}>At Risk</div>
                     </td>
@@ -279,7 +310,7 @@ const StudentSummary = () => {
                     ></input>
                   </td>
                   <td className={studentStyle.content}>
-                    <a href= "#">Student 4</a>
+                    <a href="#">Student 4</a>
                   </td>
                   <td className={studentStyle.content}>95/100</td>
                   <td className={studentStyle.content}>
@@ -310,7 +341,7 @@ const StudentSummary = () => {
                     ></input>
                   </td>
                   <td className={studentStyle.content}>
-                    <a href= "#">Student5</a>
+                    <a href="#">Student5</a>
                   </td>
                   <td className={studentStyle.content}>95/100</td>
                   <td className={studentStyle.content}>
