@@ -98,7 +98,9 @@ const NewCohortModal = ({showNewCohortModal, newCohortModal, onClose}) => {
                 </>
             ) : null}
         </>
-  )
-}
+      ) : null}
+    </>
+  );
+};
 
-export default NewCohortModal
+export default NewCohortModal;
