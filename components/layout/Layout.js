@@ -57,7 +57,7 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/students").then((res) => {
-      setStudents(res.data.students[0]);
+      setStudents(res.data.students);
       // console.log(res.data.students[0]);
     });
 

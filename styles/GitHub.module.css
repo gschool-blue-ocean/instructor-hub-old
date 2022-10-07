@@ -88,6 +88,8 @@
 .tableListItem {
     position: relative;
     border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
     /* display: table-row; */
     list-style: none;
 }
@@ -132,7 +134,6 @@
     overflow: hidden;
     line-height: 1;
     vertical-align: middle;
-    background-color: var(--color-avatar-bg);
     flex-shrink: 0;
     box-shadow: 2px 2px 10px rgb(0 0 0 / 15%);
     border: 1px solid;
