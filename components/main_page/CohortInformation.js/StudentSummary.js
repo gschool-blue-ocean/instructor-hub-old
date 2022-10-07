@@ -24,8 +24,6 @@ const StudentSummary = () => {
     row6: false,
   });
 
-  console.log(students);
-
   const deleteHandler = (e) => {
     e.preventDefault();
     let id = e.currentTarget.id;
