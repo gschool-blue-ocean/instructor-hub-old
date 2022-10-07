@@ -31,9 +31,9 @@ CREATE EXTENSION pgcrypto;
 
 --TABLE OF CONTENTS--
 --SECTION 1: TABLES AND RELATIONS
------- (1) cohorts
------- (2) students
------- (3) users
+------ (1) users
+------ (2) cohorts
+------ (3) students
 ------ (4) coding_groups
 ------ (5) assigned_student_groupings
 ------ (6) notes
@@ -59,16 +59,27 @@ CREATE EXTENSION pgcrypto;
 /* ============================================================
 -- SECTION 1: Create tables and relations
 ============================================================== */
+  CREATE TABLE users (
+  user_id SERIAL PRIMARY KEY,
+  username VARCHAR (20) UNIQUE,
+  password TEXT NOT NULL,
+  is_instructor BOOLEAN,
+  default_cohort TEXT,
+  asana_access_token TEXT,  
+  cohort_asana_gid TEXT
+);
+
 CREATE TABLE cohorts (
   cohort_id SERIAL PRIMARY KEY,
   cohort TEXT,
   begin_date DATE,
   end_date DATE,
-  instructor TEXT,
+  instructor INT,
   cohort_avg INT,
   cohort_min INT,
   cohort_max INT,
-  ASANA_GID TEXT
+  ASANA_GID TEXT,
+  FOREIGN KEY (instructor) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE students (
@@ -87,15 +98,6 @@ CREATE TABLE students (
   ASANA_GID TEXT,
   FOREIGN KEY (cohort_id) REFERENCES cohorts(cohort_id) ON DELETE CASCADE
   );
-
-  CREATE TABLE users (
-  user_id SERIAL PRIMARY KEY,
-  username VARCHAR (20) UNIQUE,
-  password TEXT NOT NULL,
-  default_cohort TEXT,
-  asana_access_token TEXT,  
-  cohort_asana_gid TEXT
-);
 
 --THIS ENABLES TRACKING OF STUDENT CODING PAIR/GROUP ASSIGNMENTS
 CREATE TABLE coding_groups (
@@ -375,13 +377,30 @@ INSERT INTO users (
     username,
     password,
     default_cohort,
+    is_instructor,
     asana_access_token
   )
 VALUES (
     'testuser',
     crypt('12345', gen_salt('bf')),
     'MCSP13',
+    'true',
     'here_goes_an_asana_access_token'
+  );
+
+  INSERT INTO users (
+    username,
+    password,
+    default_cohort,
+    is_instructor,
+    asana_access_token
+  )
+VALUES (
+    'Mr. Egg',
+    crypt('password', gen_salt('bf')),
+    'MCSP15',
+    'true',
+    'heres_another_asana_access_token'
   );
 
 -- Fake Data
@@ -395,7 +414,7 @@ VALUES (
     'MCSP13',
     '01/01/2022',
     '04/04/2022',
-    'Mr. Egg'
+    '1'
   );
 
 
@@ -511,7 +530,7 @@ VALUES (
     'MCSP15',
     '01/01/2022',
     '04/04/2022',
-    'Patsiukovich'
+    '2'
   );
 
 -- Test for triggers to recalc average on update
