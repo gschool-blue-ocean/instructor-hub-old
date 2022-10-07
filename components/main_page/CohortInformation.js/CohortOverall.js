@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
-import { studentsState } from "../../state.js";
+import { studentsState, cohortsState } from "../../state.js";
 import { useRecoilState } from "recoil";
 
 ChartJS.register(
@@ -35,6 +35,7 @@ const CohortOverall = ({ children }) => {
   const [teamAvg, setTeamAvg] = useRecoilState(studentsState);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
+  const [cohort, setCohort] = useRecoilState(cohortsState);
 
   const openUpdateModal = () => {
     setShowUpdateModal((prev) => !prev);

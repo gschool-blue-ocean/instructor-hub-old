@@ -21,6 +21,17 @@ export default async function learnGradesHandler(req, res) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
+  } else if (req.method === "POST") {
+    try {
+      const { student_id, assessment_id, assessment_grade } = req.body;
+      console.log(req.body);
+      const createLearnGrade = await sql`
+               INSERT INTO learn_grades ( student_id, assessment_id, assessment_grade ) VALUES ( ${student_id}, ${assessment_id}, ${assessment_grade}) RETURNING *`;
+      res.status(200).json({ createLearnGrade });
+    } catch (error) {
+      console.error("Bad news in index api: ", error);
+      return res.status(500).json({ msg: "Messed up on our end" });
+    }
   } else {
     res.status(400).json({ msg: "You messed up" });
   }
