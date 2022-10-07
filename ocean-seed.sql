@@ -26,7 +26,7 @@ CREATE EXTENSION pgcrypto;
 --questions for mike-c or the group:
 --1) notes table: can we drop fname and lname from notes table?
 --2) notes table: do we need instructor AND seir notes? is that how front end is designed?
---3) MJ - see if/how to limit duplicate records in transactions (e.g. proj_grades, learn_grades)
+--3) MJ - confirm if any cascading deletions are unwanted or create a problem (e.g. deleting an assessment deletes the record of student's grades and averages)
 
 
 --TABLE OF CONTENTS--
@@ -158,6 +158,9 @@ CREATE TABLE project_grades (
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
 );
+----this index ensures students don't have duplicate grades
+CREATE UNIQUE INDEX project_grades_only_one_per_student
+    ON project_grades (student_id, project_id);
 
 CREATE TABLE learn (
   assessment_id SERIAL PRIMARY KEY,
@@ -171,50 +174,9 @@ CREATE TABLE learn_grades (
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
   FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE CASCADE
 );
-
-
-
-
---ussers 
---Populate student ID in other tables when new student created
-/* CREATE OR REPLACE FUNCTION student_copy() RETURNS TRIGGER AS $BODY$ BEGIN
-INSERT INTO learn_grades(student_id)
-VALUES(new.student_id);
-INSERT INTO project_grades(student_id)
-VALUES(new.student_id);
-INSERT INTO notes(student_id)
-VALUES(new.student_id);
-RETURN new;
-END;
-$BODY$ language plpgsql;
-CREATE TRIGGER trig_student_copy
-AFTER
-INSERT OR UPDATE OF name_first ON students FOR EACH ROW EXECUTE PROCEDURE student_copy();
-
--- Populate cohort ID in tables when a new cohort is created
-CREATE OR REPLACE FUNCTION cohort_copy() RETURNS TRIGGER AS $BODY$ BEGIN
-INSERT INTO coding_groups(cohort_id) 
-VALUES(new.cohort_id)
-ON CONFLICT DO NOTHING;
-INSERT INTO students(cohort_id)
-VALUES(new.cohort_id)
-ON CONFLICT DO NOTHING;
-RETURN new;
-END;
-$BODY$ language plpgsql;
-CREATE TRIGGER trig_cohort_copy
-AFTER
-INSERT
-  OR
-UPDATE OF cohort ON cohorts FOR EACH ROW EXECUTE PROCEDURE cohort_copy(); */
-
-
-
-
-
-
-
-
+----this index ensures students don't have duplicate grades
+CREATE UNIQUE INDEX learn_grades_only_one_per_student
+    ON learn_grades (student_id, assessment_id);
 
 
 
@@ -223,7 +185,6 @@ UPDATE OF cohort ON cohorts FOR EACH ROW EXECUTE PROCEDURE cohort_copy(); */
 /* ============================================================
 -- SECTION 2: FUNCTIONS AND TRIGGERS
 ============================================================== */
-
 --- (1) UPDATE STUDENT'S TECH SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED. 
 ----FUNCTION: UPDATE STUDENT'S TECH AVG SCORE
 CREATE OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
@@ -371,7 +332,7 @@ VALUES('4', 'Exceeds standard');
 /* ============================================================
 -- SECTION 4: TESTING(FAKE) DATA
 ============================================================== */
---INSERT INTO USERS
+--FAKE USERS (INSTRUCTOS, SEIRS, ETC)
 -- Test of users password MD5 hash
 INSERT INTO users (
     username,
@@ -403,7 +364,7 @@ VALUES (
     'heres_another_asana_access_token'
   );
 
--- Fake Data
+-- FAKE COHORTS
 INSERT INTO cohorts (
     cohort,
     begin_date,
@@ -417,9 +378,35 @@ VALUES (
     '1'
   );
 
+  INSERT INTO cohorts (
+    cohort,
+    begin_date,
+    end_date,
+    instructor
+  )
+VALUES (
+    'MCSP15',
+    '04/04/2022',
+    '08/05/2022',
+    '2'
+  );
+
+  INSERT INTO cohorts (
+    cohort,
+    begin_date,
+    end_date,
+    instructor
+  )
+VALUES (
+    'MCSP15',
+    '01/01/2022',
+    '04/04/2022',
+    '2'
+  );
 
 
--- Fake Data
+
+-- FAKE STUDENTS
 INSERT INTO students (
     name_first,
     name_last,
@@ -444,56 +431,7 @@ VALUES (
     '12/31/2022',
     'bronzedog'
   );
-
--- Fake Data
-INSERT INTO notes (student_id, note_date, instructor_notes)
-VALUES ('1', NOW(), 'Ой у лузі червона калина похилилася,
-Чогось наша славна Україна зажурилася.
-А ми тую червону калину підіймемо,
-А ми нашу славну Україну, гей-гей, розвеселимо!
-А ми тую червону калину підіймемо,
-А ми нашу славну Україну, гей-гей, розвеселимо!');
-
-
-
---INSERT INTO TECH AND TEAMWORK TABLES
-
-
--- Fake Data
-INSERT INTO projects (project_name)
-VALUES ('Twiddler');
-INSERT INTO projects (project_name  )
-VALUES ('PixelArtMaker');
-INSERT INTO projects (project_name)
-VALUES ('ReactMVP');
-
-INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '1', 'TRUE', 'Great job. They are so smart');
-INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '2', 'TRUE', 'not very good');
-INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '3', 'FALSE', 'good effort but missed the mark');
-
---Fake Data
-INSERT INTO learn (assessment_name)
-VALUES('Functions');
-INSERT INTO learn (assessment_name)
-VALUES ('Objects');
-INSERT INTO learn (assessment_name)
-VALUES ('Arrays');
-
-
--- Fake Data
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
-VALUES ('1', '1', '99');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
-VALUES ('1', '2', '90');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
-VALUES ('1', '3', '60');
-
-
--- Test for student_id population across tables in the db when new student created
-INSERT INTO students (
+  INSERT INTO students (
     name_first,
     name_last,
     server_side_test,
@@ -517,45 +455,7 @@ VALUES (
     '12/31/2022',
     'platypus66'
   );
-
-
--- Test for cohort_id population into coding groups when cohort created
-INSERT INTO cohorts (
-    cohort,
-    begin_date,
-    end_date,
-    instructor
-  )
-VALUES (
-    'MCSP15',
-    '01/01/2022',
-    '04/04/2022',
-    '2'
-  );
-
--- Test for triggers to recalc average on update
-INSERT INTO projects (project_name)
-VALUES ('FoodTruck');
-INSERT INTO learn (assessment_name)
-VALUES('DOM_API');
-INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '4', 'FALSE', 'They SUCK!!');
-INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
-VALUES ('1', '4', '100');
-
-
-
--- Test of date update for notes
-UPDATE notes
-SET SEIR_notes = 'this is a test of the change date on note update feature'
-WHERE student_id = '2';
-UPDATE notes
-SET note_date = NOW()
-WHERE student_id = '2';
-
--- Test of cohort avergage, to make sure only one coohort is averaged
-
-INSERT INTO students (
+  INSERT INTO students (
     name_first,
     name_last,
     server_side_test,
@@ -579,8 +479,6 @@ VALUES (
     '12/31/2022',
     'catman57'
   );
-
-
   INSERT INTO students (
     name_first,
     name_last,
@@ -607,6 +505,84 @@ VALUES (
   );
 
 
+
+-- FAKE NOTES
+INSERT INTO notes (student_id, note_date, instructor_notes)
+VALUES ('1', NOW(), 'Ой у лузі червона калина похилилася,
+Чогось наша славна Україна зажурилася.
+А ми тую червону калину підіймемо,
+А ми нашу славну Україну, гей-гей, розвеселимо!
+А ми тую червону калину підіймемо,
+А ми нашу славну Україну, гей-гей, розвеселимо!');
+
+
+
+--INSERT INTO TECH AND TEAMWORK TABLES
+
+
+-- FAKE PROJECTS
+INSERT INTO projects (project_name)
+VALUES ('Twiddler');
+INSERT INTO projects (project_name  )
+VALUES ('PixelArtMaker');
+INSERT INTO projects (project_name)
+VALUES ('ReactMVP');
+INSERT INTO projects (project_name)
+VALUES ('FoodTruck');
+
+INSERT INTO project_grades (student_id, project_id, project_passed, notes)
+VALUES ('1', '1', 'TRUE', 'Great job. They are so smart');
+INSERT INTO project_grades (student_id, project_id, project_passed, notes)
+VALUES ('1', '2', 'TRUE', 'not very good');
+INSERT INTO project_grades (student_id, project_id, project_passed, notes)
+VALUES ('1', '3', 'FALSE', 'good effort but missed the mark');
+UPDATE project_grades 
+SET 
+project_passed =  TRUE,
+notes = 'he did it!'
+WHERE student_id = 1 AND project_id = 3;
+
+--FAKE LEARN ASSESSMENTS
+INSERT INTO learn (assessment_name)
+VALUES('Functions');
+INSERT INTO learn (assessment_name)
+VALUES ('Objects');
+INSERT INTO learn (assessment_name)
+VALUES ('Arrays');
+INSERT INTO learn (assessment_name)
+VALUES('DOM_API');
+
+
+-- FAKE LEARN GRADES
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('1', '1', '99');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('1', '2', '90');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('1', '3', '60');
+
+
+-- Test for triggers to recalc average on update
+INSERT INTO project_grades (student_id, project_id, project_passed, notes)
+VALUES ('1', '4', 'FALSE', 'They SUCK!!');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('1', '4', '100');
+
+
+
+-- Test of date update for notes
+UPDATE notes
+SET SEIR_notes = 'this is a test of the change date on note update feature'
+WHERE student_id = '2';
+UPDATE notes
+SET note_date = NOW()
+WHERE student_id = '2';
+
+-- Test of cohort avergage, to make sure only one coohort is averaged
+
+
+
+
 INSERT INTO projects (project_name)
 VALUES ('Hackathon');
 INSERT INTO learn (assessment_name)
@@ -621,6 +597,10 @@ INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('4', '2', '97');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('4', '3', '89');
+UPDATE learn_grades 
+SET assessment_grade = 88
+WHERE 
+student_id = 4 AND assessment_id = 3;
 
 
 INSERT INTO student_tech_skills (student_id, score, record_date)
