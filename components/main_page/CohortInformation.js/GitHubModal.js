@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { studentsState } from "../../state.js";
 import gitStyle from '../../../styles/GitHub.module.css'
 import Image from 'next/image'
 
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
+  const [students, setStudents] = useRecoilState(studentsState);
   
     return (
       <>
@@ -30,8 +33,8 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                       </span>
                     </div>
                     <div className= {gitStyle.tableListName}>
-                      <a className= {gitStyle.frameInclineName}> Student 1 </a>
-                      <span className= {gitStyle.codeName}>TantalizingTickler</span>
+                      <a className= {gitStyle.frameInclineName}> {students.name_first +" "+students.name_last} </a>
+                      <span className= {gitStyle.codeName}> {students.github} </span>
                     </div>
                   </li>
                   <li className= {gitStyle.tableListItem}>
