@@ -25,7 +25,7 @@ export default async function usersHandler(req, res) {
     try {
       const { username, password, default_cohort, asana_access_token } =
         req.body;
-
+      console.log(req.body);
       const createUsers = await sql`
                INSERT INTO users (  username, password, default_cohort, asana_access_token )
                VALUES ( ${username}, ${password}, ${default_cohort}, ${asana_access_token}) 
