@@ -173,7 +173,7 @@ const StudentSummary = () => {
                   </td>
                 </tr>
                 ))}
-                <tr className={studentStyle.tbodyRow}>
+                {/* <tr className={studentStyle.tbodyRow}>
                   <td>
                     <input
                       type="checkbox"
@@ -236,7 +236,7 @@ const StudentSummary = () => {
                       <path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>{" "}
                     </svg>{" "}
                   </td>
-                </tr>
+                </tr> */}
 
                 {/* <tr className={studentStyle.tbodyRow}>
                   <td>

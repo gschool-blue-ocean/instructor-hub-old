@@ -9,6 +9,7 @@
 .container {
     height: 330px;
     padding: 10px;
+    overflow: hidden;
 }
 
 .topBorder {
