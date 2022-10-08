@@ -13,6 +13,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+
     console.log("What is the submit 'e'?", e);
     const stagedStudent = formGetter(e.target);
     setStagedCohort((prev) => ({
