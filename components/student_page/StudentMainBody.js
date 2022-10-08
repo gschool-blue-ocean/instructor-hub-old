@@ -19,6 +19,7 @@ const StudentMainBody = () => {
       </div>
       <StudentStatus/>
       <div className={styles.notesContainer}>
+        <div className={styles.notes}>
         <div className={styles.notesTitle}>Notes</div>
         <div>
           <ul>
@@ -27,6 +28,7 @@ const StudentMainBody = () => {
             <li>His most significant character trait is his low intelligence</li>
             <li>which often gets him and his best friend, SpongeBob SquarePants, into trouble</li>
           </ul>
+        </div>
         </div>
       </div>
     </div>

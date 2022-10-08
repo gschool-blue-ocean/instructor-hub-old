@@ -1,11 +1,15 @@
 .container{
     width: 450px;
-    background: lightgray;
+    /* background: lightgray; */
+    /* background: rgba(255, 255, 255, 0.49); */
+    background: rgba(255, 255, 255, 0.806);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
     margin: 10px;
+    box-shadow: 2px 2px 10px rgb(0 0 0 / 40%);
+    border-radius: 10px;
 }
 .tableContainer {
    width: 100%;
@@ -18,8 +22,10 @@
 }
 .table{
     /* border-collapse: collapse; */
-    border: 1px solid black;
+    /* border: 1px solid black; */
     width: 350px;
+    /* background: #0b131b61; */
+    background: #1b4a49cf;
 }
 .tableHead{
     display: table-header-group;
@@ -31,7 +37,7 @@
 }
 .headerRow{
     color: white; 
-    border: 1px solid black;
+    /* border: 1px solid black; */
     display: table;
     width: 100%;
     table-layout: fixed;
@@ -72,6 +78,7 @@ background: pink;
     scrollbar-width: thin;
     table-layout: fixed;
     max-height: 80px;
+    color: white;
 }
 .noteIcon{
     width: 25px;

@@ -7,7 +7,6 @@ const ProjNoteModal = ({ showNotesModal, setShowNotesModal, onClose }) => {
     const [students, setStudents] = useRecoilState(studentsState);
     const [notes, setNotes] = useRecoilState(notesState);
   return (
-    <div>
        <>
       {showNotesModal ? (
         <div>
@@ -19,8 +18,7 @@ const ProjNoteModal = ({ showNotesModal, setShowNotesModal, onClose }) => {
                 <div>
                   <div onClick={onClose} className={commentStyle.close}></div>
                   <div className={commentStyle.studentName}>
-                    {" "}
-                    {students.name_first + " " + students.name_last}{" "}
+                   Student Name
                   </div>
                 </div>
               </div>
@@ -41,11 +39,10 @@ const ProjNoteModal = ({ showNotesModal, setShowNotesModal, onClose }) => {
                       <div className={commentStyle.headerLayout}>
                         <div className={commentStyle.textColor}>
                           <div className={commentStyle.inlineBlock}>
-                            <h4 className={commentStyle.userName}>Danny Boy</h4>
+                            <h4 className={commentStyle.userName}>Instructor Name</h4>
                           </div>
                           <span className={commentStyle.time}>
-                            {" "}
-                            {notes.note_date}
+                         Date
                           </span>
                           <p className={commentStyle.commentSection}>
                             I have never seen anyone so BAD at coding or
@@ -57,24 +54,11 @@ const ProjNoteModal = ({ showNotesModal, setShowNotesModal, onClose }) => {
                   </div>
                 </div>
               </div>
-              <div className={commentStyle.btn_container}>
-                <div onClick={onClose} className={commentStyle.close_btn}>
-                  <div className={commentStyle.close_btn_medium}>
-                    <span className={commentStyle.cancel}> Close</span>
-                  </div>
-                </div>
-                {/* <div className= {commentStyle.post_btn}>
-                        <div className= {commentStyle.post_btn_medium}>
-                            <span className= {commentStyle.post}>Post</span>
-                        </div>
-                    </div> */}
-              </div>
             </div>
           </div>
         </div>
       ) : null}
     </>
-    </div>
   )
 }
 
