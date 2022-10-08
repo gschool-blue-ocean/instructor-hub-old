@@ -23,16 +23,29 @@ export default async function cohortsHandler(req, res) {
     }
   } else if (req.method === "POST") {
     try {
-      const { cohort, begin_date, end_date, instructor } = req.body;
+      const {
+        cohort,
+        begin_date,
+        end_date,
+        instructor,
+        cohort_avg,
+        cohort_min,
+        cohort_max,
+        ASANA_GID,
+      } = req.body;
 
       const createCohort = await sql`
                INSERT INTO cohorts ( 
                 cohort,
                 begin_date,
                 end_date,
-                instructor
+                instructor,
+                cohort_avg,
+                cohort_min,
+                cohort_max,
+                ASANA_GID
                 )
-               VALUES (${cohort}, ${begin_date}, ${end_date}, ${instructor}) 
+               VALUES (${cohort}, ${begin_date}, ${end_date}, ${instructor}, ${cohort_avg}, ${cohort_min}, ${cohort_max}, ${ASANA_GID}) 
                RETURNING *`;
       res.status(200).json({ createCohort });
     } catch (error) {

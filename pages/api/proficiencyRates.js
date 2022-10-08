@@ -11,24 +11,23 @@ const sql = postgres(
     : {}
 );
 
-export default async function projectGradesHandler(req, res) {
+export default async function proficiencyRatesHandler(req, res) {
   if (req.method === "GET") {
     try {
-      const projectGrades = await sql`
-      SELECT * FROM project_grades`;
-      res.status(200).json({ projectGrades });
+      const projects = await sql`
+      SELECT * FROM proficiency_rates;`;
+      res.status(200).json({ projects });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
   } else if (req.method === "POST") {
     try {
-      const { student_id, project_id, project_grade } = req.body;
+      const { skill_id, skill_descr } = req.body;
       console.log(req.body);
-      const createProjectGrades = await sql`
-               INSERT INTO project_grades ( student_id, project_id, project_grade )
-               VALUES ( ${student_id}, ${project_id}, ${project_grade}) RETURNING *`;
-      res.status(200).json({ createProjectGrades });
+      const createProjects = await sql`
+               INSERT INTO proficiency_rates ( skill_id, skill_descr ) VALUES ( ${skill_id}, ${skill_descr}) RETURNING *`;
+      res.status(200).json({ createProjects });
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
