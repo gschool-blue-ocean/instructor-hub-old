@@ -54,3 +54,8 @@ export const usersState = atom({
   key: "users",
   default: [],
 });
+
+export const currentCohortState = atom({
+  key: "current cohort",
+  default: ''
+})

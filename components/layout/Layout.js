@@ -12,6 +12,7 @@ import {
   learnGradesState,
   projectGradesState,
   usersState,
+  // currentCohortState
 } from "../state.js";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -27,10 +28,12 @@ const Layout = ({ children }) => {
   const [learnGrades, setLearnGrades] = useRecoilState(learnGradesState);
   const [projectGrades, setProjectGrades] = useRecoilState(projectGradesState);
   const [users, setUsers] = useRecoilState(usersState);
+  // const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
 
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
-      setCohorts(res.data.cohorts[0]);
+      // removed the [0] - gerard
+      setCohorts(res.data.cohorts);
       // console.log(res.data.cohorts[0]);
     });
 
@@ -81,7 +84,12 @@ const Layout = ({ children }) => {
       setUsers(res.data.users[0]);
       console.log(res.data.users[0]);
     });
+
   }, []);
+
+  // useEffect(() => {
+  //   console.log(cohorts[0])
+  // }, [cohorts])
 
   return (
     <>
