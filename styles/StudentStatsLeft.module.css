@@ -19,7 +19,7 @@
 .table{
     /* border-collapse: collapse; */
     border: 1px solid black;
-    width: 300px;
+    width: 350px;
 }
 .tableHead{
     display: table-header-group;
@@ -72,6 +72,14 @@ background: pink;
     scrollbar-width: thin;
     table-layout: fixed;
     max-height: 80px;
+}
+.noteIcon{
+    width: 25px;
+    height: 32px;
+    display: inline-block;
+    overflow: visible !important;
+    vertical-align: text-bottom;
+    fill: currentColor;
 }
 
 /* width */
