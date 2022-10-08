@@ -23,6 +23,15 @@ export default async function getStudents(req, res) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
+  } else if (req.method === "GET") {
+    try {
+      const student = await sql`
+        SELECT * FROM students WHERE student_id = ${id}`;
+      res.status(200).json({ student });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ msg: "Messed up on our end" });
+    }
   } else if (req.method === "PATCH") {
     try {
       const {

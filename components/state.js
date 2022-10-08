@@ -79,3 +79,8 @@ export const studentTechSkillsState = atom({
   key: "proficiency Rates",
   default: [],
 });
+
+export const studentIdState = atom({
+  key: "student id",
+  default: [],
+});
