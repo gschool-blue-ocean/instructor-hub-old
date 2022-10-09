@@ -1,13 +1,35 @@
 import SignUp from "./SignUp.js";
 import styles from "../../styles/signUp.module.css";
 import Link from "next/link";
+import { useState } from "react"
 import { useRecoilState } from "recoil";
 import { usersState } from "../state.js";
 
 const LoginScreen = () => {
   const [user, setUser] = useRecoilState(usersState);
+  const [enteredUsername, setEnteredUsername] = useState("")
+  const [enteredPassword, setEnteredPassword] = useState("")
   // get request from asana then post request to our database
-  console.log(user);
+  const usernameFunc = (e) => {
+    console.log(user)
+    console.log(e.target.value)
+    setEnteredUsername(e.target.value)
+  }
+  const passwordFunc = (e) => {
+    console.log(e.target.value)
+    setEnteredPassword(e.target.value)
+  }
+  const checkUser = (e) =>{
+    e.preventDefault()
+    user.filter( (e) => {
+      if(e.username === enteredUsername && e.password === enteredPassword){
+        return( 
+          <Link href="/home" />
+        )
+      }
+    })
+  }
+  
   return (
     <div>
       <div className={styles.signUpContainer}>
@@ -22,33 +44,22 @@ const LoginScreen = () => {
                   <form className={styles.signUpForm}>
                     <div className={styles.accountInputContainer}>
                       <div className={styles.signUp}>Username</div>
-                      <input
-                        className={styles.inputFields}
-                        type="text"
-                        required
-                      ></input>
+                      <input className={styles.usernameField} type="text" onChange={(e)=>usernameFunc(e)} required></input>
                     </div>
                     <div className={styles.accountInputContainer}>
                       <div className={styles.signUp}>Password</div>
-                      <input
-                        className={styles.inputFields}
-                        type="password"
-                        required
-                      ></input>
+                      <input className={styles.passwordFields} type="password" onChange={(e) => passwordFunc(e)} required></input>
                     </div>
                     <div className={styles.rememberMeContainer}>
-                      <input
-                        type="checkbox"
-                        className={styles.rememberMeCheckBox}
-                      ></input>
-                      <div className={styles.rememberMeText}>Remember me</div>
+                      {/* <input type="checkbox" className={styles.rememberMeCheckBox}></input>
+                      <div className={styles.rememberMeText}>Remember me</div> */}
                     </div>
                     <div className={styles.signInBtnContainer}>
-                      <Link href="/home">
-                        <button type="submit" className={styles.signInBtn}>
+                      {/* <Link href="/home"> */}
+                        <button type="submit" onSubmit={(e)=> checkUser(e)} className={styles.signInBtn}>
                           Sign in
                         </button>
-                      </Link>
+                      {/* </Link> */}
                     </div>
                     <div>
                       {"Don't have an account? Click "}

@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil';
 import { usersState } from '../state';
 import axios from 'axios';
 import SignUpModal from './SignUpModal';
+import { bodyStreamToNodeStream } from 'next/dist/server/body-streams';
 
 const SignUp = () => {
     // const [users, setUsers] = useRecoilState(usersState);
@@ -30,7 +31,7 @@ const SignUp = () => {
     
     function showDisplayCohortModal(e){
         e.preventDefault();
-        // if(confirmPassword === password && username.length >= 6 && password.length >= 8 && asanaToken){
+        if(confirmPassword === password && username.length >= 6 && password.length >= 8 && asanaToken){
             axios.get('https://app.asana.com/api/1.0/projects/', {
                 headers: {
                     Authorization: `Bearer ${asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
@@ -39,20 +40,26 @@ const SignUp = () => {
                 setListOfCohorts(res.data.data)
                 setDisplayCohortModal(!displayCohortModal)
             })
-        // }else{
-        //     if(username.length < 6){
-        //         alert("Please enter a username with 6 or more characters.")
-        //     } 
-        //     if(password.length < 8){
-        //         alert("Please enter a password with 8 or more characters.")
-        //     }
-        //     if(!asanaToken){
-        //         alert("Please enter your Asana API Key.")
-        //     }
-        //     if(confirmPassword !== password){
-        //         alert("Please verify that your passwords match.")
-        //     }
-        // }
+        }else{
+            if(username.length < 6){
+                document.getElementById('username').border = "2px solid red"
+                alert("Please enter a username with 6 or more characters.")
+
+            } 
+            if(password.length < 8){
+                alert("Please enter a password with 8 or more characters.")
+                document.getElementById('password').border = "2px solid red"
+            }
+            if(!asanaToken){
+                alert("Please enter your Asana API Key.")
+                document.getElementById('asanaToken').border = "2px solid red"
+            }
+            if(confirmPassword !== password){
+                alert("Please verify that your passwords match.")
+                document.getElementById('password').border = "2px solid red"
+                document.getElementById('confirmPassword').border = "2px solid red"
+            }
+        }
     }
 
     function createToken(e) {
@@ -90,23 +97,23 @@ const SignUp = () => {
                                     <div className={styles.signUp}>
                                         Username
                                     </div>
-                                    <input className={styles.inputFields} onChange={(e) => createUsername(e)} type='text'  minLength="6" required></input>
+                                    <input id='username' className={styles.usernameField} onChange={(e) => createUsername(e)} type='text' required></input>
                                 </div>
                                 <div className={styles.accountInputContainer}>
                                     <div className={styles.signUp}>
                                         Password
                                     </div>
-                                    <input className={styles.inputFields} onChange={(e) => createPassword(e)} type='password' minLength="8" required></input>
+                                    <input id="password" className={styles.passwordFields} onChange={(e) => createPassword(e)} type='password' required></input>
                                 </div>
                                 <div className={styles.accountInputContainer}>
                                     <div className={styles.signUp}>
                                         Confirm Password
                                     </div>
-                                    <input className={styles.inputFields} type='password' onChange={(e) =>passwordVerification(e)} minLength="8" required></input>
+                                    <input id="confirmPassword" className={styles.passwordFields} type='password' onChange={(e) =>passwordVerification(e)} required></input>
                                 </div>
                                 <div className={styles.accessTokenDiv}>
                                     {'Asana API KEY: '}
-                                    <input type='text' className={styles.inputTokenField} placeholder='Required' onChange={(e) => createToken(e)} required></input>
+                                    <input type='text' id='asanaToken' className={styles.inputTokenField} placeholder='Required' onChange={(e) => createToken(e)} required></input>
                                 </div>
                                 <div className={styles.signInBtnContainer}>
                                     <button type='button' className={styles.signInBtn} onClick={(e) => showDisplayCohortModal(e)}>Create Account</button>
