@@ -94,3 +94,13 @@ export const currentStudentState = atom({
   key: "current student",
   default: [],
 });
+
+export const learnAndLearnGradesIdState = atom({
+  key: "student id",
+  default: "1",
+});
+
+export const currentlearnAndLearnGradesState = atom({
+  key: "current learn and learn grades",
+  default: [],
+});
