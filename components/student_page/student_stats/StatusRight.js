@@ -62,17 +62,17 @@ const StatusRight = () => {
         <Line className={style.graph}  options={options} data={data} />
       </div>
       <div className={style.avrgScoreCon}>
-        <div>
-          <span>Project Average</span>
-          <span>50%</span>
+        <div className={style.averages}>
+          <span>Project Avg</span>
+          <div>50%</div>
         </div>
-        <div>
-          <span>Assesment Average</span>
-          <span>50%</span>
+        <div className={style.averages}>
+          <span>Assesment Avg</span>
+          <div>50%</div>
         </div>
-        <div>
-          <span>Softskills Average</span>
-          <span>50%</span>
+        <div className={style.averages}>
+          <span>Softskills Avg</span>
+          <div>50%</div>
         </div>
       </div>
     </div>
