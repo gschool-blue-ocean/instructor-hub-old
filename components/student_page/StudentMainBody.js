@@ -16,14 +16,7 @@ const StudentMainBody = () => {
   );
   const [currentStudent, setCurrentStudent] =
     useRecoilState(currentStudentState);
-  console.log(currentStudent);
-  // useEffect(() => {
-  //   axios.get(`/api/students/1`).then((res) => {
-  //     setStudentId(res.data.student[0]);
-  //     // console.log(res.data.student[0]);
-  //   });
-  // }, []);
-  // `${student[0].name_first} ${student[0].name_last}`
+
   return (
     <>
       <NavBar />
@@ -49,25 +42,25 @@ const StudentMainBody = () => {
         <StudentStatus />
         <div className={styles.notesContainer}>
           <div className={styles.notes}>
-          <div className={styles.notesTitle}>Notes</div>
-          <div>
-            <ul>
-              <li>An obese pink starfish</li>
-              <li>
-                Patrick lives under a rock in the underwater city of Bikini
-                Bottom next door to Squidward Tentacles' moai
-              </li>
-              <li>
-                His most significant character trait is his low intelligence
-              </li>
-              <li>
-                which often gets him and his best friend, SpongeBob SquarePants,
-                into trouble
-              </li>
-            </ul>
+            <div className={styles.notesTitle}>Notes</div>
+            <div>
+              <ul>
+                <li>An obese pink starfish</li>
+                <li>
+                  Patrick lives under a rock in the underwater city of Bikini
+                  Bottom next door to Squidward Tentacles' moai
+                </li>
+                <li>
+                  His most significant character trait is his low intelligence
+                </li>
+                <li>
+                  which often gets him and his best friend, SpongeBob
+                  SquarePants, into trouble
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-          </div>
       </div>
     </>
   );
