@@ -11,32 +11,23 @@ const sql = postgres(
     : {}
 );
 
-export default async function usersHandler(req, res) {
+export default async function projectsHandler(req, res) {
   if (req.method === "GET") {
     try {
-      const users = await sql`
-      SELECT * FROM users`;
-      res.status(200).json({ users });
+      const projects = await sql`
+      SELECT * FROM projects`;
+      res.status(200).json({ projects });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
   } else if (req.method === "POST") {
     try {
-      const {
-        username,
-        password,
-        is_instructor,
-        default_cohort,
-        asana_access_token,
-        cohort_asana_gid,
-      } = req.body;
+      const { project_id, project_name } = req.body;
       console.log(req.body);
-      const createUsers = await sql`
-               INSERT INTO users (  username, password, is_instructor, default_cohort, asana_access_token, cohort_asana_gid )
-               VALUES ( ${username}, ${password}, ${is_instructor}, ${default_cohort}, ${asana_access_token}, ${cohort_asana_gid}) 
-               RETURNING *`;
-      res.status(200).json(req.body);
+      const createProjects = await sql`
+               INSERT INTO projects ( project_id, project_name ) VALUES ( ${project_id}, ${project_name}) RETURNING *`;
+      res.status(200).json({ createProjects });
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });

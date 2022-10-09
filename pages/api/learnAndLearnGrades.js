@@ -11,12 +11,12 @@ const sql = postgres(
     : {}
 );
 
-export default async function projectsHandler(req, res) {
+export default async function learnAndLearnGradesHandler(req, res) {
   if (req.method === "GET") {
     try {
-      const projects = await sql`
-      SELECT * FROM projects`;
-      res.status(200).json({ projects });
+      const learnAndLearnGrades = await sql`
+      SELECT * FROM learn INNER JOIN learn_grades ON learn.assessment_id = learn_grades.assessment_id`;
+      res.status(200).json({ learnAndLearnGrades });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });

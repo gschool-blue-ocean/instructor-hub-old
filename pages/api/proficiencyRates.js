@@ -11,32 +11,23 @@ const sql = postgres(
     : {}
 );
 
-export default async function usersHandler(req, res) {
+export default async function proficiencyRatesHandler(req, res) {
   if (req.method === "GET") {
     try {
-      const users = await sql`
-      SELECT * FROM users`;
-      res.status(200).json({ users });
+      const proficiencyRates = await sql`
+      SELECT * FROM proficiency_rates;`;
+      res.status(200).json({ proficiencyRates });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
   } else if (req.method === "POST") {
     try {
-      const {
-        username,
-        password,
-        is_instructor,
-        default_cohort,
-        asana_access_token,
-        cohort_asana_gid,
-      } = req.body;
+      const { skill_id, skill_descr } = req.body;
       console.log(req.body);
-      const createUsers = await sql`
-               INSERT INTO users (  username, password, is_instructor, default_cohort, asana_access_token, cohort_asana_gid )
-               VALUES ( ${username}, ${password}, ${is_instructor}, ${default_cohort}, ${asana_access_token}, ${cohort_asana_gid}) 
-               RETURNING *`;
-      res.status(200).json(req.body);
+      const createProficiencyRates = await sql`
+               INSERT INTO proficiency_rates ( skill_id, skill_descr ) VALUES ( ${skill_id}, ${skill_descr}) RETURNING *`;
+      res.status(200).json({ createProficiencyRates });
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
