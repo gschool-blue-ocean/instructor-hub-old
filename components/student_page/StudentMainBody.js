@@ -16,7 +16,6 @@ const StudentMainBody = () => {
   );
   const [currentStudent, setCurrentStudent] =
     useRecoilState(currentStudentState);
-  // console.log(learnAndLearnGrades.skill_descr);
 
   return (
     <>

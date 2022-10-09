@@ -20,6 +20,7 @@ import {
   studentIdState,
   currentStudentState,
   currentlearnAndLearnGradesState,
+  learnAndLearnGradesIdState,
 } from "../state.js";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -54,8 +55,11 @@ const Layout = ({ children }) => {
     useRecoilState(currentStudentState);
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] =
     useRecoilState(currentlearnAndLearnGradesState);
+  const [learnAndLearnGradesId, setLearnAndLearnGradesId] = useRecoilState(
+    learnAndLearnGradesIdState
+  );
 
-  console.log(studentId);
+  console.log(learnAndLearnGradesId);
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
       setCohorts(res.data.cohorts);
@@ -137,13 +141,13 @@ const Layout = ({ children }) => {
 
     axios.get(`/api/students/${studentId}`).then((res) => {
       setCurrentStudent(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     });
 
     axios
-      .get(`/api/learnAndLearnGrades/${currentLearnAndLearnGrades}`)
+      .get(`/api/learnAndLearnGradesId/${learnAndLearnGradesId}`)
       .then((res) => {
-        setCurrentStudent(res.data);
+        setCurrentLearnAndLearnGrades(res.data);
         console.log(res.data);
       });
   }, []);
