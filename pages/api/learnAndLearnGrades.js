@@ -16,7 +16,7 @@ export default async function learnAndLearnGradesHandler(req, res) {
     try {
       const learnAndLearnGrades = await sql`
       SELECT * FROM learn INNER JOIN learn_grades ON learn.assessment_id = learn_grades.assessment_id`;
-      res.status(200).json({ learnAndLearnGrades });
+      res.status(200).json(learnAndLearnGrades);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
