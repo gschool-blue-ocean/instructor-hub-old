@@ -28,7 +28,7 @@ export default async function projectGradesHandler(req, res) {
       const createProjectGrades = await sql`
                INSERT INTO project_grades ( student_id, project_id, project_grade )
                VALUES ( ${student_id}, ${project_id}, ${project_grade}) RETURNING *`;
-      res.status(200).json({ createProjectGrades });
+      res.status(200).json(createProjectGrades);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
