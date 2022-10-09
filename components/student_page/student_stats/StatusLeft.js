@@ -157,7 +157,8 @@ const StatusLeft = () => {
                 <tbody className={`${style.tableBody}, ${style.tbody}`}>
                   <tr className={style.tBodyRow}>
                     <td className={style.projNamCell}>
-                      {currentLearnAndLearnGrades[0].assessment_name}
+                      Asessment 1
+                      {/* {currentLearnAndLearnGrades[0].assessment_name} */}
                     </td>
                     <td className={style.scoreCell}>50%</td>
                   </tr>
