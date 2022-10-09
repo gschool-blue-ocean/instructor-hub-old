@@ -48,6 +48,7 @@ const StudentMainBody = () => {
         </div>
         <StudentStatus />
         <div className={styles.notesContainer}>
+          <div className={styles.notes}>
           <div className={styles.notesTitle}>Notes</div>
           <div>
             <ul>
@@ -66,6 +67,7 @@ const StudentMainBody = () => {
             </ul>
           </div>
         </div>
+          </div>
       </div>
     </>
   );
