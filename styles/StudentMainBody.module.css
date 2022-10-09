@@ -1,13 +1,16 @@
 .container{
     max-width: 950px;
-    background: rgba(72, 72, 130, 0.456);
-    margin: 0 auto;
+    background: rgb(72 122 130 / 46%);
+    margin: 50px auto;
     padding: 25px 15px;
+    box-shadow: 2px 2px 10px rgb(0 0 0 / 40%);
+    border-radius: 10px;
 }
 .containerTitle {
     display: flex;
     flex-direction: row;
     color: white;
+    padding: 10px;
 }
 .picture{
     border-radius: 50px;
@@ -31,9 +34,18 @@
     padding-right: 20px;
 }
 .notesContainer{
-    background: lightsteelblue;
+    /* background: lightsteelblue; */
+    /* background: rgba(255, 255, 255, 0.49); */
     padding: 20px;
 }
 .notesTitle{
     border-bottom: 1px dashed blue;
+}
+.notes{
+    /* color: white; */
+    padding: 10px;
+    /* background: rgba(255, 255, 255, 0.49); */
+    background: rgba(255, 255, 255, 0.806);
+    box-shadow: 2px 2px 10px rgb(0 0 0 / 40%);
+    border-radius: 10px;
 }
