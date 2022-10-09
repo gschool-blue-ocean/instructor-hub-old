@@ -40,26 +40,26 @@ const StudentMainBody = () => {
             </div>
           </div>
         </div>
-      </div>
-      <StudentStatus />
-      <div className={styles.notesContainer}>
-        <div className={styles.notes}>
-          <div className={styles.notesTitle}>Notes</div>
-          <div>
-            <ul>
-              <li>An obese pink starfish</li>
-              <li>
-                Patrick lives under a rock in the underwater city of Bikini
-                Bottom next door to Squidward Tentacles' moai
-              </li>
-              <li>
-                His most significant character trait is his low intelligence
-              </li>
-              <li>
-                which often gets him and his best friend, SpongeBob SquarePants,
-                into trouble
-              </li>
-            </ul>
+        <StudentStatus />
+        <div className={styles.notesContainer}>
+          <div className={styles.notes}>
+            <div className={styles.notesTitle}>Notes</div>
+            <div>
+              <ul>
+                <li>An obese pink starfish</li>
+                <li>
+                  Patrick lives under a rock in the underwater city of Bikini
+                  Bottom next door to Squidward Tentacles' moai
+                </li>
+                <li>
+                  His most significant character trait is his low intelligence
+                </li>
+                <li>
+                  which often gets him and his best friend, SpongeBob
+                  SquarePants, into trouble
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
