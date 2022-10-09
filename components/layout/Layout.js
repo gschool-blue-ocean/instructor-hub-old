@@ -18,6 +18,7 @@ import {
   studentTeamworkSkillsState,
   studentTechSkillsState,
   studentIdState,
+  currentStudentState,
 } from "../state.js";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -48,7 +49,9 @@ const Layout = ({ children }) => {
     studentTechSkillsState
   );
   const [studentId, setStudentId] = useRecoilState(studentIdState);
-
+  const [currentStudent, setCurrentStudent] =
+    useRecoilState(currentStudentState);
+  console.log(studentId);
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
       setCohorts(res.data.cohorts);
@@ -128,9 +131,9 @@ const Layout = ({ children }) => {
       // console.log(res.data.studentTechSkills);
     });
 
-    axios.get(`/api/students/1`).then((res) => {
-      setStudentId(res.data.student[0]);
-      // console.log(res.data.student[0]);
+    axios.get(`/api/students/${studentId}`).then((res) => {
+      setCurrentStudent(res.data);
+      console.log(res.data);
     });
   }, []);
 

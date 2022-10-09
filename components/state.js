@@ -82,5 +82,10 @@ export const studentTechSkillsState = atom({
 
 export const studentIdState = atom({
   key: "student id",
+  default: "1",
+});
+
+export const currentStudentState = atom({
+  key: "current student",
   default: [],
 });

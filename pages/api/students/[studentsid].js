@@ -13,7 +13,7 @@ const sql = postgres(
 
 export default async function getStudents(req, res) {
   const id = req.query.studentsid;
-  console.log(id);
+  // console.log(id);
   if (req.method === "DELETE") {
     try {
       const deleteStudents = await sql`
@@ -27,7 +27,7 @@ export default async function getStudents(req, res) {
     try {
       const student = await sql`
         SELECT * FROM students WHERE student_id = ${id}`;
-      res.status(200).json({ student });
+      res.status(200).json(student[0]);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });

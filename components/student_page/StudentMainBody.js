@@ -1,11 +1,29 @@
 import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
-import { studentsState } from "../state";
+import {
+  learnAndLearnGradesState,
+  studentsState,
+  currentStudentState,
+} from "../state";
 import { useRecoilState } from "recoil";
+import { useEffect } from "react";
+import axios from "axios";
 const StudentMainBody = () => {
   const [student, setStudent] = useRecoilState(studentsState);
-  // console.log(student[0].student_id);
+  const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(
+    learnAndLearnGradesState
+  );
+  const [currentStudent, setCurrentStudent] =
+    useRecoilState(currentStudentState);
+  console.log(currentStudent);
+  // useEffect(() => {
+  //   axios.get(`/api/students/1`).then((res) => {
+  //     setStudentId(res.data.student[0]);
+  //     // console.log(res.data.student[0]);
+  //   });
+  // }, []);
+  // `${student[0].name_first} ${student[0].name_last}`
   return (
     <>
       <NavBar />
@@ -19,7 +37,9 @@ const StudentMainBody = () => {
             height={80}
           />
           <div className={styles.title}>
-            <div className={styles.studentName}>First LastName</div>
+            <div
+              className={styles.studentName}
+            >{`${currentStudent.name_first} ${currentStudent.name_last}`}</div>
             <div className={styles.gitTransCon}>
               <p className={styles.etsDate}>ETS DATE: March 20, 2023</p>
               <p className={styles.gitHub}>GitHub Username: student123A</p>
