@@ -18,17 +18,17 @@ export default async function getNotes(req, res) {
     try {
       const deleteNotes = await sql`
                DELETE FROM notes WHERE student_id = ${id}`;
-      res.status(200).json({ deleteNotes });
+      res.status(200).json(deleteNotes[0]);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
   } else if (req.method === "PATCH") {
     try {
-      const { instructor_notes, SEIR_note } = req.body;
+      const { instructor_notes, SEIR_notes } = req.body;
       const patchNotes = await sql`
             UPDATE notes SET instructor_notes = ${instructor_notes}, SEIR_notes = ${SEIR_notes}, note_date = NOW() WHERE student_id = ${id}`;
-      res.status(200).json({ patchNotes });
+      res.status(200).json(patchNotes[0]);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
