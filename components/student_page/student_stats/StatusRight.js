@@ -41,14 +41,14 @@ const StatusRight = () => {
     }
   };
 
-  const labels = ['month 1', 'month 2', 'month 3', 'month 4'];
+  const labels = ['1', '2', '3', '4'];
   const data = {
     labels,
     datasets: [
       {
         label: 'Fake progress',
         data: teckSkill,
-        borderColor: 'blue',
+        borderColor: 'darkblue',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         tension: 0.4, 
         // pointRadius: 1, 
