@@ -12,6 +12,7 @@ import {
   learnGradesState,
   projectGradesState,
   usersState,
+  // currentCohortState,
   learnAndLearnGradesState,
   projectsAndProjectGradesState,
   proficiencyRatesState,
@@ -34,6 +35,14 @@ const Layout = ({ children }) => {
   const [learnGrades, setLearnGrades] = useRecoilState(learnGradesState);
   const [projectGrades, setProjectGrades] = useRecoilState(projectGradesState);
   const [users, setUsers] = useRecoilState(usersState);
+  // const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
+
+  useEffect(() => {
+    axios.get("/api/cohorts").then((res) => {
+      // removed the [0] - gerard
+      setCohorts(res.data.cohorts);
+      // console.log(res.data.cohorts[0]);
+      
   const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(
     learnAndLearnGradesState
   );
@@ -135,7 +144,12 @@ const Layout = ({ children }) => {
       setCurrentStudent(res.data);
       console.log(res.data);
     });
+
   }, []);
+
+  // useEffect(() => {
+  //   console.log(cohorts[0])
+  // }, [cohorts])
 
   return (
     <>

@@ -55,6 +55,11 @@ export const usersState = atom({
   default: [],
 });
 
+export const currentCohortState = atom({
+  key: "current cohort",
+  default: ''
+})
+
 export const learnAndLearnGradesState = atom({
   key: "learn and learn_grades",
   default: [],
