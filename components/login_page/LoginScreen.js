@@ -3,7 +3,7 @@ import styles from "../../styles/signUp.module.css";
 import Link from "next/link";
 import { useState } from "react"
 import { useRecoilState } from "recoil";
-import { usersState, loggedIn } from "../state.js";
+import { usersState, loggedIn, currentCohortState } from "../state.js";
 import { useRouter} from "next/router"
 
 
@@ -12,6 +12,7 @@ const LoginScreen = () => {
   const [enteredUsername, setEnteredUsername] = useState("")
   const [enteredPassword, setEnteredPassword] = useState("")
   const [verifiedUser, setVerifiedUser] = useRecoilState(loggedIn)
+  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
   const router = useRouter();
   
   const usernameFunc = (e) => {
@@ -25,6 +26,9 @@ const LoginScreen = () => {
     for (let element of user){
       if(element.username === enteredUsername && element.password === enteredPassword){
         setVerifiedUser(true)
+        setUser(element)
+        setCurrentCohort(element.default_cohort)
+        console.log(element)
         router.push("/home")
       }
     }
