@@ -135,7 +135,7 @@ const Layout = ({ children }) => {
     });
     
     axios
-      .get(`/api/learnAndLearnGradesId/${learnAndLearnGradesId}`)
+      .get(`/api/learnAndLearnGradesId/${studentId}`)
       .then((res) => {
         setCurrentLearnAndLearnGrades(res.data);
         //console.log(res.data);

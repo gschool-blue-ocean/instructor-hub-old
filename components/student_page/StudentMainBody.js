@@ -1,21 +1,14 @@
 import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
-import {
-  learnAndLearnGradesState,
-  studentsState,
-  currentStudentState,
-} from "../state";
+import { currentStudentState} from "../state";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 import axios from "axios";
 const StudentMainBody = () => {
-  const [student, setStudent] = useRecoilState(studentsState);
-  const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(
-    learnAndLearnGradesState
-  );
-  const [currentStudent, setCurrentStudent] =
-    useRecoilState(currentStudentState);
+
+  // current student is the current information for one person 
+  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
 
   return (
     <>

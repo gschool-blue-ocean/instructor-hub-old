@@ -9,7 +9,7 @@ const StatusLeft = () => {
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] =
     useRecoilState(currentlearnAndLearnGradesState);
 
-  // console.log(currentLearnAndLearnGrades[0].assessment_name);
+  console.log(currentLearnAndLearnGrades);
 
   const openNoteModel = () => {
     setShowNoteModal((prev) => !prev);
@@ -157,7 +157,7 @@ const StatusLeft = () => {
                 <tbody className={`${style.tableBody}, ${style.tbody}`}>
                   <tr className={style.tBodyRow}>
                     <td className={style.projNamCell}>
-                      {currentLearnAndLearnGrades[0].assessment_name}
+                      {/* {currentLearnAndLearnGrades[0].assessment_name} */}
                     </td>
                     <td className={style.scoreCell}>50%</td>
                   </tr>

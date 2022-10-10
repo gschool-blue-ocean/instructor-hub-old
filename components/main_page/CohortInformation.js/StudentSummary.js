@@ -6,6 +6,7 @@ import CommentModal from "./CommentModal";
 import { useRecoilState } from "recoil";
 import { studentsState, notesState } from "../../state";
 import axios from "axios";
+import Link from 'next/link'
 
 const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
@@ -177,6 +178,7 @@ const StudentSummary = () => {
                 className={`${studentStyle.tbody} ${studentStyle.tableBody}`}
               >
                 {students.map((student) => (
+                  <Link as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>
                   <tr
                     key={student.student_id}
                     className={studentStyle.tbodyRow}
@@ -234,6 +236,7 @@ const StudentSummary = () => {
                       </svg>{" "}
                     </td>
                   </tr>
+                  </Link>
                 ))}
                 {/* <tr className={studentStyle.tbodyRow}>
                   <td>
