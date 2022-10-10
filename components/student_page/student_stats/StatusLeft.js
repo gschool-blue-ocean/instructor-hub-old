@@ -1,15 +1,20 @@
 import style from "../../../styles/StudentStatsLeft.module.css";
 import ProjNoteModal from "./ProjNoteModal.js";
 import React, { useState } from "react";
-import { currentlearnAndLearnGradesState } from "../../state";
+import {
+  currentlearnAndLearnGradesState,
+  projectsAndProjectGradesState,
+  studentTechSkillsState,
+  studentTeamworkSkillsState
+} from "../../state";
 import { useRecoilState } from "recoil";
 
 const StatusLeft = () => {
   const [showNoteModal, setShowNoteModal] = useState(false);
-  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] =
-    useRecoilState(currentlearnAndLearnGradesState);
-
-  // console.log(currentLearnAndLearnGrades[0].assessment_name);
+  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
+  const [projectsAndProjectGrades, setProjectsAndProjectGrades] = useRecoilState(projectsAndProjectGradesState);
+  
+  // console.log(currentLearnAndLearnGrades);
 
   const openNoteModel = () => {
     setShowNoteModal((prev) => !prev);
@@ -157,7 +162,8 @@ const StatusLeft = () => {
                 <tbody className={`${style.tableBody}, ${style.tbody}`}>
                   <tr className={style.tBodyRow}>
                     <td className={style.projNamCell}>
-                      {currentLearnAndLearnGrades[0].assessment_name}
+                      Asessment 1
+                      {/* {currentLearnAndLearnGrades[0].assessment_name} */}
                     </td>
                     <td className={style.scoreCell}>50%</td>
                   </tr>

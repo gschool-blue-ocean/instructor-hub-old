@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
   // const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
       
   const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(learnAndLearnGradesState);
-  const [projectsAndProjectGrades, setprojectsAndProjectGrades] = useRecoilState(projectsAndProjectGradesState);
+  const [projectsAndProjectGrades, setProjectsAndProjectGrades] = useRecoilState(projectsAndProjectGradesState);
   const [proficiencyRates, setProficiencyRates] = useRecoilState(proficiencyRatesState);
   const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
   const [studentTechSkills, setStudentTechSkills] = useRecoilState(studentTechSkillsState);
@@ -48,7 +48,6 @@ const Layout = ({ children }) => {
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
   const [learnAndLearnGradesId, setLearnAndLearnGradesId] = useRecoilState(learnAndLearnGradesIdState);
-  //console.log(learnAndLearnGradesId);
   
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
@@ -84,13 +83,13 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/learnGrades").then((res) => {
-      setLearnGrades(res.data.learnGrades);
-      // console.log(res.data.learnGrades);
+      setLearnGrades(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/projectGrades").then((res) => {
-      setProjectGrades(res.data.projectGrades);
-      // console.log(res.data.projectGrades);
+      setProjectGrades(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/assignedGroup").then((res) => {
@@ -105,27 +104,27 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/learnAndLearnGrades").then((res) => {
-      setLearnAndLearnGrades(res.data.learnAndLearnGrades);
-      // console.log(res.data.learnAndLearnGrades);
+      setLearnAndLearnGrades(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/projectsAndProjectGrades").then((res) => {
-      setLearnAndLearnGrades(res.data.projectsAndProjectGrades);
+      setProjectsAndProjectGrades(res.data.projectsAndProjectGrades);
       // console.log(res.data.projectsAndProjectGrades);
     });
 
     axios.get("/api/proficiencyRates").then((res) => {
-      setLearnAndLearnGrades(res.data.proficiencyRates);
+      setProficiencyRates(res.data.proficiencyRates);
       // console.log(res.data.proficiencyRates);
     });
 
     axios.get("/api/studentTeamworkSkills").then((res) => {
-      setLearnAndLearnGrades(res.data.studentTeamworkSkills);
+      setStudentTeamworkSkills(res.data.studentTeamworkSkills);
       // console.log(res.data.studentTeamworkSkills);
     });
 
     axios.get("/api/studentTechSkills").then((res) => {
-      setLearnAndLearnGrades(res.data.studentTechSkills);
+      setStudentTechSkills(res.data.studentTechSkills);
       // console.log(res.data.studentTechSkills);
     });
 

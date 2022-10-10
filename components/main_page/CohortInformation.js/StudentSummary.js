@@ -27,10 +27,10 @@ const StudentSummary = () => {
 
   const deleteHandler = (e) => {
     e.preventDefault();
-    let id = e.currentTarget.id;
+    let id = e.target.id;
     console.log(id);
     axios.delete(`/api/students/${id}`).then(() => {
-      setStudents({ studentsState });
+      setStudents(studentsState);
     });
   };
 
