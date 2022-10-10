@@ -13,8 +13,16 @@ const sql = postgres(
 
 export default async function getNotes(req, res) {
   const id = req.query.notesId;
-
-  if (req.method === "DELETE") {
+  if (req.method === "GET") {
+    try {
+      const getNotesId = await sql`
+      SELECT * FROM notes WHERE student_id = ${id}`;
+      res.status(200).json(getNotesId);
+    } catch (error) {
+      console.error("Bad news in index api: ", error);
+      return res.status(500).json({ msg: "Messed up on our end" });
+    }
+  } else if (req.method === "DELETE") {
     try {
       const deleteNotes = await sql`
                DELETE FROM notes WHERE student_id = ${id}`;
