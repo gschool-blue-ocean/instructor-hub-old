@@ -11,7 +11,7 @@ const sql = postgres(
     : {}
 );
 
-export default async function getLearnAndLearnGradesId(req, res) {
+export default async function getProjectsAndProjectGradesId(req, res) {
   const id = req.query.projectsAndProjectGradesid;
   console.log(id + "projectAndProjectGradesid");
 
