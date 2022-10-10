@@ -6,7 +6,7 @@ const sql = postgres(
   process.env.NODE_ENV === "production"
     ? {
         ssl: { rejectUnauthorized: false },
-        max_lifetime: 60 * 30,
+        // max_lifetime: 60 * 30,
       }
     : {}
 );

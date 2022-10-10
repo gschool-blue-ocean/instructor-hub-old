@@ -1,13 +1,17 @@
 import style from "../../../styles/StudentStatsLeft.module.css";
 import ProjNoteModal from "./ProjNoteModal.js";
 import React, { useState } from "react";
-import { currentlearnAndLearnGradesState } from "../../state";
+import {
+  currentlearnAndLearnGradesState,
+  projectsAndProjectGradesState,
+  studentTechSkillsState,
+  studentTeamworkSkillsState
+} from "../../state";
 import { useRecoilState } from "recoil";
 
 const StatusLeft = () => {
   const [showNoteModal, setShowNoteModal] = useState(false);
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
-
 
   const openNoteModel = () => {
     setShowNoteModal((prev) => !prev);

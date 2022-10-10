@@ -5,16 +5,15 @@ import { currentStudentState} from "../state";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 import axios from "axios";
+
 const StudentMainBody = () => {
 
   // current student is the current information for one person 
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
 
-
   // converting ETs date into MM DAY YYYY
   let date = new Date(currentStudent.ets_date); 
   let etsDate = date.toDateString()
-
 
   return (
     <>
