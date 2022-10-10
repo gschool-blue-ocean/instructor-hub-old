@@ -104,3 +104,8 @@ export const currentlearnAndLearnGradesState = atom({
   key: "current learn and learn grades",
   default: [],
 });
+
+export const currStudentProjectsState = atom({
+  key: 'currStudentProjects',
+  default: '1',
+})

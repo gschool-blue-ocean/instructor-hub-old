@@ -1,19 +1,19 @@
 import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
-import {
-  learnAndLearnGradesState,
-  studentsState,
-  currentStudentState,
-} from "../state";
+import { currentStudentState} from "../state";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 import axios from "axios";
 
 const StudentMainBody = () => {
-  const [student, setStudent] = useRecoilState(studentsState);
-  const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(learnAndLearnGradesState);
+
+  // current student is the current information for one person 
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
+
+  // converting ETs date into MM DAY YYYY
+  let date = new Date(currentStudent.ets_date); 
+  let etsDate = date.toDateString()
 
   return (
     <>
@@ -32,8 +32,8 @@ const StudentMainBody = () => {
               className={styles.studentName}
             >{`${currentStudent.name_first} ${currentStudent.name_last}`}</div>
             <div className={styles.gitTransCon}>
-              <p className={styles.etsDate}>ETS DATE: March 20, 2023</p>
-              <p className={styles.gitHub}>GitHub Username: student123A</p>
+              <p className={styles.etsDate}>{`ETS DATE: ${etsDate} `}</p>
+              <p className={styles.gitHub}>{`GitHub Username: ${currentStudent.github}`}</p>
             </div>
           </div>
         </div>
