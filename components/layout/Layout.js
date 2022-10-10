@@ -36,30 +36,16 @@ const Layout = ({ children }) => {
   const [learnGrades, setLearnGrades] = useRecoilState(learnGradesState);
   const [projectGrades, setProjectGrades] = useRecoilState(projectGradesState);
   const [users, setUsers] = useRecoilState(usersState);
-  const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(
-    learnAndLearnGradesState
-  );
-  const [projectsAndProjectGrades, setprojectsAndProjectGrades] =
-    useRecoilState(projectsAndProjectGradesState);
-  const [proficiencyRates, setProficiencyRates] = useRecoilState(
-    proficiencyRatesState
-  );
-  const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(
-    studentTeamworkSkillsState
-  );
-  const [studentTechSkills, setStudentTechSkills] = useRecoilState(
-    studentTechSkillsState
-  );
+  const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(learnAndLearnGradesState);
+  const [projectsAndProjectGrades, setProjectsAndProjectGrades] = useRecoilState(projectsAndProjectGradesState);
+  const [proficiencyRates, setProficiencyRates] = useRecoilState(proficiencyRatesState);
+  const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
+  const [studentTechSkills, setStudentTechSkills] = useRecoilState(studentTechSkillsState);
   const [studentId, setStudentId] = useRecoilState(studentIdState);
-  const [currentStudent, setCurrentStudent] =
-    useRecoilState(currentStudentState);
-  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] =
-    useRecoilState(currentlearnAndLearnGradesState);
-  const [learnAndLearnGradesId, setLearnAndLearnGradesId] = useRecoilState(
-    learnAndLearnGradesIdState
-  );
+  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
+  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
+  const [learnAndLearnGradesId, setLearnAndLearnGradesId] = useRecoilState(learnAndLearnGradesIdState);
 
-  console.log(learnAndLearnGradesId);
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
       setCohorts(res.data.cohorts);
@@ -120,7 +106,7 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/projectsAndProjectGrades").then((res) => {
-      setLearnAndLearnGrades(res.data.projectsAndProjectGrades);
+      setProjectsAndProjectGrades(res.data.projectsAndProjectGrades);
       // console.log(res.data.projectsAndProjectGrades);
     });
 
@@ -130,12 +116,12 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/studentTeamworkSkills").then((res) => {
-      setLearnAndLearnGrades(res.data.studentTeamworkSkills);
+      setStudentTeamworkSkills(res.data.studentTeamworkSkills);
       // console.log(res.data.studentTeamworkSkills);
     });
 
     axios.get("/api/studentTechSkills").then((res) => {
-      setLearnAndLearnGrades(res.data.studentTechSkills);
+      setStudentTechSkills(res.data.studentTechSkills);
       // console.log(res.data.studentTechSkills);
     });
 
@@ -148,7 +134,7 @@ const Layout = ({ children }) => {
       .get(`/api/learnAndLearnGradesId/${learnAndLearnGradesId}`)
       .then((res) => {
         setCurrentLearnAndLearnGrades(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       });
   }, []);
 

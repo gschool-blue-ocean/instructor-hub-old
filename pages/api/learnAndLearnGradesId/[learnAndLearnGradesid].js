@@ -25,8 +25,7 @@ export default async function getLearnAndLearnGradesId(req, res) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
-  }
-  if (req.method === "PATCH") {
+  } else if (req.method === "PATCH") {
     try {
       const { assessment_grade } = req.body;
       const patchLearnGrades = await sql`

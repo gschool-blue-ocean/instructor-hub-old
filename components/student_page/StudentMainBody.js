@@ -9,13 +9,11 @@ import {
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 import axios from "axios";
+
 const StudentMainBody = () => {
   const [student, setStudent] = useRecoilState(studentsState);
-  const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(
-    learnAndLearnGradesState
-  );
-  const [currentStudent, setCurrentStudent] =
-    useRecoilState(currentStudentState);
+  const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(learnAndLearnGradesState);
+  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
 
   return (
     <>
