@@ -12,7 +12,7 @@ const SignUp = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    // const [default_cohort, setDefault_cohort] = useRecoilState(usersState);
+    const [default_cohort, setDefault_cohort] = useRecoilState(usersState);
     const [displayCohortModal, setDisplayCohortModal] = useState(false)
     const [displayAsanaKeyModal, setDisplayAsanaKeyModal] = useState(false)
     const [listOfCohorts, setListOfCohorts] = useState([])
@@ -31,6 +31,7 @@ const SignUp = () => {
     
     function showDisplayCohortModal(e){
         e.preventDefault();
+        console.log(usersState)
         if(confirmPassword === password && username.length >= 6 && password.length >= 8 && asanaToken){
             axios.get('https://app.asana.com/api/1.0/projects/', {
                 headers: {
@@ -44,7 +45,6 @@ const SignUp = () => {
             if(username.length < 6){
                 document.getElementById('username').border = "2px solid red"
                 alert("Please enter a username with 6 or more characters.")
-
             } 
             if(password.length < 8){
                 alert("Please enter a password with 8 or more characters.")
@@ -55,8 +55,8 @@ const SignUp = () => {
                 document.getElementById('asanaToken').border = "2px solid red"
             }
             if(confirmPassword !== password){
-                alert("Please verify that your passwords match.")
                 document.getElementById('password').border = "2px solid red"
+                alert("Please verify that your passwords match.")
                 document.getElementById('confirmPassword').border = "2px solid red"
             }
         }
@@ -65,9 +65,6 @@ const SignUp = () => {
     function createToken(e) {
         setAsana_Access_Token(e.target.value)
     }
-
-   
-       
 
   return (
     <>
