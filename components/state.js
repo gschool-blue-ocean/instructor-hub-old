@@ -109,3 +109,8 @@ export const currStudentProjectsState = atom({
   key: 'currStudentProjects',
   default: '1',
 })
+
+export const loggedIn = atom({
+  key: 'loggedIn',
+  default: false,
+})
