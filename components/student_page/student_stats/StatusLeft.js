@@ -12,7 +12,6 @@ import { useRecoilState } from "recoil";
 const StatusLeft = () => {
   const [showNoteModal, setShowNoteModal] = useState(false);
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
-
   const openNoteModel = () => {
     setShowNoteModal((prev) => !prev);
   };
@@ -159,7 +158,7 @@ const StatusLeft = () => {
                 </thead>
                 <tbody className={`${style.tableBody}, ${style.tbody}`}>
                   {currentLearnAndLearnGrades.map((assessment) =>(
-                    <tr className={style.tBodyRow}>
+                    <tr key={assessment.assessment_id}className={style.tBodyRow}>
                     <td className={style.projNamCell}>{assessment.assessment_name}</td>
                     <td className={style.scoreCell}>{`${assessment.assessment_grade} %`}</td>
                     </tr>

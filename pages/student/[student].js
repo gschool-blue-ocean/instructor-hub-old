@@ -11,6 +11,7 @@ const student = () => {
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   setStudentId(router.query.student); 
 
+
   return (
     <div>
         <StudentMainBody />

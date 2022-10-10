@@ -11,9 +11,11 @@ const StudentMainBody = () => {
   // current student is the current information for one person 
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
 
+
   // converting ETs date into MM DAY YYYY
   let date = new Date(currentStudent.ets_date); 
   let etsDate = date.toDateString()
+
 
   return (
     <>

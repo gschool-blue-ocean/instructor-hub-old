@@ -41,7 +41,7 @@ const Layout = ({ children }) => {
   // const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
       
   const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(learnAndLearnGradesState);
-  const [projectsAndProjectGrades, setProjectsAndProjectGrades] = useRecoilState(projectsAndProjectGradesState);
+  const [projectsAndProjectGrades, setprojectsAndProjectGrades] = useRecoilState(projectsAndProjectGradesState);
   const [proficiencyRates, setProficiencyRates] = useRecoilState(proficiencyRatesState);
   const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
   const [studentTechSkills, setStudentTechSkills] = useRecoilState(studentTechSkillsState);
@@ -86,13 +86,13 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/learnGrades").then((res) => {
-      setLearnGrades(res.data);
-      // console.log(res.data);
+      setLearnGrades(res.data.learnGrades);
+      // console.log(res.data.learnGrades);
     });
 
     axios.get("/api/projectGrades").then((res) => {
-      setProjectGrades(res.data);
-      // console.log(res.data);
+      setProjectGrades(res.data.projectGrades);
+      // console.log(res.data.projectGrades);
     });
 
     axios.get("/api/assignedGroup").then((res) => {
@@ -107,27 +107,27 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/learnAndLearnGrades").then((res) => {
-      setLearnAndLearnGrades(res.data);
-      // console.log(res.data);
+      setLearnAndLearnGrades(res.data.learnAndLearnGrades);
+      // console.log(res.data.learnAndLearnGrades);
     });
 
     axios.get("/api/projectsAndProjectGrades").then((res) => {
-      setProjectsAndProjectGrades(res.data.projectsAndProjectGrades);
+      setLearnAndLearnGrades(res.data.projectsAndProjectGrades);
       // console.log(res.data.projectsAndProjectGrades);
     });
 
     axios.get("/api/proficiencyRates").then((res) => {
-      setProficiencyRates(res.data.proficiencyRates);
+      setLearnAndLearnGrades(res.data.proficiencyRates);
       // console.log(res.data.proficiencyRates);
     });
 
     axios.get("/api/studentTeamworkSkills").then((res) => {
-      setStudentTeamworkSkills(res.data.studentTeamworkSkills);
+      setLearnAndLearnGrades(res.data.studentTeamworkSkills);
       // console.log(res.data.studentTeamworkSkills);
     });
 
     axios.get("/api/studentTechSkills").then((res) => {
-      setStudentTechSkills(res.data.studentTechSkills);
+      setLearnAndLearnGrades(res.data.studentTechSkills);
       // console.log(res.data.studentTechSkills);
     });
 
@@ -135,6 +135,7 @@ const Layout = ({ children }) => {
 
   // this is when you select one student and it retirves the information for that student 
   useEffect(() => {
+    console.log(studentId, 'student Id')
     axios.get(`/api/students/${studentId}`).then((res) => {
       setCurrentStudent(res.data);
       // console.log(res.data);
@@ -146,12 +147,12 @@ const Layout = ({ children }) => {
         setCurrentLearnAndLearnGrades(res.data);
         //console.log(res.data);
       });
-      axios
-      .get(`/api/projectAndProjectGradesId/${studentId}`)
-      .then((res) => {
-        setCurrStudentProjects(res.data);
-        console.log(res.data);
-      });
+      // axios
+      // .get(`/api/projectAndProjectGradesId/${studentId}`)
+      // .then((res) => {
+      //   setCurrentLearnAndLearnGrades(res.data);
+      //   //console.log(res.data);
+      // });
   }, [studentId])
 
   return (
