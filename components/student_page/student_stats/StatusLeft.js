@@ -6,10 +6,8 @@ import { useRecoilState } from "recoil";
 
 const StatusLeft = () => {
   const [showNoteModal, setShowNoteModal] = useState(false);
-  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] =
-    useRecoilState(currentlearnAndLearnGradesState);
+  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
 
-  console.log(currentLearnAndLearnGrades);
 
   const openNoteModel = () => {
     setShowNoteModal((prev) => !prev);
@@ -41,6 +39,7 @@ const StatusLeft = () => {
                 </tr>
               </thead>
               <tbody className={`${style.tableBody}, ${style.tbody}`}>
+                {}
                 <tr className={style.tBodyRow}>
                   <td className={style.projNamCell}>Front End Proj</td>
                   <td className={style.scoreCell}>Pass</td>
@@ -155,24 +154,12 @@ const StatusLeft = () => {
                   </tr>
                 </thead>
                 <tbody className={`${style.tableBody}, ${style.tbody}`}>
-                  <tr className={style.tBodyRow}>
-                    <td className={style.projNamCell}>
-                      {/* {currentLearnAndLearnGrades[0].assessment_name} */}
-                    </td>
-                    <td className={style.scoreCell}>50%</td>
-                  </tr>
-                  <tr className={style.tBodyRow}>
-                    <td className={style.projNamCell}>Assesment 2</td>
-                    <td className={style.scoreCell}>10% </td>
-                  </tr>
-                  <tr className={style.tBodyRow}>
-                    <td className={style.projNamCell}>Assesment 3</td>
-                    <td className={style.scoreCell}>50%</td>
-                  </tr>
-                  <tr className={style.tBodyRow}>
-                    <td className={style.projNamCell}>Assesment 4</td>
-                    <td className={style.scoreCell}>100%</td>
-                  </tr>
+                  {currentLearnAndLearnGrades.map((assessment) =>(
+                    <tr className={style.tBodyRow}>
+                    <td className={style.projNamCell}>{assessment.assessment_name}</td>
+                    <td className={style.scoreCell}>{`${assessment.assessment_grade} %`}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

@@ -178,7 +178,7 @@ const StudentSummary = () => {
                 className={`${studentStyle.tbody} ${studentStyle.tableBody}`}
               >
                 {students.map((student) => (
-                  <Link as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>
+                  <Link key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>
                   <tr
                     key={student.student_id}
                     className={studentStyle.tbodyRow}

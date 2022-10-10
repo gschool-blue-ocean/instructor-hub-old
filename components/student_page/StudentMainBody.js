@@ -10,6 +10,12 @@ const StudentMainBody = () => {
   // current student is the current information for one person 
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
 
+
+  // converting ETs date into MM DAY YYYY
+  let date = new Date(currentStudent.ets_date); 
+  let etsDate = date.toDateString()
+
+
   return (
     <>
       <NavBar />
@@ -27,8 +33,8 @@ const StudentMainBody = () => {
               className={styles.studentName}
             >{`${currentStudent.name_first} ${currentStudent.name_last}`}</div>
             <div className={styles.gitTransCon}>
-              <p className={styles.etsDate}>ETS DATE: March 20, 2023</p>
-              <p className={styles.gitHub}>GitHub Username: student123A</p>
+              <p className={styles.etsDate}>{`ETS DATE: ${etsDate} `}</p>
+              <p className={styles.gitHub}>{`GitHub Username: ${currentStudent.github}`}</p>
             </div>
           </div>
         </div>

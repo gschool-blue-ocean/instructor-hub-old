@@ -22,6 +22,7 @@ import {
   currentStudentState,
   currentlearnAndLearnGradesState,
   learnAndLearnGradesIdState,
+  currStudentProjectsState,
 } from "../state.js";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -48,6 +49,7 @@ const Layout = ({ children }) => {
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
   const [learnAndLearnGradesId, setLearnAndLearnGradesId] = useRecoilState(learnAndLearnGradesIdState);
+  const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState)
   //console.log(learnAndLearnGradesId);
   
   useEffect(() => {
@@ -129,6 +131,10 @@ const Layout = ({ children }) => {
       // console.log(res.data.studentTechSkills);
     });
 
+  }, []);
+
+  // this is when you select one student and it retirves the information for that student 
+  useEffect(() => {
     axios.get(`/api/students/${studentId}`).then((res) => {
       setCurrentStudent(res.data);
       // console.log(res.data);
@@ -140,11 +146,13 @@ const Layout = ({ children }) => {
         setCurrentLearnAndLearnGrades(res.data);
         //console.log(res.data);
       });
-  }, []);
-
-  // useEffect(() => {
-  //   console.log(cohorts[0])
-  // }, [cohorts])
+      axios
+      .get(`/api/projectAndProjectGradesId/${studentId}`)
+      .then((res) => {
+        setCurrStudentProjects(res.data);
+        console.log(res.data);
+      });
+  }, [studentId])
 
   return (
     <>
