@@ -5,6 +5,7 @@ import { currentStudentState} from "../state";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 import axios from "axios";
+
 const StudentMainBody = () => {
 
   // current student is the current information for one person 

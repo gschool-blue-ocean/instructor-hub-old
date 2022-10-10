@@ -1,56 +1,79 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from '../../styles/signUp.module.css';
 import Link from 'next/link';
 import { useRecoilState } from 'recoil';
 import { usersState } from '../state';
 import axios from 'axios';
 import SignUpModal from './SignUpModal';
+import { bodyStreamToNodeStream } from 'next/dist/server/body-streams';
 
 const SignUp = () => {
-    const [username, setUsername] = useRecoilState(usersState);
-    const [password, setPassword] = useRecoilState(usersState);
+    // const [users, setUsers] = useRecoilState(usersState);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [default_cohort, setDefault_cohort] = useRecoilState(usersState);
     const [displayCohortModal, setDisplayCohortModal] = useState(false)
     const [displayAsanaKeyModal, setDisplayAsanaKeyModal] = useState(false)
     const [listOfCohorts, setListOfCohorts] = useState([])
-    const [asanaToken, setAsanaToken] = useState('')
+    const [asana_access_token, setAsana_Access_Token] = useState('')
 
     const createUsername= (e)=> {
-        console.log(e.target.value)
         setUsername(e.target.value)
     }
 
     const createPassword = (e) => {
-        console.log(e.target.value)
         setPassword(e.target.value)
+    }
+    const passwordVerification = (e) =>{
+        setConfirmPassword(e.target.value)
     }
     
     function showDisplayCohortModal(e){
-        e.preventDefault()
-        axios.get('https://app.asana.com/api/1.0/projects/', {
-            headers: {
-                Authorization: `Bearer ${asanaToken}`,  //need template literal for ALLLLL headers so global state dependant on user
-            },
-        }).then((res) => {
-            setListOfCohorts(res.data.data)
-            console.log(res.data.data)
-            setDisplayCohortModal(!displayCohortModal)
-        })
+        e.preventDefault();
+        console.log(usersState)
+        if(confirmPassword === password && username.length >= 6 && password.length >= 8 && asanaToken){
+            axios.get('https://app.asana.com/api/1.0/projects/', {
+                headers: {
+                    Authorization: `Bearer ${asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
+                },
+            }).then((res) => {
+                setListOfCohorts(res.data.data)
+                setDisplayCohortModal(!displayCohortModal)
+            })
+        }else{
+            if(username.length < 6){
+                document.getElementById('username').border = "2px solid red"
+                alert("Please enter a username with 6 or more characters.")
+            } 
+            if(password.length < 8){
+                alert("Please enter a password with 8 or more characters.")
+                document.getElementById('password').border = "2px solid red"
+            }
+            if(!asanaToken){
+                alert("Please enter your Asana API Key.")
+                document.getElementById('asanaToken').border = "2px solid red"
+            }
+            if(confirmPassword !== password){
+                document.getElementById('password').border = "2px solid red"
+                alert("Please verify that your passwords match.")
+                document.getElementById('confirmPassword').border = "2px solid red"
+            }
+        }
     }
 
     function createToken(e) {
-        setAsanaToken(e.target.value)
+        setAsana_Access_Token(e.target.value)
     }
-
-   
-       
 
   return (
     <>
     <SignUpModal 
-        setDisplayCohortModal={setDisplayCohortModal} 
         displayCohortModal={displayCohortModal} 
         listOfCohorts={listOfCohorts}
+        asana_access_token={asana_access_token}
+        password={password}
+        username={username}
         onClose={() => {
             setDisplayCohortModal(false)
         }}
@@ -71,32 +94,23 @@ const SignUp = () => {
                                     <div className={styles.signUp}>
                                         Username
                                     </div>
-                                    <input className={styles.inputFields} onChange={(e) => createUsername(e)} type='text' required></input>
+                                    <input id='username' className={styles.usernameField} onChange={(e) => createUsername(e)} type='text' required></input>
                                 </div>
                                 <div className={styles.accountInputContainer}>
                                     <div className={styles.signUp}>
                                         Password
                                     </div>
-                                    <input className={styles.inputFields} onChange={(e) => createPassword(e)} type='password' required></input>
+                                    <input id="password" className={styles.passwordFields} onChange={(e) => createPassword(e)} type='password' required></input>
                                 </div>
                                 <div className={styles.accountInputContainer}>
                                     <div className={styles.signUp}>
                                         Confirm Password
                                     </div>
-                                    <input className={styles.inputFields} type='password' required></input>
+                                    <input id="confirmPassword" className={styles.passwordFields} type='password' onChange={(e) =>passwordVerification(e)} required></input>
                                 </div>
-                                {/* <div className={styles.cohortSelectorDiv}>{'Select Cohort: '}
-                                    <select className={styles.cohortSelector}> */}
-                                        {/* add a for each so that it will auto create the options for us*/}
-                                        {/* <option value="">MCSP-13 Bravo</option>
-                                        <option value="">MCSP-13 Alpha</option>
-                                        <option value="">MCSP-12</option>
-                                        <option value="">MCSP-11</option>
-                                    </select> */}
-                                {/* </div> */}
                                 <div className={styles.accessTokenDiv}>
                                     {'Asana API KEY: '}
-                                    <input type='text' className={styles.inputTokenField} placeholder='Required' onChange={(e) => createToken(e)} required></input>
+                                    <input type='text' id='asanaToken' className={styles.inputTokenField} placeholder='Required' onChange={(e) => createToken(e)} required></input>
                                 </div>
                                 <div className={styles.signInBtnContainer}>
                                     <button type='button' className={styles.signInBtn} onClick={(e) => showDisplayCohortModal(e)}>Create Account</button>

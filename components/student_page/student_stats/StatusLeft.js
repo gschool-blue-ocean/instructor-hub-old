@@ -1,13 +1,17 @@
 import style from "../../../styles/StudentStatsLeft.module.css";
 import ProjNoteModal from "./ProjNoteModal.js";
 import React, { useState } from "react";
-import { currentlearnAndLearnGradesState } from "../../state";
+import {
+  currentlearnAndLearnGradesState,
+  projectsAndProjectGradesState,
+  studentTechSkillsState,
+  studentTeamworkSkillsState
+} from "../../state";
 import { useRecoilState } from "recoil";
 
 const StatusLeft = () => {
   const [showNoteModal, setShowNoteModal] = useState(false);
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
-
 
   const openNoteModel = () => {
     setShowNoteModal((prev) => !prev);
@@ -154,12 +158,34 @@ const StatusLeft = () => {
                   </tr>
                 </thead>
                 <tbody className={`${style.tableBody}, ${style.tbody}`}>
+<<<<<<< HEAD
                   {currentLearnAndLearnGrades.map((assessment) =>(
                     <tr className={style.tBodyRow}>
                     <td className={style.projNamCell}>{assessment.assessment_name}</td>
                     <td className={style.scoreCell}>{`${assessment.assessment_grade} %`}</td>
                     </tr>
                   ))}
+=======
+                  <tr className={style.tBodyRow}>
+                    <td className={style.projNamCell}>
+                      Asessment 1
+                      {/* {currentLearnAndLearnGrades[0].assessment_name} */}
+                    </td>
+                    <td className={style.scoreCell}>50%</td>
+                  </tr>
+                  <tr className={style.tBodyRow}>
+                    <td className={style.projNamCell}>Assesment 2</td>
+                    <td className={style.scoreCell}>10% </td>
+                  </tr>
+                  <tr className={style.tBodyRow}>
+                    <td className={style.projNamCell}>Assesment 3</td>
+                    <td className={style.scoreCell}>50%</td>
+                  </tr>
+                  <tr className={style.tBodyRow}>
+                    <td className={style.projNamCell}>Assesment 4</td>
+                    <td className={style.scoreCell}>100%</td>
+                  </tr>
+>>>>>>> 848a4e56e488c8014a91e4fbd2ee5800d38e7a70
                 </tbody>
               </table>
             </div>
