@@ -3,14 +3,15 @@ import styles from "../../styles/signUp.module.css";
 import Link from "next/link";
 import { useState } from "react"
 import { useRecoilState } from "recoil";
-import { usersState } from "../state.js";
+import { usersState, loggedIn } from "../state.js";
 import { useRouter} from "next/router"
+
 
 const LoginScreen = () => {
   const [user, setUser] = useRecoilState(usersState);
   const [enteredUsername, setEnteredUsername] = useState("")
   const [enteredPassword, setEnteredPassword] = useState("")
-  const [verifiedUser, setVerifiedUser] = useState(false)
+  const [verifiedUser, setVerifiedUser] = useRecoilState(loggedIn)
   const router = useRouter();
   
   const usernameFunc = (e) => {
