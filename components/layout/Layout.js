@@ -135,24 +135,27 @@ const Layout = ({ children }) => {
 
   // this is when you select one student and it retirves the information for that student 
   useEffect(() => {
-    console.log(studentId, 'student Id')
-    axios.get(`/api/students/${studentId}`).then((res) => {
-      setCurrentStudent(res.data);
-      // console.log(res.data);
-    });
-    
-    axios
-      .get(`/api/learnAndLearnGradesId/${studentId}`)
-      .then((res) => {
-        setCurrentLearnAndLearnGrades(res.data);
-        //console.log(res.data);
+    if(studentId) {
+
+      // console.log(studentId, 'student Id')
+      axios.get(`/api/students/${studentId}`).then((res) => {
+        setCurrentStudent(res.data);
+        // console.log(res.data);
       });
-      // axios
-      // .get(`/api/projectAndProjectGradesId/${studentId}`)
-      // .then((res) => {
-      //   setCurrentLearnAndLearnGrades(res.data);
-      //   //console.log(res.data);
-      // });
+      
+      axios
+        .get(`/api/learnAndLearnGradesId/${studentId}`)
+        .then((res) => {
+          setCurrentLearnAndLearnGrades(res.data);
+          //console.log(res.data);
+        });
+        axios
+        .get(`/api/projectsAndProjectGradesId/${studentId}`)
+        .then((res) => {
+          setCurrStudentProjects(res.data);
+          //console.log(res.data);
+        });
+    }
   }, [studentId])
 
   return (

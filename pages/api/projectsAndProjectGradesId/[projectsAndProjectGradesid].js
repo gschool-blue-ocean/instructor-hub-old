@@ -19,8 +19,8 @@ export default async function getProjectsAndProjectGradesId(req, res) {
     try {
       const projectAndProjectGradesId = await sql`
         SELECT * FROM projects INNER JOIN project_grades ON projects.project_id = project_grades.project_id
-        WHERE projects.project_id = ${id}`;
-      res.status(200).json(projectAndProjectGradesId[0]);
+        WHERE project_grades.student_id = ${id}`;
+      res.status(200).json(projectAndProjectGradesId);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });

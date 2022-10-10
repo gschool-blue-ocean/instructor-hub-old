@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
 import { useRecoilState } from "recoil";
-import { studentsState, notesState } from "../../state";
+import { studentsState, notesState,studentIdState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
 
@@ -12,6 +12,8 @@ const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCommentModal, setShowCommenttModal] = useState(false);
+
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
 
   const [notes, setNotes] = useRecoilState(notesState);
 
@@ -179,6 +181,7 @@ const StudentSummary = () => {
               >
                 {students.map((student) => (
                   <Link key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>
+                  {/* setStudentId(student.student_id);  */}
                   <tr
                     key={student.student_id}
                     className={studentStyle.tbodyRow}
