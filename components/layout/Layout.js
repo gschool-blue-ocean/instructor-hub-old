@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
   // const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
       
   const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(learnAndLearnGradesState);
-  const [projectsAndProjectGrades, setprojectsAndProjectGrades] = useRecoilState(projectsAndProjectGradesState);
+  const [projectsAndProjectGrades, setProjectsAndProjectGrades] = useRecoilState(projectsAndProjectGradesState);
   const [proficiencyRates, setProficiencyRates] = useRecoilState(proficiencyRatesState);
   const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
   const [studentTechSkills, setStudentTechSkills] = useRecoilState(studentTechSkillsState);
