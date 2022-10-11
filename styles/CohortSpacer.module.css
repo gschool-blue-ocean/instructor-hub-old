@@ -1,7 +1,8 @@
 .spacerContainer {
-    /* border: 1px solid; */
     width: 950px;
     height: 75px;
+    position: relative;
+    display: flex;
 }
 
 .gitBtn {
@@ -16,8 +17,9 @@
     /* background-color: rgba(33, 48, 33, 0.781); */
     /* background: linear-gradient(129deg, rgb(33, 47, 32) 0%, rgb(0, 45, 2) 71%, rgba(0,0,0,1) 100%); */
     margin-right: 3px;
+    top: 5px;
     background: #0b131b61;
-
+    position: absolute;
 }
 
 .gitBtn:hover {
@@ -36,4 +38,22 @@
   border-radius: 2px;
   display: block;
   background: transparent;
+}
+
+.cohort {
+  border-radius: 10px;
+  border: none;
+  padding: 10px 15px;
+  /* display: inline-block; */
+  cursor: pointer;
+  text-decoration: none !important;
+  color: white !important;
+  /* background-image: linear-gradient(to right, #47598b, #2f77ca); */
+  /* background-color: rgba(33, 48, 33, 0.781); */
+  /* background: linear-gradient(129deg, rgb(33, 47, 32) 0%, rgb(0, 45, 2) 71%, rgba(0,0,0,1) 100%); */
+  background: #0b131b61;
+  margin-left: auto;
+  margin-right: auto;
+  /* margin-top: auto; */
+  margin-bottom: auto;
 }

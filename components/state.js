@@ -55,12 +55,62 @@ export const usersState = atom({
   default: [],
 });
 
+export const currentCohortState = atom({
+  key: "current cohort",
+  default: ''
+})
+
 export const learnAndLearnGradesState = atom({
   key: "learn and learn_grades",
   default: [],
 });
 
 export const projectsAndProjectGradesState = atom({
-  key: "learn and learn_grades",
+  key: "projects And Project Grades",
   default: [],
+});
+
+export const proficiencyRatesState = atom({
+  key: "proficiency Rates",
+  default: [],
+});
+
+export const studentTeamworkSkillsState = atom({
+  key: "student teamwork skills",
+  default: [],
+});
+
+export const studentTechSkillsState = atom({
+  key: "student tech skill",
+  default: [],
+});
+
+export const studentIdState = atom({
+  key: "student id",
+  default: "1",
+});
+
+export const currentStudentState = atom({
+  key: "current student",
+  default: [],
+});
+
+export const learnAndLearnGradesIdState = atom({
+  key: "learn and learn_grades id",
+  default: "1",
+});
+
+export const currentlearnAndLearnGradesState = atom({
+  key: "current learn and learn grades",
+  default: [],
+});
+
+export const currStudentProjectsState = atom({
+  key: 'currStudentProjects',
+  default: [],
+});
+
+export const loggedIn = atom({
+  key: 'loggedIn',
+  default: false,
 });
