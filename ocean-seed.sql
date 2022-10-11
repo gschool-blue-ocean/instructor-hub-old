@@ -363,13 +363,6 @@ VALUES (
     'heres_another_asana_access_token'
   );
 
-VALUES (
-    'testuser',
-    crypt('12345', gen_salt('bf')),
-    'MCSP13',
-    'here_goes_an_asana_access_token'
-  );
-
   INSERT INTO users (
     username,
     password,
