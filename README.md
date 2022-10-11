@@ -44,7 +44,7 @@ Within the database are 13 interconnected tables with primary and foreign keys, 
 
 # Database Organization
 
-The seed file is organized, and comes with a table of contents that aids finding tables or functions of interest. This aids future developers in adding or modifying database tables, relationships, or features.
+The seed file is organized, and comes with a table of contents that aids finding tables or functions of interest. This aids future developers in adding or modifying database tables, relationships, or features. References to "gid" in tables indicate ASANA-specific identifiers that can be replicated and accessed in the database.  
 
 # Data Security
 

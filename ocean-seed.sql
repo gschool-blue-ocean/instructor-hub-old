@@ -22,6 +22,11 @@ DROP TRIGGER IF EXISTS trig_cohort_copy ON cohorts CASCADE;
 DROP EXTENSION IF EXISTS pgcrypto;
 
 CREATE EXTENSION pgcrypto;
+--questions for mike-c or the group:
+--1) notes table: can we drop fname and lname from notes table?
+--2) notes table: do we need instructor AND seir notes? is that how front end is designed?
+--3) MJ - confirm if any cascading deletions are unwanted or create a problem (e.g. deleting an assessment deletes the record of student's grades and averages)
+--4) Asana GIDs should they be unique?
 
 --TABLE OF CONTENTS--
 --SECTION 1: TABLES AND RELATIONS
@@ -59,7 +64,7 @@ CREATE EXTENSION pgcrypto;
   password TEXT NOT NULL,
   default_cohort TEXT,
   asana_access_token TEXT,  
-  cohort_asana_gid TEXT
+  gid TEXT
 );
 
 CREATE TABLE cohorts (
@@ -124,7 +129,7 @@ CREATE TABLE student_tech_skills (
   score INT,
   record_date TIMESTAMPTZ,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE CASCADE
+  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
 );
 
   CREATE TABLE student_teamwork_skills (
@@ -132,7 +137,7 @@ CREATE TABLE student_tech_skills (
     score INT,
     record_date TIMESTAMPTZ,
     FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-    FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE CASCADE
+    FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
   );
 
 --THIS ALLOWS TRACKIJNG STUDENTS' PROJECT RATINGS/SCORES
@@ -148,8 +153,12 @@ CREATE TABLE project_grades (
   project_passed BOOLEAN,
   notes TEXT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
+  FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT
+  --removes learn grades if student is deleted. Cannot delete projects without deleting grades first
 );
+----this index ensures students don't have duplicate grades
+CREATE UNIQUE INDEX project_grades_only_one_per_student
+    ON project_grades (student_id, project_id);
 
 CREATE TABLE learn (
   assessment_id SERIAL PRIMARY KEY,
@@ -161,13 +170,21 @@ CREATE TABLE learn_grades (
   assessment_id INT,
   assessment_grade INT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE CASCADE
+  FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE RESTRICT
+  --removes learn grades if student is deleted. Cannot delete assessments without deleting grades first
+
 );
+----this index ensures students don't have duplicate grades
+CREATE UNIQUE INDEX learn_grades_only_one_per_student
+    ON learn_grades (student_id, assessment_id);
+
+
+
+
 
 /* ============================================================
 -- SECTION 2: FUNCTIONS AND TRIGGERS
 ============================================================== */
-
 --- (1) UPDATE STUDENT'S TECH SKILLS AVG WHEN NEW SCORE IS ADDED OR UPDATED. 
 ----FUNCTION: UPDATE STUDENT'S TECH AVG SCORE
 CREATE OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $$ BEGIN WITH scores AS (
@@ -177,7 +194,8 @@ CREATE OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $$ BEGIN WITH score
   )
 UPDATE students
 SET tech_avg = scores.avg
-FROM scores;
+FROM scores
+WHERE student_id = NEW.student_id;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -198,7 +216,8 @@ CREATE OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $$ BEGIN WITH sc
   )
 UPDATE students
 SET teamwork_avg = scores.avg
-FROM scores;
+FROM scores
+WHERE student_id = NEW.student_id;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
