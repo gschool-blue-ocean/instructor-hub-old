@@ -16,7 +16,7 @@ const SignUpModal = ({displayCohortModal, listOfCohorts, password, username, asa
                 setDefault_Cohort(listOfCohorts[i].name)
             }
         }
-        console.log(e.target.value, 'made it here')
+        console.log(listOfCohorts, 'made it here')
     }
 
     const saveUserInfo = () => {
