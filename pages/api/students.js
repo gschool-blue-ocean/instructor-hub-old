@@ -7,7 +7,7 @@ const sql = postgres(
   process.env.NODE_ENV === "production"
     ? {
         ssl: { rejectUnauthorized: false },
-        max_lifetime: 60 * 30,
+        // max_lifetime: 60 * 30,
       }
     : {}
 );
@@ -29,17 +29,22 @@ export default async function studentsHandler(req, res) {
         name_first,
         name_last,
         learn_avg,
-        project_avg,
+        tech_avg,
+        teamwork_avg,
         server_side_test,
         client_side_test,
-        soft_skills,
         cohort,
+        cohort_id,
         ETS_date,
+        github,
+        ASANA_GID,
       } = req.body;
       console.log(req.body);
       const createStudent = await sql`
-               INSERT INTO students ( student_id, name_first, name_last, learn_avg, project_avg, server_side_test, client_side_test, soft_skills, cohort, ETS_date )
-               VALUES (${student_id}, ${name_first}, ${name_last}, ${learn_avg}, ${project_avg}, ${server_side_test}, ${client_side_test}, ${soft_skills}, ${cohort}, ${ETS_date}) 
+               INSERT INTO students (  name_first, name_last, learn_avg, tech_avg, teamwork_avg, server_side_test, client_side_test, cohort,cohort_id, ETS_date, github,
+                ASANA_GID )
+               VALUES ( ${name_first}, ${name_last}, ${learn_avg}, ${tech_avg}, ${teamwork_avg},${server_side_test}, ${client_side_test}, ${cohort}, ${cohort_id}, ${ETS_date}, ${github},
+                ${ASANA_GID}) 
                RETURNING *`;
       res.status(200).json(req.body);
     } catch (error) {

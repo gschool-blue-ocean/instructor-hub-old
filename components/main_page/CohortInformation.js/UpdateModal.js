@@ -35,7 +35,19 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       setStudentList(res.data.data)
     })
 
+<<<<<<< HEAD
   }
+=======
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    console.log("What is the submit 'e'?", e);
+    const stagedStudent = formGetter(e.target);
+    setStagedCohort((prev) => ({
+      ...stagedStudent,
+    }));
+  };
+>>>>>>> 30aefecd22141cc792110e402b8de28afac80cdd
 
   useEffect(() => { 
     fetchData();
