@@ -27,6 +27,7 @@ CREATE EXTENSION pgcrypto;
 --1) notes table: can we drop fname and lname from notes table?
 --2) notes table: do we need instructor AND seir notes? is that how front end is designed?
 --3) MJ - confirm if any cascading deletions are unwanted or create a problem (e.g. deleting an assessment deletes the record of student's grades and averages)
+--4) Asana GIDs should they be unique?
 
 
 --TABLE OF CONTENTS--
@@ -61,9 +62,8 @@ CREATE EXTENSION pgcrypto;
 ============================================================== */
   CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
-  username VARCHAR (20) UNIQUE,
+  username VARCHAR (50) UNIQUE,
   password TEXT NOT NULL,
-  is_instructor BOOLEAN,
   default_cohort TEXT,
   asana_access_token TEXT,  
   cohort_asana_gid TEXT
@@ -71,7 +71,7 @@ CREATE EXTENSION pgcrypto;
 
 CREATE TABLE cohorts (
   cohort_id SERIAL PRIMARY KEY,
-  cohort TEXT,
+  name TEXT,
   begin_date DATE,
   end_date DATE,
   instructor INT,
@@ -79,7 +79,7 @@ CREATE TABLE cohorts (
   cohort_min INT,
   cohort_max INT,
   ASANA_GID TEXT,
-  FOREIGN KEY (instructor) REFERENCES users(user_id) ON DELETE CASCADE
+  FOREIGN KEY (instructor) REFERENCES users(user_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE students (
@@ -132,7 +132,7 @@ CREATE TABLE student_tech_skills (
   score INT,
   record_date TIMESTAMPTZ,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE CASCADE
+  FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
 );
 
   CREATE TABLE student_teamwork_skills (
@@ -140,7 +140,7 @@ CREATE TABLE student_tech_skills (
     score INT,
     record_date TIMESTAMPTZ,
     FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-    FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE CASCADE
+    FOREIGN KEY (score) REFERENCES proficiency_rates(skill_id) ON DELETE RESTRICT
   );
 
 --THIS ALLOWS TRACKIJNG STUDENTS' PROJECT RATINGS/SCORES
@@ -156,7 +156,8 @@ CREATE TABLE project_grades (
   project_passed BOOLEAN,
   notes TEXT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
+  FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT
+  --removes learn grades if student is deleted. Cannot delete projects without deleting grades first
 );
 ----this index ensures students don't have duplicate grades
 CREATE UNIQUE INDEX project_grades_only_one_per_student
@@ -172,7 +173,9 @@ CREATE TABLE learn_grades (
   assessment_id INT,
   assessment_grade INT,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
-  FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE CASCADE
+  FOREIGN KEY (assessment_id) REFERENCES learn(assessment_id) ON DELETE RESTRICT
+  --removes learn grades if student is deleted. Cannot delete assessments without deleting grades first
+
 );
 ----this index ensures students don't have duplicate grades
 CREATE UNIQUE INDEX learn_grades_only_one_per_student
@@ -194,7 +197,8 @@ CREATE OR REPLACE FUNCTION calc_techavg() RETURNS trigger AS $$ BEGIN WITH score
   )
 UPDATE students
 SET tech_avg = scores.avg
-FROM scores;
+FROM scores
+WHERE student_id = NEW.student_id;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -215,7 +219,8 @@ CREATE OR REPLACE FUNCTION calc_teamwrkavg() RETURNS trigger AS $$ BEGIN WITH sc
   )
 UPDATE students
 SET teamwork_avg = scores.avg
-FROM scores;
+FROM scores
+WHERE student_id = NEW.student_id;
 RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -338,14 +343,12 @@ INSERT INTO users (
     username,
     password,
     default_cohort,
-    is_instructor,
     asana_access_token
   )
 VALUES (
     'testuser',
     crypt('12345', gen_salt('bf')),
     'MCSP13',
-    'true',
     'here_goes_an_asana_access_token'
   );
 
@@ -353,20 +356,18 @@ VALUES (
     username,
     password,
     default_cohort,
-    is_instructor,
     asana_access_token
   )
 VALUES (
     'Mr. Egg',
     crypt('password', gen_salt('bf')),
     'MCSP15',
-    'true',
     'heres_another_asana_access_token'
   );
 
 -- FAKE COHORTS
 INSERT INTO cohorts (
-    cohort,
+    name,
     begin_date,
     end_date,
     instructor
@@ -379,7 +380,7 @@ VALUES (
   );
 
   INSERT INTO cohorts (
-    cohort,
+    name,
     begin_date,
     end_date,
     instructor
@@ -392,7 +393,7 @@ VALUES (
   );
 
   INSERT INTO cohorts (
-    cohort,
+    name,
     begin_date,
     end_date,
     instructor
@@ -597,17 +598,27 @@ INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('4', '2', '97');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('4', '3', '89');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('3', '1', '50');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('2', '1', '50');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('2', '2', '100');
 UPDATE learn_grades 
 SET assessment_grade = 88
 WHERE 
 student_id = 4 AND assessment_id = 3;
 
-
+INSERT INTO student_tech_skills (student_id, score, record_date)
+VALUES ('1', '1', NOW());
 INSERT INTO student_tech_skills (student_id, score, record_date)
 VALUES ('2', '4', NOW());
 
+
 INSERT INTO student_teamwork_skills (student_id, score, record_date)
 VALUES ('2', '2', NOW());
+INSERT INTO student_teamwork_skills (student_id, score, record_date)
+VALUES ('2', '1', NOW());
 
 -- Database statistics collector:
 -- SELECT * FROM pg_stat_activity
