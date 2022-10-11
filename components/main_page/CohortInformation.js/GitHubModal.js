@@ -91,7 +91,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                         :
                           <span className={gitStyle.codeName} id={student.student_id}
                           onDoubleClick={(e) => editGithub(e)}>
-                           {student.github ? student.github : "Add Account"}
+                           {student.github ? student.github : "Add Github"}
                           </span>
                       }                 
                     </div>
