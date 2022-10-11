@@ -1,12 +1,14 @@
-.border {
-    float: right;
+/* .border {
     background: rgba(69, 78, 106, 0.399) ;
-    width: 625px;
-    height:475px;
-    margin-left: 0px;
     border-radius: 20px;
     box-shadow: 2px 2px 10px rgb(0 0 0 / 40%);
     color: #d0c5c5;
+    overflow: hidden;
+} */
+
+.container {
+    height: 330px;
+    padding: 10px;
     overflow: hidden;
 }
 
@@ -15,7 +17,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 20px;
     padding: 0 16px 0 16px;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
@@ -56,12 +57,10 @@
     color: white !important;
     margin-right: 3px;
     background: #0b131b61;
-
 }
 
 .gitBtn:hover {
-    background: rgba(3, 29, 52, 0.776);
-    
+    background: rgba(3, 29, 52, 0.776); 
 }
 
 .gitBtn_medium {
@@ -77,10 +76,10 @@
 }
 
 .middleBorder {
-  height: 390px;
+  /* height: 380px; */
   margin: 15px;
   border-radius: 10px;
-  overflow-y:hidden;
+  overflow: hidden;
 }
 
 .table {
@@ -93,17 +92,21 @@
 
 .thead {
     display: table-header-group;
+    /* display: table; */
     background: #0b131b61;
+    width: 100%;
+    table-layout: fixed;
 }
 
 .headerRow {
     display: table-row;
+    width:100%;
+    table-layout: fixed;
     border-bottom: 1px solid;
     color: #d0c5c5;
 }
 
 .header {
-    display: block;
     line-height: 24px;
     display: table-cell;
     padding: 10px 0px 10px 0px;
@@ -112,13 +115,25 @@
     font-weight: 600;
     cursor: pointer;
 }
+
 .header:hover{
     color: white;  
 }
 
 .tbody {
-    display: table-row-group; 
-     background: #0b131b61;
+    display: table; 
+    table-layout: fixed;
+    background: #0b131b61;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+
+.tableBody {
+    display: table-row-group;
+    table-layout: fixed;
+    width:100%;
+    max-height: 200px;
 }
 
 .tbodyRow {
@@ -133,13 +148,12 @@
 }
 
 .content {
-    
     font-weight: 400;
     display: table-cell;
     vertical-align: inherit;
     text-align: center;
     font-size: 16px;
-    border: 0px solid;
+    /* border: 0px solid; */
     padding:10px; 
 }
 
@@ -186,6 +200,7 @@
     fill: currentColor;
     width: 16px;
     height: 16px;
+    padding-left: 3px;
 }
 
 .noteIcon {
@@ -195,4 +210,41 @@
     overflow: visible !important;
     vertical-align: text-bottom;
     fill: currentColor;
+}
+
+.box {
+    display: block;
+    top: auto;
+    left: 1000px !important;
+    width: 220px;
+    list-style: none;
+    position: absolute;
+    background: darkgray;
+    padding: 5px 0px;
+    border-radius: 10px;
+    z-index: 900;
+    margin-top: 1px;
+}
+
+.tag {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 8px 5px;
+    color: black;
+    cursor:pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tag:hover {
+    background: rgba(3, 29, 52, 0.776); 
+}
+
+
+.tagIcon {
+    color: black;
+    margin-right: 3px;
+    width:16px;
 }

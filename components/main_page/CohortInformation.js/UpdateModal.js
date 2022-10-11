@@ -8,14 +8,15 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [techSkillGid, setTechSkillGid] = useState(null)
   const [teamWorkGid, setTeamWorkGid] = useState(null)
   const [studentList, setStudentList] = useState([])
+
+
+
   // This will likely be replaced by some value grabbed from state/Recoil.
   const cohort = {}; //obsolete now? oct 5th, sam chavez
  
   // In addition, it will be necessary to grab
   // "current student" from state.
-
-
-  useEffect(() => { 
+  const fetchData = async () => {
     axios.get("https://app.asana.com/api/1.0/projects/1203082294663367" , {
       headers: {
         Authorization: "Bearer 1/1202490391764279:bea7f8d535303444d7b1aa5e74101eec",
@@ -33,15 +34,16 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     .then((res) => {
       setStudentList(res.data.data)
     })
-    console.log(studentList)
+
+  }
+
+  useEffect(() => { 
+    fetchData();
 }, [])
 
   async function submitHandler(e) {
     e.preventDefault(); 
     const target = e.target; 
-    console.log(studentList, "student list in state")
-    console.log(techSkillGid, "tech gid state")
-    console.log(teamWorkGid, "team work gid state")
     let formData = new FormData(target);
     let student = { studentInfo: {} };
     for (const pair of formData.entries()) {
@@ -49,33 +51,53 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     }
     cohort = { ...student };
     setUpdatedInfo(student)
-    setTimeout(() => {
-    }, 100)
-
-
-
-const studentGid = studentList[0].gid
+    let instructorNotes = ''
+    await axios.get("https://app.asana.com/api/1.0/tasks/1203111662850732", {
+      headers: {
+        Authorization: "Bearer 1/1202490391764279:bea7f8d535303444d7b1aa5e74101eec",
+      }
+    })
+    .then((res) => {
+      console.log(res.data.data)
+      instructorNotes = res.data.data.notes
+    })
+    instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null
+    
+const studentGid = studentList[0].gid //<<----LOCAL DB CALL
      axios({
-        method:"PUT",
-        url: `https://app.asana.com/api/1.0/tasks/${studentGid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this
+        method:"PUT",  //must be put method not patch
+        url: `https://app.asana.com/api/1.0/tasks/${studentGid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
         headers: {
-          Authorization: "Bearer 1/1202490391764279:bea7f8d535303444d7b1aa5e74101eec",
+          Authorization: "Bearer 1/1202490391764279:bea7f8d535303444d7b1aa5e74101eec",  //need template literal for ALLLLL headers so global state dependant on user
         }, 
           data: { 
             data: {
               "workspace": "1213745087037",
               "assignee_section": null,
-              // "notes": `${updatedInfo.studentInfo.assessmentName}: ${updatedInfo.studentInfo.assessmentScore}`,
+              "html_notes": `<body>${instructorNotes}\n ${cohort.studentInfo.assessmentName.toUpperCase()} ${cohort.studentInfo.assessmentScore}</body>`, //need conditional or neeed to make this field mandatory
               "parent": null,
-              "html_notes": "<p>this is a note</p>",
               "resource_subtype": "default_task",
               "custom_fields": {
-                [techSkillGid]: `${updatedInfo.studentInfo.Tech}`,  //template literal
-                [teamWorkGid]: `${updatedInfo.studentInfo.Team}`   //template literal
+                [techSkillGid]: `${cohort.studentInfo.Tech}`,  //template literal - done
+                [teamWorkGid]: `${cohort.studentInfo.Team}`   //template literal - done 
         }
       }
       }
-    })    
+    })
+    axios({
+      method:"POST",  //must be put method not patch
+        url: `https://app.asana.com/api/1.0/tasks/${studentGid}/subtasks`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this
+        headers: {
+          Authorization: "Bearer 1/1202490391764279:bea7f8d535303444d7b1aa5e74101eec",  //need template literal for ALLLLL headers so global state dependant on user <<---test next week with all members
+        }, 
+        data: { 
+          data: {            
+            "due_on": "2022-10-02",
+            // "name": "note test 55" //this is the subtask note
+    }
+    }
+    })  
+    .then(fetchData())
   };
 
   async function asanaPost() {
@@ -115,7 +137,7 @@ const studentGid = studentList[0].gid
               </p>
               <form onSubmit={submitHandler}>
                 <label htmlFor="Tech">Technical Aptitude</label> <br />
-                <select id="Tech" name="Tech" required>
+                <select id="Tech" name="Tech" required autoFocus="true">
                   <option value="none" selected disabled hidden>
                     Select an Option
                   </option>

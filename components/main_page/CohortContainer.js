@@ -7,8 +7,10 @@ const CohortContainer = () => {
   return (
     <div className={containerStyles.container}>
       <CohortSpacer />
-      <CohortOverall />
+      <div className= {containerStyles.container2}>
       <StudentSummary />
+      <CohortOverall />
+      </div>
     </div>
   );
 };

@@ -102,8 +102,10 @@ const CohortOverall = ({ children }) => {
 
   return (
     <div className={overallStyles.overallBorder}>
-      <div id="barHolder">
-        <Bar data={data} options={options} width={100} height={200} />
+      <div className={overallStyles.graphContainer}>
+        <div className= {overallStyles.barHolder}>
+          <Bar data={data} options={options} width={100} height={200} />
+        </div>
       </div>
       {/* <button
         id="techRandomizerButton"
@@ -117,17 +119,19 @@ const CohortOverall = ({ children }) => {
       >
         Randomize Cohort Team Average
       </button> */}
-      <div className={overallStyles.textContent}>
-        <div className={overallStyles.link}>
-          <u onClick={openUpdateModal}>Weekly Update</u>
+      <div className= {overallStyles.btnContainer}>
+        <div className={overallStyles.textContent}>
+          <div className={overallStyles.link}>
+            <u onClick={openUpdateModal}>Weekly Update</u>
+          </div>
+          <UpdateModal
+            showUpdateModal={showUpdateModal}
+            setShowUpdateModal={setShowUpdateModal}
+            onClose={() => {
+              setShowUpdateModal(false);
+            }}
+          />
         </div>
-        <UpdateModal
-          showUpdateModal={showUpdateModal}
-          setShowUpdateModal={setShowUpdateModal}
-          onClose={() => {
-            setShowUpdateModal(false);
-          }}
-        />
       </div>
     </div>
   );
