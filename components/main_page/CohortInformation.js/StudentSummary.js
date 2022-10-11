@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
 import { useRecoilState } from "recoil";
-import { studentsState, notesState } from "../../state";
+import { studentsState, notesState, studentIdState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
 
@@ -14,7 +14,8 @@ const StudentSummary = () => {
   const [showCommentModal, setShowCommenttModal] = useState(false);
 
   const [notes, setNotes] = useRecoilState(notesState);
-
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
+ 
   const [showBox, setShowBox] = useState(false);
   const [checkedAll, setCheckAll] = useState(false);
   const [checked, setChecked] = useState({
@@ -28,9 +29,8 @@ const StudentSummary = () => {
 
   const deleteHandler = (e) => {
     e.preventDefault();
-    let id = e.target.id;
-    console.log(id);
-    axios.delete(`/api/students/${id}`).then(() => {
+    
+    axios.delete(`/api/students/${studentId}`).then(() => {
       setStudents(studentsState);
     });
   };
