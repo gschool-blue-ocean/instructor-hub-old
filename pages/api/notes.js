@@ -16,7 +16,7 @@ export default async function notesHandler(req, res) {
     try {
       const notes = await sql`
       SELECT * FROM notes`;
-      res.status(200).json({ notes });
+      res.status(200).json(notes);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
