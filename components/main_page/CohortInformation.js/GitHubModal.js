@@ -8,15 +8,6 @@ import axios from "axios";
 
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [students, setStudents] = useRecoilState(studentsState);
-  const [gitHubAccount, setGitHubAccount] = useRecoilState(studentsState);
-  const [showForm, SetShowForm] = useState(false)
-  const [addFormData, setAddFormData] = useState({
-    name_first:'',
-    name_last: '',
-    github: ''
-  })
-  // console.log(gitHubAccount[0].github);
-
   const [isEditing, setIsEditing] = useState(false);
   const [githubAccount, setGithubAccount] = useState(null)
   // edit github account 
@@ -54,32 +45,6 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
       },
     });
   };
-
-  const handleAddFormChange = (event) => {
-    event.preventDefault();
-
-    const fieldName = event.target.getAttribute("name")
-    const fieldValue = event.target.value;
-
-    const newFormData = {...addFormData };
-    newFormData[fieldName] = fieldValue;
-
-    setAddFormData(newFormData);
-  };
-
-  const handleAddFormSubmit = (event) => {
-    event.preventDefault();
-    const addStudent = {
-      id:nanoid(),
-      name_first: addFormData.name_first,
-      name_last: addFormData.name_last,
-      github: addFormData.github,
-    }
-
-    const addStudents = [...students, addStudent]
-    setStudents(addStudents);
-
-  }
 
   return (
     <>

@@ -34,7 +34,9 @@ const StudentSummary = () => {
     }
   }
 
-  let course = students.filter(classRoom => classRoom.cohort == currentCohort)
+  // Allows the cohorts to be filter 
+  let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
+
   // const deleteHandler = (e) => {
   //   e.preventDefault();
     
@@ -176,6 +178,7 @@ const StudentSummary = () => {
                 </tr>
               </thead>
               <tbody className= {studentStyle.tbody}>
+              {/* Map through the students data, ties in with the variable course */}
               {course.map((student) => (
                 <tr className= {studentStyle.tbodyRow} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
@@ -183,7 +186,7 @@ const StudentSummary = () => {
                   </td>
                   <td  className= {studentStyle.nameContent}>
                     <Link key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>
-                      <a className= {studentStyle.nameSpace} href="#">{student.name_first +" "+student.name_last}</a>
+                      <a className= {studentStyle.nameSpace} href="#">{student.name}</a>
                     </Link>
                   </td>
                   <td className= {studentStyle.content}>{student.learn_avg}%</td>
