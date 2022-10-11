@@ -31,8 +31,8 @@ ChartJS.register(
 );
 
 const CohortOverall = ({ children }) => {
-  const [techAvg, setTechAvg] = useRecoilState(studentsState);
-  const [teamAvg, setTeamAvg] = useRecoilState(studentsState);
+  const [techAvg, setTechAvg] = useState(60);
+  const [teamAvg, setTeamAvg] = useState(40);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
   const [cohortAvg, setCohortAvg] = useRecoilState(cohortsState);
@@ -40,11 +40,6 @@ const CohortOverall = ({ children }) => {
   const openUpdateModal = () => {
     setShowUpdateModal((prev) => !prev);
   };
-
-  // const randomizer = () => {
-  //   const result = Math.floor(Math.random() * 100);
-  //   return result;
-  // };
 
   // *The GRAPH - using ChartJS, we want it to be
   // dynamic, responsive to changes in the
@@ -54,18 +49,21 @@ const CohortOverall = ({ children }) => {
   // *Graph as its own sub-component?
 
   const options = {
+    // "x" by default, setting to "y" makes the graph horizontal
     indexAxis: "y",
     elements: {
       bar: {
         borderWidth: 2,
       },
     },
+    // auto-scales by default, defining min max to not be stupid
     scales: {
       x: {
         suggestedMin: 0,
         suggestedMax: 100,
       },
     },
+    //"responsive" graph
     maintainAspectRatio: false,
     responsive: true,
     plugins: {
@@ -106,18 +104,6 @@ const CohortOverall = ({ children }) => {
           <Bar data={data} options={options} width={100} height={200} />
         </div>
       </div>
-      {/* <button
-        id="techRandomizerButton"
-        onClick={() => setTechAvg(() => randomizer)}
-      >
-        Randomize Cohort Tech Average
-      </button>
-      <button
-        id="teamRandomizerButton"
-        onClick={() => setTeamAvg(() => randomizer)}
-      >
-        Randomize Cohort Team Average
-      </button> */}
       <div className={overallStyles.btnContainer}>
         <div className={overallStyles.textContent}>
           <div className={overallStyles.link}>

@@ -39,19 +39,34 @@ const Layout = ({ children }) => {
   const [projectGrades, setProjectGrades] = useRecoilState(projectGradesState);
   const [users, setUsers] = useRecoilState(usersState);
   // const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
-      
-  const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(learnAndLearnGradesState);
-  const [projectsAndProjectGrades, setprojectsAndProjectGrades] = useRecoilState(projectsAndProjectGradesState);
-  const [proficiencyRates, setProficiencyRates] = useRecoilState(proficiencyRatesState);
-  const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
-  const [studentTechSkills, setStudentTechSkills] = useRecoilState(studentTechSkillsState);
+
+  const [learnAndLearnGrades, setLearnAndLearnGrades] = useRecoilState(
+    learnAndLearnGradesState
+  );
+  const [projectsAndProjectGrades, setprojectsAndProjectGrades] =
+    useRecoilState(projectsAndProjectGradesState);
+  const [proficiencyRates, setProficiencyRates] = useRecoilState(
+    proficiencyRatesState
+  );
+  const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(
+    studentTeamworkSkillsState
+  );
+  const [studentTechSkills, setStudentTechSkills] = useRecoilState(
+    studentTechSkillsState
+  );
   const [studentId, setStudentId] = useRecoilState(studentIdState);
-  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
-  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
-  const [learnAndLearnGradesId, setLearnAndLearnGradesId] = useRecoilState(learnAndLearnGradesIdState);
-  const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState)
+  const [currentStudent, setCurrentStudent] =
+    useRecoilState(currentStudentState);
+  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] =
+    useRecoilState(currentlearnAndLearnGradesState);
+  const [learnAndLearnGradesId, setLearnAndLearnGradesId] = useRecoilState(
+    learnAndLearnGradesIdState
+  );
+  const [currStudentProjects, setCurrStudentProjects] = useRecoilState(
+    currStudentProjectsState
+  );
   //console.log(learnAndLearnGradesId);
-  
+
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
       setCohorts(res.data.cohorts);
@@ -130,38 +145,32 @@ const Layout = ({ children }) => {
       setLearnAndLearnGrades(res.data.studentTechSkills);
       // console.log(res.data.studentTechSkills);
     });
-
   }, []);
 
-  // this is when you select one student and it retirves the information for that student 
+  // this is when you select one student and it retirves the information for that student
   useEffect(() => {
-    if(studentId) {
-
+    if (studentId) {
       // console.log(studentId, 'student Id')
       axios.get(`/api/students/${studentId}`).then((res) => {
         setCurrentStudent(res.data);
         // console.log(res.data);
       });
-      
-      axios
-        .get(`/api/learnAndLearnGradesId/${studentId}`)
-        .then((res) => {
-          setCurrentLearnAndLearnGrades(res.data);
-          //console.log(res.data);
-        });
-        axios
-        .get(`/api/projectsAndProjectGradesId/${studentId}`)
-        .then((res) => {
-          setCurrStudentProjects(res.data);
-          //console.log(res.data);
-        });
+
+      axios.get(`/api/learnAndLearnGradesId/${studentId}`).then((res) => {
+        setCurrentLearnAndLearnGrades(res.data);
+        //console.log(res.data);
+      });
+      axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
+        setCurrStudentProjects(res.data);
+        //console.log(res.data);
+      });
     }
-  }, [studentId])
+  }, [studentId]);
 
   return (
     <>
       <Header />
-        {children}
+      {children}
       <Footer />
     </>
   );
