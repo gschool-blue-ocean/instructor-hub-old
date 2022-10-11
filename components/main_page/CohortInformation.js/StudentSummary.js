@@ -13,6 +13,8 @@ const StudentSummary = () => {
   const [order, setOrder] = useState("ASC")
   // const [checked, setChecked] = useState({ students: false });
 
+  
+
   const sorting= (col) => {
     if(order === 'ASC') {
       const sorted = [...students].sort((a,b) =>
