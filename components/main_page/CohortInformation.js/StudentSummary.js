@@ -1,20 +1,27 @@
 import studentStyle from "../../../styles/StudentSummary.module.css";
+import commentStyle from "../../../styles/CommentModal.module.css";
 import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { studentsState } from "../../state.js";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
+import { useRecoilState } from "recoil";
+import { studentsState, notesState,studentIdState } from "../../state";
+import axios from "axios";
+import Link from 'next/link'
 
 const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCommentModal, setShowCommenttModal] = useState(false);
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
+  const [notes, setNotes] = useRecoilState(notesState);
+  const [showBox, setShowBox] = useState(false);
   const [checkedAll, setCheckAll] = useState(false);
   const [order, setOrder] = useState("ASC")
   // const [checked, setChecked] = useState({ students: false });
 
   
-
   const sorting= (col) => {
     if(order === 'ASC') {
       const sorted = [...students].sort((a,b) =>
@@ -36,7 +43,7 @@ const StudentSummary = () => {
   };
 
   useEffect(() => {
-    setStudents(students)
+    setStudents(students);
   }, []);
 
 
@@ -48,9 +55,9 @@ const StudentSummary = () => {
       });
       setStudents(tempStudent);
     } else {
-      let tempStudent = students.map((student) => 
-        student.id === id ? { ...student, isChecked: checked } : student 
-    );
+      let tempStudent = students.map((student) =>
+        student.id === id ? { ...student, isChecked: checked } : student
+      );
       setStudents(tempStudent);
     }
   }

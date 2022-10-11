@@ -2,7 +2,8 @@ import style from '../../../styles/StudentStatsRight.module.css'
 import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend,} from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import {useState} from 'react'
-
+import { studentTechSkillsState, studentTeamworkSkillsState, learnAndLearnGradesIdState, currentlearnAndLearnGradesState } from "../../state";
+import { useRecoilState } from 'recoil';
 
 ChartJS.register(
   CategoryScale,
@@ -15,7 +16,9 @@ ChartJS.register(
 );
 
 const StatusRight = () => { 
-
+  const [studentTechSkills, setStudentTechSkills] = useRecoilState(studentTechSkillsState);
+  const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
+  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
   const [teckSkill, setTeckSkill] = useState([1, 3, 4, 2])
   const options = {
     responsive: true,
@@ -41,14 +44,14 @@ const StatusRight = () => {
     }
   };
 
-  const labels = ['month 1', 'month 2', 'month 3', 'month 4'];
+  const labels = ['1', '2', '3', '4'];
   const data = {
     labels,
     datasets: [
       {
         label: 'Fake progress',
         data: teckSkill,
-        borderColor: 'blue',
+        borderColor: 'darkblue',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         tension: 0.4, 
         // pointRadius: 1, 
@@ -62,17 +65,17 @@ const StatusRight = () => {
         <Line className={style.graph}  options={options} data={data} />
       </div>
       <div className={style.avrgScoreCon}>
-        <div>
-          <span>Project Average</span>
-          <span>50%</span>
+        <div className={style.averages}>
+          <span>Project Avg</span>
+          <div>50%</div>
         </div>
-        <div>
-          <span>Assesment Average</span>
-          <span>50%</span>
+        <div className={style.averages}>
+          <span>Assesment Avg</span>
+          <div>50%</div>
         </div>
-        <div>
-          <span>Softskills Average</span>
-          <span>50%</span>
+        <div className={style.averages}>
+          <span>Softskills Avg</span>
+          <div>50%</div>
         </div>
       </div>
     </div>
