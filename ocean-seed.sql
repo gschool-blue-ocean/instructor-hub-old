@@ -23,12 +23,6 @@ DROP EXTENSION IF EXISTS pgcrypto;
 
 CREATE EXTENSION pgcrypto;
 
---questions for mike-c or the group:
---1) notes table: can we drop fname and lname from notes table?
---2) notes table: do we need instructor AND seir notes? is that how front end is designed?
---3) MJ - see if/how to limit duplicate records in transactions (e.g. proj_grades, learn_grades)
-
-
 --TABLE OF CONTENTS--
 --SECTION 1: TABLES AND RELATIONS
 ------ (1) users
@@ -61,9 +55,8 @@ CREATE EXTENSION pgcrypto;
 ============================================================== */
   CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
-  username VARCHAR (20) UNIQUE,
+  username VARCHAR (50) UNIQUE,
   password TEXT NOT NULL,
-  is_instructor BOOLEAN,
   default_cohort TEXT,
   asana_access_token TEXT,  
   cohort_asana_gid TEXT
@@ -71,21 +64,19 @@ CREATE EXTENSION pgcrypto;
 
 CREATE TABLE cohorts (
   cohort_id SERIAL PRIMARY KEY,
-  cohort TEXT,
+  name TEXT,
   begin_date DATE,
   end_date DATE,
-  instructor INT,
+  instructor TEXT,
   cohort_avg INT,
   cohort_min INT,
   cohort_max INT,
-  ASANA_GID TEXT,
-  FOREIGN KEY (instructor) REFERENCES users(user_id) ON DELETE CASCADE
+  gid TEXT
 );
 
 CREATE TABLE students (
   student_id SERIAL PRIMARY KEY,
-  name_first TEXT,
-  name_last TEXT,
+  name TEXT,
   learn_avg INT,
   tech_avg INT,
   teamwork_avg INT,
@@ -95,7 +86,7 @@ CREATE TABLE students (
   cohort_id INT,
   ETS_date DATE,
   github TEXT,
-  ASANA_GID TEXT,
+  gid TEXT,
   FOREIGN KEY (cohort_id) REFERENCES cohorts(cohort_id) ON DELETE CASCADE
   );
 
@@ -116,8 +107,9 @@ CREATE TABLE assigned_student_groupings (
 
 CREATE TABLE notes (
   student_id INT,
-  instructor_notes TEXT,
-  SEIR_notes TEXT,
+  note_id SERIAL PRIMARY KEY,
+  notes TEXT,
+  name TEXT,
   note_date TIMESTAMPTZ,
   FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 );
@@ -330,14 +322,12 @@ INSERT INTO users (
     username,
     password,
     default_cohort,
-    is_instructor,
     asana_access_token
   )
 VALUES (
     'testuser',
     crypt('12345', gen_salt('bf')),
     'MCSP13',
-    'true',
     'here_goes_an_asana_access_token'
   );
 
@@ -345,20 +335,38 @@ VALUES (
     username,
     password,
     default_cohort,
-    is_instructor,
     asana_access_token
   )
 VALUES (
     'Mr. Egg',
     crypt('password', gen_salt('bf')),
     'MCSP15',
-    'true',
     'heres_another_asana_access_token'
+  );
+
+VALUES (
+    'testuser',
+    crypt('12345', gen_salt('bf')),
+    'MCSP13',
+    'here_goes_an_asana_access_token'
+  );
+
+  INSERT INTO users (
+    username,
+    password,
+    default_cohort,
+    asana_access_token
+  )
+VALUES (
+    'a',
+    crypt('a', gen_salt('bf')),
+    'MCSP13',
+    'heres_yet another_asana_access_token'
   );
 
 -- Fake Data
 INSERT INTO cohorts (
-    cohort,
+    name,
     begin_date,
     end_date,
     instructor
@@ -367,12 +375,11 @@ VALUES (
     'MCSP13',
     '01/01/2022',
     '04/04/2022',
-    '1'
+    'testuser'
   );
 -- Fake Data
 INSERT INTO students (
-    name_first,
-    name_last,
+    name,
     server_side_test,
     client_side_test,
     tech_avg,
@@ -383,8 +390,7 @@ INSERT INTO students (
     github
   )
 VALUES (
-    'John',
-    'Testor',
+    'John Testor',
     'pass',
     'pass',
     '3',
@@ -396,8 +402,8 @@ VALUES (
   );
 
 -- Fake Data
-INSERT INTO notes (student_id, note_date, instructor_notes)
-VALUES ('1', NOW(), 'Ой у лузі червона калина похилилася,
+INSERT INTO notes (student_id, name, note_date, notes)
+VALUES ('1', 'Egg',NOW(), 'Ой у лузі червона калина похилилася,
 Чогось наша славна Україна зажурилася.
 А ми тую червону калину підіймемо,
 А ми нашу славну Україну, гей-гей, розвеселимо!
@@ -445,8 +451,7 @@ VALUES ('1', '3', '60');
 
 -- Test for student_id population across tables in the db when new student created
 INSERT INTO students (
-    name_first,
-    name_last,
+    name,
     server_side_test,
     client_side_test,
     tech_avg,
@@ -457,8 +462,7 @@ INSERT INTO students (
     github
   )
 VALUES (
-    'Bob',
-    'Builder',
+    'Bob Builder',
     'pass',
     'pass',
     '4',
@@ -480,7 +484,7 @@ VALUES ('2', '3', '88');
 
 -- Test for cohort_id population into coding groups when cohort created
 INSERT INTO cohorts (
-    cohort,
+    name,
     begin_date,
     end_date,
     instructor
@@ -489,7 +493,7 @@ VALUES (
     'MCSP15',
     '01/01/2022',
     '04/04/2022',
-    '2'
+    'Egg'
   );
 
 -- Test for triggers to recalc average on update
@@ -506,7 +510,7 @@ VALUES ('1', '4', '100');
 
 -- Test of date update for notes
 UPDATE notes
-SET SEIR_notes = 'this is a test of the change date on note update feature'
+SET notes = 'this is a test of the change date on note update feature'
 WHERE student_id = '2';
 UPDATE notes
 SET note_date = NOW()
@@ -515,8 +519,7 @@ WHERE student_id = '2';
 -- Test of cohort avergage, to make sure only one coohort is averaged
 
 INSERT INTO students (
-    name_first,
-    name_last,
+    name,
     server_side_test,
     client_side_test,
     tech_avg,
@@ -527,8 +530,7 @@ INSERT INTO students (
     github
   )
 VALUES (
-    'Dark',
-    'Helmet',
+    'Dark Helmet',
     'pass',
     'pass',
     '3',
@@ -541,8 +543,7 @@ VALUES (
 
 
   INSERT INTO students (
-    name_first,
-    name_last,
+    name,
     server_side_test,
     client_side_test,
     tech_avg,
@@ -553,8 +554,7 @@ VALUES (
     github
   )
 VALUES (
-    'Anna',
-    'Cortana',
+    'Anna Cortana',
     'pass',
     'pass',
     '4',
