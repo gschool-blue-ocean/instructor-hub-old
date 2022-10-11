@@ -1,8 +1,8 @@
 import style from '../../../styles/StudentStatsRight.module.css'
 import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend,} from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import {useState} from 'react'
-import { studentTechSkillsState, studentTeamworkSkillsState, learnAndLearnGradesIdState, currentlearnAndLearnGradesState } from "../../state";
+import {useEffect, useState} from 'react'
+import { studentTechSkillsState, studentTeamworkSkillsState, studentIdState, currentlearnAndLearnGradesState } from "../../state";
 import { useRecoilState } from 'recoil';
 
 ChartJS.register(
@@ -15,19 +15,25 @@ ChartJS.register(
   Legend
 );
 
-const StatusRight = () => { 
+const StatusRight = ({currentStudent}) => { 
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [studentTechSkills, setStudentTechSkills] = useRecoilState(studentTechSkillsState);
-  const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
-  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
-  const [teckSkill, setTeckSkill] = useState([1, 3, 4, 2])
+  
+  const [teckSkill, setTeckSkill] = useState([]); 
+  // console.log(studentTechSkills, 'here')
+
+
+   let currTechSkills = studentTechSkills.filter(teckSkill => teckSkill.student_id == studentId); 
+   let arrTeckSkills = currTechSkills.map((skill) => skill.score); 
+
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        display: false,
+        display: true,
         // if we want multiple options then we can display true here
-        // positiomn: 'bottom',
-        //align:'center',
+        position: 'bottom',
+        align:'center',
       },
       title: {
         display: true,
@@ -44,15 +50,23 @@ const StatusRight = () => {
     }
   };
 
-  const labels = ['1', '2', '3', '4'];
+  const labels = ['1', '2', '3', '4', '5', '6', '7', '8'];
   const data = {
     labels,
     datasets: [
       {
+        label: 'TECH SKILLS',
+        data: arrTeckSkills,
+        borderColor: 'darkgreen',
+        backgroundColor: 'green',
+        tension: 0.4, 
+        // pointRadius: 1, 
+      },
+      {
         label: 'Fake progress',
-        data: teckSkill,
+        data: [0,2,3,3,1,1],
         borderColor: 'darkblue',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        backgroundColor: 'blue',
         tension: 0.4, 
         // pointRadius: 1, 
       },
@@ -66,16 +80,16 @@ const StatusRight = () => {
       </div>
       <div className={style.avrgScoreCon}>
         <div className={style.averages}>
-          <span>Project Avg</span>
-          <div>50%</div>
+          <span>Tech Avg</span>
+          <div>{currentStudent.tech_avg}%</div>
         </div>
         <div className={style.averages}>
-          <span>Assesment Avg</span>
-          <div>50%</div>
+          <span>Learn Avg</span>
+          <div>{currentStudent.learn_avg}%</div>
         </div>
         <div className={style.averages}>
-          <span>Softskills Avg</span>
-          <div>50%</div>
+          <span>TeamWork Avg</span>
+          <div>{currentStudent.teamwork_avg}%</div>
         </div>
       </div>
     </div>

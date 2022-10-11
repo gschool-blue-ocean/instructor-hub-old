@@ -15,7 +15,6 @@ const StudentMainBody = () => {
   const [currNotes, setCurrNotes] = useState([]); 
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
-  console.log(userNotes, 'here'); 
 
 
   // converting ETs date into MM DAY YYYY
@@ -45,7 +44,7 @@ const StudentMainBody = () => {
             </div>
           </div>
         </div>
-        <StudentStatus />
+        <StudentStatus currentStudent={currentStudent}/>
         <div className={styles.notesContainer}>
           <div className={styles.notes}>
             <div className={styles.notesTitle}>Notes</div>

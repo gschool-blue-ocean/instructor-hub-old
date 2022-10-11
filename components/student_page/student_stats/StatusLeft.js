@@ -19,7 +19,7 @@ const StatusLeft = () => {
   const openNoteModel = (currNote) => {
   
     setShowNoteModal((prev) => !prev);
-    setCurrNote(currNote); 
+    setCurrNote(currNote);
   };
   return (
     <>

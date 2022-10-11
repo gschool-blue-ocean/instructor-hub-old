@@ -127,7 +127,7 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/studentTechSkills").then((res) => {
-      setLearnAndLearnGrades(res.data.studentTechSkills);
+      setStudentTechSkills(res.data.studentTechSkills);
       // console.log(res.data.studentTechSkills);
     });
 
