@@ -1,12 +1,12 @@
 import postgres from "postgres";
 
-const { DB_CONNECTION_URL, PORT, NODE_ENV } = process.env;
+// const { DB_CONNECTION_URL, PORT, NODE_ENV } = process.env;
 const sql = postgres(
   process.env.DB_CONNECTION_URL,
   process.env.NODE_ENV === "production"
     ? {
         ssl: { rejectUnauthorized: false },
-        max_lifetime: 60 * 30,
+        // max_lifetime: 60 * 30,
       }
     : {}
 );
