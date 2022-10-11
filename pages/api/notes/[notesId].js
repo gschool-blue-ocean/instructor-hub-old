@@ -16,7 +16,7 @@ export default async function getNotes(req, res) {
   if (req.method === "GET") {
     try {
       const getNotesId = await sql`
-      SELECT * FROM notes WHERE student_id = ${id}`;
+            SELECT * FROM notes WHERE student_id = ${id}`;
       res.status(200).json(getNotesId);
     } catch (error) {
       console.error("Bad news in index api: ", error);
@@ -25,7 +25,7 @@ export default async function getNotes(req, res) {
   } else if (req.method === "DELETE") {
     try {
       const deleteNotes = await sql`
-               DELETE FROM notes WHERE student_id = ${id}`;
+            DELETE FROM notes WHERE student_id = ${id}`;
       res.status(200).json(deleteNotes[0]);
     } catch (error) {
       console.error("Bad news in index api: ", error);
@@ -35,7 +35,7 @@ export default async function getNotes(req, res) {
     try {
       const { instructor_notes, SEIR_notes } = req.body;
       const patchNotes = await sql`
-            UPDATE notes SET instructor_notes = ${instructor_notes}, SEIR_notes = ${SEIR_notes}, note_date = NOW() WHERE student_id = ${id}`;
+            UPDATE notes SET instructor_notes = ${instructor_notes}, SEIR_notes = ${SEIR_notes},note_date = NOW() WHERE student_id = ${id}`;
       res.status(200).json(patchNotes[0]);
     } catch (error) {
       console.error("Bad news in index api: ", error);

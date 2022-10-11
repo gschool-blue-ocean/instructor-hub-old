@@ -12,7 +12,7 @@ const sql = postgres(
 );
 
 export default async function getLearnAndLearnGradesId(req, res) {
-  const id = req.query.learnAndLearnGradesid;
+  // const id = req.query.learnAndLearnGradesid;
   console.log(id + "LearnAndLearnGradesId");
 
   if (req.method === "GET") {
