@@ -23,7 +23,7 @@ const StudentSummary = () => {
   const sorting= (col) => {
     if(order === 'ASC') {
       const sorted = [...students].sort((a,b) =>
-        a[col] < b[col] ? 1 : -1
+        a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
       );
       setStudents(sorted);
       setOrder("ASC")
@@ -45,24 +45,24 @@ const StudentSummary = () => {
   }, []);
 
 
-  const handleChange = (e) => {
-    const { id, checked } = e.target;
-    if (id === "allSelect") {
-      let tempStudent = students.map((student) => {
-        return { ...student, isChecked: checked };
-      });
-      setStudents(tempStudent);
-    } else {
-      let tempStudent = students.map((student) =>
-        student.id === id ? { ...student, isChecked: checked } : student
-      );
-      setStudents(tempStudent);
-    }
-  }
+  // const handleChange = (e) => {
+  //   const { id, checked } = e.target;
+  //   if (id === "allSelect") {
+  //     let tempStudent = students.map((student) => {
+  //       return { ...student, isChecked: checked };
+  //     });
+  //     setStudents(tempStudent);
+  //   } else {
+  //     let tempStudent = students.map((student) =>
+  //       student.id === id ? { ...student, isChecked: checked } : student
+  //     );
+  //     setStudents(tempStudent);
+  //   }
+  // }
 
-  const handleDeleteClick = (studentId) => {
+  const handleDeleteClick = (id) => {
     const newStudent = [...students] //Create New Array based on current students
-    const index = students.findIndex((student) => student.id === studentId)
+    const index = students.findIndex((student) => student.student_id === id)
     newStudent.splice(index, 1);
     setStudents(newStudent)
   }
@@ -130,7 +130,7 @@ const StudentSummary = () => {
                 checked={
                   !students.some((student) => student?.isChecked !== true)
                 }
-                onChange={handleChange}
+                // onChange={handleChange}
               />
               <label htmlFor="selectMe"> Select/Deselect All</label>
             </div>
@@ -166,9 +166,10 @@ const StudentSummary = () => {
               </thead>
               <tbody className= {studentStyle.tbody}>
               {students.map((student) => (
+                <Link key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>
                 <tr className= {studentStyle.tbodyRow} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
-                    <input type="checkbox" name={student.id} checked={student?.isChecked || false} onChange={handleChange}></input>
+                    <input type="checkbox" name={student.id} checked={student?.isChecked || false}></input>
                   </td>
                   <td  className= {studentStyle.nameContent}>
                     <a className= {studentStyle.nameSpace} href="#">{student.name_first +" "+student.name_last}</a>
@@ -205,6 +206,7 @@ const StudentSummary = () => {
                     </svg>{" "}
                   </td>
                 </tr>
+                </Link>
                 ))}
               </tbody>
             </table>
