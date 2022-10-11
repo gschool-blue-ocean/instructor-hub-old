@@ -1,13 +1,17 @@
 import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
+
 import { currentStudentState,notesState,studentIdState} from "../state";
+
 import { useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 const StudentMainBody = () => {
-
+  // testing notes for indiviual student
+  const [notes, setNotes] = useRecoilState(notesState);
+  console.log(notes)
   // current student is the current information for one person 
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
