@@ -11,23 +11,26 @@ const sql = postgres(
     : {}
 );
 
-export default async function assignedGroupingsHandler(req, res) {
+export default async function getLearnId(req, res) {
+  const id = req.query.learnid;
+  console.log(id + "Here");
+
   if (req.method === "GET") {
     try {
-      const studentGroupings = await sql`
-      SELECT * FROM assigned_student_groupings`;
-      res.status(200).json({ studentGroupings });
+      const learnId = await sql`
+        SELECT * FROM learn WHERE assessment_id = ${id}`;
+      res.status(200).json(learnId[0]);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
-  } else if (req.method === "POST") {
+  } else if (req.method === "PATCH") {
     try {
-      const { student_id, group_id } = req.body;
-      console.log(req.body);
-      const assignGroup = await sql`
-                 INSERT INTO assigned_student_groupings (student_id, group_id ) VALUES (${student_id}, ${group_id}) RETURNING *`;
-      res.status(200).json(req.body);
+      const { assessment_name } = req.body;
+      const patchLearn = await sql`
+                 UPDATE learn SET assessment_name = ${assessment_name}
+                 WHERE assessment_id = ${id}`;
+      res.status(200).json(patchLearn);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });

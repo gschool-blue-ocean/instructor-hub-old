@@ -11,23 +11,27 @@ const sql = postgres(
     : {}
 );
 
-export default async function assignedGroupingsHandler(req, res) {
+export default async function getprojectId(req, res) {
+  const id = req.query.projectid;
+  console.log(id + "projectid");
+
   if (req.method === "GET") {
     try {
-      const studentGroupings = await sql`
-      SELECT * FROM assigned_student_groupings`;
-      res.status(200).json({ studentGroupings });
+      const project = await sql`
+        SELECT * FROM projects
+        WHERE project_id = ${id}`;
+      res.status(200).json(project);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
-  } else if (req.method === "POST") {
+  } else if (req.method === "PATCH") {
     try {
-      const { student_id, group_id } = req.body;
-      console.log(req.body);
-      const assignGroup = await sql`
-                 INSERT INTO assigned_student_groupings (student_id, group_id ) VALUES (${student_id}, ${group_id}) RETURNING *`;
-      res.status(200).json(req.body);
+      const { project_name } = req.body;
+      const patchProject = await sql`
+                 UPDATE projects SET project_name = ${project_name}
+                 WHERE project_id = ${id}`;
+      res.status(200).json(patchProject);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });

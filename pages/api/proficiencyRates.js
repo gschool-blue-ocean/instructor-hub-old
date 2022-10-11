@@ -11,23 +11,23 @@ const sql = postgres(
     : {}
 );
 
-export default async function assignedGroupingsHandler(req, res) {
+export default async function proficiencyRatesHandler(req, res) {
   if (req.method === "GET") {
     try {
-      const studentGroupings = await sql`
-      SELECT * FROM assigned_student_groupings`;
-      res.status(200).json({ studentGroupings });
+      const proficiencyRates = await sql`
+      SELECT * FROM proficiency_rates;`;
+      res.status(200).json({ proficiencyRates });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
   } else if (req.method === "POST") {
     try {
-      const { student_id, group_id } = req.body;
+      const { skill_id, skill_descr } = req.body;
       console.log(req.body);
-      const assignGroup = await sql`
-                 INSERT INTO assigned_student_groupings (student_id, group_id ) VALUES (${student_id}, ${group_id}) RETURNING *`;
-      res.status(200).json(req.body);
+      const createProficiencyRates = await sql`
+               INSERT INTO proficiency_rates ( skill_id, skill_descr ) VALUES ( ${skill_id}, ${skill_descr}) RETURNING *`;
+      res.status(200).json({ createProficiencyRates });
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });

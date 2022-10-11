@@ -28,4 +28,39 @@
     -webkit-box-orient: vertical;
     max-height: 80%;
     display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.newCohortForm {
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.submit {
+  border-radius: 10px;
+  border: none;
+  padding: 0 15px;
+  font-size: 15px;
+  line-height: 30px;
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none !important;
+  color: white !important;
+  /* background-image: linear-gradient(to right, #47598b, #2f77ca); */
+  /* background-color: rgba(33, 48, 33, 0.781); */
+  /* background: linear-gradient(129deg, rgb(33, 47, 32) 0%, rgb(0, 45, 2) 71%, rgba(0,0,0,1) 100%); */
+  margin-right: 3px;
+  background: #0b131b61;
+  margin-bottom: 100px;
+}
+
+.submit:hover {
+  background: rgba(3, 29, 52, 0.776);
+}
+
+.created {
+  color: white;
+  font-size: 20px;
 }
