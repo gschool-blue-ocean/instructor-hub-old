@@ -21,7 +21,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   //       setTasks(updateGithub);
   //     });
   // };
-  console.log(students)
+  
   const handleSubmit = () => {
     e.preventDefault();
     setIsEditing(false);
@@ -29,7 +29,6 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   };
 
   const editGithub = (e) => {
-    console.log(e.target.id)
     setGithubAccount(e.target.id)
     setIsEditing(true);
     
