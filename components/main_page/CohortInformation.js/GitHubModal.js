@@ -8,7 +8,7 @@ import axios from "axios";
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [isEditing, setIsEditing] = useState(false);
-  const [githubAccount, setGithubAccount] = useState("")
+  const [githubAccount, setGithubAccount] = useState(null)
   // edit github account 
   // const editGithub = (id, currentValue) => {
   //   axios.patch(`/api/students/${id}`, {
@@ -21,7 +21,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   //       setTasks(updateGithub);
   //     });
   // };
-
+  console.log(students)
   const handleSubmit = () => {
     e.preventDefault();
     setIsEditing(false);
@@ -29,9 +29,10 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   };
 
   const editGithub = (e) => {
-    console.log(e.target.textContent)
+    console.log(e.target.id)
+    setGithubAccount(e.target.id)
     setIsEditing(true);
-    // setGithubAccount(e.target.textContent)
+    
   }
   // not complete
   const addGitHubAccount = () => {
@@ -87,14 +88,14 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                         {" "}
                         {student.name_first + " " + student.name_last}{" "}
                       </a>
-                      {isEditing ?
+                      {isEditing && student.student_id == githubAccount ? 
                           <>
                            <input type="text" defaultValue={student.github} />
                             <button>&#10004;</button>
-                            <button onClick={() => setIsEditing(false)} >X</button>
+                            <button onClick={() => setIsEditing(false)}>X</button>
                           </> 
                         :
-                          <span className={gitStyle.codeName} key={student.student_id}
+                          <span className={gitStyle.codeName} id={student.student_id}
                           onDoubleClick={(e) => editGithub(e)}>
                            {student.github}
                           </span>
