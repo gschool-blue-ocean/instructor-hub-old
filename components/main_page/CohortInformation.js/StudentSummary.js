@@ -2,10 +2,8 @@ import studentStyle from "../../../styles/StudentSummary.module.css";
 import commentStyle from "../../../styles/CommentModal.module.css";
 import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { studentsState } from "../../state.js";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
-import { useRecoilState } from "recoil";
 import { studentsState, notesState,studentIdState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
