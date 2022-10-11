@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { studentsState } from "../../state.js";
 import gitStyle from "../../../styles/GitHub.module.css";
 import Image from "next/image";
+import axios from "axios";
 
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [students, setStudents] = useRecoilState(studentsState);
@@ -15,6 +16,33 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
     github: ''
   })
   // console.log(gitHubAccount[0].github);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [githubAccount, setGithubAccount] = useState(null)
+  // edit github account 
+  // const editGithub = (id, currentValue) => {
+  //   axios.patch(`/api/students/${id}`, {
+  //     "github": currentValue
+  //   })
+  //     .then((updatedGithub) => {
+  //       const indexOfGithubToUpdate = students.findIndex((student) => student.student_id === id);
+  //       const updateGithub = [...students];
+  //       updateGithub[indexOfGithubToUpdate] = updatedGithub;
+  //       setTasks(updateGithub);
+  //     });
+  // };
+  
+  const handleSubmit = () => {
+    e.preventDefault();
+    setIsEditing(false);
+    editGithub(students.student_id, currentValue);
+  };
+
+  const editGithub = (e) => {
+    setGithubAccount(e.target.id)
+    setIsEditing(true);
+    
+  }
 
   // not complete
   const addGitHubAccount = () => {
@@ -78,8 +106,41 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                 </div>
               </div>
               <ul className={gitStyle.tableList}>
-              {students.map((student) => (
-                <li className={gitStyle.tableListItem}>
+                {students.map((student) => (
+                  <li className={gitStyle.tableListItem}>
+                    <div className={gitStyle.tableListCell}>
+                      <span className={gitStyle.frameLeft}>
+                        <a className={gitStyle.frameInline} href="#">
+                          <Image
+                            src="/pic1.jpg"
+                            height="44"
+                            width="44"
+                            className={gitStyle.avatar}
+                          />
+                        </a>
+                      </span>
+                    </div>
+                    <div className={gitStyle.tableListName}>
+                      <a className={gitStyle.frameInclineName}>
+                        {" "}
+                        {student.name_first + " " + student.name_last}{" "}
+                      </a>
+                      {isEditing && student.student_id == githubAccount ? 
+                          <>
+                           <input type="text" defaultValue={student.github} />
+                            <button>&#10004;</button>
+                            <button onClick={() => setIsEditing(false)}>X</button>
+                          </> 
+                        :
+                          <span className={gitStyle.codeName} id={student.student_id}
+                          onDoubleClick={(e) => editGithub(e)}>
+                           {student.github}
+                          </span>
+                      }                 
+                    </div>
+                  </li>
+                    ))}
+                 <li className={gitStyle.tableListItem}>
                   <div className={gitStyle.tableListCell}>
                     <span className={gitStyle.frameLeft}>
                       <a className={gitStyle.frameInline} href="#">
@@ -93,17 +154,10 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                     </span>
                   </div>
                   <div className={gitStyle.tableListName}>
-                    <a className={gitStyle.frameInclineName}>
-                      {" "}
-                      {student.name_first + " " + student.name_last}{" "}
-                    </a>
-                    <span className={gitStyle.codeName}>
-                      {" "}
-                      {student.github}{" "}
-                    </span>
+                    <a className={gitStyle.frameInclineName}> Student 2 </a>
+                    <span className={gitStyle.codeName}> BurtMFReynolds</span>
                   </div>
                 </li>
-                ))}
               </ul>
               <h2 className={gitStyle.addAccount}>+Add Account</h2>
               <form onSubmit={handleAddFormSubmit}>

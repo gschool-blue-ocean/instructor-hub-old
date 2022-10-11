@@ -23,11 +23,11 @@ export default async function projectGradesHandler(req, res) {
     }
   } else if (req.method === "POST") {
     try {
-      const { student_id, project_id, project_grade } = req.body;
+      const { student_id, project_id, project_passed, notes} = req.body;
       console.log(req.body);
       const createProjectGrades = await sql`
-               INSERT INTO project_grades ( student_id, project_id, project_grade )
-               VALUES ( ${student_id}, ${project_id}, ${project_grade}) RETURNING *`;
+               INSERT INTO project_grades ( student_id, project_id, project_passed, notes )
+               VALUES ( ${student_id}, ${project_id}, ${project_passed}, ${notes}) RETURNING *`;
       res.status(200).json(createProjectGrades);
     } catch (error) {
       console.error("Bad news in index api: ", error);

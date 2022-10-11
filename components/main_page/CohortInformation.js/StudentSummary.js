@@ -30,6 +30,14 @@ const StudentSummary = () => {
     }
   }
 
+  const deleteHandler = (e) => {
+    e.preventDefault();
+    
+    axios.delete(`/api/students/${studentId}`).then(() => {
+      setStudents(studentsState);
+    });
+  };
+
   console.log(students)
 
   const openGitHubModal = () => {
