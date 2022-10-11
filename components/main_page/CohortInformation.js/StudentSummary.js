@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
-import { studentsState, notesState,studentIdState } from "../../state";
+import { studentsState, notesState,studentIdState, cohortsState, currentCohortState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
 
@@ -14,44 +14,54 @@ const StudentSummary = () => {
   const [showCommentModal, setShowCommenttModal] = useState(false);
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [notes, setNotes] = useRecoilState(notesState);
+  const [noteStudent, setNoteStudent] = useState(" ")
   const [showBox, setShowBox] = useState(false);
   const [checkedAll, setCheckAll] = useState(false);
   const [order, setOrder] = useState("ASC")
+  const [cohorts, setCohorts] = useRecoilState(cohortsState);
+  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
   // const [checked, setChecked] = useState({ students: false });
 
-  
+  console.log(currentCohort)
   const sorting= (col) => {
+    console.log(col)
     if(order === 'ASC') {
       const sorted = [...students].sort((a,b) =>
-        a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
+        a[col] < b[col] ? 1 : -1
       );
       setStudents(sorted);
       setOrder("ASC")
     }
   }
 
-  const deleteHandler = (e) => {
-    e.preventDefault();
+  let course = students.filter(classRoom => classRoom.cohort == currentCohort)
+  // const deleteHandler = (e) => {
+  //   e.preventDefault();
     
-    axios.delete(`/api/students/${studentId}`).then(() => {
-      setStudents(studentsState);
-    });
-  };
-
-  console.log(students)
+  //   axios.delete(`/api/students/${studentId}`).then(() => {
+  //     setStudents(studentsState);
+  //   });
+  // };
 
   const openGitHubModal = () => {
     setShowGitHubModal((prev) => !prev);
   };
 
-  const openCommentModel = () => {
+  const openCommentModel = (student) => {
     setShowCommenttModal((prev) => !prev);
+    setNoteStudent(student)
   };
 
   useEffect(() => {
     setStudents(students);
   }, []);
 
+  const handleDeleteClick = (id) => {
+    const newStudent = [...students] //Create New Array based on current students
+    const index = students.findIndex((student) => student.student_id === id)
+    newStudent.splice(index, 1);
+    setStudents(newStudent)
+  }
 
   // const handleChange = (e) => {
   //   const { id, checked } = e.target;
@@ -68,12 +78,6 @@ const StudentSummary = () => {
   //   }
   // }
 
-  const handleDeleteClick = (id) => {
-    const newStudent = [...students] //Create New Array based on current students
-    const index = students.findIndex((student) => student.student_id === id)
-    newStudent.splice(index, 1);
-    setStudents(newStudent)
-  }
 
   // onChange={() => toggleCheck("{student.student_id}")} checked={checked["{student.student_id}"]}
   // const toggleCheck = (inputName) => {
@@ -120,10 +124,9 @@ const StudentSummary = () => {
       />
       <CommentModal
         showCommentModal={showCommentModal}
-        setShowCommenttModal={setShowGitHubModal}
-        onClose={() => {
-          setShowCommenttModal(false);
-        }}
+        setShowCommenttModal={setShowCommenttModal}
+        onClose={() => {setShowCommenttModal(false)}}
+        noteStudent = {noteStudent}
       />
       <div className={studentStyle.container}>
         <div className={studentStyle.topBorder}>
@@ -173,26 +176,25 @@ const StudentSummary = () => {
                 </tr>
               </thead>
               <tbody className= {studentStyle.tbody}>
-              {students.map((student) => (
-                <Link key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>
+              {course.map((student) => (
                 <tr className= {studentStyle.tbodyRow} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
                     <input type="checkbox" name={student.id} checked={student?.isChecked || false}></input>
                   </td>
                   <td  className= {studentStyle.nameContent}>
-                    <a className= {studentStyle.nameSpace} href="#">{student.name_first +" "+student.name_last}</a>
+                    <Link key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>
+                      <a className= {studentStyle.nameSpace} href="#">{student.name_first +" "+student.name_last}</a>
+                    </Link>
                   </td>
                   <td className= {studentStyle.content}>{student.learn_avg}%</td>
-                  <td className= {studentStyle.content}>{student.client_side_test}</td>
+                  <td className= {studentStyle.content}>{student.teamwork}</td>
                   <td className= {studentStyle.content}>{student.server_side_test}</td>
-                  {/* <td className= {studentStyle.content}>{student.teamwork_avg}</td> */}
+                  {/* <td className= {studentStyle.content}>{student.teamwork}</td> */}
                   <td className= {studentStyle.content}>
                     <div className={studentStyle.color3}>At Risk</div>
                   </td>
-                  <td className= {studentStyle.content} onClick={openCommentModel}>
-                    {" "}
+                  <td className= {studentStyle.content} onClick={() => openCommentModel(student)}>
                     <svg className={studentStyle.noteIcon} viewBox="0 0 22 22">
-                      {" "}
                       <path d="M13.5,20 C14.3284271,20 15,19.3284271 15,18.5 C15,17.1192881 16.1192881,16 17.5,16 C18.3284271,16 19,15.3284271
                        19,14.5 L19,11.5 C19,11.2238576 19.2238576,11 19.5,11 C19.7761424,11 20,11.2238576 20,11.5 L20,14.5 C20,18.0898509 17.0898509,
                        21 13.5,21 L6.5,21 C5.11928813,21 4,19.8807119 4,18.5 L4,5.5 C4,4.11928813 5.11928813,3 6.5,3 L12.5,3 C12.7761424,3 13,3.22385763
@@ -209,12 +211,10 @@ const StudentSummary = () => {
                   </td>
                   <td className= {studentStyle.smallContent}>
                     <svg className={studentStyle.trash} viewBox="0 0 12 12" onClick={()=> handleDeleteClick(student.student_id)}>
-                      {" "}
-                      <path d="M6.5 17q-.625 0-1.062-.438Q5 16.125 5 15.5v-10H4V4h4V3h4v1h4v1.5h-1v10q0 .625-.438 1.062Q14.125 17 13.5 17Zm7-11.5h-7v10h7ZM8 14h1.5V7H8Zm2.5 0H12V7h-1.5Zm-4-8.5v10Z"></path>{" "}
+                      <path d="M6.5 17q-.625 0-1.062-.438Q5 16.125 5 15.5v-10H4V4h4V3h4v1h4v1.5h-1v10q0 .625-.438 1.062Q14.125 17 13.5 17Zm7-11.5h-7v10h7ZM8 14h1.5V7H8Zm2.5 0H12V7h-1.5Zm-4-8.5v10Z"></path>
                     </svg>{" "}
                   </td>
                 </tr>
-                </Link>
                 ))}
               </tbody>
             </table>

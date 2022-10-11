@@ -4,9 +4,16 @@ import { studentsState, notesState } from "../../state.js";
 import Image from "next/image";
 import commentStyle from "../../../styles/CommentModal.module.css";
 
-const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
+const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onClose }) => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [notes, setNotes] = useRecoilState(notesState);
+
+  let userNotes = notes.filter(note => note.student_id == noteStudent.student_id); 
+
+  // console.log(userNotes)
+
+  // console.log(noteStudent)
+  // console.log(notes)
 
   return (
     <>
@@ -20,8 +27,7 @@ const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
                 <div>
                   <div onClick={onClose} className={commentStyle.close}></div>
                   <div className={commentStyle.studentName}>
-                    {" "}
-                    {students.name_first + " " + students.name_last}{" "}
+                    {noteStudent.name_first + " " + noteStudent.name_last}
                   </div>
                 </div>
               </div>
@@ -35,7 +41,7 @@ const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
                           width="44"
                           height="44"
                           className={commentStyle.instructorIcon}
-                        />
+                          />
                       </div>
                     </div>
                     <div className={commentStyle.headerContainer}>
@@ -44,14 +50,12 @@ const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
                           <div className={commentStyle.inlineBlock}>
                             <h4 className={commentStyle.userName}>Danny Boy</h4>
                           </div>
-                          <span className={commentStyle.time}>
-                            {" "}
-                            {notes.note_date}
-                          </span>
-                          <p className={commentStyle.commentSection}>
-                            I have never seen anyone so BAD at coding or
-                            spelling......Expelled
-                          </p>
+                          {userNotes.map((note) => (
+                          <>
+                            <span className={commentStyle.time}> {note.note_date}</span>
+                            <p className={commentStyle.commentSection}> {note.instructor_notes}</p>
+                          </>
+                        ))}
                         </div>
                       </div>
                     </div>
@@ -64,11 +68,6 @@ const CommentModal = ({ showCommentModal, setShowCommenttModal, onClose }) => {
                     <span className={commentStyle.cancel}> Close</span>
                   </div>
                 </div>
-                {/* <div className= {commentStyle.post_btn}>
-                        <div className= {commentStyle.post_btn_medium}>
-                            <span className= {commentStyle.post}>Post</span>
-                        </div>
-                    </div> */}
               </div>
             </div>
           </div>
