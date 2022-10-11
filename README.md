@@ -32,3 +32,38 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+______________________________________________________________________________________________________________________________________
+
+# ** Database **
+
+# Data Philosophy
+
+The application uses a postgres sql relational database. 
+Within the database are 13 interconnected tables with primary and foreign keys, functions, and triggers for the functions.  The functions perform updates, calculations, and data propagation purposes, and are triggered by inserting or updating data in selected columns within certain tables. While these operations could also have been performed on the client side, the developers made the decision to perform these activities within the database to improve the client user experience and performance.  
+
+# Database Organization
+
+The seed file is organized, and comes with a table of contents that aids finding tables or functions of interest. This aids future developers in adding or modifying database tables, relationships, or features. References to "gid" in tables indicate ASANA-specific identifiers that can be replicated and accessed in the database.  
+
+# Data Security
+
+One column (password) in one table (users) is protected by pgcrypto.  The app utilizes the use the gen_salt function, to let PostgreSQL generate a random salt, and utilizes the blowfish (bf) algorithm.  
+
+The syntax for entering a password is as follows:  crypt('somepassword', gen_salt('bf')
+
+To authenticate a user, we use something similiar to the following:
+SELECT id FROM users WHERE username = 'someuser' 
+   AND password = crypt('somepassword', password);
+
+# Future possible enhancements
+
+1. Simple Bivariate Regression Analysis r^2 showing the predictive power of learn assessment scores on the student's assessed tech skills.  This could easily be done by using the following postgres sql command:
+
+SELECT regr_r2(learn_avg, tech_skills) as r2_learn_tech FROM students
+
+It should only be done with groups of ten or more, to ensure reliability.  The result is the statistical r^2, which here shows how well learn scores predict tech skills.  The closer the number is to one, the more closely the former predicts the latter. It could also be turned into a percentage by multiplying the result by 100. A sample data explanation with hypothetical numbers follows:
+
+"Cohort X average learn scores account for approximately 89% of the variance in average tech skills for students in the cohort."  
+
+This could indicate that the curriculum and assessments are relevant to the tech skills (high number), or are meaningless when it comes to student abilities (low score).
