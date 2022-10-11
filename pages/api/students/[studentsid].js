@@ -49,9 +49,7 @@ export default async function getStudents(req, res) {
         ASANA_GID
       } = req.body;
       const patchStudents = await sql`
-            UPDATE students SET name_first = ${name_first}, name_last = ${name_last}, learn_avg = ${learn_avg},  
-            tech_avg = ${tech_avg}, teamwork_avg = ${teamwork_avg}, server_side_test = ${server_side_test}, client_side_test = ${client_side_test}, 
-            cohort = ${cohort}, cohort_id = ${cohort_id}, ets_date = ${ets_date}, github = ${github}
+            UPDATE students SET github = ${github}
             WHERE student_id = ${id}`;
       res.status(200).json(patchStudents);
     } catch (error) {

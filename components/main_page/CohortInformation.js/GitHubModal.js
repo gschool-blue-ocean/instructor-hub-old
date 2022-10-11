@@ -18,7 +18,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
       "github": value
     })
       .then((updatedGithub) => {
-        const indexOfGithubToUpdate = students.findIndex((student) => student.student_id === id);
+        const indexOfGithubToUpdate = students.findIndex((student) => student.student_id === studentId);
         const updateGithub = [...students];
         updateGithub[indexOfGithubToUpdate] = updatedGithub;
         setStudents(updateGithub);
@@ -91,7 +91,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                         :
                           <span className={gitStyle.codeName} id={student.student_id}
                           onDoubleClick={(e) => editGithub(e)}>
-                           {student.github}
+                           {student.github ? student.github : "Add Account"}
                           </span>
                       }                 
                     </div>
