@@ -46,6 +46,7 @@ return (
                         </Listbox.Option>
                         ))}
                     </Listbox.Options>
+                <button as="div">Create Groups!</button>
                 </Listbox>
             </Menu.Item>
           </Menu.Items>)
@@ -54,8 +55,6 @@ return (
       )
       }
     </Menu>
-    <br/><br/>
-    <div>{display} was clicked</div>
   </>
   )
 }
