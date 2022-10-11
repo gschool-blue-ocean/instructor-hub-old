@@ -20,7 +20,6 @@ const StatusRight = () => {
   const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
   const [teckSkill, setTeckSkill] = useState([1, 3, 4, 2])
-  console.log(studentTechSkills)
   const options = {
     responsive: true,
     plugins: {

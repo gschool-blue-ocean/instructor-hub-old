@@ -1,9 +1,11 @@
 import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
-import { currentStudentState, notesState} from "../state";
+
+import { currentStudentState,notesState,studentIdState} from "../state";
+
 import { useRecoilState } from "recoil";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const StudentMainBody = () => {
@@ -11,11 +13,19 @@ const StudentMainBody = () => {
   const [notes, setNotes] = useRecoilState(notesState);
   console.log(notes)
   // current student is the current information for one person 
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
+  const [notes, setNotes] = useRecoilState(notesState);
+  const [currNotes, setCurrNotes] = useState([]); 
+
+  let userNotes = notes.filter(note => note.student_id == studentId); 
+  console.log(userNotes, 'here'); 
+
 
   // converting ETs date into MM DAY YYYY
   let date = new Date(currentStudent.ets_date); 
   let etsDate = date.toDateString()
+
 
   return (
     <>
@@ -45,18 +55,9 @@ const StudentMainBody = () => {
             <div className={styles.notesTitle}>Notes</div>
             <div>
               <ul>
-                <li>An obese pink starfish</li>
-                <li>
-                  Patrick lives under a rock in the underwater city of Bikini
-                  Bottom next door to Squidward Tentacles' moai
-                </li>
-                <li>
-                  His most significant character trait is his low intelligence
-                </li>
-                <li>
-                  which often gets him and his best friend, SpongeBob
-                  SquarePants, into trouble
-                </li>
+                {userNotes.map((note) => (
+                  <li key={note.student_id}>{note.instructor_notes}</li>
+                ))}
               </ul>
             </div>
           </div>
