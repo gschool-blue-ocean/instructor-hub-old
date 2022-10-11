@@ -12,7 +12,7 @@ const CohortSpacer = () => {
   useEffect(() => {
     // When currentCohort changes, i.e. via the select cohort feature, logs the current cohort name and object
     console.log(currentCohort)
-    console.log(cohorts.filter(current => current.cohort === currentCohort)[0])
+    console.log(cohorts.filter(current => current.name === currentCohort)[0])
   }, [currentCohort])
 
   const newCohort = () => {
@@ -27,8 +27,8 @@ const CohortSpacer = () => {
         </a>
         <select id='select' className={spacerStyle.cohort} type='select' name='cohort' value={currentCohort} onChange={(e) => setCurrentCohort(e.target.value)}>
           <option value={currentCohort} selected>{currentCohort}</option>
-          {cohorts.filter(current => current.cohort !== currentCohort).map(filteredCohort => (
-            <option value={filteredCohort.cohort}>{filteredCohort.cohort}</option>
+          {cohorts.filter(current => current.name !== currentCohort).map(filteredCohort => (
+            <option value={filteredCohort.name}>{filteredCohort.name}</option>
           ))}
         </select>
       </div>
