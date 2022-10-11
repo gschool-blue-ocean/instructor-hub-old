@@ -12,10 +12,8 @@ const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCommentModal, setShowCommenttModal] = useState(false);
-
   const [notes, setNotes] = useRecoilState(notesState);
   const [studentId, setStudentId] = useRecoilState(studentIdState);
- 
   const [showBox, setShowBox] = useState(false);
   const [checkedAll, setCheckAll] = useState(false);
   const [checked, setChecked] = useState({
