@@ -32,7 +32,7 @@ const SignUp = () => {
     function showDisplayCohortModal(e){
         e.preventDefault();
         console.log(usersState)
-        if(confirmPassword === password && username.length >= 6 && password.length >= 8 && asanaToken){
+        if(confirmPassword === password && username.length >= 6 && password.length >= 8 && asana_access_token){
             axios.get('https://app.asana.com/api/1.0/projects/', {
                 headers: {
                     Authorization: `Bearer ${asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
@@ -50,7 +50,7 @@ const SignUp = () => {
                 alert("Please enter a password with 8 or more characters.")
                 document.getElementById('password').border = "2px solid red"
             }
-            if(!asanaToken){
+            if(!asana_access_token){
                 alert("Please enter your Asana API Key.")
                 document.getElementById('asanaToken').border = "2px solid red"
             }
