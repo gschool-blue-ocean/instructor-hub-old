@@ -16,18 +16,18 @@ export default async function codingGroupsHandler(req, res) {
     try {
       const codingGroups = await sql`
       SELECT * FROM coding_groups`;
-      res.status(200).json({ codingGroups });
+      res.status(200).json(codingGroups);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
     }
   } else if (req.method === "POST") {
     try {
-      const { group_id } = req.body;
+      const { cohort_id } = req.body;
       console.log(req.body);
       const createGroup = await sql`
-               INSERT INTO coding_groups ( group_id ) VALUES (${group_id}) RETURNING *`;
-      res.status(200).json({ createGroup });
+               INSERT INTO coding_groups ( cohort_id ) VALUES (${cohort_id}) RETURNING *`;
+      res.status(200).json(createGroup);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });

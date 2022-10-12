@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { studentsState } from "../../state.js";
+import { studentIdState, studentsState } from "../../state.js";
 import gitStyle from "../../../styles/GitHub.module.css";
 import Image from "next/image";
 import axios from "axios";
@@ -8,24 +8,28 @@ import axios from "axios";
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [isEditing, setIsEditing] = useState(false);
-  const [githubAccount, setGithubAccount] = useState(null)
-  // edit github account 
-  // const editGithub = (id, currentValue) => {
-  //   axios.patch(`/api/students/${id}`, {
-  //     "github": currentValue
-  //   })
-  //     .then((updatedGithub) => {
-  //       const indexOfGithubToUpdate = students.findIndex((student) => student.student_id === id);
-  //       const updateGithub = [...students];
-  //       updateGithub[indexOfGithubToUpdate] = updatedGithub;
-  //       setTasks(updateGithub);
-  //     });
-  // };
+  const [githubAccount, setGithubAccount] = useState(null);
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
   
-  const handleSubmit = () => {
+  // edit github account
+  const patchGithub = (e) => {
+    let value = e.target.value
+    axios.patch(`/api/students/${studentId}`, {
+      "github": value
+    })
+      .then((updatedGithub) => {
+        const indexOfGithubToUpdate = students.findIndex((student) => student.student_id === studentId);
+        const updateGithub = [...students];
+        updateGithub[indexOfGithubToUpdate] = updatedGithub;
+        setStudents(updateGithub);
+      });
+  };
+  
+  const handleSubmit = (e) => {
     e.preventDefault();
     setIsEditing(false);
-    editGithub(students.student_id, currentValue);
+    patchGithub(e);
+    console.log("success")
   };
 
   const editGithub = (e) => {
@@ -33,16 +37,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
     setIsEditing(true);
     
   }
-  // not complete
-  const addGitHubAccount = () => {
-    axios({
-      method: "post",
-      url: `/api/students`,
-      data: {
-        github: "",
-      },
-    });
-  };
+  
   return (
     <>
       {showGitHubModal ? (
@@ -90,13 +85,13 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                       {isEditing && student.student_id == githubAccount ? 
                           <>
                            <input type="text" defaultValue={student.github} />
-                            <button>&#10004;</button>
+                            <button onClick={handleSubmit}>&#10004;</button>
                             <button onClick={() => setIsEditing(false)}>X</button>
                           </> 
                         :
                           <span className={gitStyle.codeName} id={student.student_id}
                           onDoubleClick={(e) => editGithub(e)}>
-                           {student.github}
+                           {student.github ? student.github : "Add Github"}
                           </span>
                       }                 
                     </div>
