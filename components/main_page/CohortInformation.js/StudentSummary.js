@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
 import { useRecoilState } from "recoil";
-
 import { studentsState, notesState, studentIdState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
