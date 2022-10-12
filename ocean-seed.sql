@@ -421,11 +421,11 @@ VALUES ('1', 'Egg',NOW(), 'Cat ipsum dolor sit amet, intrigued by the shower for
 or always ensure to lay down in such a manner that tail can lightly brush human`s nose love me!. 
 Demand to have some of whatever the human is cooking, then sniff the offering and walk away jump up to edge of bath, 
 fall in then scramble in a mad panic to get out scratch leg; 
-meow for can opener to feed me but bathe private parts with tongue then lick owner`s face and catasstrophe. 
+meow for can opener to feed me but bathe private parts with tongue then lick owner`s face and cata**trophe. 
 Pounce on unsuspecting person. Bring your owner a dead bird cat meoooow i iz master of hoomaan, not hoomaan master of i, 
 oooh damn dat dog. Meow meow you are my owner so here is a dead rat oooo! dangly balls! 
 jump swat swing flies so sweetly to the floor crash move on wash belly nap going to catch the red dot today going to catch the red dot today,
- thug cat and hack up furballs paw at your fat belly. Walk on keyboard scream for no reason at 4 am show belly for poop in the plant pot but hack. 
+ thug cat and hack up furballs paw at your fat belly. Walk on keyboard, scream for no reason at 4 am, show belly for poop in the plant pot but hack. 
  Cat snacks attack feet.');
 
 
