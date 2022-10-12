@@ -14,14 +14,19 @@ const StudentMainBody = () => {
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
   const [notes, setNotes] = useRecoilState(notesState);
   const [currNotes, setCurrNotes] = useState([]); 
+  const [isEditing, setIsEditing] = useState(false);
+  const [noteId, setNoteId] = useState(null)
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
-
-
   // converting ETs date into MM DAY YYYY
   let date = new Date(currentStudent.ets_date); 
   let etsDate = date.toDateString()
 
+  const editNote = (e) => {
+    setNoteId(e.target.id)
+    setIsEditing(true);
+    console.log(e, 'here'); 
+  }
 
   return (
     <>
@@ -38,7 +43,7 @@ const StudentMainBody = () => {
           <div className={styles.title}>
             <div
               className={styles.studentName}
-            >{`${currentStudent.name_first} ${currentStudent.name_last}`}</div>
+            >{currentStudent.name}</div>
             <div className={styles.gitTransCon}>
               <p className={styles.etsDate}>{`ETS DATE: ${etsDate} `}</p>
               <p className={styles.gitHub}>{`GitHub Username: ${currentStudent.github}`}</p>
@@ -52,7 +57,21 @@ const StudentMainBody = () => {
             <div>
               <ul>
                 {userNotes.map((note) => (
-                  <li key={note.student_id}>{note.instructor_notes}</li>
+                  <div>
+                    {
+                      isEditing && note.note_id == noteId ? 
+                      <>
+                       <textarea className={styles.editNote} type="text" defaultValue={note.notes} />
+                        <button>&#10004;</button>
+                        <button onClick={() => setIsEditing(false)}>X</button>
+                      </> 
+                    :
+                      <li id={note.note_id}
+                      onDoubleClick={(e) => editNote(e)}>
+                       {note.notes}
+                      </li>
+                    }
+                  </div>
                 ))}
               </ul>
             </div>

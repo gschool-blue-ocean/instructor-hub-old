@@ -64,10 +64,10 @@ const StatusRight = ({currentStudent}) => {
       },
       {
         label: 'Fake progress',
-        data: [0,2,3,3,1,1],
+        data: [0,2,3,4,1,1],
         borderColor: 'darkblue',
         backgroundColor: 'blue',
-        tension: 0.4, 
+        tension: 0.5, 
         // pointRadius: 1, 
       },
     ],
