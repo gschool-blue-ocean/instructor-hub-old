@@ -11,26 +11,38 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [githubAccount, setGithubAccount] = useState(null);
   const [studentId, setStudentId] = useRecoilState(studentIdState);
-  const [currentValue, setCurrentValue] = useState({github: ""});
+  const [currentValue, setCurrentValue] = useState({ github: "" });
+  const [updatedGithub, setUpdatedGithub] = useState("");
   console.log(currentValue)
   // edit github accounts
   const patchGithub = (e) => {
-    let id = e.target.id
-    axios.patch(`/api/students/${studentId}`, {
-      "github": currentValue
-    })
-      .then((updatedGithub) => {
-        
-        const updateGithub = [...students];
-        const indexOfGithubToUpdate = students.findIndex((student) => student.student_id == id);
-        console.log (indexOfGithubToUpdate)  
-        updateGithub[indexOfGithubToUpdate] = updatedGithub;
-        setStudents(updateGithub);
-        setIsEditing(false);
-        setStudentId(null)
-        console.log(updateGithub)
-      });
-  };
+    
+    let githubId = Number(githubAccount)
+    console.log(typeof githubId)
+    // for (let i = 0; i < students.length; i++) {
+    //   if (students[i].student_id === githubAccount) {
+        axios.patch(`/api/students/${githubId}`, {
+          "github": `${currentValue}`
+        })
+          .then((res) => {
+            console.log(res.data)
+            setStudents([...students])
+            setUpdatedGithub(res.data)
+            setIsEditing(false);
+            console.log(res.data.student_id)
+
+              const indexOfStudents = students.findIndex((student) => student.student_id === res.data.student_id);
+              const updateStudents = [...students];
+              updateStudents[indexOfStudents] = res.data;
+            setStudents(updateStudents);
+            
+            console.log(indexOfStudents)
+            
+          });
+      // } else {
+      //   return "Bad request"
+      // }
+    }
   
   // const handleEditClick = () => {  
   //   patchGithub();
