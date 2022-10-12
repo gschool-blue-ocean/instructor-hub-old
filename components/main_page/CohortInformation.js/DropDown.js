@@ -1,6 +1,8 @@
 import { Menu, Listbox } from '@headlessui/react'
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import { useState } from 'react'
+import { useRecoilState } from 'recoil'
+import { studentsState } from '../../state'
 
 // to be used with the inner Listbox dropdown below
 const nums = [
@@ -14,14 +16,21 @@ const nums = [
 
 const GroupMaker = () => {
 
+    const [student, setStudent] = useRecoilState(studentsState);
     const [selectedNumber, setSelectedNumber] = useState(nums[0])
-
     const [display, setDisplay] = useState('display here');
     const [customOpen, setCustomOpen] = useState(false);
+    const [toggle, setToggle] = useState(false);
+
+    console.log(student);
 
 
     function buttonClicked() {
-        setCustomOpen(prev => !prev);
+      setCustomOpen(prev => !prev);
+    }
+
+    function createGroups() {
+
     }
 
 
@@ -53,9 +62,23 @@ return (
                         ))}
                     </Listbox.Options>
                     {/* this is where the group making functionality is located in the entire Menu */}
-                <button as="div">Create Groups!</button>
+                <button as="div" onClick={() => setToggle(true)}>Create Groups!</button>
+                <div as="div">
+                  {toggle ? 
+                    <div as="div">
+                      {student.map((s) => (
+                        <div as="div">
+                          {s.name}
+                        </div>
+                      ))}
+                    </div>
+                  : !toggle }
+                </div>
                 </Listbox>
             </Menu.Item>
+            {/* <Menu.Item>
+              
+            </Menu.Item> */}
           </Menu.Items>)
           }
         </>
