@@ -25,15 +25,23 @@ const StudentSummary = () => {
   console.log(currentCohort)
   const sorting= (col) => {
     console.log(col)
-    if(order === 'ASC') {
+    if(order === "ASC") {
       const sorted = [...students].sort((a,b) =>
         a[col] < b[col] ? 1 : -1
       );
       setStudents(sorted);
       setOrder("ASC")
     }
+    if(order === "DSC") {
+      const sorted = [...students].sort((a,b) =>
+        a[col] < b[col] ? 1 : -1
+      );
+      setStudents(sorted);
+      setOrder("DSC")
+    }
   }
 
+  console.log(students)
   // Allows the cohorts to be filter 
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
 
@@ -165,33 +173,28 @@ const StudentSummary = () => {
               <thead className= {studentStyle.thead}>
                 <tr className= {studentStyle.headerRow}>
                   <th className= {studentStyle.smallHeader}></th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("name")}>Name</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Learn_Avg")}>Learn Avg</th>
-                  <th className= {studentStyle.header} scope="col"onClick={() => sorting("ClientSide")}>ClientSide</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("ServerSide")}>ServerSide</th>
-                  {/* <th className= {studentStyle.header} scope="col">
-                    <span>Teamwork</span>
-                  </th> */}
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Name")}>Name</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("learn_Avg")}>Learn Avg</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("teamwork_avg")}>Teamwork Avg</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("Tech_Skills")}>Tech Skills</th>
                   <th className= {studentStyle.header} scope="col">Notes</th>
                   <th className= {studentStyle.smallHeader} scope="col"></th>
                 </tr>
               </thead>
               <tbody className= {studentStyle.tbody}>
-              {/* Map through the students data, ties in with the variable course */}
+              {/* Iterate through the students data, ties in with the variable course */}
               {course.map((student) => (
                 <tr className= {studentStyle.tbodyRow} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
                     <input type="checkbox" name={student.id} checked={student?.isChecked || false}></input>
                   </td>
                   <td  className= {studentStyle.nameContent}>
-                    <Link key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>
-                      <a className= {studentStyle.nameSpace} href="#">{student.name}</a>
-                    </Link>
+                    <Link className= {studentStyle.nameSpace} key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>{student.name}</Link>
                   </td>
                   <td className= {studentStyle.content}>{student.learn_avg}%</td>
-                  <td className= {studentStyle.content}>{student.teamwork}</td>
-                  <td className= {studentStyle.content}>{student.server_side_test}</td>
+                  <td className= {studentStyle.content}>{student.teamwork_avg}</td>
+                  <td className= {studentStyle.content}>{student.tech_avg}</td>
                   {/* <td className= {studentStyle.content}>{student.teamwork}</td> */}
                   <td className= {studentStyle.content}>
                     <div className={studentStyle.color3}>At Risk</div>
