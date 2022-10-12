@@ -26,15 +26,14 @@ export default async function usersHandler(req, res) {
       const {
         username,
         password,
-        is_instructor,
         default_cohort,
         asana_access_token,
-        cohort_asana_gid,
+        gid,
       } = req.body;
       console.log(req.body);
       const createUsers = await sql`
-               INSERT INTO users (  username, password, is_instructor, default_cohort, asana_access_token, cohort_asana_gid )
-               VALUES ( ${username}, ${password}, ${is_instructor}, ${default_cohort}, ${asana_access_token}, ${cohort_asana_gid}) 
+               INSERT INTO users (  username, password, default_cohort, asana_access_token, gid )
+               VALUES ( ${username}, ${password}, ${default_cohort}, ${asana_access_token}, ${gid}) 
                RETURNING *`;
       res.status(200).json(req.body);
     } catch (error) {
