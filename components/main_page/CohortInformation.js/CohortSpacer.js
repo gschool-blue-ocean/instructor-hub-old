@@ -2,12 +2,19 @@ import spacerStyle from '../../../styles/CohortSpacer.module.css'
 import { useEffect, useState } from 'react'
 import NewCohortModal from './NewCohortModal'
 import { useRecoilState } from "recoil";
-import { cohortsState, currentCohortState } from "../../state.js";
+import { cohortsState, currentCohortState, usersState } from "../../state.js";
 
 const CohortSpacer = () => {
   const [newCohortModal, showNewCohortModal] = useState(false)
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
+  const [user, setUser] = useRecoilState(usersState)
+
+  useEffect(() => {
+    if (user) {
+      setCurrentCohort(user.default_cohort)
+    }
+  },[])
 
   useEffect(() => {
     // When currentCohort changes, i.e. via the select cohort feature, logs the current cohort name and object
@@ -28,7 +35,7 @@ const CohortSpacer = () => {
         <select id='select' className={spacerStyle.cohort} type='select' name='cohort' value={currentCohort} onChange={(e) => setCurrentCohort(e.target.value)}>
           <option value={currentCohort} selected>{currentCohort}</option>
           {cohorts.filter(current => current.name !== currentCohort).map(filteredCohort => (
-            <option value={filteredCohort.name}>{filteredCohort.name}</option>
+            <option key={filteredCohort.cohort_id} value={filteredCohort.name}>{filteredCohort.name}</option>
           ))}
         </select>
       </div>
