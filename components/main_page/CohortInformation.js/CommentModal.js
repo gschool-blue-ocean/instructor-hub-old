@@ -10,6 +10,7 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
 
   let userNotes = notes.filter(note => note.student_id == noteStudent.student_id); 
 
+  console.log(notes)
   // console.log(userNotes)
 
   // console.log(noteStudent)
@@ -27,11 +28,12 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
                 <div>
                   <div onClick={onClose} className={commentStyle.close}></div>
                   <div className={commentStyle.studentName}>
-                    {noteStudent.name_first + " " + noteStudent.name_last}
+                    {noteStudent.name}
                   </div>
                 </div>
               </div>
               <div className={commentStyle.content_container}>
+                {userNotes.map((note) => (
                 <div className={commentStyle.content}>
                   <div className={commentStyle.commentBorder}>
                     <div className={commentStyle.rightBorder}>
@@ -48,19 +50,18 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
                       <div className={commentStyle.headerLayout}>
                         <div className={commentStyle.textColor}>
                           <div className={commentStyle.inlineBlock}>
-                            <h4 className={commentStyle.userName}>Danny Boy</h4>
+                            <h4 className={commentStyle.userName}>{note.name}</h4>
                           </div>
-                          {userNotes.map((note) => (
                           <>
                             <span className={commentStyle.time}> {note.note_date}</span>
                             <p className={commentStyle.commentSection}> {note.instructor_notes}</p>
                           </>
-                        ))}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                ))}
               </div>
               <div className={commentStyle.btn_container}>
                 <div onClick={onClose} className={commentStyle.close_btn}>
