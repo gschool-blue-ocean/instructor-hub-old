@@ -2,6 +2,7 @@ import { Menu, Listbox } from '@headlessui/react'
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import { useState } from 'react'
 
+// to be used with the inner Listbox dropdown below
 const nums = [
     { id: 1, num: 1, unavailable: false },
     { id: 2, num: 2, unavailable: false },
@@ -26,15 +27,20 @@ const GroupMaker = () => {
 
 return (
     <>
+    {/* overall dropdown menu */}
     <Menu>
       {({open}) => (
         <>
           <Menu.Button onClick={buttonClicked}>More</Menu.Button>
           {customOpen && (
           <Menu.Items static>
+            {/* individual menu item. add another Menu.Item and whatever divs inside of that if you'd like more */}
             <Menu.Item>
+              {/* this is where the inner dropdown where the user can choose however many of groups they want made */}
                 <Listbox as="div" value={selectedNumber} onChange={setSelectedNumber}>
+                  {/* the button to activate the actual inner dropdown itself */}
                     <Listbox.Button>{selectedNumber.num}</Listbox.Button>
+                    {/* the dropdown items that are displayed by mapping the above nums array */}
                     <Listbox.Options>
                         {nums.map((number) => (
                             <Listbox.Option
@@ -46,6 +52,7 @@ return (
                         </Listbox.Option>
                         ))}
                     </Listbox.Options>
+                    {/* this is where the group making functionality is located in the entire Menu */}
                 <button as="div">Create Groups!</button>
                 </Listbox>
             </Menu.Item>
