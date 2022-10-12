@@ -145,3 +145,11 @@
     font-size: 14px !important;
     color: gray !important;
 }
+
+.addAccount {
+    font-size: 14px !important;
+}
+
+.field {
+    width: 150px;
+}

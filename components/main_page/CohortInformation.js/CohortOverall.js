@@ -17,6 +17,7 @@ import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
 import { studentsState, cohortsState } from "../../state.js";
 import { useRecoilState } from "recoil";
+import GroupMaker from "./DropDown";
 
 ChartJS.register(
   CategoryScale,
@@ -117,6 +118,7 @@ const CohortOverall = ({ children }) => {
             }}
           />
         </div>
+        <GroupMaker />
       </div>
     </div>
   );
