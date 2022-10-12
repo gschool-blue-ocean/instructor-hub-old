@@ -14,7 +14,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   
   // edit github account
   const patchGithub = (id, currentValue) => {
-    let value = e.target.value
+    // let value = e.target.value
     axios.patch(`/api/students/${id}`, {
       "github": currentValue
     })
@@ -29,7 +29,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsEditing(false);
-    patchGithub(student.id, currentValue);
+    patchGithub(students.id, currentValue);
     console.log("success")
   };
 
@@ -80,14 +80,13 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                     </div>
                     <div className={gitStyle.tableListName}>
                       <a className={gitStyle.frameInclineName}>
-                        {" "}
-                        {student.name_first + " " + student.name_last}{" "}
+                       {student.name}
                       </a>
                       {isEditing && student.student_id == githubAccount ? 
                           <>
                            <input type="text" defaultValue={student.github} />
-                            <button onClick={handleSubmit}>&#10004;</button>
-                            <button onClick={() => setIsEditing(false)}>X</button>
+                           <button onClick={handleSubmit}>&#10004;</button>
+                           <button onClick={() => setIsEditing(false)}>X</button>
                           </> 
                         :
                           <span className={gitStyle.codeName} id={student.student_id}

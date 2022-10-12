@@ -64,6 +64,19 @@ export default async function getStudents(req, res) {
   }
 }
 
-// crete another function for github patch
-// UPDATE students SET github = ${github}
+// export async function githubPatch(req, res) {
+//   if (req.method === "PATCH") {
+//     try {
+//       const patchGithub = await sql`
+//       UPDATE students SET github = ${github}
 //             WHERE student_id = ${id}`;
+//       res.status(200).json(patchGithub);
+//     } catch (err) {
+//       console.error(err);
+//       return res.status(500).json({ msg: "Messed up on our end" });
+//     }
+//   } else {
+//     res.status(400).json({ msg: "You messed up" });
+//   }
+// }
+
