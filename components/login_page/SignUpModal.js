@@ -3,13 +3,14 @@ import { useState } from 'react'
 import styles from '../../styles/NewCohortModal.module.css'
 import { useRouter } from "next/router"
 import { useRecoilState } from "recoil"
-import { loggedIn } from "../state"
+import { loggedIn, usersState } from "../state"
 
 
 const SignUpModal = ({displayCohortModal, listOfCohorts, password, username, asana_access_token, onClose }) => {
     const [default_cohort, setDefault_Cohort] = useState('');
     const [cohort_asana_gid, setCohort_Asana_Gid] = useState('');
     const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
+    const [user, setUser] = useRecoilState(usersState);
     const router = useRouter();
 
     const selectedCohort = (e) => {
@@ -29,7 +30,7 @@ const SignUpModal = ({displayCohortModal, listOfCohorts, password, username, asa
             "default_cohort": default_cohort,
             "asana_access_token": asana_access_token,
             "gid": cohort_asana_gid
-        }).then((res) => console.log(res.data))
+        }).then((res) => setUser(res.data))
         setLoggedInStatus(true)
         router.push("/home")
     }
