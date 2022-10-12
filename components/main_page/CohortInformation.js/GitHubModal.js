@@ -87,7 +87,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                       </a>
                       {isEditing && student.student_id == githubAccount ? 
                           <>
-                           <input type="text" defaultValue={student.github} />
+                          <input type="text" defaultValue={student.github} onChange={(e) => setCurrentValue(e.target.value) } />
                            <button onClick={() => patchGithub()}>&#10004;</button>
                            <button onClick={() => setIsEditing(false)}>X</button>
                           </> 
