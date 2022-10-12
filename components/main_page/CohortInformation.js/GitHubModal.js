@@ -20,12 +20,14 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
       "github": currentValue
     })
       .then((updatedGithub) => {
+        
         const updateGithub = [...students];
         const indexOfGithubToUpdate = students.findIndex((student) => student.student_id == id);
         console.log (indexOfGithubToUpdate)  
         updateGithub[indexOfGithubToUpdate] = updatedGithub;
         setStudents(updateGithub);
         setIsEditing(false);
+        setStudentId(null)
         console.log(updateGithub)
       });
   };
@@ -88,7 +90,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                       {isEditing && student.student_id == githubAccount ? 
                           <>
                           <input type="text" defaultValue={student.github} onChange={(e) => setCurrentValue(e.target.value) } />
-                           <button onClick={() => patchGithub()}>&#10004;</button>
+                           <button onClick={(e) => patchGithub(e)}>&#10004;</button>
                            <button onClick={() => setIsEditing(false)}>X</button>
                           </> 
                         :
