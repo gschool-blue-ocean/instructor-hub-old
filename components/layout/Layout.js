@@ -70,12 +70,12 @@ const Layout = ({ children }) => {
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
       setCohorts(res.data);
-      // console.log(res.data);
+      console.log("/api/cohorts gives: ", res.data);
     });
 
     axios.get("/api/learn").then((res) => {
       setLearn(res.data.learn);
-      // console.log(res.data.learn);
+      console.log("/api/learn gives: ", res.data.learn);
     });
 
     axios.get("/api/notes").then((res) => {
@@ -97,7 +97,7 @@ const Layout = ({ children }) => {
 
     axios.get("/api/students").then((res) => {
       setStudents(res.data.students);
-      // console.log(res.data.students);
+      console.log("/api/students gives: ", res.data.students);
     });
 
     axios.get("/api/learnGrades").then((res) => {
@@ -118,7 +118,7 @@ const Layout = ({ children }) => {
 
     axios.get("/api/users").then((res) => {
       setUsers(res.data.users);
-      // console.log(res.data.users);
+      console.log("/api/users gives: ", res.data.users);
     });
 
     axios.get("/api/learnAndLearnGrades").then((res) => {
