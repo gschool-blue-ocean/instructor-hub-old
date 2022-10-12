@@ -42,8 +42,8 @@ const SignUp = () => {
                 setListOfCohorts((prev) => [...prev, ...res.data.data])
                 setDisplayCohortModal(!displayCohortModal)
             }).then(
-                console.log(localCohorts)
-                // setListOfCohorts((prev) => [...prev, ...localCohorts])
+                // console.log(localCohorts)
+                setListOfCohorts((prev) => [...prev, ...localCohorts])
             )
         }else{
             if(username.length < 6){
