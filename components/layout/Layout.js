@@ -69,7 +69,7 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
-      setCohorts(res.data.cohorts);
+      setCohorts(res.data);
       // console.log(res.data.cohorts);
     });
 
@@ -80,7 +80,7 @@ const Layout = ({ children }) => {
 
     axios.get("/api/notes").then((res) => {
       // console.log(res);
-      setNotes(res.data.notes);
+      setNotes(res.data);
       // console.log(res.data.notes);
     });
 
