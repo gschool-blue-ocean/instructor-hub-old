@@ -16,7 +16,7 @@ export default async function getNotes(req, res) {
   if (req.method === "GET") {
     try {
       const getNotesId = await sql`
-            SELECT * FROM notes WHERE student_id = ${id}`;
+            SELECT * FROM notes WHERE note_id = ${id}`;
       res.status(200).json(getNotesId);
     } catch (error) {
       console.error("Bad news in index api: ", error);

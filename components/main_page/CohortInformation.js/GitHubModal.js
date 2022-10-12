@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { studentIdState, studentsState } from "../../state.js";
+import { nanoid } from "nanoid";
+import { studentsState, currentCohortState, cohortsState, studentIdState } from "../../state.js";
 import gitStyle from "../../../styles/GitHub.module.css";
 import Image from "next/image";
 import axios from "axios";
@@ -10,35 +11,37 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [githubAccount, setGithubAccount] = useState(null);
   const [studentId, setStudentId] = useRecoilState(studentIdState);
-  const [currentValue, setCurrentValue] = useState(studentIdState);
-  
+  const [currentValue, setCurrentValue] = useState({github: ""});
+  console.log(currentValue)
   // edit github accounts
-  const patchGithub = (id, currentValue) => {
-    // let value = e.target.value
-    axios.patch(`/api/students/${id}`, {
+  const patchGithub = (e) => {
+    let id = e.target.id
+    axios.patch(`/api/students/${studentId}`, {
       "github": currentValue
     })
       .then((updatedGithub) => {
-        const indexOfGithubToUpdate = students.findIndex((student) => student.student_id === id);
         const updateGithub = [...students];
+        const indexOfGithubToUpdate = students.findIndex((student) => student.student_id == id);
+        console.log (indexOfGithubToUpdate)  
         updateGithub[indexOfGithubToUpdate] = updatedGithub;
         setStudents(updateGithub);
+        setIsEditing(false);
+        console.log(updateGithub)
       });
   };
   
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsEditing(false);
-    patchGithub(students[studentId].student_id, currentValue);
-    console.log(students[studentId].student_id)
-  };
-
+  // const handleEditClick = () => {  
+  //   patchGithub();
+  //   setIsEditing(false);
+  //   console.log("Good?")
+  // };
+// gets student id and makes account editable
   const editGithub = (e) => {
     setGithubAccount(e.target.id)
     setIsEditing(true);
-    
+    setCurrentValue(e.target.textContent)
   }
-  
+
   return (
     <>
       {showGitHubModal ? (
@@ -85,37 +88,18 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                       {isEditing && student.student_id == githubAccount ? 
                           <>
                            <input type="text" defaultValue={student.github} />
-                           <button onClick={handleSubmit}>&#10004;</button>
+                           <button onClick={() => patchGithub()}>&#10004;</button>
                            <button onClick={() => setIsEditing(false)}>X</button>
                           </> 
                         :
                           <span className={gitStyle.codeName} id={student.student_id}
                           onDoubleClick={(e) => editGithub(e)}>
-                           {student.github ? student.github : "Add Github"}
+                           {student.github}
                           </span>
                       }                 
                     </div>
                   </li>
                     ))}
-                {/* <li className={gitStyle.tableListItem}>
-                  <div className={gitStyle.tableListCell}>
-                    <span className={gitStyle.frameLeft}>
-                      <a className={gitStyle.frameInline} href="#">
-                        <Image
-                          src="/pic1.jpg"
-                          height="44"
-                          width="44"
-                          className={gitStyle.avatar}
-                        />
-                      </a>
-                    </span>
-                  </div>
-                  <div className={gitStyle.tableListName}>
-                    <a className={gitStyle.frameInclineName}> Student 2 </a>
-                    <span className={gitStyle.codeName}> BurtMFReynolds</span>
-                  </div>
-                </li> */}
-              
               </ul>
             </div>
           </div>

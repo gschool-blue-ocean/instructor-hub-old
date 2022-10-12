@@ -13,7 +13,7 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [default_cohort, setDefault_cohort] = useRecoilState(usersState);
-    const [localCohorts, setlocalCohorts] = useRecoilState(cohortsState);
+    const [localCohorts, setLocalCohorts] = useRecoilState(cohortsState);
     const [displayCohortModal, setDisplayCohortModal] = useState(false)
     const [displayAsanaKeyModal, setDisplayAsanaKeyModal] = useState(false)
     const [listOfCohorts, setListOfCohorts] = useState([])
@@ -39,12 +39,13 @@ const SignUp = () => {
                     Authorization: `Bearer ${asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
                 },
             }).then((res) => {
-                setListOfCohorts((prev) => [...prev, ...res.data.data])
+                setLocalCohorts((prev) => [...prev, ...res.data.data])
                 setDisplayCohortModal(!displayCohortModal)
-            }).then(
-                // console.log(localCohorts)
-                setListOfCohorts((prev) => [...prev, ...localCohorts])
-            )
+            })
+            // .then(
+            //     // console.log(localCohorts)
+            //     setLocalCohorts((prev) => [...prev, ...localCohorts])
+            // )
         }else{
             if(username.length < 6){
                 document.getElementById('username').border = "2px solid red"
@@ -74,7 +75,8 @@ const SignUp = () => {
     <>
     <SignUpModal 
         displayCohortModal={displayCohortModal} 
-        listOfCohorts={listOfCohorts}
+        // listOfCohorts={listOfCohorts}
+        localCohorts={localCohorts}
         asana_access_token={asana_access_token}
         password={password}
         username={username}
