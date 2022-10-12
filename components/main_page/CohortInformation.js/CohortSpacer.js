@@ -8,7 +8,7 @@ const CohortSpacer = () => {
   const [newCohortModal, showNewCohortModal] = useState(false)
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
-
+console.log(cohorts)
   useEffect(() => {
     // When currentCohort changes, i.e. via the select cohort feature, logs the current cohort name and object
     console.log(currentCohort)

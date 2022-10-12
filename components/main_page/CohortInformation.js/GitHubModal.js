@@ -10,15 +10,16 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [githubAccount, setGithubAccount] = useState(null);
   const [studentId, setStudentId] = useRecoilState(studentIdState);
+  const [currentValue, setCurrentValue] = useState(students.github);
   
   // edit github account
-  const patchGithub = (e) => {
+  const patchGithub = (id, currentValue) => {
     let value = e.target.value
-    axios.patch(`/api/students/${studentId}`, {
-      "github": value
+    axios.patch(`/api/students/${id}`, {
+      "github": currentValue
     })
       .then((updatedGithub) => {
-        const indexOfGithubToUpdate = students.findIndex((student) => student.student_id === studentId);
+        const indexOfGithubToUpdate = students.findIndex((student) => student.student_id === id);
         const updateGithub = [...students];
         updateGithub[indexOfGithubToUpdate] = updatedGithub;
         setStudents(updateGithub);
@@ -28,7 +29,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsEditing(false);
-    patchGithub(e);
+    patchGithub(student.id, currentValue);
     console.log("success")
   };
 
