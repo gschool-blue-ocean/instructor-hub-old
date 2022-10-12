@@ -2,21 +2,28 @@ import axios from 'axios';
 import { useState } from 'react'
 import styles from '../../styles/NewCohortModal.module.css'
 import { useRouter } from "next/router"
+import { useRecoilState } from "recoil"
+import { loggedIn, usersState, cohortsState } from "../state"
 
 
-const SignUpModal = ({displayCohortModal, listOfCohorts, password, username, asana_access_token, onClose }) => {
+const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/localCohorts, password, username, asana_access_token, onClose }) => {
     const [default_cohort, setDefault_Cohort] = useState('');
     const [cohort_asana_gid, setCohort_Asana_Gid] = useState('');
+    const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
+    const [user, setUser] = useRecoilState(usersState);
     const router = useRouter();
 
     const selectedCohort = (e) => {
         setCohort_Asana_Gid(e.target.value);
-        for(let i = 0; i<listOfCohorts.length; i++){
-            if(e.target.value === listOfCohorts[i].gid){
-                setDefault_Cohort(listOfCohorts[i].name)
+        // for(let i = 0; i<listOfCohorts.length; i++){
+        for(let i = 0; i<localCohorts.length; i++){
+            if(e.target.value === localCohorts[i].gid){
+            // if(e.target.value === listOfCohorts[i].gid){
+                setDefault_Cohort(localCohorts[i].name)
+                // setDefault_Cohort(listOfCohorts[i].name)
             }
         }
-        console.log(e.target.value, 'made it here')
+        console.log(localCohorts, 'made it here')
     }
 
     const saveUserInfo = () => {
@@ -24,10 +31,10 @@ const SignUpModal = ({displayCohortModal, listOfCohorts, password, username, asa
             "username": username,
             "password": password,
             "default_cohort": default_cohort,
-            "is_instructor": true, //try to get rid of this from the backend
             "asana_access_token": asana_access_token,
-            "cohort_asana_gid": cohort_asana_gid
-        }).then((res) => console.log(res.data))
+            "gid": cohort_asana_gid
+        }).then((res) => setUser(res.data))
+        setLoggedInStatus(true)
         router.push("/home")
     }
 
@@ -40,7 +47,8 @@ const SignUpModal = ({displayCohortModal, listOfCohorts, password, username, asa
                        <label>Please Select Your Default Cohort.</label>
                        <select onChange={(e)=>selectedCohort(e)}>
                             <option value="" selected disabled hidden>Choose default here</option>
-                            {listOfCohorts.map(ele=> {
+                            {/* {listOfCohorts.map(ele=> { */}
+                            {localCohorts.map(ele=> {
                                 return(
                                     <option key={ele.gid} value={ele.gid} >{ele.name}</option>
                                 )

@@ -69,8 +69,8 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
-      setCohorts(res.data.cohorts);
-      // console.log(res.data.cohorts);
+      setCohorts(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/learn").then((res) => {
@@ -80,19 +80,19 @@ const Layout = ({ children }) => {
 
     axios.get("/api/notes").then((res) => {
       // console.log(res);
-      setNotes(res.data.notes);
-      // console.log(res.data.notes);
+      setNotes(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/codingGroups").then((res) => {
       // console.log(res);
-      setCodingGroup(res.data.codingGroups);
-      // console.log(res.data.codingGroups);
+      setCodingGroup(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/projects").then((res) => {
-      setProjects(res.data.projects);
-      // console.log(res.data.projects);
+      setProjects(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/students").then((res) => {
@@ -101,13 +101,13 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/learnGrades").then((res) => {
-      setLearnGrades(res.data.learnGrades);
-      // console.log(res.data.learnGrades);
+      setLearnGrades(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/projectGrades").then((res) => {
-      setProjectGrades(res.data.projectGrades);
-      // console.log(res.data.projectGrades);
+      setProjectGrades(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/assignedGroup").then((res) => {
@@ -123,7 +123,7 @@ const Layout = ({ children }) => {
 
     axios.get("/api/learnAndLearnGrades").then((res) => {
       setLearnAndLearnGrades(res.data.learnAndLearnGrades);
-      // console.log(res.data.learnAndLearnGrades);
+      // console.log(res.data);
     });
 
     axios.get("/api/projectsAndProjectGrades").then((res) => {
@@ -158,11 +158,11 @@ const Layout = ({ children }) => {
 
       axios.get(`/api/learnAndLearnGradesId/${studentId}`).then((res) => {
         setCurrentLearnAndLearnGrades(res.data);
-        //console.log(res.data);
+        // console.log(res.data);
       });
       axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
         setCurrStudentProjects(res.data);
-        //console.log(res.data);
+        // console.log(res.data);
       });
     }
   }, [studentId]);

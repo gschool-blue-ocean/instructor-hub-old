@@ -381,13 +381,15 @@ INSERT INTO cohorts (
     name,
     begin_date,
     end_date,
-    instructor
+    instructor,
+    gid
   )
 VALUES (
     'MCSP13',
     '01/01/2022',
     '04/04/2022',
-    'testuser'
+    'testuser',
+    '100'
   );
 -- Fake Data
 INSERT INTO students (
@@ -499,13 +501,15 @@ INSERT INTO cohorts (
     name,
     begin_date,
     end_date,
-    instructor
+    instructor,
+    gid
   )
 VALUES (
     'MCSP15',
     '01/01/2022',
     '04/04/2022',
-    'Egg'
+    'Egg',
+    '101'
   );
 
 -- Test for triggers to recalc average on update

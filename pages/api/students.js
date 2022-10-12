@@ -25,9 +25,7 @@ export default async function studentsHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const {
-        student_id,
-        name_first,
-        name_last,
+        name,
         learn_avg,
         tech_avg,
         teamwork_avg,
@@ -35,16 +33,16 @@ export default async function studentsHandler(req, res) {
         client_side_test,
         cohort,
         cohort_id,
-        ETS_date,
+        ets_date,
         github,
-        ASANA_GID,
+        gid
       } = req.body;
       console.log(req.body);
       const createStudent = await sql`
-               INSERT INTO students (  name_first, name_last, learn_avg, tech_avg, teamwork_avg, server_side_test, client_side_test, cohort,cohort_id, ETS_date, github,
-                ASANA_GID )
-               VALUES ( ${name_first}, ${name_last}, ${learn_avg}, ${tech_avg}, ${teamwork_avg},${server_side_test}, ${client_side_test}, ${cohort}, ${cohort_id}, ${ETS_date}, ${github},
-                ${ASANA_GID}) 
+               INSERT INTO students ( name, learn_avg, tech_avg, teamwork_avg, server_side_test, client_side_test, cohort, cohort_id, ets_date, github,
+                gid )
+               VALUES ( ${name}, ${learn_avg}, ${tech_avg}, ${teamwork_avg}, ${server_side_test}, ${client_side_test}, ${cohort}, ${cohort_id}, ${ets_date}, ${github},
+                ${gid}) 
                RETURNING *`;
       res.status(200).json(req.body);
     } catch (error) {

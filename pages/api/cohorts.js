@@ -16,7 +16,7 @@ export default async function cohortsHandler(req, res) {
     try {
       const cohorts = await sql`
       SELECT * FROM cohorts`;
-      res.status(200).json({ cohorts });
+      res.status(200).json(cohorts);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
@@ -24,30 +24,30 @@ export default async function cohortsHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const {
-        cohort,
+        name,
         begin_date,
         end_date,
         instructor,
         cohort_avg,
         cohort_min,
         cohort_max,
-        ASANA_GID,
+        gid,
       } = req.body;
 
       const createCohort = await sql`
                INSERT INTO cohorts ( 
-                cohort,
+                name,
                 begin_date,
                 end_date,
                 instructor,
                 cohort_avg,
                 cohort_min,
                 cohort_max,
-                ASANA_GID
+                gid
                 )
-               VALUES (${cohort}, ${begin_date}, ${end_date}, ${instructor}, ${cohort_avg}, ${cohort_min}, ${cohort_max}, ${ASANA_GID}) 
+               VALUES (${name}, ${begin_date}, ${end_date}, ${instructor}, ${cohort_avg}, ${cohort_min}, ${cohort_max}, ${gid}) 
                RETURNING *`;
-      res.status(200).json({ createCohort });
+      res.status(200).json(createCohort);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
