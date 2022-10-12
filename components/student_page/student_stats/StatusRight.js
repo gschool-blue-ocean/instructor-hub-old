@@ -18,13 +18,18 @@ ChartJS.register(
 const StatusRight = ({currentStudent}) => { 
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [studentTechSkills, setStudentTechSkills] = useRecoilState(studentTechSkillsState);
+  const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
   
+  console.log(studentTeamworkSkills, 'here'); 
+
   const [teckSkill, setTeckSkill] = useState([]); 
   // console.log(studentTechSkills, 'here')
 
 
    let currTechSkills = studentTechSkills.filter(teckSkill => teckSkill.student_id == studentId); 
    let arrTeckSkills = currTechSkills.map((skill) => skill.score); 
+   let currTeamSkills = studentTeamworkSkills.filter(teamSkill => teamSkill.student_id == studentId); 
+   let arrTeamSkills = currTeamSkills.map((skill) => skill.score);
 
   const options = {
     responsive: true,
@@ -63,8 +68,8 @@ const StatusRight = ({currentStudent}) => {
         // pointRadius: 1, 
       },
       {
-        label: 'Fake progress',
-        data: [0,2,3,4,1,1],
+        label: 'TEAM SKILLS',
+        data: arrTeamSkills,
         borderColor: 'darkblue',
         backgroundColor: 'blue',
         tension: 0.5, 

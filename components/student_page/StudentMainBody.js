@@ -1,9 +1,9 @@
 import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
-
+import { loggedIn } from '../state'
+import { useRouter } from 'next/router.js'
 import { currentStudentState,notesState,studentIdState} from "../state";
-
 import { useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -16,6 +16,15 @@ const StudentMainBody = () => {
   const [currNotes, setCurrNotes] = useState([]); 
   const [isEditing, setIsEditing] = useState(false);
   const [noteId, setNoteId] = useState(null)
+  const [updatedNotes, setUpdatedNOtes] = useState(''); 
+  const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
+  const router = useRouter();
+
+  useEffect(()=>{
+    if(!loggedInStatus){
+      router.push("/")
+     }
+    },[])
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
   // converting ETs date into MM DAY YYYY
@@ -25,8 +34,17 @@ const StudentMainBody = () => {
   const editNote = (e) => {
     setNoteId(e.target.id)
     setIsEditing(true);
-    console.log(e, 'here'); 
   }
+  console.log(typeof currentStudent.student_id); 
+  const addUpdate = (noteName) => {
+    axios.patch(`/api/notes/${currentStudent.student_id}`,
+    {"notes": `${updatedNotes}`, 
+    "name": `${noteName}`
+  }
+    ).then((notes) => console.log(notes ,'here')); 
+  }
+
+
 
   return (
     <>
@@ -57,17 +75,17 @@ const StudentMainBody = () => {
             <div>
               <ul>
                 {userNotes.map((note) => (
-                  <div>
+                  <div key={note.note_id}>
                     {
                       isEditing && note.note_id == noteId ? 
                       <>
-                       <textarea className={styles.editNote} type="text" defaultValue={note.notes} />
-                        <button>&#10004;</button>
+                       <textarea className={styles.editNote} type="text" defaultValue={note.notes} onChange={(e) => setUpdatedNOtes(e.target.value)} />
+                        <button onClick={() => addUpdate(note.name) } >&#10004;</button>
                         <button onClick={() => setIsEditing(false)}>X</button>
                       </> 
                     :
                       <li id={note.note_id}
-                      onDoubleClick={(e) => editNote(e)}>
+                       onDoubleClick={(e) => editNote(e)}>
                        {note.notes}
                       </li>
                     }
