@@ -19,8 +19,7 @@ const StatusRight = ({currentStudent}) => {
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [studentTechSkills, setStudentTechSkills] = useRecoilState(studentTechSkillsState);
   const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
-  
-  console.log(studentTeamworkSkills, 'here'); 
+
 
   const [teckSkill, setTeckSkill] = useState([]); 
   // console.log(studentTechSkills, 'here')
