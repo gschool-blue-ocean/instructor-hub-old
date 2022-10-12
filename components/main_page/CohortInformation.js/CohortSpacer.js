@@ -14,7 +14,8 @@ const CohortSpacer = () => {
     if (user) {
       setCurrentCohort(user.default_cohort)
     }
-  },[])
+  }, [])
+
 
   useEffect(() => {
     // When currentCohort changes, i.e. via the select cohort feature, logs the current cohort name and object
