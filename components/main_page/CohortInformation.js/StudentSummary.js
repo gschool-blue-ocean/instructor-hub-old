@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
-import { studentsState, notesState,studentIdState, cohortsState, currentCohortState } from "../../state";
+import { studentsState, notesState,studentIdState, cohortsState, currentCohortState, checkedPeopleState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
 
@@ -15,14 +15,32 @@ const StudentSummary = () => {
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [notes, setNotes] = useRecoilState(notesState);
   const [noteStudent, setNoteStudent] = useState(" ")
-  const [showBox, setShowBox] = useState(false);
-  const [checkedAll, setCheckAll] = useState(false);
   const [order, setOrder] = useState("ASC")
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
-  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
-  // const [checked, setChecked] = useState({ students: false });
+  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
+  const [checkPeople, setCheckPeople] = useRecoilState(checkedPeopleState);
+  
+  // Allows the cohorts to be filter 
+  let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
+  // console.log(course)
 
-  // console.log(currentCohort)
+  const handleChange = (e) => {
+    const { name, checked } = e.target;
+    if (name === "allSelect") {
+      let tempStudent = course.map((student) => {
+        return { ...student, isChecked: checked };
+      });
+      setStudents(tempStudent);
+      setCheckPeople(tempStudent)
+      console.log(checkPeople)
+    } else {
+      let tempStudent = course.map((student) => 
+      student.name === name ? { ...student, isChecked: checked } : student 
+      );
+      setStudents(tempStudent);
+    }
+  }
+
   const sorting= (col) => {
     console.log(col)
     if(order === "ASC") {
@@ -40,9 +58,7 @@ const StudentSummary = () => {
       setOrder("DSC")
     }
   }
-
-  // Allows the cohorts to be filter 
-  let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
+  
 
   // const deleteHandler = (e) => {
   //   e.preventDefault();
@@ -72,96 +88,21 @@ const StudentSummary = () => {
     setStudents(newStudent)
   }
 
-  // const handleChange = (e) => {
-  //   const { id, checked } = e.target;
-  //   if (id === "allSelect") {
-  //     let tempStudent = students.map((student) => {
-  //       return { ...student, isChecked: checked };
-  //     });
-  //     setStudents(tempStudent);
-  //   } else {
-  //     let tempStudent = students.map((student) =>
-  //       student.id === id ? { ...student, isChecked: checked } : student
-  //     );
-  //     setStudents(tempStudent);
-  //   }
-  // }
-
-
-  // onChange={() => toggleCheck("{student.student_id}")} checked={checked["{student.student_id}"]}
-  // const toggleCheck = (inputName) => {
-  //   setChecked((prevState) => {
-  //     const newState = { ...prevState };
-  //     newState[inputName] = !prevState[inputName];
-  //     return newState;
-  //   });
-  // };
-
-  // const selectAll = (value) => {
-  //   setCheckAll(value);
-  //   setChecked((prevState) => {
-  //     const newState = { ...prevState };
-  //     for (const inputName in newState) {
-  //       newState[inputName] = value;
-  //     }
-  //     return newState;
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   let allChecked = true;
-  //   for (const inputName in checked) {
-  //     if (checked[inputName] === false) {
-  //       allChecked = false;
-  //     }
-  //   }
-  //   if (allChecked) {
-  //     setCheckAll(true);
-  //   } else {
-  //     setCheckAll(false);
-  //   }
-  // }, [checked]);
 
   return (
     <div>
-      <GitHubModal
-        showGitHubModal={showGitHubModal}
-        setShowGitHubModal={setShowGitHubModal}
-        onClose={() => {
-          setShowGitHubModal(false);
-        }}
-      />
-      <CommentModal
-        showCommentModal={showCommentModal}
-        setShowCommenttModal={setShowCommenttModal}
-        onClose={() => {setShowCommenttModal(false)}}
-        noteStudent = {noteStudent}
-      />
+      <GitHubModal showGitHubModal={showGitHubModal} setShowGitHubModal={setShowGitHubModal} onClose={() => {setShowGitHubModal(false);}}/>
+      <CommentModal showCommentModal={showCommentModal} setShowCommenttModal={setShowCommenttModal} onClose={() => {setShowCommenttModal(false)}} noteStudent = {noteStudent}/>
       <div className={studentStyle.container}>
         <div className={studentStyle.topBorder}>
           <div className={studentStyle.selectRow}>
             <div className={studentStyle.selectAllBox}>
-              <input
-                // onChange={(event) => selectAll(event.target.checked)}
-                // checked={checkedAll}
-                className={studentStyle.checkBox}
-                type="checkbox"
-                name="allSelect"
-                checked={
-                  !students.some((student) => student?.isChecked !== true)
-                }
-                // onChange={handleChange}
-              />
+              <input className={studentStyle.checkBox} type="checkbox" name="allSelect" checked={!students.some((student) => student?.isChecked !== true)} onChange={handleChange}/>
               <label htmlFor="selectMe"> Select/Deselect All</label>
             </div>
             <div className={studentStyle.addGit}>
               <a className={studentStyle.gitBtn}>
-                <span
-                  onClick={openGitHubModal}
-                  className={` ${studentStyle.gitBtn_medium} ${studentStyle.span}`}
-                >
-                  Github Accounts
-                </span>
+                <span onClick={openGitHubModal} className={` ${studentStyle.gitBtn_medium} ${studentStyle.span}`}>Github Accounts</span>
               </a>
             </div>
           </div>
@@ -186,7 +127,7 @@ const StudentSummary = () => {
               {course.map((student) => (
                 <tr className= {studentStyle.tbodyRow} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
-                    <input type="checkbox" name={student.id} checked={student?.isChecked || false}></input>
+                    <input type="checkbox" name={student.name} checked={student?.isChecked || false} onChange={handleChange} ></input>
                   </td>
                   <td  className= {studentStyle.nameContent}>
                     <Link className= {studentStyle.nameSpace} key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>{student.name}</Link>
