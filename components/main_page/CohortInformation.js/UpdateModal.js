@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
-import { usersState, studentsState } from "../../state";
+import { usersState, studentsState, currentCohortState } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
 
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
@@ -12,20 +12,27 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // This is a rough draft idea, probably obscelesced by simply POSTing each student to Asana
   const [stagedCohort, setStagedCohort] = useState([]);
   // Merely to identify who is making the update, and possibly selecting the students of the user's default cohort
+  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [user, setUser] = useRecoilState(usersState);
   // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
   // (by going through the students)
   const [students, setStudents] = useRecoilState(studentsState);
+  // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
 
   // How to use this in relation to a stupid modal?
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
-    if (students[currStudent]) {
-      setIndexedStudent(students[currStudent]);
+    if (course[currStudent]) {
+      setIndexedStudent(course[currStudent]);
     }
     console.log("what the stagedCohort look like?", stagedCohort);
+    console.log("What is course?", course);
   }, [currStudent]);
+
+  let course = students.filter(
+    (classRoom) => classRoom.cohort == currentCohort
+  );
 
   // submitHandler and enterListener are basically redundant, see about combining/creating helper
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
@@ -70,7 +77,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     // "current student" from state.
     // these Setters MUST "return" a value, not merely increment or mutate
     setCurrStudent((prev) => {
-      if (prev < students.length) {
+      if (prev < course.length) {
         return prev + 1;
       } else {
         return 0;
