@@ -363,15 +363,8 @@ VALUES (
     'heres_another_asana_access_token'
   );
 
-VALUES (
-    'testuser',
-    crypt('12345', gen_salt('bf')),
-    'MCSP13',
-    'here_goes_an_asana_access_token'
-  );
-
   INSERT INTO users (
-    username,
+    username, 
     password,
     default_cohort,
     asana_access_token
@@ -388,13 +381,15 @@ INSERT INTO cohorts (
     name,
     begin_date,
     end_date,
-    instructor
+    instructor,
+    gid
   )
 VALUES (
     'MCSP13',
     '01/01/2022',
     '04/04/2022',
-    'testuser'
+    'testuser',
+    '101'
   );
 -- Fake Data
 INSERT INTO students (
@@ -506,13 +501,15 @@ INSERT INTO cohorts (
     name,
     begin_date,
     end_date,
-    instructor
+    instructor,
+    gid
   )
 VALUES (
     'MCSP15',
     '01/01/2022',
     '04/04/2022',
-    'Egg'
+    'Egg',
+    '100'
   );
 
 -- Test for triggers to recalc average on update
