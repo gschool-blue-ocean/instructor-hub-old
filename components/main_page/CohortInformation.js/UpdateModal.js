@@ -16,6 +16,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
   // (by going through the students)
   const [students, setStudents] = useRecoilState(studentsState);
+  const firstInput = useRef(null);
 
   // How to use this in relation to a stupid modal?
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
@@ -38,6 +39,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     });
     // Until HERE ^
     e.target.reset();
+    firstInput.current.focus();
   };
 
   const enterListener = (e) => {
@@ -51,6 +53,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       });
       // Until HERE ^
       e.target.form.reset();
+      firstInput.current.focus();
     }
   };
 
@@ -96,7 +99,13 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                 onKeyDown={enterListener}
               >
                 <label htmlFor="Tech">Technical Aptitude</label> <br />
-                <select id="Tech" name="Tech" required autoFocus={true}>
+                <select
+                  id="Tech"
+                  name="Tech"
+                  required
+                  autoFocus={true}
+                  ref={firstInput}
+                >
                   <option value="none" selected disabled hidden>
                     Select an Option
                   </option>
