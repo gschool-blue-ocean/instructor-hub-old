@@ -10,9 +10,8 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
 
   let userNotes = notes.filter(note => note.student_id == noteStudent.student_id); 
 
-  console.log(notes)
+  // console.log(notes)
   // console.log(userNotes)
-
   // console.log(noteStudent)
   // console.log(notes)
 

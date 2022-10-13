@@ -49,12 +49,10 @@ export default async function getStudents(req, res) {
         gid
       } = req.body;
       const patchStudents = await sql`
-      UPDATE students SET name_first = ${name_first}, name_last = ${name_last}, learn_avg = ${learn_avg}, 
-      tech_avg = ${tech_avg}, teamwork_avg = ${teamwork_avg}, server_side_test = ${server_side_test}, 
-      client_side_test = ${client_side_test}, cohort = ${cohort}, cohort_id = ${cohort_id}, ets_date = ${ets_date}, 
-      github = ${github}, gid = ${gid} 
-      WHERE student_id = ${id}`;
-      res.status(200).json(patchStudents);
+      UPDATE students SET github = ${github}
+            WHERE student_id = ${id} RETURNING *`;
+      
+      res.send(patchStudents[0]);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
@@ -64,6 +62,27 @@ export default async function getStudents(req, res) {
   }
 }
 
-// crete another function for github patch
-// UPDATE students SET github = ${github}
+// export async function githubPatch(req, res) {
+//   if (req.method === "PATCH") {
+//     try {
+//       const patchGithub = await sql`
+//       UPDATE students SET github = ${github}
 //             WHERE student_id = ${id}`;
+//       res.status(200).json(patchGithub);
+//     } catch (err) {
+//       console.error(err);
+//       return res.status(500).json({ msg: "Messed up on our end" });
+//     }
+//   } else {
+//     res.status(400).json({ msg: "You messed up" });
+//   }
+// }
+
+// UPDATE students SET name_first = ${name_first}, name_last = ${name_last}, learn_avg = ${learn_avg}, 
+// tech_avg = ${tech_avg}, teamwork_avg = ${teamwork_avg}, server_side_test = ${server_side_test}, 
+// client_side_test = ${client_side_test}, cohort = ${cohort}, cohort_id = ${cohort_id}, ets_date = ${ets_date}, 
+// github = ${github}, gid = ${gid} 
+// WHERE student_id = ${ id }`;
+
+// UPDATE students SET github = ${github}
+//             WHERE student_id = ${id} RETURNING *`;

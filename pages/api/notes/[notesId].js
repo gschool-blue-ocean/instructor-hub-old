@@ -35,8 +35,8 @@ export default async function getNotes(req, res) {
     try {
       const { notes, name} = req.body;
       const patchNotes = await sql`
-            UPDATE notes SET notes = ${notes}, name = ${name}, note_date = NOW() WHERE student_id = ${id}`;
-      res.status(200).json(patchNotes[0]);
+            UPDATE notes SET notes = ${notes}, name = ${name}, note_date = NOW() WHERE note_id = ${id} RETURNING *`;
+      res.send(patchNotes[0]);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styles from '../../styles/signUp.module.css';
 import Link from 'next/link';
 import { useRecoilState } from 'recoil';
-import { cohortsState, usersState } from '../state';
+import { cohortsState, usersState, accessToken } from '../state';
 import axios from 'axios';
 import SignUpModal from './SignUpModal';
 import { bodyStreamToNodeStream } from 'next/dist/server/body-streams';
@@ -17,7 +17,7 @@ const SignUp = () => {
     const [displayCohortModal, setDisplayCohortModal] = useState(false)
     const [displayAsanaKeyModal, setDisplayAsanaKeyModal] = useState(false)
     const [listOfCohorts, setListOfCohorts] = useState([])
-    const [asana_access_token, setAsana_Access_Token] = useState('')
+    const [asana_access_token, setAsana_Access_Token] = useRecoilState(accessToken)
 
     const createUsername= (e)=> {
         setUsername(e.target.value)
@@ -41,6 +41,7 @@ const SignUp = () => {
             }).then((res) => {
                 setLocalCohorts((prev) => [...prev, ...res.data.data])
                 setDisplayCohortModal(!displayCohortModal)
+                console.log(res.data.data)
             })
             // .then(
             //     // console.log(localCohorts)
