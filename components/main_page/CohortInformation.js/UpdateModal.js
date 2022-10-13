@@ -1,24 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { usersState, studentsState } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
 
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
-  const [modal, setModal] = useState(false);
-  const [stagedCohort, setStagedCohort] = useState({});
-  const [user, setUser] = useRecoilState(usersState);
-  const [students, setStudents] = useRecoilState(studentsState);
+  // What student is being updated at this moment
   const [currStudent, setCurrStudent] = useState(0);
+  // This is derived state -- updated at same time as currStudent, one derives the other
+  const [indexedStudent, setIndexedStudent] = useState({});
+  const [modal, setModal] = useState(false);
+  // This is a rough draft idea, probably obscelesced by simply POSTing each student to Asana
+  const [stagedCohort, setStagedCohort] = useState({});
+  // Merely to identify who is making the update, and possibly selecting the students of the user's default cohort
+  const [user, setUser] = useRecoilState(usersState);
+  // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
+  // (by going through the students)
+  const [students, setStudents] = useRecoilState(studentsState);
 
-  // This will likely be replaced by some value grabbed from state/Recoil.
-  // const cohort = {};
+  // How to use this in relation to a stupid modal?
+  // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
+  useEffect(() => {
+    console.log("students upon page load: ", students);
+    if (students[currStudent]) {
+      setIndexedStudent(students[currStudent]);
+      console.log("Am I changing or what", students[currStudent]);
+    }
+  }, [currStudent]);
 
+  // submitHandler and enterListener are basically redundant, see about combining/creating helper
+  // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
   const submitHandler = (e) => {
     e.preventDefault();
     const stagedStudent = formGetter(e.target);
+    // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
     setStagedCohort((prev) => ({
       ...stagedStudent,
     }));
+    // Until HERE ^
     e.target.reset();
   };
 
@@ -26,34 +44,36 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     if (e.key === "Enter" && e.shiftKey === false) {
       e.preventDefault();
       const stagedStudent = formGetter(e.target.form);
+      // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
       setStagedCohort((prev) => ({
         ...stagedStudent,
       }));
+      // Until HERE ^
+      console.log("did that work?", stagedCohort);
       e.target.form.reset();
     }
   };
 
+  // formGetter grabs the entered data from the field and packages it for POST
   const formGetter = (form) => {
-    let stagedName = `${students[currStudent].name_first} ${students[currStudent].name_last}`;
+    let stagedName = `${indexedStudent.name}`;
     console.log("staged student's name: ", stagedName);
     let stagedStudent = { [stagedName]: {} };
     let formData = new FormData(form);
     for (const pair of formData.entries()) {
-      console.log(stagedStudent);
-      console.log(pair);
       stagedStudent[stagedName][pair[0]] = pair[1];
     }
 
     // In addition, it will be necessary to grab
     // "current student" from state.
+    // these Setters MUST "return" a value, not merely increment or mutate
     setCurrStudent((prev) => {
       if (prev < students.length) {
-        currStudent++;
+        return prev + 1;
       } else {
-        currStudent = 0;
+        return 0;
       }
     });
-    console.log("New currStudent is number: ", currStudent);
     return stagedStudent;
   };
 
@@ -65,7 +85,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
           <div className={styles.UpdateModal}>
             <div className={styles.header}>
-              Update - {students[currStudent].name_first || "Null"}
+              Update - {indexedStudent.name}
               <button className={styles.button} onClick={onClose}>
                 X
               </button>
@@ -77,7 +97,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                 onKeyDown={enterListener}
               >
                 <label htmlFor="Tech">Technical Aptitude</label> <br />
-                <select id="Tech" name="Tech" required autoFocus="true">
+                <select id="Tech" name="Tech" required autoFocus={true}>
                   <option value="none" selected disabled hidden>
                     Select an Option
                   </option>
