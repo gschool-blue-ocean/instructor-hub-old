@@ -10,6 +10,7 @@ const CohortSpacer = () => {
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
   const [user, setUser] = useRecoilState(usersState)
+  // const [asanaCohorts, setAsanaCohorts] = useState([])
   // const [asana_access_token, setAsana_Access_Token] = useRecoilState(accessToken)
 
   useEffect(() => {
@@ -18,43 +19,58 @@ const CohortSpacer = () => {
     }
   }, [])
 
-  useEffect(() => {
-    console.log(cohorts)
-  }, [cohorts])
+  // useEffect(() => {
+  //   console.log(cohorts)
+  // }, [cohorts])
 
-  useEffect(() => {
-    // When currentCohort changes, i.e. via the select cohort feature, logs the current cohort name and object
-    console.log(currentCohort)
-    console.log(cohorts.filter(current => current.name === currentCohort)[0])
-  }, [currentCohort])
+  // useEffect(() => {
+  //   // When currentCohort changes, i.e. via the select cohort feature, logs the current cohort name and object
+  //   console.log(currentCohort)
+  //   console.log(cohorts.filter(current => current.name === currentCohort)[0])
+  // }, [currentCohort])
 
   const syncCohorts = () => {
-    console.log(cohorts)
-    axios.get('https://app.asana.com/api/1.0/projects/', {
+    axios.get("/api/cohorts").then((res) => setCohorts(res.data))
+    console.log(cohorts, "first")
+    syncronize();
+  }
+
+  function syncronize (){
+    console.log(cohorts, "second")
+      axios.get('https://app.asana.com/api/1.0/projects/', {
       headers: {
           Authorization: `Bearer ${user.asana_access_token}`,
         },
-    }).then((res) => {
-        let asanaCohorts = res.data.data
-        console.log(asanaCohorts)
-        // WORK IN PROGRESS, POST REQUEST DOES NOT WORK
-        // for (let cohort of asanaCohorts) {
-          // if (cohorts.filter(current => current.gid !== cohort.gid)) {
-            axios.post('/api/cohorts', {
-              // "name": "blahblah",
-              // "begin_date": "",
-              // "end_date": "",
-              // "instructor": "",
-              // "cohort_avg": null,
-              // "cohort_min": null,
-              // "cohort_max": null,
-              // "gid": "69420"
-            })
-          // }
-        // }
+    // }).then((res) => setAsanaCohorts(res.data.data))
+      })
+    .then((res) => { 
+      // console.log(cohorts,"updated cohorts", res.data.data)
+      (res.data.data).forEach((asanaCohort) =>{
+        const found = cohorts.find(element => element.gid === asanaCohort.gid)
+        console.log(found, "found")
+        if(found === undefined){
+          console.log(asanaCohort,"success")
+          axios.put('/api/cohorts', {
+            "name": `${asanaCohort.name}`,
+            "gid": `${asanaCohort.gid}`
+          })
+        }else{
+          console.log("failed")
+        }
+      })
     })
-
   }
+    
+    // WORK IN PROGRESS, POST REQUEST DOES NOT WORK   
+    //   console.log(blah, "should be new additions to table")
+      
+    //   blah.forEach(classes =>{
+    //     axios.put('/api/cohorts', {
+    //       "name": `${classes.name}`,
+    //       "gid": `${classes.gid}`
+    //     })
+    //   })
+    // })
 
   return (
     <>
