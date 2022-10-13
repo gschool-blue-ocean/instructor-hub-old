@@ -114,3 +114,8 @@ export const loggedIn = atom({
   key: 'loggedIn',
   default: false,
 });
+
+export const checkedPeopleState = atom({
+  key: 'checked people',
+  default: [],
+});
