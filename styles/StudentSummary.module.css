@@ -86,7 +86,6 @@
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0px;
-    white-space: nowrap;
 }
 
 .thead {
@@ -155,10 +154,6 @@
     table-layout: fixed; 
 }
 
-.nameSpace {
-    padding-left: 32px
-}
-
 .tbodyRow:hover{
     background: rgba(3, 29, 52, 0.776);
     color: white;
@@ -171,7 +166,10 @@
     font-size: 14px;
     padding: 8px 8px 8px 25px;
     cursor: pointer;
-    word-wrap: break-word;
+}
+
+.nameSpace {
+    word-break:break-all;
 }
 
 .content { 

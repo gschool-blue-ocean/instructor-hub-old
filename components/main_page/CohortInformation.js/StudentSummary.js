@@ -18,13 +18,11 @@ const StudentSummary = () => {
   const [order, setOrder] = useState("ASC")
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
-  const [checkPeople, setCheckPeople] = useRecoilState(checkedPeopleState);
+  const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
   
   // Allows the cohorts to be filter 
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
   // console.log(course)
-
-console.log(studentId)
 
 let colPercent = (num) => {
   if (num === 1) {
@@ -48,15 +46,21 @@ let colPercent = (num) => {
         return { ...student, isChecked: checked };
       });
       setStudents(tempStudent);
-      setCheckPeople(tempStudent)
-      console.log(checkPeople)
+      setSelectPeople(tempStudent)
     } else {
       let tempStudent = course.map((student) => 
       student.name === name ? { ...student, isChecked: checked } : student 
       );
       setStudents(tempStudent);
+      setSelectPeople(tempStudent)
     }
   }
+
+  useEffect(() => {
+      let selectedStudents = selectedPeople.filter(unChecked => unChecked.isChecked == true)
+      console.log(selectedPeople)
+      console.log(selectedStudents)
+  }, [selectedPeople])
 
   const sorting= (col) => {
     console.log(col)
@@ -150,7 +154,6 @@ let colPercent = (num) => {
                   <td className= {studentStyle.content}>{colPercent(student.tech_avg)}</td>
                   <td className= {studentStyle.content}>{student.client_side_test}</td>
                   <td className= {studentStyle.content}>{student.server_side_test}</td>
-                  {/* <td className= {studentStyle.content}>{student.teamwork}</td> */}
                   {/* <td className= {studentStyle.content}>
                     <div className={studentStyle.color3}>At Risk</div>
                   </td> */}
