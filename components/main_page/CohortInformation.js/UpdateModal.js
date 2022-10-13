@@ -10,7 +10,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [indexedStudent, setIndexedStudent] = useState({});
   const [modal, setModal] = useState(false);
   // This is a rough draft idea, probably obscelesced by simply POSTing each student to Asana
-  const [stagedCohort, setStagedCohort] = useState({});
+  const [stagedCohort, setStagedCohort] = useState([]);
   // Merely to identify who is making the update, and possibly selecting the students of the user's default cohort
   const [user, setUser] = useRecoilState(usersState);
   // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
@@ -20,11 +20,10 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // How to use this in relation to a stupid modal?
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
-    console.log("students upon page load: ", students);
     if (students[currStudent]) {
       setIndexedStudent(students[currStudent]);
-      console.log("Am I changing or what", students[currStudent]);
     }
+    console.log("what the stagedCohort look like?", stagedCohort);
   }, [currStudent]);
 
   // submitHandler and enterListener are basically redundant, see about combining/creating helper
@@ -33,9 +32,10 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     e.preventDefault();
     const stagedStudent = formGetter(e.target);
     // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
-    setStagedCohort((prev) => ({
-      ...stagedStudent,
-    }));
+    setStagedCohort((prev) => {
+      prev.push(stagedStudent);
+      return prev;
+    });
     // Until HERE ^
     e.target.reset();
   };
@@ -45,11 +45,11 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       e.preventDefault();
       const stagedStudent = formGetter(e.target.form);
       // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
-      setStagedCohort((prev) => ({
-        ...stagedStudent,
-      }));
+      setStagedCohort((prev) => {
+        prev.push(stagedStudent);
+        return prev;
+      });
       // Until HERE ^
-      console.log("did that work?", stagedCohort);
       e.target.form.reset();
     }
   };
@@ -63,7 +63,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     for (const pair of formData.entries()) {
       stagedStudent[stagedName][pair[0]] = pair[1];
     }
-
     // In addition, it will be necessary to grab
     // "current student" from state.
     // these Setters MUST "return" a value, not merely increment or mutate
