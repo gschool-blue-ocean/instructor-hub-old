@@ -127,22 +127,22 @@ const Layout = ({ children }) => {
     });
 
     axios.get("/api/projectsAndProjectGrades").then((res) => {
-      setLearnAndLearnGrades(res.data.projectsAndProjectGrades);
+      setprojectsAndProjectGrades(res.data.projectsAndProjectGrades);
       // console.log(res.data.projectsAndProjectGrades);
     });
 
     axios.get("/api/proficiencyRates").then((res) => {
-      setLearnAndLearnGrades(res.data.proficiencyRates);
+      setProficiencyRates(res.data.proficiencyRates);
       // console.log(res.data.proficiencyRates);
     });
 
     axios.get("/api/studentTeamworkSkills").then((res) => {
-      setLearnAndLearnGrades(res.data.studentTeamworkSkills);
+      setStudentTeamworkSkills(res.data.studentTeamworkSkills);
       // console.log(res.data.studentTeamworkSkills);
     });
 
     axios.get("/api/studentTechSkills").then((res) => {
-      setLearnAndLearnGrades(res.data.studentTechSkills);
+      setStudentTechSkills(res.data.studentTechSkills);
       // console.log(res.data.studentTechSkills);
     });
   }, []);
