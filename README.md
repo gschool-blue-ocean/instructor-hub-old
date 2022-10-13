@@ -49,7 +49,7 @@ One column (password) in one table (users) is protected by pgcrypto.  The app ut
 
 crypt('somepassword', gen_salt('bf');
 
-To autheticate a user, we use something similiar to the following:
+To authenticate a user, we use something similar to the following:
 
 SELECT id FROM users WHERE username = 'someuser'
    AND password = crypt('somepassword', password);
