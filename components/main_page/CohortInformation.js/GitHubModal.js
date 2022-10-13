@@ -18,37 +18,22 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const patchGithub = (e) => {
     
     let githubId = Number(githubAccount)
-    console.log(typeof githubId)
-    // for (let i = 0; i < students.length; i++) {
-    //   if (students[i].student_id === githubAccount) {
+  
         axios.patch(`/api/students/${githubId}`, {
           "github": `${currentValue}`
         })
           .then((res) => {
-            console.log(res.data)
             setStudents([...students])
             setUpdatedGithub(res.data)
             setIsEditing(false);
-            console.log(res.data.student_id)
-
-              const indexOfStudents = students.findIndex((student) => student.student_id === res.data.student_id);
-              const updateStudents = [...students];
-              updateStudents[indexOfStudents] = res.data;
-            setStudents(updateStudents);
-            
-            console.log(indexOfStudents)
-            
+           
+            const indexOfStudents = students.findIndex((student) => student.student_id === res.data.student_id);
+            const updateStudents = [...students];
+            updateStudents[indexOfStudents] = res.data;
+            setStudents(updateStudents);  
           });
-      // } else {
-      //   return "Bad request"
-      // }
     }
   
-  // const handleEditClick = () => {  
-  //   patchGithub();
-  //   setIsEditing(false);
-  //   console.log("Good?")
-  // };
 // gets student id and makes account editable
   const editGithub = (e) => {
     setGithubAccount(e.target.id)
@@ -108,7 +93,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                         :
                           <span className={gitStyle.codeName} id={student.student_id}
                           onDoubleClick={(e) => editGithub(e)}>
-                           {student.github}
+                           {(student.github ? student.github : "Add Github")}
                           </span>
                       }                 
                     </div>
