@@ -137,7 +137,7 @@ CREATE TABLE student_tech_skills (
 CREATE TABLE projects (
   project_id SERIAL PRIMARY KEY,
   project_name TEXT,
-  ASANA_GID TEXT
+  gid TEXT
 );
 
 CREATE TABLE project_grades (
