@@ -89,6 +89,13 @@ background: pink;
     fill: currentColor;
 }
 
+.add {
+    padding: 20px;
+}
+.titleBox {
+    padding-bottom: 8px;
+}
+
 /* width */
 .tbody::-webkit-scrollbar {
     width: 5px;
