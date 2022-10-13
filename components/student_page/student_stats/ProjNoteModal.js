@@ -3,7 +3,7 @@ import { studentsState, notesState } from "../../state.js";
 import Image from "next/image";
 import commentStyle from "../../../styles/CommentModal.module.css";
 
-const ProjNoteModal = ({ showNotesModal, setShowNotesModal, onClose, currStudentProjects,currNote }) => {
+const ProjNoteModal = ({ showNotesModal, onClose,currNote }) => {
     const [students, setStudents] = useRecoilState(studentsState);
     const [notes, setNotes] = useRecoilState(notesState);
     

@@ -1,41 +1,56 @@
 import style from "../../../styles/StudentStatsLeft.module.css";
 import ProjNoteModal from "./ProjNoteModal.js";
+import ProjectModal from "./ProjectModal.js";
+import AssessModal from "./AssessModal.js";
 import React, { useState } from "react";
-import {
-  currentlearnAndLearnGradesState,
-  projectsAndProjectGradesState,
-  studentTechSkillsState,
-  studentTeamworkSkillsState,
-  currStudentProjectsState
-} from "../../state";
+import {currentlearnAndLearnGradesState, currStudentProjectsState} from "../../state";
 import { useRecoilState } from "recoil";
 
-const StatusLeft = () => {
+const StatusLeft = ({currentStudent}) => {
   const [showNoteModal, setShowNoteModal] = useState(false);
+  const [showProjModal, setShowProjModal] = useState(false)
+  const [showAssessModal, setShowAssessModal] = useState(false)
   const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState)
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
   const [currNote, setCurrNote] = useState(''); 
 
   const openNoteModel = (currNote) => {
   
-    setShowNoteModal((prev) => !prev);
+    setShowNoteModal(true);
     setCurrNote(currNote);
   };
+  const projectModal = () => {
+    setShowProjModal(true); 
+    
+  }
+
   return (
     <>
       <ProjNoteModal
         showNotesModal={showNoteModal}
         currNote={currNote}
-        currStudentProjects={currStudentProjects}
-        setShowNotesModal={setShowNoteModal}
         onClose={() => {
           setShowNoteModal(false);
         }}
       />
+      <ProjectModal 
+        showProjModal={showProjModal}
+        currentStudent={currentStudent}
+        onClose={() => {
+          setShowProjModal(false); 
+        }}
+
+      />
+      <AssessModal
+       />
+
       <div className={style.container}>
         <div>
           <div className={style.tableContainer}>
-            <div className={style.title}>Projects</div>
+            <div className={style.titleBox}>
+              <span className={style.title}>Projects</span>
+              <span className={style.add} onClick={() => projectModal }>&#10133;</span>
+            </div>
             <table className={style.table}>
               <thead className={style.tableHead}>
                 <tr className={style.headerRow}>
@@ -79,7 +94,10 @@ const StatusLeft = () => {
             </table>
           </div>
           <div className={style.tableContainer}>
-            <div className={style.title}>Assesments</div>
+            <div className={style.titleBox}>
+              <span className={style.title}>Assesments</span>
+              <span className={style.add} >&#10133;</span>
+            </div>
             <div>
               <table className={style.table}>
                 <thead className={style.tableHead}>

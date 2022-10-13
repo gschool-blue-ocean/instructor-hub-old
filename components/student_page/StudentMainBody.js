@@ -20,11 +20,12 @@ const StudentMainBody = () => {
   const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
   const router = useRouter();
 
-  useEffect(()=>{
-    if(!loggedInStatus){
-      router.push("/")
-     }
-    },[])
+  
+  // useEffect(()=>{
+  //   if(!loggedInStatus){
+  //     router.push("/")
+  //    }
+  //   },[])
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
   // converting ETs date into MM DAY YYYY
@@ -35,14 +36,23 @@ const StudentMainBody = () => {
     setNoteId(e.target.id)
     setIsEditing(true);
   }
-  console.log(typeof currentStudent.student_id); 
+
+ 
   const addUpdate = (noteName) => {
     axios.patch(`/api/notes/${currentStudent.student_id}`,
     {"notes": `${updatedNotes}`, 
     "name": `${noteName}`
   }
-    ).then((notes) => console.log(notes ,'here')); 
-  }
+    ).then((res) => {
+    
+    console.log(res.data)
+
+    const indexOfNotes = notes.findIndex((note) => note.note_id === res.data.note_id);
+    const updateNotes = [...notes];
+    updateNotes[indexOfNotes] = res.data;
+    setNotes(updateNotes);  
+  
+    })}
 
 
 
