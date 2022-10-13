@@ -364,7 +364,7 @@ VALUES (
   );
 
   INSERT INTO users (
-    username, 
+    username,
     password,
     default_cohort,
     asana_access_token
@@ -389,7 +389,7 @@ VALUES (
     '01/01/2022',
     '04/04/2022',
     'testuser',
-    '101'
+    '100'
   );
 -- Fake Data
 INSERT INTO students (
@@ -509,7 +509,7 @@ VALUES (
     '01/01/2022',
     '04/04/2022',
     'Egg',
-    '100'
+    '101'
   );
 
 -- Test for triggers to recalc average on update

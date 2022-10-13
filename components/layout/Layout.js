@@ -69,45 +69,45 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     axios.get("/api/cohorts").then((res) => {
-      setCohorts(res.data.cohorts);
-      // console.log(res.data.cohorts);
+      setCohorts(res.data);
+      // console.log("/api/cohorts gives: ", res.data);
     });
 
     axios.get("/api/learn").then((res) => {
       setLearn(res.data.learn);
-      // console.log(res.data.learn);
+      // console.log("/api/learn gives: ", res.data.learn);
     });
 
     axios.get("/api/notes").then((res) => {
       // console.log(res);
-      setNotes(res.data.notes);
-      // console.log(res.data.notes);
+      setNotes(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/codingGroups").then((res) => {
       // console.log(res);
-      setCodingGroup(res.data.codingGroups);
-      // console.log(res.data.codingGroups);
+      setCodingGroup(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/projects").then((res) => {
-      setProjects(res.data.projects);
-      // console.log(res.data.projects);
+      setProjects(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/students").then((res) => {
       setStudents(res.data.students);
-      // console.log(res.data.students);
+      // console.log("/api/students gives: ", res.data.students);
     });
 
     axios.get("/api/learnGrades").then((res) => {
-      setLearnGrades(res.data.learnGrades);
-      // console.log(res.data.learnGrades);
+      setLearnGrades(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/projectGrades").then((res) => {
-      setProjectGrades(res.data.projectGrades);
-      // console.log(res.data.projectGrades);
+      setProjectGrades(res.data);
+      // console.log(res.data);
     });
 
     axios.get("/api/assignedGroup").then((res) => {
@@ -118,31 +118,31 @@ const Layout = ({ children }) => {
 
     axios.get("/api/users").then((res) => {
       setUsers(res.data.users);
-      // console.log(res.data.users);
+      // console.log("/api/users gives: ", res.data.users);
     });
 
     axios.get("/api/learnAndLearnGrades").then((res) => {
       setLearnAndLearnGrades(res.data.learnAndLearnGrades);
-      // console.log(res.data.learnAndLearnGrades);
+      // console.log(res.data);
     });
 
     axios.get("/api/projectsAndProjectGrades").then((res) => {
-      setLearnAndLearnGrades(res.data.projectsAndProjectGrades);
+      setprojectsAndProjectGrades(res.data.projectsAndProjectGrades);
       // console.log(res.data.projectsAndProjectGrades);
     });
 
     axios.get("/api/proficiencyRates").then((res) => {
-      setLearnAndLearnGrades(res.data.proficiencyRates);
+      setProficiencyRates(res.data.proficiencyRates);
       // console.log(res.data.proficiencyRates);
     });
 
     axios.get("/api/studentTeamworkSkills").then((res) => {
-      setLearnAndLearnGrades(res.data.studentTeamworkSkills);
+      setStudentTeamworkSkills(res.data.studentTeamworkSkills);
       // console.log(res.data.studentTeamworkSkills);
     });
 
     axios.get("/api/studentTechSkills").then((res) => {
-      setLearnAndLearnGrades(res.data.studentTechSkills);
+      setStudentTechSkills(res.data.studentTechSkills);
       // console.log(res.data.studentTechSkills);
     });
   }, []);
@@ -158,11 +158,11 @@ const Layout = ({ children }) => {
 
       axios.get(`/api/learnAndLearnGradesId/${studentId}`).then((res) => {
         setCurrentLearnAndLearnGrades(res.data);
-        //console.log(res.data);
+        // console.log(res.data);
       });
       axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
         setCurrStudentProjects(res.data);
-        //console.log(res.data);
+        // console.log(res.data);
       });
     }
   }, [studentId]);

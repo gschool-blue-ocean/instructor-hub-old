@@ -3,7 +3,7 @@ import { studentsState, notesState } from "../../state.js";
 import Image from "next/image";
 import commentStyle from "../../../styles/CommentModal.module.css";
 
-const ProjNoteModal = ({ showNotesModal, setShowNotesModal, onClose, currStudentProjects,currNote }) => {
+const ProjNoteModal = ({ showNotesModal, onClose,currNote }) => {
     const [students, setStudents] = useRecoilState(studentsState);
     const [notes, setNotes] = useRecoilState(notesState);
     
@@ -28,9 +28,9 @@ const ProjNoteModal = ({ showNotesModal, setShowNotesModal, onClose, currStudent
                       <div className={commentStyle.headerLayout}>
                         <div className={commentStyle.textColor}>
                           <div className={commentStyle.inlineBlock}>
-                            <h4 className={commentStyle.userName}>{currNote.project_name}</h4>
+                            <h4 className={commentStyle.userName}>{currNote.project_name} </h4>
                           </div>
-                          <span className={commentStyle.time}>{currNote.project_passed ? 'PASSED': 'FAILED'}</span>
+                          <span className={commentStyle.time}> {currNote.project_passed ? 'PASSED': 'FAILED'}</span>
                           <p className={commentStyle.commentSection}>{currNote.notes}</p>
                         </div>
                       </div>

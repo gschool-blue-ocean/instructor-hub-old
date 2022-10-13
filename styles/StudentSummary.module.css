@@ -76,44 +76,39 @@
 }
 
 .middleBorder {
-  /* height: 380px; */
-  margin: 15px;
-  border-radius: 10px;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1rem;
 }
 
 .table {
-    display: table;
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0px;
-    min-width: 150px;
+    white-space: nowrap;
 }
 
 .thead {
-    display: table-header-group;
-    /* display: table; */
     background: #0b131b61;
-    width: 100%;
+    display: table;
     table-layout: fixed;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .headerRow {
-    display: table-row;
-    width:100%;
-    table-layout: fixed;
     border-bottom: 1px solid;
-    color: #d0c5c5;
 }
 
 .header {
-    line-height: 24px;
-    display: table-cell;
-    padding: 10px 0px 10px 0px;
-    text-align: center;
+    padding: 10px 0px;
     font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
+}
+
+.smallHeader {
+    width: 30px !important;
 }
 
 .header:hover{
@@ -121,40 +116,75 @@
 }
 
 .tbody {
-    display: table; 
-    table-layout: fixed;
+    display:block;
+    max-height: 220px;
+    width: 100%;
     background: #0b131b61;
     overflow-y: auto;
-    scrollbar-width: thin;
-}
-
-
-.tableBody {
-    display: table-row-group;
     table-layout: fixed;
-    width:100%;
-    max-height: 200px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
+
+.tbody::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  .tbody::-webkit-scrollbar-track {
+    background: #f1f1f13a; 
+  }
+   
+  /* Handle */
+  .tbody::-webkit-scrollbar-thumb {
+    background: rgba(52, 76, 157, 0.748); 
+  }
+  
+  /* Handle on hover */
+  .tbody::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
 
 .tbodyRow {
-    display: table-row;
+    display: table;
+    width: 100%;
     vertical-align: middle;
     outline: 0px;
-    cursor: pointer;
+    table-layout: fixed; 
 }
+
+.nameSpace {
+    padding-left: 32px
+}
+
 .tbodyRow:hover{
     background: rgba(3, 29, 52, 0.776);
     color: white;
 }
 
-.content {
+.nameContent { 
+    width: 100%;
     font-weight: 400;
-    display: table-cell;
     vertical-align: inherit;
-    text-align: center;
+    font-size: 14px;
+    padding: 8px 8px 8px 32px;
+    cursor: pointer;
+}
+
+.content { 
+    width: 100%;
+    font-weight: 400;
+    vertical-align: inherit;
     font-size: 16px;
-    /* border: 0px solid; */
-    padding:10px; 
+    padding: 8px;
+    text-align: center;
+}
+
+.smallContent { 
+    width: 30px !important;
+    font-weight: 400;
+    vertical-align: inherit;
+    font-size: 16px;
 }
 
 .commentIcon {
@@ -193,14 +223,15 @@
     background: linear-gradient(109.6deg, rgb(255, 219, 47) 11.2%, rgb(244, 253, 0) 100.2%);
 }
 
-.dot {
+.trash {
     display: inline-block;
     overflow: visible !important;
-    vertical-align: text-bottom;
     fill: currentColor;
-    width: 16px;
+    width: 20px;
     height: 16px;
-    padding-left: 3px;
+    padding-right: 3px;
+    margin-bottom: 5px;
+    cursor: pointer;
 }
 
 .noteIcon {
@@ -210,6 +241,7 @@
     overflow: visible !important;
     vertical-align: text-bottom;
     fill: currentColor;
+    cursor: pointer;
 }
 
 .box {

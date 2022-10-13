@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { studentsState } from "../../state.js";
+import { nanoid } from "nanoid";
+import { studentsState, currentCohortState, cohortsState, studentIdState } from "../../state.js";
 import gitStyle from "../../../styles/GitHub.module.css";
 import Image from "next/image";
 import axios from "axios";
@@ -8,41 +9,38 @@ import axios from "axios";
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [isEditing, setIsEditing] = useState(false);
-  const [githubAccount, setGithubAccount] = useState(null)
-  // edit github account 
-  // const editGithub = (id, currentValue) => {
-  //   axios.patch(`/api/students/${id}`, {
-  //     "github": currentValue
-  //   })
-  //     .then((updatedGithub) => {
-  //       const indexOfGithubToUpdate = students.findIndex((student) => student.student_id === id);
-  //       const updateGithub = [...students];
-  //       updateGithub[indexOfGithubToUpdate] = updatedGithub;
-  //       setTasks(updateGithub);
-  //     });
-  // };
+  const [githubAccount, setGithubAccount] = useState(null);
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
+  const [currentValue, setCurrentValue] = useState({ github: "" });
+  const [updatedGithub, setUpdatedGithub] = useState("");
+  console.log(currentValue)
+  // edit github accounts
+  const patchGithub = (e) => {
+    
+    let githubId = Number(githubAccount)
   
-  const handleSubmit = () => {
-    e.preventDefault();
-    setIsEditing(false);
-    editGithub(students.student_id, currentValue);
-  };
-
+        axios.patch(`/api/students/${githubId}`, {
+          "github": `${currentValue}`
+        })
+          .then((res) => {
+            setStudents([...students])
+            setUpdatedGithub(res.data)
+            setIsEditing(false);
+           
+            const indexOfStudents = students.findIndex((student) => student.student_id === res.data.student_id);
+            const updateStudents = [...students];
+            updateStudents[indexOfStudents] = res.data;
+            setStudents(updateStudents);  
+          });
+    }
+  
+// gets student id and makes account editable
   const editGithub = (e) => {
     setGithubAccount(e.target.id)
     setIsEditing(true);
-    
+    setCurrentValue(e.target.textContent)
   }
-  // not complete
-  const addGitHubAccount = () => {
-    axios({
-      method: "post",
-      url: `/api/students`,
-      data: {
-        github: "",
-      },
-    });
-  };
+
   return (
     <>
       {showGitHubModal ? (
@@ -84,43 +82,23 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                     </div>
                     <div className={gitStyle.tableListName}>
                       <a className={gitStyle.frameInclineName}>
-                        {" "}
-                        {student.name_first + " " + student.name_last}{" "}
+                       {student.name}
                       </a>
                       {isEditing && student.student_id == githubAccount ? 
                           <>
-                           <input type="text" defaultValue={student.github} />
-                            <button>&#10004;</button>
-                            <button onClick={() => setIsEditing(false)}>X</button>
+                          <input type="text" defaultValue={student.github} onChange={(e) => setCurrentValue(e.target.value) } />
+                           <button onClick={(e) => patchGithub(e)}>&#10004;</button>
+                           <button onClick={() => setIsEditing(false)}>X</button>
                           </> 
                         :
                           <span className={gitStyle.codeName} id={student.student_id}
                           onDoubleClick={(e) => editGithub(e)}>
-                           {student.github}
+                           {(student.github ? student.github : "Add Github")}
                           </span>
                       }                 
                     </div>
                   </li>
                     ))}
-                {/* <li className={gitStyle.tableListItem}>
-                  <div className={gitStyle.tableListCell}>
-                    <span className={gitStyle.frameLeft}>
-                      <a className={gitStyle.frameInline} href="#">
-                        <Image
-                          src="/pic1.jpg"
-                          height="44"
-                          width="44"
-                          className={gitStyle.avatar}
-                        />
-                      </a>
-                    </span>
-                  </div>
-                  <div className={gitStyle.tableListName}>
-                    <a className={gitStyle.frameInclineName}> Student 2 </a>
-                    <span className={gitStyle.codeName}> BurtMFReynolds</span>
-                  </div>
-                </li> */}
-              
               </ul>
             </div>
           </div>

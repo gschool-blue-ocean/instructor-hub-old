@@ -16,7 +16,7 @@ export default async function notesHandler(req, res) {
     try {
       const notes = await sql`
       SELECT * FROM notes`;
-      res.status(200).json({ notes });
+      res.status(200).json(notes);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
@@ -25,13 +25,13 @@ export default async function notesHandler(req, res) {
     try {
       const {
         student_id,
-        instructor_notes,
-        SEIR_notes,
+        notes,
+        name,
         note_date,
       } = req.body;
       console.log(req.body);
       const createNotes = await sql`
-        INSERT INTO notes (student_id, instructor_notes, SEIR_notes, note_date) VALUES (${student_id}, ${instructor_notes}, ${SEIR_notes}, ${note_date})
+        INSERT INTO notes (student_id, notes, name, note_date) VALUES (${student_id}, ${notes}, ${name}, ${note_date})
         RETURNING *`;
       res.status(200).json(req.body);
     } catch (error) {

@@ -1,9 +1,9 @@
 import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
-
+import { loggedIn } from '../state'
+// import { useRouter } from 'next/router.js'
 import { currentStudentState,notesState,studentIdState} from "../state";
-
 import { useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -14,14 +14,46 @@ const StudentMainBody = () => {
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
   const [notes, setNotes] = useRecoilState(notesState);
   const [currNotes, setCurrNotes] = useState([]); 
+  const [isEditing, setIsEditing] = useState(false);
+  const [noteId, setNoteId] = useState(null)
+  const [updatedNotes, setUpdatedNOtes] = useState(''); 
+  const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
+  // const router = useRouter();
+
+  
+  // useEffect(()=>{
+  //   if(!loggedInStatus){
+  //     router.push("/")
+  //    }
+  //   },[])
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
-  console.log(userNotes, 'here'); 
-
-
   // converting ETs date into MM DAY YYYY
   let date = new Date(currentStudent.ets_date); 
   let etsDate = date.toDateString()
+
+  const editNote = (e) => {
+    setNoteId(e.target.id)
+    setIsEditing(true);
+  }
+
+ 
+  const addUpdate = (noteName) => {
+    axios.patch(`/api/notes/${currentStudent.student_id}`,
+    {"notes": `${updatedNotes}`, 
+    "name": `${noteName}`
+  }
+    ).then((res) => {
+    
+    console.log(res.data)
+
+    const indexOfNotes = notes.findIndex((note) => note.note_id === res.data.note_id);
+    const updateNotes = [...notes];
+    updateNotes[indexOfNotes] = res.data;
+    setNotes(updateNotes);  
+  
+    })}
+
 
 
   return (
@@ -39,21 +71,35 @@ const StudentMainBody = () => {
           <div className={styles.title}>
             <div
               className={styles.studentName}
-            >{`${currentStudent.name_first} ${currentStudent.name_last}`}</div>
+            >{currentStudent.name}</div>
             <div className={styles.gitTransCon}>
               <p className={styles.etsDate}>{`ETS DATE: ${etsDate} `}</p>
               <p className={styles.gitHub}>{`GitHub Username: ${currentStudent.github}`}</p>
             </div>
           </div>
         </div>
-        <StudentStatus />
+        <StudentStatus currentStudent={currentStudent}/>
         <div className={styles.notesContainer}>
           <div className={styles.notes}>
             <div className={styles.notesTitle}>Notes</div>
             <div>
               <ul>
                 {userNotes.map((note) => (
-                  <li key={note.student_id}>{note.instructor_notes}</li>
+                  <div key={note.note_id}>
+                    {
+                      isEditing && note.note_id == noteId ? 
+                      <>
+                       <textarea className={styles.editNote} type="text" defaultValue={note.notes} onChange={(e) => setUpdatedNOtes(e.target.value)} />
+                        <button onClick={() => addUpdate(note.name) } >&#10004;</button>
+                        <button onClick={() => setIsEditing(false)}>X</button>
+                      </> 
+                    :
+                      <li id={note.note_id}
+                       onDoubleClick={(e) => editNote(e)}>
+                       {note.notes}
+                      </li>
+                    }
+                  </div>
                 ))}
               </ul>
             </div>
