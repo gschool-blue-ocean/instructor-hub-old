@@ -2,7 +2,7 @@ import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
 import { loggedIn } from '../state'
-import { useRouter } from 'next/router.js'
+// import { useRouter } from 'next/router.js'
 import { currentStudentState,notesState,studentIdState} from "../state";
 import { useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
@@ -18,7 +18,7 @@ const StudentMainBody = () => {
   const [noteId, setNoteId] = useState(null)
   const [updatedNotes, setUpdatedNOtes] = useState(''); 
   const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
-  const router = useRouter();
+  // const router = useRouter();
 
   
   // useEffect(()=>{
