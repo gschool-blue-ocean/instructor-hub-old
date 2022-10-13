@@ -49,7 +49,7 @@ const StatusLeft = ({currentStudent}) => {
           <div className={style.tableContainer}>
             <div className={style.titleBox}>
               <span className={style.title}>Projects</span>
-              <span className={style.add} onClick={() => projectModal }>&#10133;</span>
+              <span className={style.add} onClick={projectModal }>&#10133;</span>
             </div>
             <table className={style.table}>
               <thead className={style.tableHead}>

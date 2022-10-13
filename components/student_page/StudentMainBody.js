@@ -38,10 +38,10 @@ const StudentMainBody = () => {
   }
 
  
-  const addUpdate = (noteName) => {
-    axios.patch(`/api/notes/${currentStudent.student_id}`,
+  const addUpdate = (note) => {
+    axios.patch(`/api/notes/${note.note_id}`,
     {"notes": `${updatedNotes}`, 
-    "name": `${noteName}`
+    "name": `${note.name}`
   }
     ).then((res) => {
     
@@ -90,7 +90,7 @@ const StudentMainBody = () => {
                       isEditing && note.note_id == noteId ? 
                       <>
                        <textarea className={styles.editNote} type="text" defaultValue={note.notes} onChange={(e) => setUpdatedNOtes(e.target.value)} />
-                        <button onClick={() => addUpdate(note.name) } >&#10004;</button>
+                        <button onClick={() => addUpdate(note) } >&#10004;</button>
                         <button onClick={() => setIsEditing(false)}>X</button>
                       </> 
                     :
