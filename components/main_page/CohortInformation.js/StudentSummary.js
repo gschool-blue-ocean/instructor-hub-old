@@ -24,7 +24,7 @@ const StudentSummary = () => {
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
   // console.log(course)
 
-console.log(students)
+console.log(studentId)
 
 let colPercent = (num) => {
   if (num === 1) {
@@ -76,14 +76,6 @@ let colPercent = (num) => {
     }
   }
 
-  // const deleteHandler = (e) => {
-  //   e.preventDefault();
-    
-  //   axios.delete(`/api/students/${studentId}`).then(() => {
-  //     setStudents(studentsState);
-  //   });
-  // };
-
   const openGitHubModal = () => {
     setShowGitHubModal((prev) => !prev);
   };
@@ -97,11 +89,14 @@ let colPercent = (num) => {
     setStudents(students);
   }, []);
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = (studentId) => {
     const newStudent = [...students] //Create New Array based on current students
-    const index = students.findIndex((student) => student.student_id === id)
+    console.log(studentId)
+    const index = students.findIndex((student) => student.student_id === studentId)
     newStudent.splice(index, 1);
-    setStudents(newStudent)
+    axios.delete(`/api/students/${studentId}`).then(() => {
+      setStudents(newStudent)
+    });
   }
 
 
@@ -143,7 +138,7 @@ let colPercent = (num) => {
               <tbody className= {studentStyle.tbody}>
               {/* Iterate through the students data, ties in with the variable course */}
               {course.map((student) => (
-                <tr className= {studentStyle.tbodyRow} key={student.student_id}>
+                <tr className= {studentStyle.tbodyRow} id= {student.student_id} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
                     <input type="checkbox" name={student.name} checked={student?.isChecked || false} onChange={handleChange} ></input>
                   </td>
