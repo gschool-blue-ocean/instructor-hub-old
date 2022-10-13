@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { nanoid } from "nanoid";
-import { studentsState, currentCohortState, cohortsState } from "../../state.js";
+import { studentsState, currentCohortState, cohortsState, studentIdState } from "../../state.js";
 import gitStyle from "../../../styles/GitHub.module.css";
 import Image from "next/image";
 import axios from "axios";
@@ -9,47 +9,37 @@ import axios from "axios";
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [isEditing, setIsEditing] = useState(false);
-  const [githubAccount, setGithubAccount] = useState(null)
-  const [cohorts, setCohorts] = useRecoilState(cohortsState);
-  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
-
-  // Allows the cohorts to be filter 
-  let course = students.filter(classRoom => classRoom.cohort == currentCohort)
-  // edit github account 
-  // const editGithub = (id, currentValue) => {
-  //   axios.patch(`/api/students/${id}`, {
-  //     "github": currentValue
-  //   })
-  //     .then((updatedGithub) => {
-  //       const indexOfGithubToUpdate = students.findIndex((student) => student.student_id === id);
-  //       const updateGithub = [...students];
-  //       updateGithub[indexOfGithubToUpdate] = updatedGithub;
-  //       setTasks(updateGithub);
-  //     });
-  // };
+  const [githubAccount, setGithubAccount] = useState(null);
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
+  const [currentValue, setCurrentValue] = useState({ github: "" });
+  const [updatedGithub, setUpdatedGithub] = useState("");
+  console.log(currentValue)
+  // edit github accounts
+  const patchGithub = (e) => {
+    
+    let githubId = Number(githubAccount)
   
-  const handleSubmit = () => {
-    e.preventDefault();
-    setIsEditing(false);
-    editGithub(students.student_id, currentValue);
-  };
-
+        axios.patch(`/api/students/${githubId}`, {
+          "github": `${currentValue}`
+        })
+          .then((res) => {
+            setStudents([...students])
+            setUpdatedGithub(res.data)
+            setIsEditing(false);
+           
+            const indexOfStudents = students.findIndex((student) => student.student_id === res.data.student_id);
+            const updateStudents = [...students];
+            updateStudents[indexOfStudents] = res.data;
+            setStudents(updateStudents);  
+          });
+    }
+  
+// gets student id and makes account editable
   const editGithub = (e) => {
     setGithubAccount(e.target.id)
     setIsEditing(true);
-    
+    setCurrentValue(e.target.textContent)
   }
-
-  // not complete
-  const addGitHubAccount = () => {
-    axios({
-      method: "post",
-      url: `/api/students`,
-      data: {
-        github: "",
-      },
-    });
-  };
 
   return (
     <>
@@ -69,14 +59,14 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                           d="M10.5 5a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zm.061 3.073a4 4 0 10-5.123 0 6.004 6.004 0 00-3.431 5.142.75.75 0 001.498.07 4.5 4.5 0 018.99 0 .75.75 0 101.498-.07 6.005 6.005 0 00-3.432-5.142z"
                         ></path>
                       </svg>
-                      {` ${course.length} Members`}
+                      {` ${students.length} Members`}
                     </div>
                   </div>
                   <div onClick={onClose} className={gitStyle.close}></div>
                 </div>
               </div>
               <ul className={gitStyle.tableList}>
-                {course.map((student) => (
+                {students.map((student) => (
                   <li className={gitStyle.tableListItem}>
                     <div className={gitStyle.tableListCell}>
                       <span className={gitStyle.frameLeft}>
@@ -92,18 +82,18 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                     </div>
                     <div className={gitStyle.tableListName}>
                       <a className={gitStyle.frameInclineName}>
-                        {student.name}
+                       {student.name}
                       </a>
                       {isEditing && student.student_id == githubAccount ? 
                           <>
-                           <input type="text" defaultValue={student.github} />
-                            <button>&#10004;</button>
-                            <button onClick={() => setIsEditing(false)}>X</button>
+                          <input type="text" defaultValue={student.github} onChange={(e) => setCurrentValue(e.target.value) } />
+                           <button onClick={(e) => patchGithub(e)}>&#10004;</button>
+                           <button onClick={() => setIsEditing(false)}>X</button>
                           </> 
                         :
                           <span className={gitStyle.codeName} id={student.student_id}
                           onDoubleClick={(e) => editGithub(e)}>
-                           {student.github}
+                           {(student.github ? student.github : "Add Github")}
                           </span>
                       }                 
                     </div>

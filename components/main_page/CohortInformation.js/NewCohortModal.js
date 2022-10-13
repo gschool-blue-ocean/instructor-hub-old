@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "../../../styles/NewCohortModal.module.css";
+// import styles from "../../../styles/NewCohortModal.module.css";
 import axios from "axios";
 
 const NewCohortModal = ({ showNewCohortModal, newCohortModal, onClose }) => {
@@ -108,4 +108,4 @@ const NewCohortModal = ({ showNewCohortModal, newCohortModal, onClose }) => {
   );
 };
 
-export default NewCohortModal;
+// export default NewCohortModal;
