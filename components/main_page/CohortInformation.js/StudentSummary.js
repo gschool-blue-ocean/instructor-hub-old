@@ -24,6 +24,23 @@ const StudentSummary = () => {
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
   // console.log(course)
 
+console.log(students)
+
+let colPercent = (num) => {
+  if (num === 1) {
+    return "25%"
+  }
+  if (num === 2) {
+    return "50%";
+  }
+  if (num === 3) {
+    return "75%";
+  }
+  if (num === 4) {
+    return "100%"
+  }
+ }
+
   const handleChange = (e) => {
     const { name, checked } = e.target;
     if (name === "allSelect") {
@@ -58,7 +75,6 @@ const StudentSummary = () => {
       setOrder("DSC")
     }
   }
-  
 
   // const deleteHandler = (e) => {
   //   e.preventDefault();
@@ -109,7 +125,7 @@ const StudentSummary = () => {
         </div>
         <div className={studentStyle.middleBorder}>
           <div>
-            <table className= {studentStyle.table}>
+            <table className= {studentStyle.table} border = "1">
               <thead className= {studentStyle.thead}>
                 <tr className= {studentStyle.headerRow}>
                   <th className= {studentStyle.smallHeader}></th>
@@ -117,7 +133,9 @@ const StudentSummary = () => {
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("learn_Avg")}>Learn Avg</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("teamwork_avg")}>Teamwork Avg</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Tech_Skills")}>Tech Skills</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Client-Side")}>Client-Side</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Server-Side")}>Server-Side</th>
+                  {/* <th className= {studentStyle.header} scope="col" onClick={() => sorting("Tech_Skills")}>Tech Skills</th> */}
                   <th className= {studentStyle.header} scope="col">Notes</th>
                   <th className= {studentStyle.smallHeader} scope="col"></th>
                 </tr>
@@ -133,12 +151,14 @@ const StudentSummary = () => {
                     <Link className= {studentStyle.nameSpace} key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>{student.name}</Link>
                   </td>
                   <td className= {studentStyle.content}>{student.learn_avg}%</td>
-                  <td className= {studentStyle.content}>{student.teamwork_avg}</td>
-                  <td className= {studentStyle.content}>{student.tech_avg}</td>
+                  <td className= {studentStyle.content}>{colPercent(student.teamwork_avg)}</td>
+                  <td className= {studentStyle.content}>{colPercent(student.tech_avg)}</td>
+                  <td className= {studentStyle.content}>{student.client_side_test}</td>
+                  <td className= {studentStyle.content}>{student.server_side_test}</td>
                   {/* <td className= {studentStyle.content}>{student.teamwork}</td> */}
-                  <td className= {studentStyle.content}>
+                  {/* <td className= {studentStyle.content}>
                     <div className={studentStyle.color3}>At Risk</div>
-                  </td>
+                  </td> */}
                   <td className= {studentStyle.content} onClick={() => openCommentModel(student)}>
                     <svg className={studentStyle.noteIcon} viewBox="0 0 22 22">
                       <path d="M13.5,20 C14.3284271,20 15,19.3284271 15,18.5 C15,17.1192881 16.1192881,16 17.5,16 C18.3284271,16 19,15.3284271

@@ -104,11 +104,13 @@
 
 .header {
     padding: 10px 0px;
-    font-size: 16px;
+    font-size: 15px;
+    width: 15px;
+    cursor: pointer;
 }
 
 .smallHeader {
-    width: 30px !important;
+    width: 3.8px !important;
 }
 
 .header:hover{
@@ -167,7 +169,7 @@
     font-weight: 400;
     vertical-align: inherit;
     font-size: 14px;
-    padding: 8px 8px 8px 32px;
+    padding: 8px 8px 8px 25px;
     cursor: pointer;
 }
 
