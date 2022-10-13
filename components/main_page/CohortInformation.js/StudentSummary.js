@@ -22,7 +22,7 @@ const StudentSummary = () => {
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
   // const [checked, setChecked] = useState({ students: false });
 
-  console.log(currentCohort)
+  // console.log(currentCohort)
   const sorting= (col) => {
     console.log(col)
     if(order === "ASC") {
@@ -41,7 +41,6 @@ const StudentSummary = () => {
     }
   }
 
-  console.log(students)
   // Allows the cohorts to be filter 
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
 
