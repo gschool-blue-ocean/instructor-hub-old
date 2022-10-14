@@ -21,7 +21,7 @@ const AssessModal = ({showAssessModal, onClose }) => {
       "student_id": studentId,
       "assessment_id": assessmentId,
       "assessment_grade":assessScore
-    }).then(
+    }).then(() => 
       axios.get(`/api/learnAndLearnGradesId/${studentId}`).then((res) => {
         setCurrentLearnAndLearnGrades(res.data);
       })

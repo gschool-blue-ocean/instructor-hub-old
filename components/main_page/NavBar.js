@@ -30,7 +30,7 @@ const NavBar = () => {
             <div className={styles.navOptRight}>
               <a href='https://auth.pairin.com/auth/signin?continue=https://app.pairin.com'>
                 <span className={styles.navSpan}>
-                  PARIN
+                  PAIRIN
                 </span>
               </a>
             </div>

@@ -28,12 +28,12 @@ const ProjectModal = ({showProjModal, onClose}) => {
       "project_id": projectId,
       "project_passed": grade, 
       "notes": `${projNotes}`
-    }).then(
+    }).then(() => {
       axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
         setCurrStudentProjects(res.data);
         // console.log(res.data, 'new');
       })
-    ) 
+    }) 
   }
 
 
