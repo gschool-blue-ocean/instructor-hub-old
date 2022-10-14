@@ -1,5 +1,5 @@
 import style from '../../../styles/StudentPModal.module.css'
-import {learnState,usersState, accessToken, currentlearnAndLearnGradesState,studentIdState, currentStudentState} from "../../state";
+import {learnState,usersState, currentlearnAndLearnGradesState,studentIdState, currentStudentState} from "../../state";
 import { useRecoilState } from "recoil";
 import React, { useState } from "react";
 import axios from 'axios';
@@ -14,8 +14,6 @@ const AssessModal = ({showAssessModal, onClose }) => {
   const [assessId, setAssessId] = useState(''); 
   const [users, setUsers] = useRecoilState(usersState);
 
-
-  // console.log(studentId)
   const selectedOption = (e) => {
     setAssessId(e.target.value)
     // console.log(e.target.value, 'value')

@@ -55,11 +55,12 @@ const StudentMainBody = () => {
       "notes": newNote, 
       "name": null, 
       "note_date": new Date()
-    }).then((res) => console.log(res.data) ).then (
+    }).then((res) => console.log(res.data) ).then (() => {
       axios.get("/api/notes").then((res) => {
           setNotes(res.data);
           console.log(notes, 'notes');
         })
+    }
     )
 
   }
