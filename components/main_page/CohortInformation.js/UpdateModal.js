@@ -24,16 +24,22 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
     if (course[currStudent]) {
-      setIndexedStudent(course[currStudent]);
+      setIndexedStudent((prev) => course[currStudent]);
     }
     console.log("what the stagedCohort look like?", stagedCohort);
-    console.log("What is course, and should the function die?", course);
     console.log(course[currStudent]);
-  }, [currStudent]);
+  }, [currStudent, currentCohort]);
 
+  // Filters students to be updated by matching their cohort value to currentCohort's name
   let course = students.filter(
     (classRoom) => classRoom.cohort == currentCohort
   );
+
+  // To reset the indexer value if modal is closed early
+  onClose = () => {
+    setCurrStudent((prev) => 0);
+    setShowUpdateModal(false);
+  };
 
   // submitHandler and enterListener are basically redundant, see about combining/creating helper
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline

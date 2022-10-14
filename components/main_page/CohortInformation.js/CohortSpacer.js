@@ -1,24 +1,30 @@
-import spacerStyle from '../../../styles/CohortSpacer.module.css'
-import { useEffect, useState } from 'react'
+import spacerStyle from "../../../styles/CohortSpacer.module.css";
+import { useEffect, useState } from "react";
 // import NewCohortModal from './NewCohortModal'
 import { useRecoilState } from "recoil";
-import { cohortsState, currentCohortState, usersState, accessToken, studentsState } from "../../state.js";
-import axios from 'axios'
+import {
+  cohortsState,
+  currentCohortState,
+  usersState,
+  accessToken,
+  studentsState,
+} from "../../state.js";
+import axios from "axios";
 
 const CohortSpacer = () => {
   // const [newCohortModal, showNewCohortModal] = useState(false)
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
-  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
-  const [students, setStudents] = useRecoilState(studentsState)
-  const [user, setUser] = useRecoilState(usersState)
+  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
+  const [students, setStudents] = useRecoilState(studentsState);
+  const [user, setUser] = useRecoilState(usersState);
   // const [asanaCohorts, setAsanaCohorts] = useState([])
   // const [asana_access_token, setAsana_Access_Token] = useRecoilState(accessToken)
 
   useEffect(() => {
     if (user) {
-      setCurrentCohort(user.default_cohort)
+      setCurrentCohort(user.default_cohort);
     }
-  }, [])
+  }, []);
 
   // useEffect(() => {
   //   console.log(cohorts)
@@ -31,76 +37,111 @@ const CohortSpacer = () => {
   // }, [currentCohort])
 
   const syncCohorts = () => {
-    axios.get("/api/cohorts").then((res) => setCohorts(res.data))
-    console.log(cohorts, "first")
+    axios.get("/api/cohorts").then((res) => setCohorts(res.data));
+    console.log(cohorts, "first");
     synchronize();
-  }
+  };
 
-  function synchronize (){
-    console.log(cohorts, "second")
-      axios.get('https://app.asana.com/api/1.0/projects/', {
-      headers: {
+  function synchronize() {
+    console.log(cohorts, "second");
+    axios
+      .get("https://app.asana.com/api/1.0/projects/", {
+        headers: {
           Authorization: `Bearer ${user.asana_access_token}`,
         },
-    // }).then((res) => setAsanaCohorts(res.data.data))
+        // }).then((res) => setAsanaCohorts(res.data.data))
       })
-    .then((res) => { 
-      // console.log(cohorts,"updated cohorts", res.data.data)
-      (res.data.data).forEach((asanaCohort) =>{
-        const found = cohorts.find(element => element.gid === asanaCohort.gid)
-        console.log(found, "found")
-        if(found === undefined){
-          console.log(asanaCohort,"success")
-          axios.put('/api/cohorts', {
-            "name": `${asanaCohort.name}`,
-            "gid": `${asanaCohort.gid}`
-          })
-          axios.get(`https://app.asana.com/api/1.0/tasks/?project=${asanaCohort.gid}`, {
-            headers: {
-                Authorization: `Bearer ${user.asana_access_token}`,
-            },
-          }).then((res) => {
-            (res.data.data).forEach((asanaStudent) => {
-                const found = students.find(element => element.gid === asanaStudent.gid)
-                if(found === undefined){
-                    console.log(asanaStudent, "success student")
-                    axios.put('/api/students', {
-                        "name": `${asanaStudent.name}`,
-                        "cohort": `${asanaCohort.name}`,
-                        "gid": `${asanaStudent.gid}`
-                    }).then((res)=> setStudents((prev) => [...prev, ...res.data]))
+      .then((res) => {
+        // console.log(cohorts,"updated cohorts", res.data.data)
+        res.data.data.forEach((asanaCohort) => {
+          const found = cohorts.find(
+            (element) => element.gid === asanaCohort.gid
+          );
+          console.log(found, "found");
+          if (found === undefined) {
+            console.log(asanaCohort, "success");
+            axios.put("/api/cohorts", {
+              name: `${asanaCohort.name}`,
+              gid: `${asanaCohort.gid}`,
+            });
+            axios
+              .get(
+                `https://app.asana.com/api/1.0/tasks/?project=${asanaCohort.gid}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${user.asana_access_token}`,
+                  },
                 }
-            })
-          })
-        }else{
-          console.log("failed")
-        }
-      })
-    })
+              )
+              .then((res) => {
+                res.data.data.forEach((asanaStudent) => {
+                  const found = students.find(
+                    (element) => element.gid === asanaStudent.gid
+                  );
+                  if (found === undefined) {
+                    console.log(asanaStudent, "success student");
+                    axios
+                      .put("/api/students", {
+                        name: `${asanaStudent.name}`,
+                        cohort: `${asanaCohort.name}`,
+                        gid: `${asanaStudent.gid}`,
+                      })
+                      .then((res) =>
+                        setStudents((prev) => [...prev, ...res.data])
+                      );
+                  }
+                });
+              });
+          } else {
+            console.log("failed");
+          }
+        });
+      });
   }
-  
-    // WORK IN PROGRESS, POST REQUEST DOES NOT WORK   
-    //   console.log(blah, "should be new additions to table")
-      
-    //   blah.forEach(classes =>{
-    //     axios.put('/api/cohorts', {
-    //       "name": `${classes.name}`,
-    //       "gid": `${classes.gid}`
-    //     })
-    //   })
-    // })
+
+  // WORK IN PROGRESS, POST REQUEST DOES NOT WORK
+  //   console.log(blah, "should be new additions to table")
+
+  //   blah.forEach(classes =>{
+  //     axios.put('/api/cohorts', {
+  //       "name": `${classes.name}`,
+  //       "gid": `${classes.gid}`
+  //     })
+  //   })
+  // })
 
   return (
     <>
-      <div className = {spacerStyle.spacerContainer}>
-        <a className = {spacerStyle.gitBtn}>
-          <span onClick={syncCohorts} className ={` ${spacerStyle.gitBtn_medium} ${spacerStyle.span}`}>Sync Cohorts</span>
+      <div className={spacerStyle.spacerContainer}>
+        <a className={spacerStyle.gitBtn}>
+          <span
+            onClick={syncCohorts}
+            className={` ${spacerStyle.gitBtn_medium} ${spacerStyle.span}`}
+          >
+            Sync Cohorts
+          </span>
         </a>
-        <select id='select' className={spacerStyle.cohort} type='select' name='cohort' value={currentCohort} onChange={(e) => setCurrentCohort(e.target.value)}>
-          <option value={currentCohort} selected>{currentCohort}</option>
-          {cohorts.filter(current => current.name !== currentCohort).map(filteredCohort => (
-            <option key={filteredCohort.cohort_id} value={filteredCohort.name}>{filteredCohort.name}</option>
-          ))}
+        <select
+          id="select"
+          className={spacerStyle.cohort}
+          type="select"
+          name="cohort"
+          value={currentCohort}
+          onChange={(e) => setCurrentCohort((prev) => e.target.value)}
+        >
+          <option value={currentCohort} selected>
+            {currentCohort}
+          </option>
+          {cohorts
+            .filter((current) => current.name !== currentCohort)
+            .map((filteredCohort) => (
+              <option
+                key={filteredCohort.cohort_id}
+                value={filteredCohort.name}
+              >
+                {filteredCohort.name}
+              </option>
+            ))}
         </select>
       </div>
       {/* <NewCohortModal
@@ -110,7 +151,7 @@ const CohortSpacer = () => {
         showNewCohortModal(false);
       }}/> */}
     </>
-  )
-}
+  );
+};
 
-export default CohortSpacer
+export default CohortSpacer;
