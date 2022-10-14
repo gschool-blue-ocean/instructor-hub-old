@@ -26,8 +26,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     if (course[currStudent]) {
       setIndexedStudent((prev) => course[currStudent]);
     }
-    console.log("what the stagedCohort look like?", stagedCohort);
-    console.log(course[currStudent]);
+    // console.log("what the stagedCohort look like?", stagedCohort);
+    // console.log(course[currStudent]);
   }, [currStudent, currentCohort]);
 
   // Filters students to be updated by matching their cohort value to currentCohort's name
@@ -74,7 +74,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // formGetter grabs the entered data from the field and packages it for POST
   const formGetter = (form) => {
     let stagedName = `${indexedStudent.name}`;
-    console.log("staged student's name: ", stagedName);
+    console.log("Just staged for POST: ", stagedName);
     let stagedStudent = { [stagedName]: {} };
     let formData = new FormData(form);
     for (const pair of formData.entries()) {
