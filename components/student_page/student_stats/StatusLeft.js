@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import {currentlearnAndLearnGradesState, currStudentProjectsState} from "../../state";
 import { useRecoilState } from "recoil";
 
-const StatusLeft = ({currentStudent}) => {
+const StatusLeft = () => {
   const [showNoteModal, setShowNoteModal] = useState(false);
   const [showProjModal, setShowProjModal] = useState(false)
   const [showAssessModal, setShowAssessModal] = useState(false)
@@ -15,13 +15,14 @@ const StatusLeft = ({currentStudent}) => {
   const [currNote, setCurrNote] = useState(''); 
 
   const openNoteModel = (currNote) => {
-  
     setShowNoteModal(true);
     setCurrNote(currNote);
   };
   const projectModal = () => {
     setShowProjModal(true); 
-    
+  }
+  const assesModal = () => {
+    setShowAssessModal(true)
   }
 
   return (
@@ -35,21 +36,25 @@ const StatusLeft = ({currentStudent}) => {
       />
       <ProjectModal 
         showProjModal={showProjModal}
-        currentStudent={currentStudent}
         onClose={() => {
           setShowProjModal(false); 
         }}
 
       />
       <AssessModal
+      showAssessModal={showAssessModal}
+      onClose={() => {
+        setShowAssessModal(false); 
+      }}
        />
+
 
       <div className={style.container}>
         <div>
           <div className={style.tableContainer}>
             <div className={style.titleBox}>
               <span className={style.title}>Projects</span>
-              <span className={style.add} onClick={() => projectModal }>&#10133;</span>
+              <span className={style.add} onClick={projectModal }>&#10133;</span>
             </div>
             <table className={style.table}>
               <thead className={style.tableHead}>
@@ -96,7 +101,7 @@ const StatusLeft = ({currentStudent}) => {
           <div className={style.tableContainer}>
             <div className={style.titleBox}>
               <span className={style.title}>Assesments</span>
-              <span className={style.add} >&#10133;</span>
+              <span className={style.add} onClick={assesModal} >&#10133;</span>
             </div>
             <div>
               <table className={style.table}>

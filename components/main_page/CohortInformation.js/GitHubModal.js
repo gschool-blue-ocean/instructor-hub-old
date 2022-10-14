@@ -13,7 +13,13 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [currentValue, setCurrentValue] = useState({ github: "" });
   const [updatedGithub, setUpdatedGithub] = useState("");
-  console.log(currentValue)
+  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
+
+  console.log(students)
+
+  //Filter required to make current cohort students appear
+  let course = students.filter(classRoom => classRoom.cohort == currentCohort)
+  
   // edit github accounts
   const patchGithub = (e) => {
     
@@ -59,18 +65,18 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                           d="M10.5 5a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zm.061 3.073a4 4 0 10-5.123 0 6.004 6.004 0 00-3.431 5.142.75.75 0 001.498.07 4.5 4.5 0 018.99 0 .75.75 0 101.498-.07 6.005 6.005 0 00-3.432-5.142z"
                         ></path>
                       </svg>
-                      {` ${students.length} Members`}
+                      {` ${course.length} Members`}
                     </div>
                   </div>
                   <div onClick={onClose} className={gitStyle.close}></div>
                 </div>
               </div>
               <ul className={gitStyle.tableList}>
-                {students.map((student) => (
-                  <li className={gitStyle.tableListItem}>
+                {course.map((student) => (
+                  <li key= {student.student_id} className={gitStyle.tableListItem}>
                     <div className={gitStyle.tableListCell}>
                       <span className={gitStyle.frameLeft}>
-                        <a className={gitStyle.frameInline} href="#">
+                        <a className={gitStyle.frameInline} href={`https://github.com/${student.github}`}>
                           <Image
                             src="/pic1.jpg"
                             height="44"

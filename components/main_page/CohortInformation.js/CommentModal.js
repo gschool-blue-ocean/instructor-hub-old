@@ -10,11 +10,6 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
 
   let userNotes = notes.filter(note => note.student_id == noteStudent.student_id); 
 
-  // console.log(notes)
-  // console.log(userNotes)
-  // console.log(noteStudent)
-  // console.log(notes)
-
   return (
     <>
       {showCommentModal ? (
@@ -31,6 +26,7 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
                   </div>
                 </div>
               </div>
+              <div>
               <div className={commentStyle.content_container}>
                 {userNotes.map((note) => (
                 <div className={commentStyle.content}>
@@ -52,8 +48,8 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
                             <h4 className={commentStyle.userName}>{note.name}</h4>
                           </div>
                           <>
-                            <span className={commentStyle.time}> {note.note_date}</span>
-                            <p className={commentStyle.commentSection}> {note.instructor_notes}</p>
+                            <span className={commentStyle.time}> {new Date(note.note_date).toDateString()}</span>
+                            <p className={commentStyle.commentSection}> {note.notes}</p>
                           </>
                         </div>
                       </div>
@@ -61,6 +57,7 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
                   </div>
                 </div>
                 ))}
+                </div>
               </div>
               <div className={commentStyle.btn_container}>
                 <div onClick={onClose} className={commentStyle.close_btn}>

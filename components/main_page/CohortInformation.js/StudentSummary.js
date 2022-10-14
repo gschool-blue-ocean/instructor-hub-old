@@ -18,11 +18,26 @@ const StudentSummary = () => {
   const [order, setOrder] = useState("ASC")
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
-  const [checkPeople, setCheckPeople] = useRecoilState(checkedPeopleState);
+  const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
   
   // Allows the cohorts to be filter 
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
   // console.log(course)
+
+let colPercent = (num) => {
+  if (num === 1) {
+    return "25%"
+  }
+  if (num === 2) {
+    return "50%";
+  }
+  if (num === 3) {
+    return "75%";
+  }
+  if (num === 4) {
+    return "100%"
+  }
+ }
 
   const handleChange = (e) => {
     const { name, checked } = e.target;
@@ -31,42 +46,40 @@ const StudentSummary = () => {
         return { ...student, isChecked: checked };
       });
       setStudents(tempStudent);
-      setCheckPeople(tempStudent)
-      console.log(checkPeople)
+      setSelectPeople(tempStudent)
     } else {
       let tempStudent = course.map((student) => 
       student.name === name ? { ...student, isChecked: checked } : student 
       );
       setStudents(tempStudent);
+      setSelectPeople(tempStudent)
     }
   }
 
+  useEffect(() => {
+      let selectedStudents = selectedPeople.filter(unChecked => unChecked.isChecked == true)
+      console.log(selectedPeople)
+      console.log(selectedStudents)
+  }, [selectedPeople])
+
   const sorting= (col) => {
-    console.log(col)
     if(order === "ASC") {
-      const sorted = [...students].sort((a,b) =>
-        a[col] < b[col] ? 1 : -1
+      const sorted = [...course].sort((a,b) =>
+        a[col] > b[col] ? 1 : -1
       );
-      setStudents(sorted);
-      setOrder("ASC")
-    }
-    if(order === "DSC") {
-      const sorted = [...students].sort((a,b) =>
-        a[col] < b[col] ? 1 : -1
-      );
+      console.log(sorted , "ASC")
       setStudents(sorted);
       setOrder("DSC")
     }
+    if(order === "DSC") {
+      const sorted = [...course].sort((a,b) =>
+        a[col] < b[col] ? 1 : -1
+      );
+      console.log(sorted, 'DSC')
+      setStudents(sorted);
+      setOrder("ASC")
+    }
   }
-  
-
-  // const deleteHandler = (e) => {
-  //   e.preventDefault();
-    
-  //   axios.delete(`/api/students/${studentId}`).then(() => {
-  //     setStudents(studentsState);
-  //   });
-  // };
 
   const openGitHubModal = () => {
     setShowGitHubModal((prev) => !prev);
@@ -81,11 +94,14 @@ const StudentSummary = () => {
     setStudents(students);
   }, []);
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = (studentId) => {
     const newStudent = [...students] //Create New Array based on current students
-    const index = students.findIndex((student) => student.student_id === id)
+    console.log(studentId)
+    const index = students.findIndex((student) => student.student_id === studentId)
     newStudent.splice(index, 1);
-    setStudents(newStudent)
+    axios.delete(`/api/students/${studentId}`).then(() => {
+      setStudents(newStudent)
+    });
   }
 
 
@@ -109,7 +125,7 @@ const StudentSummary = () => {
         </div>
         <div className={studentStyle.middleBorder}>
           <div>
-            <table className= {studentStyle.table}>
+            <table className= {studentStyle.table} border = "1">
               <thead className= {studentStyle.thead}>
                 <tr className= {studentStyle.headerRow}>
                   <th className= {studentStyle.smallHeader}></th>
@@ -117,7 +133,9 @@ const StudentSummary = () => {
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("learn_Avg")}>Learn Avg</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("teamwork_avg")}>Teamwork Avg</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Tech_Skills")}>Tech Skills</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Client-Side")}>Client-Side</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Server-Side")}>Server-Side</th>
+                  {/* <th className= {studentStyle.header} scope="col" onClick={() => sorting("Tech_Skills")}>Tech Skills</th> */}
                   <th className= {studentStyle.header} scope="col">Notes</th>
                   <th className= {studentStyle.smallHeader} scope="col"></th>
                 </tr>
@@ -125,7 +143,7 @@ const StudentSummary = () => {
               <tbody className= {studentStyle.tbody}>
               {/* Iterate through the students data, ties in with the variable course */}
               {course.map((student) => (
-                <tr className= {studentStyle.tbodyRow} key={student.student_id}>
+                <tr className= {studentStyle.tbodyRow} id= {student.student_id} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
                     <input type="checkbox" name={student.name} checked={student?.isChecked || false} onChange={handleChange} ></input>
                   </td>
@@ -133,12 +151,13 @@ const StudentSummary = () => {
                     <Link className= {studentStyle.nameSpace} key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>{student.name}</Link>
                   </td>
                   <td className= {studentStyle.content}>{student.learn_avg}%</td>
-                  <td className= {studentStyle.content}>{student.teamwork_avg}</td>
-                  <td className= {studentStyle.content}>{student.tech_avg}</td>
-                  {/* <td className= {studentStyle.content}>{student.teamwork}</td> */}
-                  <td className= {studentStyle.content}>
+                  <td className= {studentStyle.content}>{colPercent(student.teamwork_avg)}</td>
+                  <td className= {studentStyle.content}>{colPercent(student.tech_avg)}</td>
+                  <td className= {studentStyle.content}>{student.client_side_test}</td>
+                  <td className= {studentStyle.content}>{student.server_side_test}</td>
+                  {/* <td className= {studentStyle.content}>
                     <div className={studentStyle.color3}>At Risk</div>
-                  </td>
+                  </td> */}
                   <td className= {studentStyle.content} onClick={() => openCommentModel(student)}>
                     <svg className={studentStyle.noteIcon} viewBox="0 0 22 22">
                       <path d="M13.5,20 C14.3284271,20 15,19.3284271 15,18.5 C15,17.1192881 16.1192881,16 17.5,16 C18.3284271,16 19,15.3284271

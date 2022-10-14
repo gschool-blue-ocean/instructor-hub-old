@@ -3,27 +3,51 @@ import { useState } from 'react'
 import styles from '../../styles/NewCohortModal.module.css'
 import { useRouter } from "next/router"
 import { useRecoilState } from "recoil"
-import { loggedIn, usersState, cohortsState } from "../state"
+import { loggedIn, usersState, cohortsState, studentsState } from "../state"
 
 
-const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/localCohorts, password, username, asana_access_token, onClose }) => {
+const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, username, asana_access_token, onClose }) => {
     const [default_cohort, setDefault_Cohort] = useState('');
+    const [defaultCohortGid, setDefaultCohortGid] = useState('');
     const [cohort_asana_gid, setCohort_Asana_Gid] = useState('');
     const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
     const [user, setUser] = useRecoilState(usersState);
+    const [students, setStudents] = useRecoilState(studentsState)
     const router = useRouter();
 
     const selectedCohort = (e) => {
         setCohort_Asana_Gid(e.target.value);
         // for(let i = 0; i<listOfCohorts.length; i++){
-        for(let i = 0; i<localCohorts.length; i++){
-            if(e.target.value === localCohorts[i].gid){
+        for(let i = 0; i<cohorts.length; i++){
+            if(e.target.value === cohorts[i].gid){
             // if(e.target.value === listOfCohorts[i].gid){
-                setDefault_Cohort(localCohorts[i].name)
+                setDefault_Cohort(cohorts[i].name)
+                setDefaultCohortGid(cohorts[i])
                 // setDefault_Cohort(listOfCohorts[i].name)
             }
         }
-        console.log(localCohorts, 'made it here')
+        console.log(cohorts, 'made it here')
+    }
+
+    const getStudents = () => {
+        console.log(defaultCohortGid, "Cohort GID")
+        axios.get(`https://app.asana.com/api/1.0/tasks/?project=${defaultCohortGid.gid}`, {
+            headers: {
+                Authorization: `Bearer ${asana_access_token}`,
+            },
+        }).then((res) => {
+            (res.data.data).forEach((asanaStudent) => {
+                const found = students.find(element => element.gid === asanaStudent.gid)
+                if(found === undefined){
+                    console.log(asanaStudent, "success student")
+                    axios.put('/api/students', {
+                        "name": `${asanaStudent.name}`,
+                        "cohort": `${defaultCohortGid.name}`,
+                        "gid": `${asanaStudent.gid}`
+                    }).then((res)=> setStudents((prev) => [...prev, ...res.data]))
+                }
+            })
+        })
     }
 
     const saveUserInfo = () => {
@@ -35,6 +59,7 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/localCohorts, passwo
             "gid": cohort_asana_gid
         }).then((res) => setUser(res.data))
         setLoggedInStatus(true)
+        getStudents();
         router.push("/home")
     }
 
@@ -48,7 +73,7 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/localCohorts, passwo
                        <select onChange={(e)=>selectedCohort(e)}>
                             <option value="" selected disabled hidden>Choose default here</option>
                             {/* {listOfCohorts.map(ele=> { */}
-                            {localCohorts.map(ele=> {
+                            {cohorts.map(ele=> {
                                 return(
                                     <option key={ele.gid} value={ele.gid} >{ele.name}</option>
                                 )
