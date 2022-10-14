@@ -2,13 +2,14 @@ import spacerStyle from '../../../styles/CohortSpacer.module.css'
 import { useEffect, useState } from 'react'
 // import NewCohortModal from './NewCohortModal'
 import { useRecoilState } from "recoil";
-import { cohortsState, currentCohortState, usersState, accessToken } from "../../state.js";
+import { cohortsState, currentCohortState, usersState, accessToken, studentsState } from "../../state.js";
 import axios from 'axios'
 
 const CohortSpacer = () => {
   // const [newCohortModal, showNewCohortModal] = useState(false)
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
+  const [students, setStudents] = useRecoilState(studentsState)
   const [user, setUser] = useRecoilState(usersState)
   // const [asanaCohorts, setAsanaCohorts] = useState([])
   // const [asana_access_token, setAsana_Access_Token] = useRecoilState(accessToken)
@@ -32,10 +33,10 @@ const CohortSpacer = () => {
   const syncCohorts = () => {
     axios.get("/api/cohorts").then((res) => setCohorts(res.data))
     console.log(cohorts, "first")
-    syncronize();
+    synchronize();
   }
 
-  function syncronize (){
+  function synchronize (){
     console.log(cohorts, "second")
       axios.get('https://app.asana.com/api/1.0/projects/', {
       headers: {
@@ -54,13 +55,30 @@ const CohortSpacer = () => {
             "name": `${asanaCohort.name}`,
             "gid": `${asanaCohort.gid}`
           })
+          axios.get(`https://app.asana.com/api/1.0/tasks/?project=${asanaCohort.gid}`, {
+            headers: {
+                Authorization: `Bearer ${user.asana_access_token}`,
+            },
+          }).then((res) => {
+            (res.data.data).forEach((asanaStudent) => {
+                const found = students.find(element => element.gid === asanaStudent.gid)
+                if(found === undefined){
+                    console.log(asanaStudent, "success student")
+                    axios.put('/api/students', {
+                        "name": `${asanaStudent.name}`,
+                        "cohort": `${asanaCohort.name}`,
+                        "gid": `${asanaStudent.gid}`
+                    }).then((res)=> setStudents((prev) => [...prev, ...res.data]))
+                }
+            })
+          })
         }else{
           console.log("failed")
         }
       })
     })
   }
-    
+  
     // WORK IN PROGRESS, POST REQUEST DOES NOT WORK   
     //   console.log(blah, "should be new additions to table")
       

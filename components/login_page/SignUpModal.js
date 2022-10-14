@@ -22,7 +22,7 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
             if(e.target.value === cohorts[i].gid){
             // if(e.target.value === listOfCohorts[i].gid){
                 setDefault_Cohort(cohorts[i].name)
-                setDefaultCohortGid(cohorts[i].gid)
+                setDefaultCohortGid(cohorts[i])
                 // setDefault_Cohort(listOfCohorts[i].name)
             }
         }
@@ -31,7 +31,7 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
 
     const getStudents = () => {
         console.log(defaultCohortGid, "Cohort GID")
-        axios.get(`https://app.asana.com/api/1.0/tasks/?project=${defaultCohortGid}`, {
+        axios.get(`https://app.asana.com/api/1.0/tasks/?project=${defaultCohortGid.gid}`, {
             headers: {
                 Authorization: `Bearer ${asana_access_token}`,
             },
@@ -42,6 +42,7 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
                     console.log(asanaStudent, "success student")
                     axios.put('/api/students', {
                         "name": `${asanaStudent.name}`,
+                        "cohort": `${defaultCohortGid.name}`,
                         "gid": `${asanaStudent.gid}`
                     }).then((res)=> setStudents((prev) => [...prev, ...res.data]))
                 }
