@@ -22,26 +22,43 @@ const StudentSummary = () => {
   
   // Allows the cohorts to be filter 
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
-  // console.log(course)
 
-let colPercent = (num) => {
-  if (num === 1) {
-    return "25%"
+  // Determines Progress row words and background
+  let progress = (num) => {
+    if (num === 1) {
+      return "At Risk"
+    }
+    if (num === 2) {
+      return "Below Avg";
+    }
+    if (num === 3) {
+      return "Average";
+    }
+    if (num === 4) {
+      return "Above Avg"
+    }
   }
-  if (num === 2) {
-    return "50%";
-  }
-  if (num === 3) {
-    return "75%";
-  }
-  if (num === 4) {
-    return "100%"
-  }
- }
 
+  //Converts teamWork_avg and Tech_avg to percentage
+  let colPercent = (num) => {
+    if (num === 1) {
+      return "25%"
+    }
+    if (num === 2) {
+      return "50%";
+    }
+    if (num === 3) {
+      return "75%";
+    }
+    if (num === 4) {
+      return "100%"
+    }
+  }
+
+  //Handles the Select All checkbox.
   const handleChange = (e) => {
-    const { name, checked } = e.target;
-    if (name === "allSelect") {
+    const { id , checked } = e.target;
+    if (id === "allSelect") {
       let tempStudent = course.map((student) => {
         return { ...student, isChecked: checked };
       });
@@ -49,25 +66,28 @@ let colPercent = (num) => {
       setSelectPeople(tempStudent)
     } else {
       let tempStudent = course.map((student) => 
-      student.name === name ? { ...student, isChecked: checked } : student 
+      student.student_id === id ? { ...student, isChecked: checked } : student 
       );
+      console.log(students.student_id, "ID")
+      console.log(e.target, "here")
+      console.log(id)
       setStudents(tempStudent);
       setSelectPeople(tempStudent)
     }
   }
-
+  //Works in conjunction with the handleChange function. Needed to track who is selected and who is not
   useEffect(() => {
       let selectedStudents = selectedPeople.filter(unChecked => unChecked.isChecked == true)
       console.log(selectedPeople)
       console.log(selectedStudents)
   }, [selectedPeople])
 
+  //Used for sorting from ASC to DSC
   const sorting= (col) => {
     if(order === "ASC") {
       const sorted = [...course].sort((a,b) =>
         a[col] > b[col] ? 1 : -1
       );
-      console.log(sorted , "ASC")
       setStudents(sorted);
       setOrder("DSC")
     }
@@ -75,7 +95,6 @@ let colPercent = (num) => {
       const sorted = [...course].sort((a,b) =>
         a[col] < b[col] ? 1 : -1
       );
-      console.log(sorted, 'DSC')
       setStudents(sorted);
       setOrder("ASC")
     }
@@ -113,7 +132,7 @@ let colPercent = (num) => {
         <div className={studentStyle.topBorder}>
           <div className={studentStyle.selectRow}>
             <div className={studentStyle.selectAllBox}>
-              <input className={studentStyle.checkBox} type="checkbox" name="allSelect" checked={!students.some((student) => student?.isChecked !== true)} onChange={handleChange}/>
+              <input className={studentStyle.checkBox} type="checkbox" id="allSelect" checked={!students.some((student) => student?.isChecked !== true)} onChange={handleChange}/>
               <label htmlFor="selectMe"> Select/Deselect All</label>
             </div>
             <div className={studentStyle.addGit}>
@@ -125,17 +144,17 @@ let colPercent = (num) => {
         </div>
         <div className={studentStyle.middleBorder}>
           <div>
-            <table className= {studentStyle.table} border = "1">
+            <table className= {studentStyle.table}>
               <thead className= {studentStyle.thead}>
                 <tr className= {studentStyle.headerRow}>
                   <th className= {studentStyle.smallHeader}></th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("Name")}>Name</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("learn_Avg")}>Learn Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("teamwork_avg")}>Teamwork Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("Client-Side")}>Client-Side</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("Server-Side")}>Server-Side</th>
-                  {/* <th className= {studentStyle.header} scope="col" onClick={() => sorting("Tech_Skills")}>Tech Skills</th> */}
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("teamwork_avg")}>Teamwork Avg</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Tech_Skills")}>Progess</th>
                   <th className= {studentStyle.header} scope="col">Notes</th>
                   <th className= {studentStyle.smallHeader} scope="col"></th>
                 </tr>
@@ -145,19 +164,19 @@ let colPercent = (num) => {
               {course.map((student) => (
                 <tr className= {studentStyle.tbodyRow} id= {student.student_id} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
-                    <input type="checkbox" name={student.name} checked={student?.isChecked || false} onChange={handleChange} ></input>
+                    <input type="checkbox" id = {student.student_id} checked={student?.isChecked || false} onChange={handleChange} ></input>
                   </td>
                   <td  className= {studentStyle.nameContent}>
-                    <Link className= {studentStyle.nameSpace} key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>{student.name}</Link>
+                    <Link className= {studentStyle.nameSpace} key={student.name} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>{student.name}</Link>
                   </td>
                   <td className= {studentStyle.content}>{student.learn_avg}%</td>
-                  <td className= {studentStyle.content}>{colPercent(student.teamwork_avg)}</td>
-                  <td className= {studentStyle.content}>{colPercent(student.tech_avg)}</td>
                   <td className= {studentStyle.content}>{student.client_side_test}</td>
                   <td className= {studentStyle.content}>{student.server_side_test}</td>
-                  {/* <td className= {studentStyle.content}>
-                    <div className={studentStyle.color3}>At Risk</div>
-                  </td> */}
+                  <td className= {studentStyle.content}>{colPercent(student.teamwork_avg)}</td>
+                  <td className= {studentStyle.content}>{colPercent(student.tech_avg)}</td>
+                  <td className= {studentStyle.content}>
+                    <div className={studentStyle.color3}>{progress(Math.ceil((student.teamwork_avg + student.tech_avg)/2))}</div>
+                  </td>
                   <td className= {studentStyle.content} onClick={() => openCommentModel(student)}>
                     <svg className={studentStyle.noteIcon} viewBox="0 0 22 22">
                       <path d="M13.5,20 C14.3284271,20 15,19.3284271 15,18.5 C15,17.1192881 16.1192881,16 17.5,16 C18.3284271,16 19,15.3284271
