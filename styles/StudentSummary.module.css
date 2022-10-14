@@ -86,7 +86,6 @@
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0px;
-    white-space: nowrap;
 }
 
 .thead {
@@ -104,11 +103,13 @@
 
 .header {
     padding: 10px 0px;
-    font-size: 16px;
+    font-size: 15px;
+    width: 15px;
+    cursor: pointer;
 }
 
 .smallHeader {
-    width: 30px !important;
+    width: 3.8px !important;
 }
 
 .header:hover{
@@ -150,12 +151,7 @@
     width: 100%;
     vertical-align: middle;
     outline: 0px;
-    cursor: pointer;
     table-layout: fixed; 
-}
-
-.nameSpace {
-    padding-left: 32px
 }
 
 .tbodyRow:hover{
@@ -168,7 +164,12 @@
     font-weight: 400;
     vertical-align: inherit;
     font-size: 14px;
-    padding: 8px;
+    padding: 8px 8px 8px 25px;
+    cursor: pointer;
+}
+
+.nameSpace {
+    word-break:break-all;
 }
 
 .content { 
@@ -231,6 +232,7 @@
     height: 16px;
     padding-right: 3px;
     margin-bottom: 5px;
+    cursor: pointer;
 }
 
 .noteIcon {
@@ -240,6 +242,7 @@
     overflow: visible !important;
     vertical-align: text-bottom;
     fill: currentColor;
+    cursor: pointer;
 }
 
 .box {
