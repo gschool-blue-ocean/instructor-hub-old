@@ -67,7 +67,7 @@ return (
                   {toggle ? 
                     <div as="div">
                       {student.map((s) => (
-                        <div as="div">
+                        <div as="div" key="student_key">
                           {s.name}
                         </div>
                       ))}
