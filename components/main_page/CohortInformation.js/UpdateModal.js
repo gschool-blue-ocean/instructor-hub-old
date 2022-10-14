@@ -27,7 +27,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       setIndexedStudent(course[currStudent]);
     }
     console.log("what the stagedCohort look like?", stagedCohort);
-    console.log("What is course?", course);
+    console.log("What is course, and should the function die?", course);
+    console.log(course[currStudent]);
   }, [currStudent]);
 
   let course = students.filter(
