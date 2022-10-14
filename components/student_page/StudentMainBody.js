@@ -18,6 +18,7 @@ const StudentMainBody = () => {
   const [noteId, setNoteId] = useState(null)
   const [updatedNotes, setUpdatedNOtes] = useState(''); 
   const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
+  const [addNote, setAddNote] = useState(false); 
   // const router = useRouter();
 
   
@@ -39,6 +40,7 @@ const StudentMainBody = () => {
 
  
   const addUpdate = (note) => {
+    setIsEditing(false)
     axios.patch(`/api/notes/${note.note_id}`,
     {"notes": `${updatedNotes}`, 
     "name": `${note.name}`
@@ -81,8 +83,21 @@ const StudentMainBody = () => {
         <StudentStatus currentStudent={currentStudent}/>
         <div className={styles.notesContainer}>
           <div className={styles.notes}>
-            <div className={styles.notesTitle}>Notes</div>
+            <div className={styles.notesTitle}>
+              Notes
+            <span  onClick={() => setAddNote(!addNote)}>&#10133;</span>
+            </div>
             <div>
+              {
+                addNote ? (
+                  <>
+                  <textarea/>
+                  <button>&#10004;</button>
+                  <button onClick={() => setAddNote(false)}>X</button>
+                  </>
+                ): null
+              }
+
               <ul>
                 {userNotes.map((note) => (
                   <div key={note.note_id}>

@@ -49,8 +49,16 @@
 .border2{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     padding: 20px;
     margin-top: 8px;
     width: 100%;
+}
+.selectAssess {
+    display: flex;
+    flex-direction: column;
+}
+.selectScore{
+    display: flex;
+    flex-direction: column;
 }
