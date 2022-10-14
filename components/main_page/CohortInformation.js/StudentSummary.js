@@ -63,20 +63,21 @@ let colPercent = (num) => {
   }, [selectedPeople])
 
   const sorting= (col) => {
-    console.log(col)
     if(order === "ASC") {
-      const sorted = [...students].sort((a,b) =>
-        a[col] < b[col] ? 1 : -1
+      const sorted = [...course].sort((a,b) =>
+        a[col] > b[col] ? 1 : -1
       );
-      setStudents(sorted);
-      setOrder("ASC")
-    }
-    if(order === "DSC") {
-      const sorted = [...students].sort((a,b) =>
-        a[col] < b[col] ? 1 : -1
-      );
+      console.log(sorted , "ASC")
       setStudents(sorted);
       setOrder("DSC")
+    }
+    if(order === "DSC") {
+      const sorted = [...course].sort((a,b) =>
+        a[col] < b[col] ? 1 : -1
+      );
+      console.log(sorted, 'DSC')
+      setStudents(sorted);
+      setOrder("ASC")
     }
   }
 

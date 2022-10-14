@@ -76,7 +76,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                   <li className={gitStyle.tableListItem}>
                     <div className={gitStyle.tableListCell}>
                       <span className={gitStyle.frameLeft}>
-                        <a className={gitStyle.frameInline} href="https://github.com/{student.github}">
+                        <a className={gitStyle.frameInline} href={`https://github.com/${student.github}`}>
                           <Image
                             src="/pic1.jpg"
                             height="44"
