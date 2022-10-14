@@ -2,7 +2,7 @@ import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
 import { loggedIn } from '../state'
-import { currentStudentState,notesState,studentIdState} from "../state";
+import { currentStudentState,notesState,studentIdState,usersState} from "../state";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 import { useState } from "react";
@@ -19,6 +19,7 @@ const StudentMainBody = () => {
   const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
   const [addNote, setAddNote] = useState(false); 
   const [newNote, setNewNote] = useState(''); 
+  const [users, setUsers] = useRecoilState(usersState);
 
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
@@ -58,11 +59,21 @@ const StudentMainBody = () => {
     }).then((res) => console.log(res.data) ).then (() => {
       axios.get("/api/notes").then((res) => {
           setNotes(res.data);
-          console.log(notes, 'notes');
+          // console.log(notes, 'notes');
         })
-    }
-    )
-
+    })
+    // For a new subtask note you need to do a POST request instead 
+    axios({
+      method:"POST",  //must be put method not patch
+      url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}/subtasks`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
+      headers: {
+        Authorization: `Bearer ${users[3].asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
+      }, 
+        data: { 
+          data: {
+            "name": `${newNote}`
+        }}
+    })
   }
 
   return (
