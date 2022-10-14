@@ -4,7 +4,7 @@ import style from '../../../styles/StudentProfile.module.css'
 const StudentStatus = ({currentStudent}) => {
   return (
     <div className={style.container}>
-        <StatusLeft currentStudent={currentStudent} />
+        <StatusLeft  />
         <StatusRight currentStudent={currentStudent}/>
     </div>
   )
