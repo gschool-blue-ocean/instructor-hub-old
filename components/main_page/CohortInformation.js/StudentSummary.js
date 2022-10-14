@@ -103,8 +103,7 @@ let colPercent = (num) => {
       setStudents(newStudent)
     });
   }
-
-
+  
   return (
     <div>
       <GitHubModal showGitHubModal={showGitHubModal} setShowGitHubModal={setShowGitHubModal} onClose={() => {setShowGitHubModal(false);}}/>
@@ -143,12 +142,12 @@ let colPercent = (num) => {
               <tbody className= {studentStyle.tbody}>
               {/* Iterate through the students data, ties in with the variable course */}
               {course.map((student) => (
-                <tr className= {studentStyle.tbodyRow} id= {student.student_id} key={student.student_id}>
+                <tr className= {studentStyle.tbodyRow} id={student.student_id} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
                     <input type="checkbox" name={student.name} checked={student?.isChecked || false} onChange={handleChange} ></input>
                   </td>
-                  <td  className= {studentStyle.nameContent}>
-                    <Link className= {studentStyle.nameSpace} key={student.student_id} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>{student.name}</Link>
+                  <td  className= {studentStyle.nameContent}  onClick={() => setStudentId(student.student_id)}>
+                    <Link className= {studentStyle.nameSpace} key={student.student_id} href={`/student/${student.student_id}`}>{student.name}</Link>
                   </td>
                   <td className= {studentStyle.content}>{student.learn_avg}%</td>
                   <td className= {studentStyle.content}>{colPercent(student.teamwork_avg)}</td>

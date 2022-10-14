@@ -62,7 +62,7 @@ const StudentMainBody = () => {
           // console.log(notes, 'notes');
         })
     })
-    // For a new subtask note you need to do a POST request instead 
+    // For a new subtask note IN Asana you need to do a POST request instead 
     axios({
       method:"POST",  //must be put method not patch
       url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}/subtasks`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
