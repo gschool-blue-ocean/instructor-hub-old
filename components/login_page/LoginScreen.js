@@ -68,9 +68,9 @@ const LoginScreen = () => {
                     </div>
                     <div>
                       {"Don't have an account? Click "}
-                      <a href="/signup" className={styles.linkText}>
+                      <Link href="/signup" className={styles.linkText}>
                         here!
-                      </a>
+                      </Link>
                     </div>
                     {/* <div className='text-[12px] font-[500] text-center'>&nbsp;</div> */}
                   </form>
