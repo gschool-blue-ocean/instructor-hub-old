@@ -2,11 +2,10 @@ import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
 import { loggedIn } from '../state'
-// import { useRouter } from 'next/router.js'
 import { currentStudentState,notesState,studentIdState} from "../state";
 import { useRecoilState } from "recoil";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 
 const StudentMainBody = () => {
   // current student is the current information for one person 
@@ -19,14 +18,8 @@ const StudentMainBody = () => {
   const [updatedNotes, setUpdatedNOtes] = useState(''); 
   const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
   const [addNote, setAddNote] = useState(false); 
-  // const router = useRouter();
+  const [newNote, setNewNote] = useState(''); 
 
-  
-  // useEffect(()=>{
-  //   if(!loggedInStatus){
-  //     router.push("/")
-  //    }
-  //   },[])
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
   // converting ETs date into MM DAY YYYY
@@ -55,8 +48,21 @@ const StudentMainBody = () => {
     setNotes(updateNotes);  
   
     })}
+  
+  const addNewNote = () => {
+    axios.post('/api/notes', {
+      "student_id": Number(studentId),
+      "notes": newNote, 
+      "name": null, 
+      "note_date": new Date()
+    }).then((res) => console.log(res.data) ).then (
+      axios.get("/api/notes").then((res) => {
+          setNotes(res.data);
+          console.log(notes, 'notes');
+        })
+    )
 
-
+  }
 
   return (
     <>
@@ -91,8 +97,8 @@ const StudentMainBody = () => {
               {
                 addNote ? (
                   <>
-                  <textarea/>
-                  <button>&#10004;</button>
+                  <textarea onChange={(e) => setNewNote(e.target.value)}/>
+                  <button onClick={addNewNote}>&#10004;</button>
                   <button onClick={() => setAddNote(false)}>X</button>
                   </>
                 ): null
