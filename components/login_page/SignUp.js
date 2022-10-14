@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styles from '../../styles/signUp.module.css';
 import Link from 'next/link';
 import { useRecoilState } from 'recoil';
-import { cohortsState, usersState, accessToken } from '../state';
+import { cohortsState, usersState, accessToken, studentsState } from '../state';
 import axios from 'axios';
 import SignUpModal from './SignUpModal';
 import { bodyStreamToNodeStream } from 'next/dist/server/body-streams';
@@ -13,11 +13,12 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [default_cohort, setDefault_cohort] = useRecoilState(usersState);
-    const [localCohorts, setLocalCohorts] = useRecoilState(cohortsState);
+    const [cohorts, setCohorts] = useRecoilState(cohortsState);
     const [displayCohortModal, setDisplayCohortModal] = useState(false)
     const [displayAsanaKeyModal, setDisplayAsanaKeyModal] = useState(false)
     const [listOfCohorts, setListOfCohorts] = useState([])
     const [asana_access_token, setAsana_Access_Token] = useRecoilState(accessToken)
+    const [students, setStudents] = useRecoilState(studentsState)
 
     const createUsername= (e)=> {
         setUsername(e.target.value)
@@ -29,7 +30,7 @@ const SignUp = () => {
     const passwordVerification = (e) =>{
         setConfirmPassword(e.target.value)
     }
-    
+
     function showDisplayCohortModal(e){
         e.preventDefault();
         console.log(usersState)
@@ -39,13 +40,25 @@ const SignUp = () => {
                     Authorization: `Bearer ${asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
                 },
             }).then((res) => {
-                setLocalCohorts((prev) => [...prev, ...res.data.data])
+                (res.data.data).forEach((asanaCohort) => {
+                    const found = cohorts.find(element => element.gid === asanaCohort.gid)
+                    if(found === undefined){
+                        console.log(asanaCohort, "success on signup")
+                        axios.put('/api/cohorts', {
+                            "name": `${asanaCohort.name}`,
+                            "gid": `${asanaCohort.gid}`
+                        }).then((res)=> setCohorts((prev) => [...prev, ...res.data]))
+                    }else{
+                        console.log("failed on signup")
+                    }
+                })
+                // setCohorts((prev) => [...prev, ...res.data.data])
                 setDisplayCohortModal(!displayCohortModal)
-                console.log(res.data.data)
+                // console.log(res.data.data)
             })
             // .then(
-            //     // console.log(localCohorts)
-            //     setLocalCohorts((prev) => [...prev, ...localCohorts])
+            //     // console.log(cohorts)
+            //     setCohorts((prev) => [...prev, ...cohorts])
             // )
         }else{
             if(username.length < 6){
@@ -77,7 +90,7 @@ const SignUp = () => {
     <SignUpModal 
         displayCohortModal={displayCohortModal} 
         // listOfCohorts={listOfCohorts}
-        localCohorts={localCohorts}
+        cohorts={cohorts}
         asana_access_token={asana_access_token}
         password={password}
         username={username}
