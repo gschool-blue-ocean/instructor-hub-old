@@ -4,7 +4,7 @@ import { useRecoilState } from "recoil";
 import {studentIdState} from '../../components/state.js'
 
 
-const student = () => {
+const Student = () => {
   // if you cosole.log router it will tell you which student is being pass through 
   const router = useRouter();  
   // we use recoil state here becuause we want to use the current studentid in layout component to make a get request for that student
@@ -19,4 +19,4 @@ const student = () => {
   )
 }
 
-export default student
+export default Student
