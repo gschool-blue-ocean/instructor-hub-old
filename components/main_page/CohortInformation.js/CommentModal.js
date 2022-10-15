@@ -31,16 +31,6 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
                 {userNotes.map((note) => (
                 <div className={commentStyle.content}>
                   <div className={commentStyle.commentBorder}>
-                    <div className={commentStyle.rightBorder}>
-                      <div className={commentStyle.rightInline}>
-                        <Image
-                          src="/pic1.jpg"
-                          width="44"
-                          height="44"
-                          className={commentStyle.instructorIcon}
-                          />
-                      </div>
-                    </div>
                     <div className={commentStyle.headerContainer}>
                       <div className={commentStyle.headerLayout}>
                         <div className={commentStyle.textColor}>
