@@ -38,65 +38,50 @@ const CohortSpacer = () => {
 
   const syncCohorts = () => {
     axios.get("/api/cohorts").then((res) => setCohorts(res.data));
-    console.log(cohorts, "first");
+    // console.log(cohorts, "first");
     synchronize();
   };
 
   function synchronize() {
-    console.log(cohorts, "second");
-    axios
-      .get("https://app.asana.com/api/1.0/projects/", {
-        headers: {
-          Authorization: `Bearer ${user.asana_access_token}`,
-        },
-        // }).then((res) => setAsanaCohorts(res.data.data))
-      })
-      .then((res) => {
-        // console.log(cohorts,"updated cohorts", res.data.data)
-        res.data.data.forEach((asanaCohort) => {
-          const found = cohorts.find(
-            (element) => element.gid === asanaCohort.gid
-          );
-          console.log(found, "found");
-          if (found === undefined) {
-            console.log(asanaCohort, "success");
-            axios.put("/api/cohorts", {
-              name: `${asanaCohort.name}`,
-              gid: `${asanaCohort.gid}`,
-            });
-            axios
-              .get(
-                `https://app.asana.com/api/1.0/tasks/?project=${asanaCohort.gid}`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${user.asana_access_token}`,
-                  },
-                }
-              )
-              .then((res) => {
-                res.data.data.forEach((asanaStudent) => {
-                  const found = students.find(
-                    (element) => element.gid === asanaStudent.gid
-                  );
-                  if (found === undefined) {
-                    console.log(asanaStudent, "success student");
-                    axios
-                      .put("/api/students", {
-                        name: `${asanaStudent.name}`,
-                        cohort: `${asanaCohort.name}`,
-                        gid: `${asanaStudent.gid}`,
-                      })
-                      .then((res) =>
-                        setStudents((prev) => [...prev, ...res.data])
-                      );
-                  }
-                });
-              });
-          } else {
-            console.log("failed");
-          }
+    // console.log(cohorts, "second");
+    axios.get("https://app.asana.com/api/1.0/projects/", {
+      headers: {
+        Authorization: `Bearer ${user.asana_access_token}`,
+      },
+      // }).then((res) => setAsanaCohorts(res.data.data))
+    }).then((res) => {
+
+      res.data.data.forEach((asanaCohort) => {
+        const found = cohorts.find((element) => element.gid === asanaCohort.gid);
+        console.log(found, "found");
+        if (found === undefined) {
+          console.log(asanaCohort, "success");
+          axios.put("/api/cohorts", {
+            name: `${asanaCohort.name}`,
+            gid: `${asanaCohort.gid}`,
+          })
+        } else {
+          console.log("failed");
+        }
+        axios.get(`https://app.asana.com/api/1.0/tasks/?project=${asanaCohort.gid}`, {
+          headers: {
+            Authorization: `Bearer ${user.asana_access_token}`,
+          },
+        }).then((res) => {
+          res.data.data.forEach((asanaStudent) => {
+            const found = students.find((element) => element.gid === asanaStudent.gid);
+            if (found === undefined) {
+              // console.log(asanaStudent, "success student");
+              axios.put("/api/students", {
+                name: `${asanaStudent.name}`,
+                cohort: `${asanaCohort.name}`,
+                gid: `${asanaStudent.gid}`,
+              }).then((res) => setStudents((prev) => [...prev, ...res.data]));
+            }
+          });
         });
       });
+    });
   }
 
   // WORK IN PROGRESS, POST REQUEST DOES NOT WORK
