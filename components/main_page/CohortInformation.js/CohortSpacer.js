@@ -65,17 +65,24 @@ const CohortSpacer = () => {
                 name: `${asanaStudent.name}`,
                 cohort: `${asanaCohort.name}`,
                 gid: `${asanaStudent.gid}`,
-              }).then((res) => setStudents((prev) => [...prev, ...res.data]));
+              }).then((res) => setStudents([...students, ...res.data]));
             }
-          });
+          })
+
           //this looks at the students in our database and checks to see if they are in the asana database. If not then it removes it from our database
           //have someone check the logic of my axios.delete request
+          // remainingStudents is an array that I will push all students that are in both local and asana databases
           students.forEach((localStudent) => {
-            const deletedInAsana = res.data.data.find((element) => element.gid === localStudent.gid);
-            if (deletedInAsana === undefined) {
-              axios.delete(`/api/students/${localStudent.student_id}`).then((res) => setStudents((prev) => {
-                prev.splice(localStudent.student_id - 1, 1)
-              }))
+            const studentInAsana = res.data.data.find((element) => element.gid === localStudent.gid);
+            if (studentInAsana === undefined && localStudent.cohort === asanaCohort.name) {
+              axios.delete(`/api/students/${localStudent.student_id}`).then((res) => {
+                console.log(localStudent, "student that was not in asana")
+              }).then(()=>{
+                axios.get("/api/students").then((res) => {
+                  console.log(res.data.students)
+                  setStudents(res.data.students)
+                })
+              })
             }
           });
         });
