@@ -26,31 +26,20 @@ const CohortSpacer = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   console.log(cohorts)
-  // }, [cohorts])
-
-  // useEffect(() => {
-  //   // When currentCohort changes, i.e. via the select cohort feature, logs the current cohort name and object
-  //   console.log(currentCohort)
-  //   console.log(cohorts.filter(current => current.name === currentCohort)[0])
-  // }, [currentCohort])
-
   const syncCohorts = () => {
+    //verifies that the cohorts set state matches what is in our database
     axios.get("/api/cohorts").then((res) => setCohorts(res.data));
-    // console.log(cohorts, "first");
     synchronize();
   };
 
   function synchronize() {
-    // console.log(cohorts, "second");
+    //this axios request gets all cohorts associated with the user/user's asana token
     axios.get("https://app.asana.com/api/1.0/projects/", {
       headers: {
         Authorization: `Bearer ${user.asana_access_token}`,
       },
-      // }).then((res) => setAsanaCohorts(res.data.data))
     }).then((res) => {
-
+      //this goes through each cohort in the asana database and adds ones that do not exist in our database
       res.data.data.forEach((asanaCohort) => {
         const found = cohorts.find((element) => element.gid === asanaCohort.gid);
         console.log(found, "found");
@@ -63,6 +52,7 @@ const CohortSpacer = () => {
         } else {
           console.log("failed");
         }
+        // this axios request looks at the students in our database and adds new students from the asana database
         axios.get(`https://app.asana.com/api/1.0/tasks/?project=${asanaCohort.gid}`, {
           headers: {
             Authorization: `Bearer ${user.asana_access_token}`,
@@ -71,7 +61,6 @@ const CohortSpacer = () => {
           res.data.data.forEach((asanaStudent) => {
             const found = students.find((element) => element.gid === asanaStudent.gid);
             if (found === undefined) {
-              // console.log(asanaStudent, "success student");
               axios.put("/api/students", {
                 name: `${asanaStudent.name}`,
                 cohort: `${asanaCohort.name}`,
@@ -79,21 +68,20 @@ const CohortSpacer = () => {
               }).then((res) => setStudents((prev) => [...prev, ...res.data]));
             }
           });
+          //this looks at the students in our database and checks to see if they are in the asana database. If not then it removes it from our database
+          //have someone check the logic of my axios.delete request
+          students.forEach((localStudent) => {
+            const deletedInAsana = res.data.data.find((element) => element.gid === localStudent.gid);
+            if (deletedInAsana === undefined) {
+              axios.delete(`/api/students/${localStudent.student_id}`).then((res) => setStudents((prev) => {
+                prev.splice(localStudent.student_id - 1, 1)
+              }))
+            }
+          });
         });
       });
     });
   }
-
-  // WORK IN PROGRESS, POST REQUEST DOES NOT WORK
-  //   console.log(blah, "should be new additions to table")
-
-  //   blah.forEach(classes =>{
-  //     axios.put('/api/cohorts', {
-  //       "name": `${classes.name}`,
-  //       "gid": `${classes.gid}`
-  //     })
-  //   })
-  // })
 
   return (
     <>
