@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import headerStyle from "../../styles/Header.module.css";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
@@ -16,10 +16,7 @@ const Header = () => {
 
   //function allows for logging out and rerouting to sign in page. Also resets the dropDown menu to the hidden state
   const logoutFunc = (e)=>{
-    setLoggedInStatus(false);
-    axios.get("/api/users").then((res) => {
-      setUsers(res.data.users);
-    });
+    sessionStorage.clear();
     showDropDown(!dropDown)
     router.push("/")
   }

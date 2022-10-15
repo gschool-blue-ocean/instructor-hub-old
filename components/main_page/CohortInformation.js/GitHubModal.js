@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { nanoid } from "nanoid";
 import { studentsState, currentCohortState, cohortsState, studentIdState } from "../../state.js";
 import gitStyle from "../../../styles/GitHub.module.css";
 import Image from "next/image";
@@ -15,8 +14,6 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [currentValue, setCurrentValue] = useState({ github: "" });
   const [updatedGithub, setUpdatedGithub] = useState("");
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
-
-  console.log(students)
 
   //Filter required to make current cohort students appear
   let course = students.filter(classRoom => classRoom.cohort == currentCohort)

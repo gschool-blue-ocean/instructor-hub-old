@@ -2,6 +2,7 @@ import StudentMainBody from '../../components/student_page/StudentMainBody.js'
 import { useRouter } from 'next/router.js'
 import { useRecoilState } from "recoil";
 import {studentIdState} from '../../components/state.js'
+import { useLayoutEffect } from 'react';
 
 
 const student = () => {
@@ -11,6 +12,13 @@ const student = () => {
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   setStudentId(router.query.student); 
 
+  useLayoutEffect(()=>{
+    const status = sessionStorage.getItem('logged_in_Status')
+      if(!status){
+        sessionStorage.clear();
+        router.push("/")
+      }
+    },[])
 
   return (
     <div>

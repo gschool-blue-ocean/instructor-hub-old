@@ -1,5 +1,5 @@
 import style from '../../../styles/StudentPModal.module.css'
-import {projectsState,currStudentProjectsState, studentIdState} from "../../state";
+import {projectsState,currStudentProjectsState, studentIdState, currentStudentState, usersState} from "../../state";
 import { useRecoilState } from "recoil";
 import React, { useState } from "react";
 import axios from 'axios';
@@ -9,31 +9,61 @@ const ProjectModal = ({showProjModal, onClose}) => {
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [projects, setProjects] = useRecoilState(projectsState);
   const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState)
+  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
+  const [users, setUsers] = useRecoilState(usersState);
   const [projSelected, setProjSelected] = useState(''); 
   const [projGrade, setProjGrade] = useState([]); 
   const [projNotes, setProjNotes] = useState(''); 
 
   
-
+/*-----Converting string into Boolean and Number-----*/
   let grade = projGrade === 'true'
   let projectId = Number(projSelected)
   // console.log(projectId,'here')
 
 
   const addProject = () => {
-        // e.preventDefault(); 
-
     axios.post('/api/projectGrades', {
       "student_id": studentId,
       "project_id": projectId,
       "project_passed": grade, 
       "notes": `${projNotes}`
-    }).then(() => {
+    })
+    .then(() => {
       axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
         setCurrStudentProjects(res.data);
         // console.log(res.data, 'new');
       })
     }) 
+
+    let instructorNotes = ''
+     axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
+      headers: {
+        Authorization: `Bearer ${users[3].asana_access_token}`,
+      }
+    })
+    .then((res) => {
+      console.log(res.data.data)
+      instructorNotes = res.data.data.notes
+    })
+    .then(() => {
+      instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null
+      axios({
+        method:"PUT",  //must be put method not patch
+        url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
+        headers: {
+          Authorization: `Bearer ${users[3].asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
+        }, data: { 
+            data: {
+              "workspace": "1213745087037",
+              "assignee_section": null,
+              "html_notes": `<body>${instructorNotes}\n ${"Name".toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
+              "parent": null,
+              "resource_subtype": "default_task",
+            }
+          }
+      })
+    })
   }
 
 
