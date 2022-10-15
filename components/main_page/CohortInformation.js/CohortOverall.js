@@ -32,15 +32,44 @@ ChartJS.register(
 );
 
 const CohortOverall = ({ children }) => {
-  const [techAvg, setTechAvg] = useState(60);
-  const [teamAvg, setTeamAvg] = useState(40);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
-  const [cohortAvg, setCohortAvg] = useRecoilState(cohortsState);
+  const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [students, setStudents] = useRecoilState(studentsState)
+  const [cohortAvg, setCohortAvg] = useState(0)
 
-  // console.log(cohortAvg)
-  console.log(students)
+  console.log(cohorts)
+// function to get cohort average
+ 
+    useEffect(() => {
+      //  const cohortAverage = () => {
+   
+      cohorts.map((cohort) => {
+      if (cohort.cohort_id) {
+       setCohortAvg(cohort.cohort_avg)
+      }
+      })
+      // }
+    }, [cohorts])
+// function to get tech average
+  const techAvg = () => {
+    let sum = 0;
+    students.map((student) => (
+      sum += student.tech_avg
+    ))
+    let avg = sum /students.length
+    return (avg * 100) / students.length;
+  }
+  //function to get team average
+  const teamworkAvg = () => {
+    let sum = 0;
+    students.map((student) => (
+      sum += student.teamwork_avg
+    ))
+    let avg = sum /students.length
+    return (avg * 100) / students.length;
+  }
+
   const openUpdateModal = () => {
     setShowUpdateModal((prev) => !prev);
   };
@@ -52,8 +81,17 @@ const CohortOverall = ({ children }) => {
   // *Need to make sure I'm bringing in averaged data
   // for cohorts as state, I think.
   // *Graph as its own sub-component?
+  // let techAvg = []
+  // let teamAvg = []
+  // let sum = 0;
+  // for (let i = 0; i <= students.length; i++) {
+  //   let techId = students[i].tech_avg;
+  //   sum += techId
+  // }
 
   const options = {
+   
+    
     // "x" by default, setting to "y" makes the graph horizontal
     indexAxis: "y",
     elements: {
@@ -88,13 +126,19 @@ const CohortOverall = ({ children }) => {
     datasets: [
       {
         label: "Tech Avg",
-        data: [techAvg],
+        data: [cohorts[0].cohort_avg],
+        borderColor: "black",
+        backgroundColor: ["green"],
+      },
+      {
+        label: "Tech Avg",
+        data: [techAvg()],
         borderColor: "black",
         backgroundColor: ["rgba(53, 162, 235, 0.5"],
       },
       {
         label: "Team Avg",
-        data: [teamAvg],
+        data: [teamworkAvg()],
         borderColor: "black",
         backgroundColor: ["rgba(255, 99, 132, 0.5)"],
       },
