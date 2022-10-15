@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react"
 import { useRecoilState } from "recoil";
 import { usersState, loggedIn, currentCohortState } from "../state.js";
-import { useRouter} from "next/router"
+import { useRouter } from "next/router"
 
 
 const LoginScreen = () => {
@@ -27,6 +27,9 @@ const LoginScreen = () => {
       if(element.username === enteredUsername && element.password === enteredPassword){
         setVerifiedUser(true)
         setUser(element)
+        sessionStorage.setItem('user asana access token', `${element.asana_access_token}`)
+        sessionStorage.setItem('user name', `${element.name}`)
+        sessionStorage.setItem('logged_in_Status', 'true')
         setCurrentCohort(element.default_cohort)
         console.log(element)
         router.push("/home")
