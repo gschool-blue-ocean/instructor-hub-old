@@ -19,6 +19,7 @@ const StudentSummary = () => {
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
 
   // Allows the cohorts to be filter 
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
