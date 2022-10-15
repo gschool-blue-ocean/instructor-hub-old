@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
+import GraphModal from "./GraphModal";
 import { studentsState, notesState,studentIdState, cohortsState, currentCohortState, checkedPeopleState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
@@ -12,18 +13,17 @@ const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCommentModal, setShowCommenttModal] = useState(false);
-  const [studentId, setStudentId] = useRecoilState(studentIdState);
-  const [notes, setNotes] = useRecoilState(notesState);
+  const [showGraphModal, setShowGraphModal] = useState(false);
   const [noteStudent, setNoteStudent] = useState(" ")
   const [order, setOrder] = useState("ASC")
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
-  
+
   // Allows the cohorts to be filter 
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
 
-  // Determines Progress row words and background
+  // Determines Progress row words
   let progress = (num) => {
     if (num === 1) {
       return "At Risk"
@@ -35,7 +35,7 @@ const StudentSummary = () => {
       return "Average";
     }
     if (num === 4) {
-      return "Above Avg"
+      return "Above Avg";
     }
   }
 
@@ -66,15 +66,13 @@ const StudentSummary = () => {
       setSelectPeople(tempStudent)
     } else {
       let tempStudent = course.map((student) => 
-      student.student_id === id ? { ...student, isChecked: checked } : student 
-      );
-      console.log(students.student_id, "ID")
-      console.log(e.target, "here")
-      console.log(id)
+      student.student_id == id ? { ...student, isChecked: checked } : student 
+    );
       setStudents(tempStudent);
       setSelectPeople(tempStudent)
     }
   }
+
   //Works in conjunction with the handleChange function. Needed to track who is selected and who is not
   useEffect(() => {
       let selectedStudents = selectedPeople.filter(unChecked => unChecked.isChecked == true)
@@ -83,36 +81,25 @@ const StudentSummary = () => {
   }, [selectedPeople])
 
   //Used for sorting from ASC to DSC
-  const sorting= (col) => {
-    if(order === "ASC") {
-      const sorted = [...course].sort((a,b) =>
-        a[col] > b[col] ? 1 : -1
+  const sorting= (name) => {
+      if(order === "ASC") {
+        const sorted = [...course].sort((a,b) =>
+          a[name] > b[name]? 1 : -1
       );
+      console.log(name, "name")
+      console.log(sorted)
       setStudents(sorted);
       setOrder("DSC")
     }
     if(order === "DSC") {
       const sorted = [...course].sort((a,b) =>
-        a[col] < b[col] ? 1 : -1
+        a[name] < b[name] ? 1 : -1
       );
       setStudents(sorted);
       setOrder("ASC")
     }
   }
-
-  const openGitHubModal = () => {
-    setShowGitHubModal((prev) => !prev);
-  };
-
-  const openCommentModel = (student) => {
-    setShowCommenttModal((prev) => !prev);
-    setNoteStudent(student)
-  };
-
-  useEffect(() => {
-    setStudents(students);
-  }, []);
-
+  
   const handleDeleteClick = (studentId) => {
     const newStudent = [...students] //Create New Array based on current students
     console.log(studentId)
@@ -122,12 +109,30 @@ const StudentSummary = () => {
       setStudents(newStudent)
     });
   }
+  
+    const openGitHubModal = () => {
+      setShowGitHubModal((prev) => !prev);
+    };
+  
+    const openCommentModel = (student) => {
+      setShowCommenttModal((prev) => !prev);
+      setNoteStudent(student)
+    };
 
-
+    const openGraphModel = () => {
+      setShowGraphModal((prev) => !prev);
+    }
+  
+    useEffect(() => {
+      setStudents(students);
+    }, []);
+  
+  
   return (
     <div>
       <GitHubModal showGitHubModal={showGitHubModal} setShowGitHubModal={setShowGitHubModal} onClose={() => {setShowGitHubModal(false);}}/>
       <CommentModal showCommentModal={showCommentModal} setShowCommenttModal={setShowCommenttModal} onClose={() => {setShowCommenttModal(false)}} noteStudent = {noteStudent}/>
+      <GraphModal showGraphModal={showGraphModal} setShowGraphModal={setShowGraphModal} onClose={() => {setShowGraphModal(false)}}></GraphModal>
       <div className={studentStyle.container}>
         <div className={studentStyle.topBorder}>
           <div className={studentStyle.selectRow}>
@@ -148,13 +153,13 @@ const StudentSummary = () => {
               <thead className= {studentStyle.thead}>
                 <tr className= {studentStyle.headerRow}>
                   <th className= {studentStyle.smallHeader}></th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Name")}>Name</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("learn_Avg")}>Learn Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Client-Side")}>Client-Side</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Server-Side")}>Server-Side</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("name")}>Name</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("learn_avg")}>Learn Avg</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("client_side_test")}>Client-Side</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("server_side_test")}>Server-Side</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("teamwork_avg")}>Teamwork Avg</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("Tech_Skills")}>Progess</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("progress")}>Progess</th>
                   <th className= {studentStyle.header} scope="col">Notes</th>
                   <th className= {studentStyle.smallHeader} scope="col"></th>
                 </tr>
@@ -174,8 +179,8 @@ const StudentSummary = () => {
                   <td className= {studentStyle.content}>{student.server_side_test}</td>
                   <td className= {studentStyle.content}>{colPercent(student.teamwork_avg)}</td>
                   <td className= {studentStyle.content}>{colPercent(student.tech_avg)}</td>
-                  <td className= {studentStyle.content}>
-                    <div className={studentStyle.color3}>{progress(Math.ceil((student.teamwork_avg + student.tech_avg)/2))}</div>
+                  <td className= {studentStyle.content} onClick={openGraphModel}>
+                    <div className={studentStyle.color}>{progress(Math.ceil((student.teamwork_avg + student.tech_avg)/2))}</div>
                   </td>
                   <td className= {studentStyle.content} onClick={() => openCommentModel(student)}>
                     <svg className={studentStyle.noteIcon} viewBox="0 0 22 22">
