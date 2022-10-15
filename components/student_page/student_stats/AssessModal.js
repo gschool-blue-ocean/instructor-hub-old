@@ -1,7 +1,7 @@
 import style from '../../../styles/StudentPModal.module.css'
 import {learnState,usersState, currentlearnAndLearnGradesState,studentIdState, currentStudentState} from "../../state";
 import { useRecoilState } from "recoil";
-import React, { useState } from "react";
+import { useState, useLayoutEffect } from "react";
 import axios from 'axios';
 
 const AssessModal = ({showAssessModal, onClose }) => {
@@ -14,6 +14,10 @@ const AssessModal = ({showAssessModal, onClose }) => {
   const [assessId, setAssessId] = useState(''); 
   const [users, setUsers] = useRecoilState(usersState);
 
+  
+  let asanaToken = sessionStorage.getItem('user asana access token')
+ 
+
   const selectedOption = (e) => {
     setAssessId(e.target.value)
     // console.log(e.target.value, 'value')
@@ -25,6 +29,7 @@ const AssessModal = ({showAssessModal, onClose }) => {
   /*------------- On Submit------------*/
   const addAssesment = () => {
     // on submit it will do a post request to our local databse 
+    console.log(asanaToken)
     axios.post("/api/learnGrades", {
         student_id: studentId,
         assessment_id: assessmentId,
@@ -42,7 +47,7 @@ const AssessModal = ({showAssessModal, onClose }) => {
         let instructorNotes = ""
         axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
             headers: {
-              Authorization: `Bearer ${users[3].asana_access_token}`,
+              Authorization: `Bearer ${asanaToken}`,
             },
           })
           .then((res) => {
@@ -57,7 +62,7 @@ const AssessModal = ({showAssessModal, onClose }) => {
               method: "PUT", //must be put method not patch
               url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
               headers: {
-                Authorization: `Bearer ${users[3].asana_access_token} `, //need template literal for ALLLLL headers so global state dependant on user
+                Authorization: `Bearer ${asanaToken} `, //need template literal for ALLLLL headers so global state dependant on user
               },
               data: {
                 data: {
