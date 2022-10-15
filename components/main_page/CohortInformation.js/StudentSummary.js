@@ -167,12 +167,12 @@ const StudentSummary = () => {
               <tbody className= {studentStyle.tbody}>
               {/* Iterate through the students data, ties in with the variable course */}
               {course.map((student) => (
-                <tr className= {studentStyle.tbodyRow} id= {student.student_id} key={student.student_id}>
+                <tr className= {studentStyle.tbodyRow} id={student.student_id} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
                     <input type="checkbox" id = {student.student_id} checked={student?.isChecked || false} onChange={handleChange} ></input>
                   </td>
-                  <td  className= {studentStyle.nameContent}>
-                    <Link className= {studentStyle.nameSpace} key={student.name} as={`/student/${student.student_id}`} href={`/student/[${student.student_id}]`}>{student.name}</Link>
+                  <td  className= {studentStyle.nameContent}  onClick={() => setStudentId(student.student_id)}>
+                    <Link className= {studentStyle.nameSpace} key={student.student_id} href={`/student/${student.student_id}`}>{student.name}</Link>
                   </td>
                   <td className= {studentStyle.content}>{student.learn_avg}%</td>
                   <td className= {studentStyle.content}>{student.client_side_test}</td>
