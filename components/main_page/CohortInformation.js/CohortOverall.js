@@ -18,6 +18,7 @@ import UpdateModal from "./UpdateModal";
 import { studentsState, cohortsState, currentCohortState } from "../../state.js";
 import { useRecoilState } from "recoil";
 import GroupMaker from "./DropDown";
+import UpdateProjectsModal from "./UpdateProjectModal"
 
 ChartJS.register(
   CategoryScale,
@@ -159,6 +160,13 @@ const CohortOverall = ({ children }) => {
             <u onClick={openUpdateModal}>Weekly Update</u>
           </div>
           <UpdateModal
+            showUpdateModal={showUpdateModal}
+            setShowUpdateModal={setShowUpdateModal}
+            onClose={() => {
+              setShowUpdateModal(false);
+            }}
+          />
+          <UpdateProjectsModal
             showUpdateModal={showUpdateModal}
             setShowUpdateModal={setShowUpdateModal}
             onClose={() => {
