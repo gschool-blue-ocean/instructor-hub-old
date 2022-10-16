@@ -18,7 +18,7 @@ import UpdateModal from "./UpdateModal";
 import { studentsState, cohortsState, currentCohortState } from "../../state.js";
 import { useRecoilState } from "recoil";
 import GroupMaker from "./DropDown";
-import UpdateProjectsModal from "./UpdateProjectModal"
+import UpdateProjectsModal from "./UpdateProjectsModal"
 
 ChartJS.register(
   CategoryScale,
