@@ -40,8 +40,8 @@ const CohortOverall = ({ children }) => {
   const [cohortAvg, setCohortAvg] = useState(0)
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
  
-  const course = students.filter(classRoom => classRoom.cohort == currentCohort) 
-  const currentClass = cohorts.filter(classNow => classNow.name == currentCohort)
+  const studentsInCohort = students.filter(student => student.cohort === currentCohort) 
+  const currentClass = cohorts.filter(classNow => classNow.name === currentCohort)
  
 // function to get cohort average
     useEffect(() => {  
@@ -55,20 +55,20 @@ const CohortOverall = ({ children }) => {
 // function to get tech average
   const techAvg = () => {
     let sum = 0;
-    course.map((student) => (
+    studentsInCohort.map((student) => (
       sum += student.tech_avg
     ))
-    let avg = sum /students.length
-    return (avg * 100) / students.length;
+    let avg = sum /studentsInCohort.length
+    return (avg / 4) * 100;
   }
   //function to get team average
   const teamworkAvg = () => {
     let sum = 0;
-    course.map((student) => (
+    studentsInCohort.map((student) => (
       sum += student.teamwork_avg
     ))
-    let avg = sum /students.length
-    return (avg * 100) / students.length;
+    let avg = sum / studentsInCohort.length
+    return (avg / 4) * 100;
   }
 
   const openUpdateModal = () => {
