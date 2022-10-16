@@ -69,8 +69,8 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                 </div>
               </div>
               <ul className={gitStyle.tableList}>
-                {course.map((student) => (
-                  <li key= {student.student_id} className={gitStyle.tableListItem}>
+                {students.map((student) => (
+                  <li className={gitStyle.tableListItem} key="student_key">
                     <div className={gitStyle.tableListCell}>
                       <span className={gitStyle.frameLeft}>
                         <a className={gitStyle.frameInline} href={`https://github.com/${student.github}`}>

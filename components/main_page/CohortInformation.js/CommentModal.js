@@ -29,7 +29,7 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
               <div>
               <div className={commentStyle.content_container}>
                 {userNotes.map((note) => (
-                <div className={commentStyle.content}>
+                <div className={commentStyle.content} key="note_key">
                   <div className={commentStyle.commentBorder}>
                     <div className={commentStyle.headerContainer}>
                       <div className={commentStyle.headerLayout}>
