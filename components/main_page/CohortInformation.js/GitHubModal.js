@@ -4,7 +4,6 @@ import { studentsState, currentCohortState, cohortsState, studentIdState } from 
 import gitStyle from "../../../styles/GitHub.module.css";
 import Image from "next/image";
 import axios from "axios";
-import { BaseNextResponse } from "next/dist/server/base-http/index.js";
 
 const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [students, setStudents] = useRecoilState(studentsState);
