@@ -13,7 +13,7 @@ const StatusLeft = () => {
   const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState)
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
   const [currNote, setCurrNote] = useState(''); 
-
+console.log(currStudentProjects)
   const openNoteModel = (currNote) => {
     setShowNoteModal(true);
     setCurrNote(currNote);

@@ -37,10 +37,14 @@ const CohortOverall = ({ children }) => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
   const [cohortAvg, setCohortAvg] = useRecoilState(cohortsState);
+  const [students, setStudents] = useRecoilState(studentsState)
 
+  // console.log(cohortAvg)
+  console.log(students)
   const openUpdateModal = () => {
     setShowUpdateModal((prev) => !prev);
   };
+
 
   // *The GRAPH - using ChartJS, we want it to be
   // dynamic, responsive to changes in the
@@ -84,13 +88,13 @@ const CohortOverall = ({ children }) => {
     datasets: [
       {
         label: "Tech Avg",
-        data: [techAvg.learn_avg],
+        data: [techAvg],
         borderColor: "black",
         backgroundColor: ["rgba(53, 162, 235, 0.5"],
       },
       {
         label: "Team Avg",
-        data: [teamAvg.soft_skills],
+        data: [teamAvg],
         borderColor: "black",
         backgroundColor: ["rgba(255, 99, 132, 0.5)"],
       },
