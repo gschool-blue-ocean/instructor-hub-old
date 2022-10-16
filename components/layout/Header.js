@@ -17,6 +17,7 @@ const Header = () => {
   const logoutFunc = (e)=>{
     sessionStorage.clear();
     showDropDown(false)
+    axios.get("/api/users").then((res)=>setUsers(res.data.users))
     router.push("/")
   }
   const signInStatus = ()=>{
