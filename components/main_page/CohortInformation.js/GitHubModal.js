@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { nanoid } from "nanoid";
 import { studentsState, currentCohortState, cohortsState, studentIdState } from "../../state.js";
 import gitStyle from "../../../styles/GitHub.module.css";
 import Image from "next/image";
@@ -14,8 +13,6 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [currentValue, setCurrentValue] = useState({ github: "" });
   const [updatedGithub, setUpdatedGithub] = useState("");
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
-
-  console.log(students)
 
   //Filter required to make current cohort students appear
   let course = students.filter(classRoom => classRoom.cohort == currentCohort)
@@ -72,8 +69,8 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                 </div>
               </div>
               <ul className={gitStyle.tableList}>
-                {course.map((student) => (
-                  <li key= {student.student_id} className={gitStyle.tableListItem}>
+                {students.map((student) => (
+                  <li className={gitStyle.tableListItem} key="student_key">
                     <div className={gitStyle.tableListCell}>
                       <span className={gitStyle.frameLeft}>
                         <a className={gitStyle.frameInline} href={`https://github.com/${student.github}`}>
@@ -98,7 +95,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                           </> 
                         :
                           <span className={gitStyle.codeName} id={student.student_id}
-                          onDoubleClick={(e) => editGithub(e)}>
+                          onClick={(e) => editGithub(e)} title="Click to update Github">
                            {(student.github ? student.github : "Add Github")}
                           </span>
                       }                 

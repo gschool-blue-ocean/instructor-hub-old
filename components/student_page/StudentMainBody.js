@@ -2,11 +2,10 @@ import styles from "../../styles/StudentMainBody.module.css";
 import StudentStatus from "../student_page/student_stats/StudentStatus.js";
 import NavBar from "../main_page/NavBar.js";
 import { loggedIn } from '../state'
-// import { useRouter } from 'next/router.js'
-import { currentStudentState,notesState,studentIdState} from "../state";
+import { currentStudentState,notesState,studentIdState,usersState} from "../state";
 import { useRecoilState } from "recoil";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 
 const StudentMainBody = () => {
   // current student is the current information for one person 
@@ -19,14 +18,10 @@ const StudentMainBody = () => {
   const [updatedNotes, setUpdatedNOtes] = useState(''); 
   const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
   const [addNote, setAddNote] = useState(false); 
-  // const router = useRouter();
+  const [newNote, setNewNote] = useState(''); 
+  const [users, setUsers] = useRecoilState(usersState);
 
-  
-  // useEffect(()=>{
-  //   if(!loggedInStatus){
-  //     router.push("/")
-  //    }
-  //   },[])
+  let asanaToken = sessionStorage.getItem('user asana access token')
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
   // converting ETs date into MM DAY YYYY
@@ -55,8 +50,32 @@ const StudentMainBody = () => {
     setNotes(updateNotes);  
   
     })}
-
-
+  
+  const addNewNote = () => {
+    axios.post('/api/notes', {
+      "student_id": Number(studentId),
+      "notes": newNote, 
+      "name": null, 
+      "note_date": new Date()
+    }).then((res) => console.log(res.data) ).then (() => {
+      axios.get("/api/notes").then((res) => {
+          setNotes(res.data);
+          // console.log(notes, 'notes');
+        })
+    })
+    // For a new subtask note IN Asana you need to do a POST request instead 
+    axios({
+      method:"POST",  //must be put method not patch
+      url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}/subtasks`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
+      headers: {
+        Authorization: `Bearer ${asanaToken}`,  //need template literal for ALLLLL headers so global state dependant on user
+      }, 
+        data: { 
+          data: {
+            "name": `${newNote}`
+        }}
+    })
+  }
 
   return (
     <>
@@ -91,9 +110,11 @@ const StudentMainBody = () => {
               {
                 addNote ? (
                   <>
-                  <textarea/>
-                  <button>&#10004;</button>
+                  <div className={styles.newNoteCon}>
+                  <textarea className={styles.newNote} onChange={(e) => setNewNote(e.target.value)}/>
+                  <button onClick={addNewNote}>&#10004;</button>
                   <button onClick={() => setAddNote(false)}>X</button>
+                  </div>
                   </>
                 ): null
               }

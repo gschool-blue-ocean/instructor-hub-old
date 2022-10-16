@@ -17,13 +17,10 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
 
     const selectedCohort = (e) => {
         setCohort_Asana_Gid(e.target.value);
-        // for(let i = 0; i<listOfCohorts.length; i++){
         for(let i = 0; i<cohorts.length; i++){
             if(e.target.value === cohorts[i].gid){
-            // if(e.target.value === listOfCohorts[i].gid){
                 setDefault_Cohort(cohorts[i].name)
                 setDefaultCohortGid(cohorts[i])
-                // setDefault_Cohort(listOfCohorts[i].name)
             }
         }
         console.log(cohorts, 'made it here')
@@ -58,7 +55,9 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
             "asana_access_token": asana_access_token,
             "gid": cohort_asana_gid
         }).then((res) => setUser(res.data))
-        setLoggedInStatus(true)
+        sessionStorage.setItem('logged_in_Status', 'true');
+        sessionStorage.setItem('user asana access token', `${asana_access_token}`)
+        sessionStorage.setItem('user name', `${username}`)
         getStudents();
         router.push("/home")
     }

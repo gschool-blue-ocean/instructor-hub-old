@@ -5,19 +5,20 @@ import { loggedIn } from '../state'
 import { useRecoilState } from 'recoil'
 import { useRouter } from "next/router"
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 
 const FullPage = () => {
   const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
   const router = useRouter();
-
-  useEffect(()=>{
-    if(!loggedInStatus){
-      router.push("/")
-     }
+  
+  useLayoutEffect(()=>{
+    const status = sessionStorage.getItem('logged_in_Status')
+      if(!status){
+        sessionStorage.clear();
+        router.push("/")
+      }
     },[])
   
-
   return (
     <div>
       <div className={style.a}>
