@@ -19,8 +19,7 @@ const Header = () => {
     showDropDown(false)
     router.push("/")
   }
-  const signInStatus = (e)=>{
-    
+  const signInStatus = ()=>{
     let loggedInUser = sessionStorage.getItem("user name");
     if(loggedInUser){
       return true
