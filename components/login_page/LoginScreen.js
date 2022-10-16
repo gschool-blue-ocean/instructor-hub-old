@@ -31,7 +31,7 @@ const LoginScreen = () => {
         sessionStorage.setItem('user name', `${element.name}`)
         sessionStorage.setItem('logged_in_Status', 'true')
         setCurrentCohort(element.default_cohort)
-        console.log(element)
+        console.log(element.username)
         router.push("/home")
       }
     }
