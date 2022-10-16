@@ -42,8 +42,7 @@ const CohortOverall = ({ children }) => {
  
   const course = students.filter(classRoom => classRoom.cohort == currentCohort) 
   const currentClass = cohorts.filter(classNow => classNow.name == currentCohort)
-  console.log(students.length)
-  console.log(course[0].tech_avg)
+ 
 // function to get cohort average
     useEffect(() => {  
       currentClass.map((cohort) => {
@@ -60,7 +59,6 @@ const CohortOverall = ({ children }) => {
       sum += student.tech_avg
     ))
     let avg = sum / course.length
-    console.log(avg)
     return ( avg / 4 ) * 100 
   }
   //function to get team average
@@ -168,6 +166,9 @@ const CohortOverall = ({ children }) => {
               setShowUpdateModal(false);
             }}
           />
+          <div className={overallStyles.link}>
+            <u onClick={openUpdateModal}>Projects Grade Update</u>
+          </div>
           <UpdateProjectsModal
             showUpdateModal={showUpdateModal}
             setShowUpdateModal={setShowUpdateModal}

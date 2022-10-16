@@ -116,10 +116,10 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
                   onSubmit={submitHandler}
                   onKeyDown={enterListener}
                 >
-                  <label htmlFor="Tech">Technical Aptitude</label> <br />
+                  <label htmlFor="Projects">Projects</label> <br />
                   <select
-                    id="Tech"
-                    name="Tech"
+                    id="Projects"
+                    name="Projects"
                     required
                     autoFocus={true}
                     ref={firstInput}
@@ -128,36 +128,34 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
                       Select an Option
                     </option>
                     <option value="1 - Needs improvement">
-                      1 - Needs improvement
+                      1 - Twiddler
                     </option>
                     <option value="2 - Approaching standard">
-                      2 - Approaching standard
+                      2 - PixelArtMaker
                     </option>
                     <option value="3 - Meets standard">
-                      3 - Meets standard
+                      3 - ReactMVP
                     </option>
                     <option value="4 - Exceeds standard">
-                      4 - Exceeds standard
+                      4 - FoodTruck
+                    </option>
+                    <option value="4 - Exceeds standard">
+                      5 - Hackathon
                     </option>
                   </select>{" "}
                   <br />
-                  <label htmlFor="Team">Teamwork Aptitude</label> <br />
-                  <select id="Team" name="Team" required>
+                  <label htmlFor="Grade">Grade</label> <br />
+                  <select id="Grade" name="Grade" required>
                     <option value="none" selected disabled hidden>
                       Select an Option
                     </option>
                     <option value="1 - Needs improvement">
-                      1 - Needs improvement
+                      1 - Passed
                     </option>
                     <option value="2 - Approaching standard">
-                      2 - Approaching standard
+                      2 - Failed
                     </option>
-                    <option value="3 - Meets standard">
-                      3 - Meets standard
-                    </option>
-                    <option value="4 - Exceeds standard">
-                      4 - Exceeds standard
-                    </option>
+                
                   </select>{" "}
                   <br />
                   <label htmlFor="Notes">Notes</label> <br />
