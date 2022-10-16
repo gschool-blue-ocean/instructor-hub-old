@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
-import { studentsState, cohortsState } from "../../state.js";
+import { studentsState, cohortsState, usersState, currentCohortState } from "../../state.js";
 import { useRecoilState } from "recoil";
 import GroupMaker from "./DropDown";
 
@@ -37,24 +37,31 @@ const CohortOverall = ({ children }) => {
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [students, setStudents] = useRecoilState(studentsState)
   const [cohortAvg, setCohortAvg] = useState(0)
+  const [user, setUser] = useRecoilState(usersState);
+  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
 
-  console.log(cohorts)
-// function to get cohort average
+  console.log('cohorts:', cohorts)
+  console.log('students:', students)
+  console.log('currentCohort:', currentCohort)
  
+  let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
+  let currentClass = cohorts.filter(classNow => classNow.name == currentCohort)
+  console.log('current cohort in cohortoverall:', currentClass)
+// function to get cohort average
     useEffect(() => {
       //  const cohortAverage = () => {
    
-      cohorts.map((cohort) => {
+      currentClass.map((cohort) => {
       if (cohort.cohort_id) {
        setCohortAvg(cohort.cohort_avg)
       }
       })
       // }
-    }, [cohorts])
+    }, [currentCohort])
 // function to get tech average
   const techAvg = () => {
     let sum = 0;
-    students.map((student) => (
+    course.map((student) => (
       sum += student.tech_avg
     ))
     let avg = sum /students.length
@@ -63,7 +70,7 @@ const CohortOverall = ({ children }) => {
   //function to get team average
   const teamworkAvg = () => {
     let sum = 0;
-    students.map((student) => (
+    course.map((student) => (
       sum += student.teamwork_avg
     ))
     let avg = sum /students.length
@@ -125,8 +132,8 @@ const CohortOverall = ({ children }) => {
     labels: ["Cohort Averages"],
     datasets: [
       {
-        label: "Tech Avg",
-        data: [cohorts[0].cohort_avg],
+        label: "Cohort Average",
+        data: [cohortAvg],
         borderColor: "black",
         backgroundColor: ["green"],
       },

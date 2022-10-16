@@ -22,8 +22,6 @@ const GroupMaker = () => {
     const [customOpen, setCustomOpen] = useState(false);
     const [toggle, setToggle] = useState(false);
 
-    console.log(student);
-
 
     function buttonClicked() {
       setCustomOpen(prev => !prev);
