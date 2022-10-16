@@ -39,18 +39,12 @@ const CohortOverall = ({ children }) => {
   const [cohortAvg, setCohortAvg] = useState(0)
   const [user, setUser] = useRecoilState(usersState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
-
-  console.log('cohorts:', cohorts)
-  console.log('students:', students)
-  console.log('currentCohort:', currentCohort)
  
-  let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
-  let currentClass = cohorts.filter(classNow => classNow.name == currentCohort)
-  console.log('current cohort in cohortoverall:', currentClass)
+  const course = students.filter(classRoom => classRoom.cohort == currentCohort) 
+  const currentClass = cohorts.filter(classNow => classNow.name == currentCohort)
+ 
 // function to get cohort average
-    useEffect(() => {
-      //  const cohortAverage = () => {
-   
+    useEffect(() => {  
       currentClass.map((cohort) => {
       if (cohort.cohort_id) {
        setCohortAvg(cohort.cohort_avg)
