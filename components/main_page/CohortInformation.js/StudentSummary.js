@@ -14,8 +14,9 @@ const StudentSummary = () => {
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCommentModal, setShowCommenttModal] = useState(false);
   const [showGraphModal, setShowGraphModal] = useState(false);
-  const [noteStudent, setNoteStudent] = useState(" ")
-  const [order, setOrder] = useState("ASC")
+  const [noteStudent, setNoteStudent] = useState(" ");
+  const [studentGraph, setStudentGraph] = useState(" ");
+  const [order, setOrder] = useState("ASC");
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
@@ -102,7 +103,6 @@ const StudentSummary = () => {
   
   const handleDeleteClick = (studentId) => {
     const newStudent = [...students] //Create New Array based on current students
-    console.log(studentId)
     const index = students.findIndex((student) => student.student_id === studentId)
     newStudent.splice(index, 1);
     axios.delete(`/api/students/${studentId}`).then(() => {
@@ -119,8 +119,9 @@ const StudentSummary = () => {
       setNoteStudent(student)
     };
 
-    const openGraphModel = () => {
+    const openGraphModel = (student) => {
       setShowGraphModal((prev) => !prev);
+      setStudentGraph(student)
     }
   
     useEffect(() => {
@@ -132,7 +133,7 @@ const StudentSummary = () => {
     <div>
       <GitHubModal showGitHubModal={showGitHubModal} setShowGitHubModal={setShowGitHubModal} onClose={() => {setShowGitHubModal(false);}}/>
       <CommentModal showCommentModal={showCommentModal} setShowCommenttModal={setShowCommenttModal} onClose={() => {setShowCommenttModal(false)}} noteStudent = {noteStudent}/>
-      <GraphModal showGraphModal={showGraphModal} setShowGraphModal={setShowGraphModal} onClose={() => {setShowGraphModal(false)}}></GraphModal>
+      <GraphModal showGraphModal={showGraphModal} setShowGraphModal={setShowGraphModal} onClose={() => {setShowGraphModal(false)}} studentGraph = {studentGraph}/>
       <div className={studentStyle.container}>
         <div className={studentStyle.topBorder}>
           <div className={studentStyle.selectRow}>
@@ -179,7 +180,7 @@ const StudentSummary = () => {
                   <td className= {studentStyle.content}>{student.server_side_test}</td>
                   <td className= {studentStyle.content}>{colPercent(student.teamwork_avg)}</td>
                   <td className= {studentStyle.content}>{colPercent(student.tech_avg)}</td>
-                  <td className= {studentStyle.content} onClick={openGraphModel}>
+                  <td className= {studentStyle.content} onClick={() => openGraphModel(student)}>
                     <div className={studentStyle.color}>{progress(Math.ceil((student.teamwork_avg + student.tech_avg)/2))}</div>
                   </td>
                   <td className= {studentStyle.content} onClick={() => openCommentModel(student)}>

@@ -8,6 +8,7 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
   const [students, setStudents] = useRecoilState(studentsState);
   const [notes, setNotes] = useRecoilState(notesState);
 
+  console.log(noteStudent)
   let userNotes = notes.filter(note => note.student_id == noteStudent.student_id); 
 
   return (
@@ -21,9 +22,7 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
               <div className={commentStyle.commentHeader}>
                 <div>
                   <div onClick={onClose} className={commentStyle.close}></div>
-                  <div className={commentStyle.studentName}>
-                    {noteStudent.name}
-                  </div>
+                  <div className={commentStyle.studentName}>{noteStudent.name}</div>
                 </div>
               </div>
               <div>
