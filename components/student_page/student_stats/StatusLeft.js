@@ -3,7 +3,7 @@ import ProjNoteModal from "./ProjNoteModal.js";
 import ProjectModal from "./ProjectModal.js";
 import AssessModal from "./AssessModal.js";
 import React, { useState } from "react";
-import {currentlearnAndLearnGradesState, currStudentProjectsState,accessToken} from "../../state";
+import {currentlearnAndLearnGradesState, currStudentProjectsState,accessToken, currentStudentState} from "../../state";
 import { useRecoilState } from "recoil";
 
 const StatusLeft = () => {
@@ -13,7 +13,11 @@ const StatusLeft = () => {
   const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState)
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
   const [currNote, setCurrNote] = useState(''); 
-console.log(currStudentProjects)
+  const [editProjGrade, setEditPojGrade] = useState(false)
+  const [projGradeId, setProjGradeId] = useState(''); 
+
+  //console.log(currStudentProjects.length , 'here'); 
+
   const openNoteModel = (currNote) => {
     setShowNoteModal(true);
     setCurrNote(currNote);
@@ -24,6 +28,13 @@ console.log(currStudentProjects)
   const assesModal = () => {
     setShowAssessModal(true)
   }
+
+  const editGrade = (projId) => {
+    setEditPojGrade(true)
+    setProjGradeId()
+  }
+
+
 
   return (
     <>
@@ -56,6 +67,8 @@ console.log(currStudentProjects)
               <span className={style.title}>Projects</span>
               <span className={style.add} onClick={projectModal }>&#10133;</span>
             </div>
+            {
+              currStudentProjects.length ? 
             <table className={style.table}>
               <thead className={style.tableHead}>
                 <tr className={style.headerRow}>
@@ -72,7 +85,7 @@ console.log(currStudentProjects)
                 {currStudentProjects.map((project) => (
                 <tr key={project.project_id} className={style.tBodyRow}>
                   <td className={style.projNamCell}>{project.project_name}</td>
-                  <td className={style.scoreCell}>{project.project_passed ? 'Passed' : 'Failed'}</td>
+                  <td onDoubleClick={() => editGrade(project.project_id)} className={style.scoreCell}>{project.project_passed ? 'Passed' : 'Failed'}</td>
                   <td onClick={() => openNoteModel(project)}  className={style.scoreCell}>
                     {" "}
                     <svg className={style.noteIcon} viewBox="0 0 22 22">
@@ -97,6 +110,15 @@ console.log(currStudentProjects)
                 ))}
               </tbody>
             </table>
+            :
+            <>
+            <div className={style.noValueContainer}>
+              <div>
+                <div>NO CURRENT PROJECT</div> 
+              </div>
+            </div>
+            </>
+            }
           </div>
           <div className={style.tableContainer}>
             <div className={style.titleBox}>
@@ -104,6 +126,8 @@ console.log(currStudentProjects)
               <span className={style.add} onClick={assesModal} >&#10133;</span>
             </div>
             <div>
+              {
+                currentLearnAndLearnGrades.length ?
               <table className={style.table}>
                 <thead className={style.tableHead}>
                   <tr className={style.headerRow}>
@@ -124,6 +148,16 @@ console.log(currStudentProjects)
                   ))}
                 </tbody>
               </table>
+              : 
+            <>
+            <div className={style.noValueContainer}>
+              <div>
+                <div> NO CURRENT ASSESSMENTS </div>
+              </div>
+            </div>
+            </>
+
+              }
             </div>
           </div>
         </div>
