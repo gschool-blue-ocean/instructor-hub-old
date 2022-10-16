@@ -23,4 +23,4 @@ const Student = () => {
   )
 }
 
-export default Student
+export default student
