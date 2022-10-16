@@ -96,6 +96,7 @@ background: pink;
     padding-bottom: 8px;
 }
 
+
 /* width */
 .tbody::-webkit-scrollbar {
     width: 5px;
@@ -115,3 +116,9 @@ background: pink;
   .tbody::-webkit-scrollbar-thumb:hover {
     background: #555; 
   }
+
+.noValueContainer {
+    background: #00000026;
+    height: 100px;
+    border-radius: 5px;
+}

@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { usersState, studentsState, currentCohortState } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
 
-const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
+const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // What student is being updated at this moment
   const [currStudent, setCurrStudent] = useState(0);
   // This is derived state -- updated at same time as currStudent, one derives the other
@@ -182,4 +182,4 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   );
 };
 
-export default UpdateModal;
+export default UpdateProjectsModal;
