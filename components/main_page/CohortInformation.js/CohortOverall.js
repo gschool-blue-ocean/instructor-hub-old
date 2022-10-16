@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
-import { studentsState, cohortsState, usersState, currentCohortState } from "../../state.js";
+import { studentsState, cohortsState, currentCohortState } from "../../state.js";
 import { useRecoilState } from "recoil";
 import GroupMaker from "./DropDown";
 
@@ -37,7 +37,6 @@ const CohortOverall = ({ children }) => {
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [students, setStudents] = useRecoilState(studentsState)
   const [cohortAvg, setCohortAvg] = useState(0)
-  const [user, setUser] = useRecoilState(usersState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
  
   const course = students.filter(classRoom => classRoom.cohort == currentCohort) 
