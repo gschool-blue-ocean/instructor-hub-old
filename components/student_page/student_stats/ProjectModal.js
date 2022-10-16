@@ -15,7 +15,8 @@ const ProjectModal = ({showProjModal, onClose}) => {
   const [projGrade, setProjGrade] = useState([]); 
   const [projNotes, setProjNotes] = useState(''); 
 
-  
+  let asanaToken = sessionStorage.getItem('user asana access token')
+
 /*-----Converting string into Boolean and Number-----*/
   let grade = projGrade === 'true'
   let projectId = Number(projSelected)
@@ -39,7 +40,7 @@ const ProjectModal = ({showProjModal, onClose}) => {
     let instructorNotes = ''
      axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
       headers: {
-        Authorization: `Bearer ${users[3].asana_access_token}`,
+        Authorization: `Bearer ${asanaToken}`,
       }
     })
     .then((res) => {
@@ -52,7 +53,7 @@ const ProjectModal = ({showProjModal, onClose}) => {
         method:"PUT",  //must be put method not patch
         url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
         headers: {
-          Authorization: `Bearer ${users[3].asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
+          Authorization: `Bearer ${asanaToken}`,  //need template literal for ALLLLL headers so global state dependant on user
         }, data: { 
             data: {
               "workspace": "1213745087037",

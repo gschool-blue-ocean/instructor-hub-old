@@ -109,9 +109,11 @@ const StudentMainBody = () => {
               {
                 addNote ? (
                   <>
-                  <textarea onChange={(e) => setNewNote(e.target.value)}/>
+                  <div className={styles.newNoteCon}>
+                  <textarea className={styles.newNote} onChange={(e) => setNewNote(e.target.value)}/>
                   <button onClick={addNewNote}>&#10004;</button>
                   <button onClick={() => setAddNote(false)}>X</button>
+                  </div>
                   </>
                 ): null
               }
