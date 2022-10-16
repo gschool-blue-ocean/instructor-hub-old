@@ -1,7 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
-import { usersState, studentsState, currentCohortState } from "../../state";
+import {
+  usersState,
+  studentsState,
+  currentCohortState,
+  cohortsState,
+} from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
+import axios from "axios";
 
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // What student is being updated at this moment
@@ -11,8 +17,12 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [modal, setModal] = useState(false);
   // This is a rough draft idea, probably obscelesced by simply POSTing each student to Asana
   const [stagedCohort, setStagedCohort] = useState([]);
+  const [studentGID, setStudentGID] = useState([]);
+  const [techSkillGID, setTechSkillGID] = useState({});
+  const [teamWorkGID, setTeamWorkGID] = useState({});
   // Merely to identify who is making the update, and possibly selecting the students of the user's default cohort
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
+  const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [user, setUser] = useRecoilState(usersState);
   // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
   // (by going through the students)
@@ -20,14 +30,56 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
 
-  // How to use this in relation to a stupid modal?
+  const fetchData = async () => {
+    axios
+      .get(`https://app.asana.com/api/1.0/projects/${studentGID}`, {
+        headers: {
+          Authorization: `Bearer ${user.asana_access_token}`,
+        },
+      })
+      .then((res) => {
+        setTechSkillGID({
+          GID: res.data.data.custom_field_settings[0].custom_field.gid,
+          Great:
+            res.data.data.custom_field_settings[0].custom_field.enum_options[0]
+              .gid,
+          Good: res.data.data.custom_field_settings[0].custom_field
+            .enum_options[1].gid,
+          Okay: res.data.data.custom_field_settings[0].custom_field
+            .enum_options[2].gid,
+          Bad: res.data.data.custom_field_settings[0].custom_field
+            .enum_options[3].gid,
+        });
+        setTeamWorkGID({
+          GID: res.data.data.custom_field_settings[1].custom_field.gid,
+          Great:
+            res.data.data.custom_field_settings[1].custom_field.enum_options[0]
+              .gid,
+          Good: res.data.data.custom_field_settings[1].custom_field
+            .enum_options[1].gid,
+          Okay: res.data.data.custom_field_settings[1].custom_field
+            .enum_options[2].gid,
+          Bad: res.data.data.custom_field_settings[1].custom_field
+            .enum_options[3].gid,
+        });
+      });
+  };
+
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
+    setStudentGID(async (prev) => {
+      cohorts.forEach((element) => {
+        if (element.name.toLowerCase() === currentCohort.toLowerCase()) {
+          return element.gid;
+        }
+      });
+    });
     if (course[currStudent]) {
       setIndexedStudent((prev) => course[currStudent]);
     }
     // console.log("what the stagedCohort look like?", stagedCohort);
     // console.log(course[currStudent]);
+    console.log("where cohort GID?", currentCohort);
   }, [currStudent, currentCohort]);
 
   // Filters students to be updated by matching their cohort value to currentCohort's name
@@ -65,6 +117,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
         prev.push(stagedStudent);
         return prev;
       });
+
       // Until HERE ^
       e.target.form.reset();
       firstInput.current.focus();
