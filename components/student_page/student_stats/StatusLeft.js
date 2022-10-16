@@ -16,7 +16,7 @@ const StatusLeft = () => {
   const [editProjGrade, setEditPojGrade] = useState(false)
   const [projGradeId, setProjGradeId] = useState(''); 
 
-  console.log(currStudentProjects.length , 'here'); 
+  //console.log(currStudentProjects.length , 'here'); 
 
   const openNoteModel = (currNote) => {
     setShowNoteModal(true);

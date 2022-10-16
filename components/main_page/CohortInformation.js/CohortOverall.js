@@ -15,9 +15,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
-import { studentsState, cohortsState } from "../../state.js";
+import { studentsState, cohortsState, currentCohortState } from "../../state.js";
 import { useRecoilState } from "recoil";
 import GroupMaker from "./DropDown";
+import UpdateProjectsModal from "./UpdateProjectsModal"
 
 ChartJS.register(
   CategoryScale,
@@ -32,15 +33,48 @@ ChartJS.register(
 );
 
 const CohortOverall = ({ children }) => {
-  const [techAvg, setTechAvg] = useState(60);
-  const [teamAvg, setTeamAvg] = useState(40);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
-  const [cohortAvg, setCohortAvg] = useRecoilState(cohortsState);
+  const [cohorts, setCohorts] = useRecoilState(cohortsState);
+  const [students, setStudents] = useRecoilState(studentsState)
+  const [cohortAvg, setCohortAvg] = useState(0)
+  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
+ 
+  const course = students.filter(classRoom => classRoom.cohort == currentCohort) 
+  const currentClass = cohorts.filter(classNow => classNow.name == currentCohort)
+ 
+// function to get cohort average
+    useEffect(() => {  
+      currentClass.map((cohort) => {
+      if (cohort.cohort_id) {
+       setCohortAvg(cohort.cohort_avg)
+      }
+      })
+      // }
+    }, [currentCohort])
+// function to get tech average
+  const techAvg = () => {
+    let sum = 0;
+    course.map((student) => (
+      sum += student.tech_avg
+    ))
+    let avg = sum /students.length
+    return (avg * 100) / students.length;
+  }
+  //function to get team average
+  const teamworkAvg = () => {
+    let sum = 0;
+    course.map((student) => (
+      sum += student.teamwork_avg
+    ))
+    let avg = sum /students.length
+    return (avg * 100) / students.length;
+  }
 
   const openUpdateModal = () => {
     setShowUpdateModal((prev) => !prev);
   };
+
 
   // *The GRAPH - using ChartJS, we want it to be
   // dynamic, responsive to changes in the
@@ -48,8 +82,17 @@ const CohortOverall = ({ children }) => {
   // *Need to make sure I'm bringing in averaged data
   // for cohorts as state, I think.
   // *Graph as its own sub-component?
+  // let techAvg = []
+  // let teamAvg = []
+  // let sum = 0;
+  // for (let i = 0; i <= students.length; i++) {
+  //   let techId = students[i].tech_avg;
+  //   sum += techId
+  // }
 
   const options = {
+   
+    
     // "x" by default, setting to "y" makes the graph horizontal
     indexAxis: "y",
     elements: {
@@ -83,14 +126,20 @@ const CohortOverall = ({ children }) => {
     labels: ["Cohort Averages"],
     datasets: [
       {
+        label: "Cohort Average",
+        data: [cohortAvg],
+        borderColor: "black",
+        backgroundColor: ["green"],
+      },
+      {
         label: "Tech Avg",
-        data: [techAvg.learn_avg],
+        data: [techAvg()],
         borderColor: "black",
         backgroundColor: ["rgba(53, 162, 235, 0.5"],
       },
       {
         label: "Team Avg",
-        data: [teamAvg.soft_skills],
+        data: [teamworkAvg()],
         borderColor: "black",
         backgroundColor: ["rgba(255, 99, 132, 0.5)"],
       },
@@ -111,6 +160,13 @@ const CohortOverall = ({ children }) => {
             <u onClick={openUpdateModal}>Weekly Update</u>
           </div>
           <UpdateModal
+            showUpdateModal={showUpdateModal}
+            setShowUpdateModal={setShowUpdateModal}
+            onClose={() => {
+              setShowUpdateModal(false);
+            }}
+          />
+          <UpdateProjectsModal
             showUpdateModal={showUpdateModal}
             setShowUpdateModal={setShowUpdateModal}
             onClose={() => {
