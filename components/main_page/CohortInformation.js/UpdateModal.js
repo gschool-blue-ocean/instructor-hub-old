@@ -5,7 +5,7 @@ import {
   studentsState,
   currentCohortState,
   cohortsState,
-  currentStudentState,
+  studentIdState,
 } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
 import axios from "axios";
@@ -13,28 +13,31 @@ import axios from "axios";
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // What student is being updated at this moment
   const [currStudent, setCurrStudent] = useState(0);
+  // Array of students checked against currentCohortName to determine cohort for iterating through
   const [filteredCohort, setFilteredCohort] = useState([]);
+  // Same as filteredCohort, but checks cohorts against the currentCohortName to grab the cohort GID
   const [cohortObject, setCohortObject] = useState([]);
   // This is derived state -- updated at same time as currStudent, one derives the other
   const [indexedStudent, setIndexedStudent] = useState({});
   const [modal, setModal] = useState(false);
   // This is a rough draft idea, probably obscelesced by simply POSTing each student to Asana
   const [stagedCohort, setStagedCohort] = useState([]);
-  const [studentGID, setStudentGID] = useState([]);
+  // techSkill and teamWorkGID hold the K-V pairs describing the custom fields in Asana that instructors use for their weekly updates
   const [techSkillGID, setTechSkillGID] = useState({});
   const [teamWorkGID, setTeamWorkGID] = useState({});
   // Merely to identify who is making the update, and possibly selecting the students of the user's default cohort
   const [currentCohortName, setCurrentCohortName] =
     useRecoilState(currentCohortState);
-  const [cohorts, setCohorts] = useRecoilState(cohortsState);
-  const [user, setUser] = useRecoilState(usersState);
-  const [currentStudent, setCurrentStudent] =
-    useRecoilState(currentStudentState);
-  // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
-  // (by going through the students)
+  // Unless these two [cohorts, students] are replaced by some "selected students" state, and/or "current cohort" state, this determines how the updater iterates
+  // (by going through the students)...
   const [students, setStudents] = useRecoilState(studentsState);
+  // ... as well as through the available cohorts
+  const [cohorts, setCohorts] = useRecoilState(cohortsState);
+  // useful for stating who is making the updates, and for grabbing the default_cohort value
+  const [user, setUser] = useRecoilState(usersState);
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
     if (filteredCohort[currStudent]) {
@@ -48,17 +51,17 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       );
       setTechSkillGID({
         GID: projectInfo.data.data.custom_fields[0].gid,
-        Great: projectInfo.data.data.custom_fields[0].enum_options[0].gid,
-        Good: projectInfo.data.data.custom_fields[0].enum_options[1].gid,
-        Okay: projectInfo.data.data.custom_fields[0].enum_options[2].gid,
-        Bad: projectInfo.data.data.custom_fields[0].enum_options[3].gid,
+        4: projectInfo.data.data.custom_fields[0].enum_options[0].gid,
+        3: projectInfo.data.data.custom_fields[0].enum_options[1].gid,
+        2: projectInfo.data.data.custom_fields[0].enum_options[2].gid,
+        1: projectInfo.data.data.custom_fields[0].enum_options[3].gid,
       });
       setTeamWorkGID({
         GID: projectInfo.data.data.custom_fields[1].gid,
-        Great: projectInfo.data.data.custom_fields[1].enum_options[0].gid,
-        Good: projectInfo.data.data.custom_fields[1].enum_options[1].gid,
-        Okay: projectInfo.data.data.custom_fields[1].enum_options[2].gid,
-        Bad: projectInfo.data.data.custom_fields[1].enum_options[3].gid,
+        4: projectInfo.data.data.custom_fields[1].enum_options[0].gid,
+        3: projectInfo.data.data.custom_fields[1].enum_options[1].gid,
+        2: projectInfo.data.data.custom_fields[1].enum_options[2].gid,
+        1: projectInfo.data.data.custom_fields[1].enum_options[3].gid,
       });
     } else {
       return;
@@ -67,6 +70,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   useEffect(() => {
     console.log("Students: ", students);
+    console.log("What happened to the user?", user);
     if (students) {
       const impendingCohort = students.filter(
         (student) => student.cohort == user.default_cohort
@@ -81,7 +85,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
-    // What the hell
     if (filteredCohort[currStudent]) {
       setIndexedStudent(() => filteredCohort[currStudent]);
     }
@@ -89,34 +92,12 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     //   currStudent === filteredCohort.length &&
     //   filteredCohort.length > 0
     // ) {
-    //   axios.put(
-    //     `https://app.asana.com/api/1.0/projects/${cohortObject[0].gid}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${user.asana_access_token}`,
-    //       },
-    //       // data: {
-    //       //   data: {
-
-    //       //   }
-    //       // }
-    //     }
-    //   );
-    //   // setStagedCohort({});
     // }
     console.log("What is currStudent?", currStudent);
     console.log("IndexedStudent is", indexedStudent);
     console.log("filteredCohort come back", filteredCohort);
     // fetchData();
   }, [currStudent, filteredCohort]);
-
-  // Filters students to be updated by matching their cohort value to currentCohortName's name
-  // let filteredCohort = students.filter(
-  //   (student) => student.cohort == currentCohortName
-  // );
-  // let cohortObject = cohorts.filter(
-  //   (cohort) => cohort.name == currentCohortName
-  // );
 
   // To reset the indexer value if modal is closed early
   onClose = () => {
@@ -151,12 +132,20 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   // formGetter grabs the entered data from the field and packages it for POST
   const formGetter = (form) => {
-    let stagedName = `${indexedStudent.name}`;
-    console.log("Just staged for POST: ", stagedName);
-    let stagedStudent = { name: stagedName, GID: indexedStudent.gid };
+    // let stagedName = `${indexedStudent.name}`;
+    // console.log("Just staged for POST: ", stagedName);
+    let stagedStudent = {
+      ID: indexedStudent.student_id,
+      GID: indexedStudent.gid,
+      Name: indexedStudent.name,
+    };
     let formData = new FormData(form);
     for (const pair of formData.entries()) {
-      stagedStudent[pair[0]] = pair[1];
+      if (pair[0] === "Tech" || pair[0] === "Team") {
+        stagedStudent[pair[0]] = parseInt(pair[1]);
+      } else {
+        stagedStudent[pair[0]] = pair[1];
+      }
     }
     console.log("StagedStudent", stagedStudent);
     // In addition, it will be necessary to grab
@@ -172,6 +161,55 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       }
     });
     return stagedStudent;
+  };
+
+  const asanaRoute = async () => {
+    setIsLoading(() => true);
+    stagedCohort.map(async (student) => {
+      axios
+        .put(`https://app.asana.com/api/1.0/tasks/${student.GID}`, {
+          headers: {
+            Authorization: `Bearer ${user.asana_access_token}`,
+          },
+          data: {
+            data: {
+              custom_fields: {
+                [techSkillGID.GID]: techSkillGID[student.Tech],
+                [teamWorkGID.GID]: teamWorkGID[student.Team],
+              },
+            },
+          },
+        })
+        .then(() =>
+          axios.post(
+            `https://app.asana.com/api/1.0/tasks/${student.GID}/subtasks`,
+            {
+              headers: {
+                Authorization: `Bearer ${user.asana_access_token}`,
+              },
+              data: {
+                data: {
+                  name: student.Notes,
+                },
+              },
+            }
+          )
+        );
+      const sentTech = await axios.post("/api/studentTechSkills", {
+        student_id: student.ID,
+        score: parseInt(student.Tech),
+      });
+      const sentTeam = await axios.post("api/studentTeamworkSkills", {
+        student_id: student.ID,
+        score: parseInt(student.Team),
+      });
+      const sentNotes = await axios.post("/api/notes", {
+        student_id: student.ID,
+        notes: student.Notes,
+        name: null,
+        note_date: new Date(),
+      });
+    });
   };
 
   return (
@@ -253,13 +291,20 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                   <input type="submit" value="Submit" />
                 </form>
               ) : (
-                <ul>
-                  {stagedCohort.map((student) => (
-                    <li key={student.GID}>
-                      {student.name}, {student.Notes}
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul>
+                    {stagedCohort.map((student) => (
+                      <li key={student.GID}>
+                        {student.Name} - Tech: {student.Tech}
+                        <br />
+                        Team: {student.Team}
+                        <br />
+                        Notes: {student.Notes}
+                      </li>
+                    ))}
+                  </ul>
+                  <button onClick={asanaRoute}>Click to Update</button>
+                </>
               )}
             </div>
           </div>

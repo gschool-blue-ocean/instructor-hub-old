@@ -1,18 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import {
-        usersState,
-        studentsState,
-        currentCohortState,
-        studentIdState,
-        currentStudentState,
-        currStudentProjectsState,
-        projectsState
-      } from "../../state";
+  usersState,
+  studentsState,
+  currentCohortState,
+  studentIdState,
+  currentStudentState,
+  currStudentProjectsState,
+  projectsState,
+} from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
-import axios from 'axios'
+import axios from "axios";
 
-const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal, onClose }) => {
+const UpdateProjectsModal = ({
+  showUpdateProjectModal,
+  setShowUpdateProjectModal,
+  onClose,
+}) => {
   // What student is being updated at this moment
   const [currStudent, setCurrStudent] = useState(0);
   // This is derived state -- updated at same time as currStudent, one derives the other
@@ -31,12 +35,15 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
 
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [projects, setProjects] = useRecoilState(projectsState);
-  const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState)
-  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
+  const [currStudentProjects, setCurrStudentProjects] = useRecoilState(
+    currStudentProjectsState
+  );
+  const [currentStudent, setCurrentStudent] =
+    useRecoilState(currentStudentState);
   const [users, setUsers] = useRecoilState(usersState);
-  const [projSelected, setProjSelected] = useState(''); 
-  const [projGrade, setProjGrade] = useState([]); 
-  const [projNotes, setProjNotes] = useState(''); 
+  const [projSelected, setProjSelected] = useState("");
+  const [projGrade, setProjGrade] = useState([]);
+  const [projNotes, setProjNotes] = useState("");
 
   // How to use this in relation to a stupid modal?
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
@@ -58,39 +65,42 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
     setCurrStudent((prev) => 0);
     setShowUpdateProjectModal(false);
   };
-  let grade = projGrade === 'true'
-  let projectId = Number(projSelected)
-  console.log("Here:", indexedStudent.student_id)
-  
+  let grade = projGrade === "true";
+  let projectId = Number(projSelected);
+  // console.log("Here:", indexedStudent.student_id)
+
   // submitHandler and enterListener are basically redundant, see about combining/creating helper
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
   const submitHandler = (e) => {
     e.preventDefault();
     const stagedStudent = formGetter(e.target);
     // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
-    axios.post('/api/projectGrades', {
-      "student_id": indexedStudent.student_id,
-      "project_id": projectId,
-      "project_passed": grade, 
-      "notes": `${projNotes}`
-    })
-    .then(() => {
-      axios.get(`/api/projectsAndProjectGradesId/${indexedStudent.student_id}`).then((res) => {
-        setCurrStudentProjects(res.data);
-        // set
-        console.log(res.data, 'new');
-        console.log(currStudentProjects)
-        // setStagedCohort((prev) => {
-        //   prev.push(stagedStudent);
-        //   console.log(prev)
-          console.log(stagedStudent)
-        //   return prev;
-        // })
-        // Until HERE ^
-        e.target.reset();
-        firstInput.current.focus();
+    axios
+      .post("/api/projectGrades", {
+        student_id: indexedStudent.student_id,
+        project_id: projectId,
+        project_passed: grade,
+        notes: `${projNotes}`,
       })
-    }) 
+      .then(() => {
+        axios
+          .get(`/api/projectsAndProjectGradesId/${indexedStudent.student_id}`)
+          .then((res) => {
+            setCurrStudentProjects(res.data);
+            // set
+            console.log(res.data, "new");
+            console.log(currStudentProjects);
+            // setStagedCohort((prev) => {
+            //   prev.push(stagedStudent);
+            //   console.log(prev)
+            console.log(stagedStudent);
+            //   return prev;
+            // })
+            // Until HERE ^
+            e.target.reset();
+            firstInput.current.focus();
+          });
+      });
     // setStagedCohort((prev) => {
     //   prev.push(stagedStudent);
     //   console.log(prev)
@@ -139,18 +149,16 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
     return stagedStudent;
   };
 
-  
-/*-----Converting string into Boolean and Number-----*/
+  /*-----Converting string into Boolean and Number-----*/
   // let grade = projGrade === 'true'
   // let projectId = Number(projSelected)
   // // console.log(projectId,'here')
-
 
   const addProject = () => {
     // axios.post('/api/projectGrades', {
     //   "student_id": studentId,
     //   "project_id": projectId,
-    //   "project_passed": grade, 
+    //   "project_passed": grade,
     //   "notes": `${projNotes}`
     // })
     // .then(() => {
@@ -158,37 +166,43 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
     //     setCurrStudentProjects(res.data);
     //     // console.log(res.data, 'new');
     //   })
-    // }) 
+    // })
 
-    let instructorNotes = ''
-     axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
-      headers: {
-        Authorization: `Bearer ${users[3].asana_access_token}`,
-      }
-    })
-    .then((res) => {
-      console.log(res.data.data)
-      instructorNotes = res.data.data.notes
-    })
-    .then(() => {
-      instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null
-      axios({
-        method:"PUT",  //must be put method not patch
-        url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
+    let instructorNotes = "";
+    axios
+      .get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
         headers: {
-          Authorization: `Bearer ${users[3].asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
-        }, data: { 
-            data: {
-              "workspace": "1213745087037",
-              "assignee_section": null,
-              "html_notes": `<body>${instructorNotes}\n ${"Name".toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
-              "parent": null,
-              "resource_subtype": "default_task",
-            }
-          }
+          Authorization: `Bearer ${users[3].asana_access_token}`,
+        },
       })
-    })
-  }
+      .then((res) => {
+        console.log(res.data.data);
+        instructorNotes = res.data.data.notes;
+      })
+      .then(() => {
+        instructorNotes.length === 0
+          ? (instructorNotes = "<u>Test Name: Test Score</u>")
+          : null;
+        axios({
+          method: "PUT", //must be put method not patch
+          url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
+          headers: {
+            Authorization: `Bearer ${users[3].asana_access_token}`, //need template literal for ALLLLL headers so global state dependant on user
+          },
+          data: {
+            data: {
+              workspace: "1213745087037",
+              assignee_section: null,
+              html_notes: `<body>${instructorNotes}\n ${"Name".toUpperCase()}: ${
+                grade ? "Passed" : "Failed"
+              }</body>`, //need conditional or neeed to make this field mandatory
+              parent: null,
+              resource_subtype: "default_task",
+            },
+          },
+        });
+      });
+  };
 
   return (
     <>
@@ -225,35 +239,25 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
                     <option value="none" selected disabled hidden>
                       Select an Option
                     </option>
-                    <option value="1">
-                      1 - Twiddler
-                    </option>
-                    <option value="2">
-                      2 - PixelArtMaker
-                    </option>
-                    <option value="3">
-                      3 - ReactMVP
-                    </option>
-                    <option value="4">
-                      4 - FoodTruck
-                    </option>
-                    <option value="5">
-                      5 - Hackathon
-                    </option>
+                    <option value="1">1 - Twiddler</option>
+                    <option value="2">2 - PixelArtMaker</option>
+                    <option value="3">3 - ReactMVP</option>
+                    <option value="4">4 - FoodTruck</option>
+                    <option value="5">5 - Hackathon</option>
                   </select>{" "}
                   <br />
                   <label htmlFor="Grade">Grade</label> <br />
-                  <select id="Grade" name="Grade" required onChange={(e) => setProjGrade(e.target.value)}>
+                  <select
+                    id="Grade"
+                    name="Grade"
+                    required
+                    onChange={(e) => setProjGrade(e.target.value)}
+                  >
                     <option value="none" selected disabled hidden>
                       Select an Option
                     </option>
-                    <option value={true}>
-                      1 - Passed
-                    </option>
-                    <option value={false}>
-                      2 - Failed
-                    </option>
-                
+                    <option value={true}>1 - Passed</option>
+                    <option value={false}>2 - Failed</option>
                   </select>{" "}
                   <br />
                   <label htmlFor="Notes">Notes</label> <br />
