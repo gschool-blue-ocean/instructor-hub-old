@@ -15,7 +15,7 @@ const ProjectModal = ({showProjModal, onClose}) => {
   const [projGrade, setProjGrade] = useState([]); 
   const [projNotes, setProjNotes] = useState(''); 
 
-  let asanaToken = sessionStorage.getItem('user asana access token')
+
 
 /*-----Converting string into Boolean and Number-----*/
   let grade = projGrade === 'true'
@@ -23,7 +23,12 @@ const ProjectModal = ({showProjModal, onClose}) => {
   // console.log(projectId,'here')
 
 
+
   const addProject = () => {
+
+    const selectedProjName = projects.find((project) => project.project_id === projectId)
+
+
     axios.post('/api/projectGrades', {
       "student_id": studentId,
       "project_id": projectId,
@@ -40,7 +45,7 @@ const ProjectModal = ({showProjModal, onClose}) => {
     let instructorNotes = ''
      axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
       headers: {
-        Authorization: `Bearer ${asanaToken}`,
+        Authorization: `Bearer ${users.asana_access_token}`,
       }
     })
     .then((res) => {
@@ -53,12 +58,12 @@ const ProjectModal = ({showProjModal, onClose}) => {
         method:"PUT",  //must be put method not patch
         url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
         headers: {
-          Authorization: `Bearer ${asanaToken}`,  //need template literal for ALLLLL headers so global state dependant on user
+          Authorization: `Bearer ${users.asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
         }, data: { 
             data: {
               "workspace": "1213745087037",
               "assignee_section": null,
-              "html_notes": `<body>${instructorNotes}\n ${"Name".toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
+              "html_notes": `<body>${instructorNotes}\n ${selectedProjName.project_name.toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
               "parent": null,
               "resource_subtype": "default_task",
             }

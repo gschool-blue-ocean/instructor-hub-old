@@ -85,15 +85,24 @@ const StatusRight = ({currentStudent}) => {
       <div className={style.avrgScoreCon}>
         <div className={style.averages}>
           <span>Tech Avg</span>
-          <div>{currentStudent.tech_avg}%</div>
+          {currentStudent.tech_avg ?   
+            <div className={style.avgScores} >{currentStudent.tech_avg}%</div>
+            :  <div className={style.avgScores} > -- </div>
+          }
         </div>
         <div className={style.averages}>
           <span>Learn Avg</span>
-          <div>{currentStudent.learn_avg}%</div>
+          { currentStudent.learn_avg ?
+            <div className={style.avgScores} >{currentStudent.learn_avg}%</div>
+            : <div className={style.avgScores}> -- </div>
+          }
         </div>
         <div className={style.averages}>
           <span>TeamWork Avg</span>
-          <div>{currentStudent.teamwork_avg}%</div>
+          {currentStudent.teamwork_avg ?
+            <div className={style.avgScores} >{currentStudent.teamwork_avg}%</div>
+            : <div className={style.avgScores} > -- </div>
+          }
         </div>
       </div>
     </div>
