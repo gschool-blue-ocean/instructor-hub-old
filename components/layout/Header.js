@@ -48,9 +48,9 @@ const Header = () => {
               {/* this will allow the menu to only be shown if logged in */}
               {signInStatus ? (
                 <>
-                  <a onClick={() =>logoutFunc()}>Logout</a>
-                  <a>Settings</a>
-                  <a>Cohort</a>
+                  <a className={headerStyle.dropDown_a} onClick={() =>logoutFunc()}>Logout</a>
+                  <a className={headerStyle.dropDown_a}>Settings</a>
+                  <a className={headerStyle.dropDown_a}>Cohort</a>
                 </>
               ): ""}
             </div>

@@ -38,7 +38,13 @@
 .dropDown a {
     cursor: pointer;
     padding: 1px;
-    color: #002d02;
+    padding-left: 10px;
+    padding-right: 15px;
+    color: white;
+    text-align: center;
+    /* background: rgb(184, 183, 183); */
+    font-size: 14px;
+    font-weight: normal;
 }
 
 .spacer {
