@@ -24,7 +24,7 @@ const CohortSpacer = () => {
     if (user) {
       setCurrentCohort(user.default_cohort);
     }
-  }, []);
+  }, [user]);
 
   const syncCohorts = () => {
     //verifies that the cohorts set state matches what is in our database
@@ -42,15 +42,15 @@ const CohortSpacer = () => {
       //this goes through each cohort in the asana database and adds ones that do not exist in our database
       res.data.data.forEach((asanaCohort) => {
         const found = cohorts.find((element) => element.gid === asanaCohort.gid);
-        console.log(found, "found");
+        // console.log(found, "found");
         if (found === undefined) {
-          console.log(asanaCohort, "success");
+          console.log(asanaCohort, "success, cohorts will be added to our database");
           axios.put("/api/cohorts", {
             name: `${asanaCohort.name}`,
             gid: `${asanaCohort.gid}`,
           })
         } else {
-          console.log("failed");
+          console.log("failed, cohorts are in our database");
         }
         // this axios request looks at the students in our database and adds new students from the asana database
         axios.get(`https://app.asana.com/api/1.0/tasks/?project=${asanaCohort.gid}`, {
@@ -65,7 +65,7 @@ const CohortSpacer = () => {
                 name: `${asanaStudent.name}`,
                 cohort: `${asanaCohort.name}`,
                 gid: `${asanaStudent.gid}`,
-              }).then((res) => setStudents([...students, ...res.data]));
+              }).then((res) => setStudents((prev) => [...prev, ...res.data]));
             }
           })
 
@@ -76,12 +76,9 @@ const CohortSpacer = () => {
             const studentInAsana = res.data.data.find((element) => element.gid === localStudent.gid);
             if (studentInAsana === undefined && localStudent.cohort === asanaCohort.name) {
               axios.delete(`/api/students/${localStudent.student_id}`).then((res) => {
-                console.log(localStudent, "student that was not in asana")
+                // console.log(localStudent, "student that was not in asana")
               }).then(()=>{
-                axios.get("/api/students").then((res) => {
-                  console.log(res.data.students)
-                  setStudents(res.data.students)
-                })
+                axios.get("/api/students").then((res) => setStudents(res.data.students))
               })
             }
           });
