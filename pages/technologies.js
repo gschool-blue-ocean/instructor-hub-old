@@ -9,12 +9,12 @@ const technologies = () => {
       <NavBar />
       <div className={style.container}>
         <div className={style.header}>
-          <h2>
+          <h1>
           Technologies
-          </h2>
+          </h1>
         </div>
         <div className={style.subContainer}>
-          <div className={style.technology}>
+          <div className={style.technology_1}>
             <div className={style.imageDiv}>
               <div className={style.image}>
                 <Image src='/Nextjs-logo-bigger.png' width={240} height={144}/>
@@ -30,7 +30,7 @@ const technologies = () => {
               </a>
             </div>
           </div>
-          <div className={style.technology}>
+          <div className={style.technology_2}>
             <div className={style.imageDiv}>
               <div className={style.image}>
                 <Image src='/React-icon.svg.png' width={240} height={209}/>
@@ -46,7 +46,7 @@ const technologies = () => {
               </a>
             </div>
           </div>
-          <div className={style.technology}>
+          <div className={style.technology_1}>
             <div className={style.imageDiv}>
               <div className={style.image}>
                 <Image src='/Axios-logo.png' width={300} height={44}/>
@@ -62,7 +62,7 @@ const technologies = () => {
               </a>
             </div>
           </div>
-          <div className={style.technology}>
+          <div className={style.technology_2}>
             <div className={style.imageDiv}>
               <div className={style.image}>
                 <Image src='/Recoiljs-logo.png' width={300} height={106}/>
@@ -78,7 +78,7 @@ const technologies = () => {
               </a>
             </div>
           </div>
-          <div className={style.technology}>
+          <div className={style.technology_1}>
             <div className={style.imageDiv}>
               <div className={style.image}>
                 <Image src='/Postgresql_elephant.svg.png' width={280} height={289}/>

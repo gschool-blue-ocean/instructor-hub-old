@@ -29,6 +29,7 @@
 }
 
 .dropDown {
+    border-radius: 15px;
     flex-direction: column;
     vertical-align: top;
     position: absolute;
@@ -37,7 +38,7 @@
 
 .dropDown a {
     cursor: pointer;
-    padding: 1px;
+    padding: 10px;
     padding-left: 10px;
     padding-right: 15px;
     color: white;

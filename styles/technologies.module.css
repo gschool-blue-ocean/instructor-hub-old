@@ -1,10 +1,14 @@
+/* h1 {
+    text-decoration: underline;
+} */
+
 .container {
     text-align: center;
 }
 
 .header {
     padding-top: 60px;
-    color: rgb(63, 63, 63);
+    color: white;
     font-size: 20px;
     margin: auto;
     line-height: 50px;
@@ -18,10 +22,13 @@
     flex-direction: column;
 }
 
-.technology {
+.technology_1 {
     display: flex;
-    width: 100%;
+    border-radius: 50px;
+    width: 80%;
     margin: 10px;
+    margin-right: 20%;
+    background-color: steelblue;
     padding: 22px;
     cursor: pointer;
     transition: 0.4s;
@@ -29,8 +36,27 @@
     box-shadow: 2px 2px 10px rgb(0 0 0 / 40%);
 }
 
-.technology:hover{
-    background: #ddd;
+.technology_2 {
+    display: flex;
+    border-radius: 50px;
+    width: 80%;
+    margin: 10px;
+    margin-left: 20%;
+    background-color: rgb(41, 95, 139);
+    padding: 22px;
+    cursor: pointer;
+    transition: 0.4s;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 10px rgb(0 0 0 / 40%);
+}
+
+.technology_1:hover{
+    background: rgb(75, 159, 58);
+    border-radius: 12px;
+}
+
+.technology_2:hover{
+    background:  rgb(75, 159, 58);
     border-radius: 12px;
 }
 
@@ -71,8 +97,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
     height: 80%;
     padding: 20px 0;
+    padding-right: 40px;
 }
 
 .link {
