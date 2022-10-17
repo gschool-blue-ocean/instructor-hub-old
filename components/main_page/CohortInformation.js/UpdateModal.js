@@ -67,33 +67,39 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
     console.log("What's the whole cohort object?", cohortObject[0]);
+    console.log(
+      "Don't mess with me and try to say this isn't a array",
+      stagedCohort
+    );
     if (filteredCohort[currStudent]) {
       setIndexedStudent((prev) => filteredCohort[currStudent]);
-    } else if (
-      (currStudent = filteredCohort.length && filteredCohort.length > 0)
-    ) {
-      axios.put(
-        `https://app.asana.com/api/1.0/projects/${cohortObject[0].gid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.asana_access_token}`,
-          },
-          // data: {
-          //   data: {
-
-          //   }
-          // }
-        }
-      );
-      setStagedCohort({});
     }
+    // else if (
+    //   currStudent === filteredCohort.length &&
+    //   filteredCohort.length > 0
+    // ) {
+    //   axios.put(
+    //     `https://app.asana.com/api/1.0/projects/${cohortObject[0].gid}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${user.asana_access_token}`,
+    //       },
+    //       // data: {
+    //       //   data: {
+
+    //       //   }
+    //       // }
+    //     }
+    //   );
+    //   // setStagedCohort({});
+    // }
     console.log("what filteredCohort?", filteredCohort);
-    fetchData();
+    // fetchData();
   }, [currStudent, currentCohortName]);
 
   // Filters students to be updated by matching their cohort value to currentCohortName's name
   let filteredCohort = students.filter(
-    (classRoom) => classRoom.cohort == currentCohortName
+    (student) => student.cohort == currentCohortName
   );
   let cohortObject = cohorts.filter(
     (cohort) => cohort.name == currentCohortName
@@ -121,8 +127,13 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     if (e.key === "Enter" && e.shiftKey === false) {
       e.preventDefault();
       const stagedStudent = formGetter(e.target.form);
+      console.log(
+        "Here's what the e.target.form is",
+        formGetter(e.target.form)
+      );
       // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
       setStagedCohort((prev) => [...prev, stagedStudent]);
+      console.log("IndexedStudent is", indexedStudent);
 
       // Until HERE ^
       e.target.form.reset();
@@ -143,6 +154,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     // In addition, it will be necessary to grab
     // "current student" from state.
     // these Setters MUST "return" a value, not merely increment or mutate
+
+    // Can I replace each usage of setCurrStudent with a way to just setIndexedStudent to filteredCohort[prev + 1]
     setCurrStudent((prev) => {
       if (prev < filteredCohort.length) {
         return prev + 1;
@@ -232,15 +245,13 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                   <input type="submit" value="Submit" />
                 </form>
               ) : (
-                <>
+                <ul>
                   {stagedCohort.map((student) => (
-                    <>
-                      <ul>
-                        <li key={student.GID}>{student.name}</li>
-                      </ul>
-                    </>
+                    <li key={student.GID}>
+                      {student.name}, {student.Notes}
+                    </li>
                   ))}
-                </>
+                </ul>
               )}
             </div>
           </div>
