@@ -5,6 +5,7 @@ import {
   studentsState,
   currentCohortState,
   cohortsState,
+  currentStudentState,
 } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
 import axios from "axios";
@@ -24,6 +25,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [user, setUser] = useRecoilState(usersState);
+  const [currentStudent, setCurrentStudent] =
+    useRecoilState(currentStudentState);
   // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
   // (by going through the students)
   const [students, setStudents] = useRecoilState(studentsState);
@@ -31,55 +34,59 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const firstInput = useRef(null);
 
   const fetchData = async () => {
-    axios
-      .get(`https://app.asana.com/api/1.0/projects/${studentGID}`, {
-        headers: {
-          Authorization: `Bearer ${user.asana_access_token}`,
-        },
-      })
-      .then((res) => {
-        setTechSkillGID({
-          GID: res.data.data.custom_field_settings[0].custom_field.gid,
-          Great:
-            res.data.data.custom_field_settings[0].custom_field.enum_options[0]
-              .gid,
-          Good: res.data.data.custom_field_settings[0].custom_field
-            .enum_options[1].gid,
-          Okay: res.data.data.custom_field_settings[0].custom_field
-            .enum_options[2].gid,
-          Bad: res.data.data.custom_field_settings[0].custom_field
-            .enum_options[3].gid,
-        });
-        setTeamWorkGID({
-          GID: res.data.data.custom_field_settings[1].custom_field.gid,
-          Great:
-            res.data.data.custom_field_settings[1].custom_field.enum_options[0]
-              .gid,
-          Good: res.data.data.custom_field_settings[1].custom_field
-            .enum_options[1].gid,
-          Okay: res.data.data.custom_field_settings[1].custom_field
-            .enum_options[2].gid,
-          Bad: res.data.data.custom_field_settings[1].custom_field
-            .enum_options[3].gid,
-        });
+    if (course.length > 0) {
+      console.log("What the fuck", course[currStudent].gid);
+      const projectInfo = await axios.get(
+        `https://app.asana.com/api/1.0/tasks/${course[currStudent].gid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.asana_access_token}`,
+          },
+        }
+      );
+      console.log("wut projectinfo", projectInfo.data);
+      setTechSkillGID({
+        GID: projectInfo.data.data.custom_fields[0].gid,
+        Great: projectInfo.data.data.custom_fields[0].enum_options[0].gid,
+        Good: projectInfo.data.data.custom_fields[0].enum_options[1].gid,
+        Okay: projectInfo.data.data.custom_fields[0].enum_options[2].gid,
+        Bad: projectInfo.data.data.custom_fields[0].enum_options[3].gid,
       });
+      setTeamWorkGID({
+        GID: projectInfo.data.data.custom_fields[1].gid,
+        Great: projectInfo.data.data.custom_fields[1].enum_options[0].gid,
+        Good: projectInfo.data.data.custom_fields[1].enum_options[1].gid,
+        Okay: projectInfo.data.data.custom_fields[1].enum_options[2].gid,
+        Bad: projectInfo.data.data.custom_fields[1].enum_options[3].gid,
+      });
+    }
   };
 
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
-    setStudentGID(async (prev) => {
-      cohorts.forEach((element) => {
-        if (element.name.toLowerCase() === currentCohort.toLowerCase()) {
-          return element.gid;
-        }
-      });
-    });
+    // let projectGID;
+    // cohorts.forEach((element) => {
+    //   if (element.name.toLowerCase() === currentCohort.toLowerCase()) {
+    //     console.log("What the hell is studentGID right now", element.gid);
+    //     projectGID = element.gid;
+    //   }
+    // });
+    // setStudentGID((prev) => {
+    //   // cohorts.forEach((element) => {
+    //   //   if (element.name.toLowerCase() === currentCohort.toLowerCase()) {
+    //   //     console.log("What the hell is studentGID right now", element.gid);
+    //   //     return element.gid;
+    //   //   }
+    //   // });
+    //   return projectGID;
+    // });
     if (course[currStudent]) {
       setIndexedStudent((prev) => course[currStudent]);
     }
     // console.log("what the stagedCohort look like?", stagedCohort);
     // console.log(course[currStudent]);
-    console.log("where cohort GID?", currentCohort);
+    console.log("what course?", course);
+    fetchData();
   }, [currStudent, currentCohort]);
 
   // Filters students to be updated by matching their cohort value to currentCohort's name
@@ -113,10 +120,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       e.preventDefault();
       const stagedStudent = formGetter(e.target.form);
       // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
-      setStagedCohort((prev) => {
-        prev.push(stagedStudent);
-        return prev;
-      });
+      setStagedCohort((prev) => [...prev, stagedStudent]);
 
       // Until HERE ^
       e.target.form.reset();
@@ -128,7 +132,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const formGetter = (form) => {
     let stagedName = `${indexedStudent.name}`;
     console.log("Just staged for POST: ", stagedName);
-    let stagedStudent = { [stagedName]: {} };
+    let stagedStudent = { [stagedName]: { GID: [indexedStudent.gid] } };
     let formData = new FormData(form);
     for (const pair of formData.entries()) {
       stagedStudent[stagedName][pair[0]] = pair[1];
@@ -225,7 +229,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                   <input type="submit" value="Submit" />
                 </form>
               ) : (
-                <span>Go code with your buds, you're done</span>
+                <span>{stagedCohort}</span>
               )}
             </div>
           </div>
