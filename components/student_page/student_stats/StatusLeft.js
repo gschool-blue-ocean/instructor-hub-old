@@ -22,6 +22,10 @@ const StatusLeft = () => {
   const [gradesId, setGradesId] = useState(''); 
   const [studentId, setStudentId] = useRecoilState(studentIdState);
 
+<<<<<<< HEAD
+=======
+  //console.log(currStudentProjects.length , 'here'); 
+>>>>>>> 47b59b18697d3762daf0903763e5680d218f102a
 
   const openNoteModel = (currNote) => {
     setShowNoteModal(true);

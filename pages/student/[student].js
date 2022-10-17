@@ -5,9 +5,9 @@ import {studentIdState} from '../../components/state.js'
 import { useLayoutEffect } from 'react';
 
 
-const Student = () => {
-  const router = useRouter()
-
+const Student = () => { 
+  const router = useRouter();  
+ 
   useLayoutEffect(()=>{
     const status = sessionStorage.getItem('logged_in_Status')
       if(!status){
