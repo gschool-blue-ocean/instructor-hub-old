@@ -49,7 +49,7 @@
 .border2{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 20px;
     margin-top: 8px;
     width: 100%;
@@ -61,4 +61,21 @@
 .selectScore{
     display: flex;
     flex-direction: column;
+}
+.section{
+    display: flex;
+    flex-direction: column;
+}
+.labels{
+    padding-bottom: 3px;
+    padding-top: 5px;
+}
+.input {
+    min-height: 100px;
+}
+.btn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
 }
