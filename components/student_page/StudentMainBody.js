@@ -21,9 +21,6 @@ const StudentMainBody = () => {
   const [newNote, setNewNote] = useState(''); 
   const [users, setUsers] = useRecoilState(usersState);
 
-  console.log(currentStudent.gid, 'here')
-
-  let asanaToken = sessionStorage.getItem('user asana access token')
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
   // converting ETs date into MM DAY YYYY
@@ -70,7 +67,7 @@ const StudentMainBody = () => {
       method:"POST",  //must be put method not patch
       url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}/subtasks`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
       headers: {
-        Authorization: `Bearer ${asanaToken}`,  //need template literal for ALLLLL headers so global state dependant on user
+        Authorization: `Bearer ${users.asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
       }, 
         data: { 
           data: {
