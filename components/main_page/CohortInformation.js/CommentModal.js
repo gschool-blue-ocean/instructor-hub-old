@@ -8,7 +8,6 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
   const [students, setStudents] = useRecoilState(studentsState);
   const [notes, setNotes] = useRecoilState(notesState);
 
-  console.log(noteStudent)
   let userNotes = notes.filter(note => note.student_id == noteStudent.student_id); 
 
   return (
@@ -22,10 +21,12 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
               <div className={commentStyle.commentHeader}>
                 <div>
                   <div onClick={onClose} className={commentStyle.close}></div>
-                  <div className={commentStyle.studentName}>{noteStudent.name}</div>
+                  <div className={commentStyle.studentName}>
+                    {noteStudent.name}
+                  </div>
                 </div>
               </div>
-              <div>
+              <div className={commentStyle.content_outerContainer}>
               <div className={commentStyle.content_container}>
                 {userNotes.map((note) => (
                   <div className={commentStyle.content} key={"keycomment"}>
@@ -46,12 +47,12 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
                   </div>
                 </div>
                 ))}
-                </div>
               </div>
-              <div className={commentStyle.btn_container}>
-                <div onClick={onClose} className={commentStyle.close_btn}>
-                  <div className={commentStyle.close_btn_medium}>
-                    <span className={commentStyle.cancel}> Close</span>
+                <div className={commentStyle.btn_container}>
+                  <div onClick={onClose} className={commentStyle.close_btn}>
+                    <div className={commentStyle.close_btn_medium}>
+                      <span className={commentStyle.cancel}> Close</span>
+                    </div>
                   </div>
                 </div>
               </div>

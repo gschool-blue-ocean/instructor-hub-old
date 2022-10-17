@@ -14,11 +14,11 @@ const GraphModal = ({ studentGraph, showGraphModal, setShowGraphModal, onClose }
     const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
     const [studentId, setStudentId] = useRecoilState(studentIdState);
 
-    console.log(studentTechSkills)
+    console.log(studentGraph)
 
-    let currTechSkills = studentTechSkills.filter(teckSkill => teckSkill.student_id == studentId); 
+    let currTechSkills = studentTechSkills.filter(teckSkill => teckSkill.student_id == studentGraph.student_id); 
     let arrTeckSkills = currTechSkills.map((skill) => skill.score); 
-    let currTeamSkills = studentTeamworkSkills.filter(teamSkill => teamSkill.student_id == studentId); 
+    let currTeamSkills = studentTeamworkSkills.filter(teamSkill => teamSkill.student_id == studentGraph.student_id); 
     let arrTeamSkills = currTeamSkills.map((skill) => skill.score);
 
     const options = {
@@ -45,7 +45,7 @@ const GraphModal = ({ studentGraph, showGraphModal, setShowGraphModal, onClose }
         }
       };
     
-      const labels = ['1', '2', '3', '4', '5', '6', '7', '8'];
+      const labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'];
       const data = {
         labels,
         datasets: [
@@ -81,7 +81,7 @@ const GraphModal = ({ studentGraph, showGraphModal, setShowGraphModal, onClose }
                                 <div onClick={onClose} className={graphStyle.close}></div>
                                 <div className={graphStyle.name}>{studentGraph.name}</div>
                             </div>
-                        <div>
+                        <div className= {graphStyle.outerContainer}>
                             <div className={graphStyle.graphContainer}>
                                 <Line className={graphStyle.graph} option= {options} data= {data}></Line>
                             </div>
