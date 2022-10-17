@@ -21,9 +21,6 @@ const StudentMainBody = () => {
   const [newNote, setNewNote] = useState(''); 
   const [users, setUsers] = useRecoilState(usersState);
 
-  console.log(currentStudent.gid, 'here')
-
-  let asanaToken = sessionStorage.getItem('user asana access token')
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
   // converting ETs date into MM DAY YYYY

@@ -1,9 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
-import { usersState, studentsState, currentCohortState } from "../../state";
+import {
+        usersState,
+        studentsState,
+        currentCohortState,
+        studentIdState,
+        currentStudentState,
+        currStudentProjectsState,
+        projectsState
+      } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
+import axios from 'axios'
 
-const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
+const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal, onClose }) => {
   // What student is being updated at this moment
   const [currStudent, setCurrStudent] = useState(0);
   // This is derived state -- updated at same time as currStudent, one derives the other
@@ -19,6 +28,15 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
   const [students, setStudents] = useRecoilState(studentsState);
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
+
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
+  const [projects, setProjects] = useRecoilState(projectsState);
+  const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState)
+  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
+  const [users, setUsers] = useRecoilState(usersState);
+  const [projSelected, setProjSelected] = useState(''); 
+  const [projGrade, setProjGrade] = useState([]); 
+  const [projNotes, setProjNotes] = useState(''); 
 
   // How to use this in relation to a stupid modal?
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
@@ -38,22 +56,50 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
   // To reset the indexer value if modal is closed early
   onClose = () => {
     setCurrStudent((prev) => 0);
-    setShowUpdateModal(false);
+    setShowUpdateProjectModal(false);
   };
-
+  let grade = projGrade === 'true'
+  let projectId = Number(projSelected)
+  console.log("Here:", indexedStudent.student_id)
+  
   // submitHandler and enterListener are basically redundant, see about combining/creating helper
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
   const submitHandler = (e) => {
     e.preventDefault();
     const stagedStudent = formGetter(e.target);
     // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
-    setStagedCohort((prev) => {
-      prev.push(stagedStudent);
-      return prev;
-    });
-    // Until HERE ^
-    e.target.reset();
-    firstInput.current.focus();
+    axios.post('/api/projectGrades', {
+      "student_id": indexedStudent.student_id,
+      "project_id": projectId,
+      "project_passed": grade, 
+      "notes": `${projNotes}`
+    })
+    .then(() => {
+      axios.get(`/api/projectsAndProjectGradesId/${indexedStudent.student_id}`).then((res) => {
+        setCurrStudentProjects(res.data);
+        // set
+        console.log(res.data, 'new');
+        console.log(currStudentProjects)
+        // setStagedCohort((prev) => {
+        //   prev.push(stagedStudent);
+        //   console.log(prev)
+          console.log(stagedStudent)
+        //   return prev;
+        // })
+        // Until HERE ^
+        e.target.reset();
+        firstInput.current.focus();
+      })
+    }) 
+    // setStagedCohort((prev) => {
+    //   prev.push(stagedStudent);
+    //   console.log(prev)
+    //   console.log(stagedStudent)
+    //   return prev;
+    // });
+    // // Until HERE ^
+    // e.target.reset();
+    // firstInput.current.focus();
   };
 
   const enterListener = (e) => {
@@ -93,9 +139,60 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
     return stagedStudent;
   };
 
+  
+/*-----Converting string into Boolean and Number-----*/
+  // let grade = projGrade === 'true'
+  // let projectId = Number(projSelected)
+  // // console.log(projectId,'here')
+
+
+  const addProject = () => {
+    // axios.post('/api/projectGrades', {
+    //   "student_id": studentId,
+    //   "project_id": projectId,
+    //   "project_passed": grade, 
+    //   "notes": `${projNotes}`
+    // })
+    // .then(() => {
+    //   axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
+    //     setCurrStudentProjects(res.data);
+    //     // console.log(res.data, 'new');
+    //   })
+    // }) 
+
+    let instructorNotes = ''
+     axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
+      headers: {
+        Authorization: `Bearer ${users[3].asana_access_token}`,
+      }
+    })
+    .then((res) => {
+      console.log(res.data.data)
+      instructorNotes = res.data.data.notes
+    })
+    .then(() => {
+      instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null
+      axios({
+        method:"PUT",  //must be put method not patch
+        url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
+        headers: {
+          Authorization: `Bearer ${users[3].asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
+        }, data: { 
+            data: {
+              "workspace": "1213745087037",
+              "assignee_section": null,
+              "html_notes": `<body>${instructorNotes}\n ${"Name".toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
+              "parent": null,
+              "resource_subtype": "default_task",
+            }
+          }
+      })
+    })
+  }
+
   return (
     <>
-      {showUpdateModal ? (
+      {showUpdateProjectModal ? (
         <>
           <div className={styles.modalOverlay} onClick={onClose} />
 
@@ -104,7 +201,7 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
               Update -{" "}
               {course[currStudent]
                 ? indexedStudent.name
-                : "Weekly Update COMPLETE"}
+                : "Project Update COMPLETE"}
               <button className={styles.button} onClick={onClose}>
                 X
               </button>
@@ -116,48 +213,47 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
                   onSubmit={submitHandler}
                   onKeyDown={enterListener}
                 >
-                  <label htmlFor="Tech">Technical Aptitude</label> <br />
+                  <label htmlFor="Projects">Projects</label> <br />
                   <select
-                    id="Tech"
-                    name="Tech"
+                    id="Projects"
+                    name="Projects"
                     required
                     autoFocus={true}
                     ref={firstInput}
+                    onChange={(e) => setProjSelected(e.target.value)}
                   >
                     <option value="none" selected disabled hidden>
                       Select an Option
                     </option>
-                    <option value="1 - Needs improvement">
-                      1 - Needs improvement
+                    <option value="1">
+                      1 - Twiddler
                     </option>
-                    <option value="2 - Approaching standard">
-                      2 - Approaching standard
+                    <option value="2">
+                      2 - PixelArtMaker
                     </option>
-                    <option value="3 - Meets standard">
-                      3 - Meets standard
+                    <option value="3">
+                      3 - ReactMVP
                     </option>
-                    <option value="4 - Exceeds standard">
-                      4 - Exceeds standard
+                    <option value="4">
+                      4 - FoodTruck
+                    </option>
+                    <option value="5">
+                      5 - Hackathon
                     </option>
                   </select>{" "}
                   <br />
-                  <label htmlFor="Team">Teamwork Aptitude</label> <br />
-                  <select id="Team" name="Team" required>
+                  <label htmlFor="Grade">Grade</label> <br />
+                  <select id="Grade" name="Grade" required onChange={(e) => setProjGrade(e.target.value)}>
                     <option value="none" selected disabled hidden>
                       Select an Option
                     </option>
-                    <option value="1 - Needs improvement">
-                      1 - Needs improvement
+                    <option value={true}>
+                      1 - Passed
                     </option>
-                    <option value="2 - Approaching standard">
-                      2 - Approaching standard
+                    <option value={false}>
+                      2 - Failed
                     </option>
-                    <option value="3 - Meets standard">
-                      3 - Meets standard
-                    </option>
-                    <option value="4 - Exceeds standard">
-                      4 - Exceeds standard
-                    </option>
+                
                   </select>{" "}
                   <br />
                   <label htmlFor="Notes">Notes</label> <br />
@@ -167,6 +263,7 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
                     rows="10"
                     cols="30"
                     required
+                    onChange={(e) => setProjNotes(e.target.value)}
                   ></textarea>{" "}
                   <br />
                   <input type="submit" value="Submit" />

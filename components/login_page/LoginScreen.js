@@ -27,11 +27,7 @@ const LoginScreen = () => {
       if(element.username === enteredUsername && element.password === enteredPassword){
         setVerifiedUser(true)
         setUser(element)
-        sessionStorage.setItem('user asana access token', `${element.asana_access_token}`)
-        sessionStorage.setItem('user name', `${element.name}`)
-        sessionStorage.setItem('logged_in_Status', 'true')
         setCurrentCohort(element.default_cohort)
-        console.log(element.username)
         router.push("/home")
       }
     }
