@@ -30,6 +30,23 @@ const StatusRight = ({currentStudent}) => {
    let currTeamSkills = studentTeamworkSkills.filter(teamSkill => teamSkill.student_id == studentId); 
    let arrTeamSkills = currTeamSkills.map((skill) => skill.score);
 
+   let colPercent = (num) => {
+    if (num === 1) {
+      return "25%"
+    }
+    if (num === 2) {
+      return "50%";
+    }
+    if (num === 3) {
+      return "75%";
+    }
+    if (num === 4) {
+      return "100%"
+    }
+  }
+
+
+
   const options = {
     responsive: true,
     plugins: {
@@ -86,7 +103,7 @@ const StatusRight = ({currentStudent}) => {
         <div className={style.averages}>
           <span>Tech Avg</span>
           {currentStudent.tech_avg ?   
-            <div className={style.avgScores} >{currentStudent.tech_avg}%</div>
+            <div className={style.avgScores} >{colPercent(currentStudent.tech_avg)}</div>
             :  <div className={style.avgScores} > -- </div>
           }
         </div>
@@ -100,7 +117,7 @@ const StatusRight = ({currentStudent}) => {
         <div className={style.averages}>
           <span>TeamWork Avg</span>
           {currentStudent.teamwork_avg ?
-            <div className={style.avgScores} >{currentStudent.teamwork_avg}%</div>
+            <div className={style.avgScores} >{colPercent(currentStudent.teamwork_avg)}</div>
             : <div className={style.avgScores} > -- </div>
           }
         </div>

@@ -18,14 +18,11 @@ const StatusLeft = () => {
   const [editLeanrScore, setEditLearnScore] = useState(false)
   const [projGradeId, setProjGradeId] = useState(''); 
   const [learnGradeId, setLearnGradeId] = useState(''); 
+  const [newLearnScore, setNewLearnScore] = useState(''); 
   const [newSelectedGrade, setNewSelectedGrade] = useState('')
   const [gradesId, setGradesId] = useState(''); 
   const [studentId, setStudentId] = useRecoilState(studentIdState);
 
-<<<<<<< HEAD
-=======
-  //console.log(currStudentProjects.length , 'here'); 
->>>>>>> 47b59b18697d3762daf0903763e5680d218f102a
 
   const openNoteModel = (currNote) => {
     setShowNoteModal(true);
@@ -60,11 +57,22 @@ const StatusLeft = () => {
     setLearnGradeId(assesmentId)
   }
 
-  const newScore = () => {
+  const enterListener = (e) => {
+    const updateScore = Number(newLearnScore); 
 
-  }
-
-
+    if (e.key === "Enter" && e.shiftKey === false) {
+      e.preventDefault();
+      setEditLearnScore(false)
+      axios.patch(`/api/learnGradesId/${learnGradeId}`, {
+        "assessment_grade": updateScore 
+      }).then(() => 
+      axios.get(`/api/learnAndLearnGradesId/${studentId}`).then((res) => {
+        setCurrentLearnAndLearnGrades(res.data);
+        // console.log(res.data);
+      })
+    )}
+  };
+  
   return (
     <>
       <ProjNoteModal
@@ -170,7 +178,7 @@ const StatusLeft = () => {
                     <th className={`${(style.header, style.headName)}`}>
                       Name
                     </th>
-                    <th className={`${(style.header, style.headScore)}`}>
+                    <th className={`${(style.header, style.headScore)}`} onClick={() => setEditLearnScore(false)}>
                       Score
                     </th>
                   </tr>
@@ -181,9 +189,9 @@ const StatusLeft = () => {
                     <td className={style.projNamCell}>{assessment.assessment_name}</td>
                     {
                       editLeanrScore && learnGradeId == assessment.learn_grade_id ?
-                        <td className={style.scoreCell} onChange={(e) => console.log(e.target.value)}>
-                          <form onSubmit={newScore}>
-                            <input type='text' placeholder={assessment.assessment_grade} ></input>
+                        <td className={style.scoreCell} onChange={(e) => setNewLearnScore(e.target.value)}>
+                          <form onKeyDown={enterListener} >
+                            <input type='number' placeholder={assessment.assessment_grade} ></input>
                           </form>
                         </td>
                       :

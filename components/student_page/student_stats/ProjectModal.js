@@ -86,28 +86,33 @@ const ProjectModal = ({showProjModal, onClose}) => {
             <div className={style.content}>
               <div className={style.border}>
                 <div className={style.border2}>
-                  <div>Add a Project</div> 
-                  <div>
-                    <select id='select' type='select' onChange={(e) => setProjSelected(e.target.value)}>
-                      <option></option>
-                      { projects.map(proj => (
-                          <option key={proj.project_id} value={proj.project_id}>{proj.project_name}</option>
-                      ))
-                      }
-                    </select>
-                  </div>
-                  <div>
-                    <select id='select' type='select' onChange={(e) => setProjGrade(e.target.value)}>
-                     <option></option>
-                      <option value={true}>Passed</option>
-                      <option value={false}>Failed</option>
-                    </select>
-                  </div>
-                  <div>
-                    <textarea onChange={(e) => setProjNotes(e.target.value)}></textarea>
-                  </div>
-                  <div>
-                    <button onClick={addProject}>submiit</button>
+                  <div className='hello'>
+                    <h3>Add a Project</h3> 
+                    <div className={style.section}>
+                      <lable className={style.labels}>Name</lable>
+                      <select id='select' type='select' onChange={(e) => setProjSelected(e.target.value)}>
+                        <option>- Select -</option>
+                        { projects.map(proj => (
+                            <option key={proj.project_id} value={proj.project_id}>{proj.project_name}</option>
+                        ))
+                        }
+                      </select>
+                    </div>
+                    <div className={style.section}>
+                      <lable className={style.labels} >Score</lable>
+                      <select id='select' type='select' onChange={(e) => setProjGrade(e.target.value)}>
+                      <option>- Select -</option>
+                        <option value={true}>Passed</option>
+                        <option value={false}>Failed</option>
+                      </select>
+                    </div>
+                    <div className={style.section}>
+                      <label className={style.labels} >Notes</label>
+                      <textarea className={style.input} onChange={(e) => setProjNotes(e.target.value)}></textarea>
+                    </div>
+                    <div className={style.btn}>
+                      <button onClick={addProject}>submiit</button>
+                    </div>
                   </div>
                 </div>
               </div>

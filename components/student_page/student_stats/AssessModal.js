@@ -96,24 +96,26 @@ const AssessModal = ({showAssessModal, onClose }) => {
             <div className={style.content}>
               <div className={style.border}>
                 <div className={style.border2}>
-                  {/* <div>Assesment</div>  */}
-                  <div className={style.selectAssess}>
-                    <label>Assesment</label>
-                    <select id='select' type='select' onChange={(e) => selectedOption(e)} >
-                      <option>Select</option>
-                      { learn.map(assess => (
-                          <option key={assess.assessment_id} value={assess.assessment_id}>{assess.assessment_name}</option>
-                      ))
-                      }
-                    </select>
-                    {/* <input onChange={(e) => selectedOption(e)}  /> */}
-                  </div>
-                  <div className={style.selectScore}>
-                    <label>SCORE</label>
-                   <input onChange={(e) => setScore(e.target.value)} type='number' />
-                  </div>
                   <div>
-                    <button onClick={addAssesment}>submiit</button>
+                    <h3>Add an Assesment</h3> 
+                    <div className={style.selectAssess}>
+                      <label className={style.labels}>Assesment</label>
+                      <select id='select' type='select' onChange={(e) => selectedOption(e)} >
+                        <option>- Select -</option>
+                        { learn.map(assess => (
+                            <option key={assess.assessment_id} value={assess.assessment_id}>{assess.assessment_name}</option>
+                        ))
+                        }
+                      </select>
+                      {/* <input onChange={(e) => selectedOption(e)}  /> */}
+                    </div>
+                    <div className={style.selectScore}>
+                      <label className={style.labels}>Score</label>
+                    <input onChange={(e) => setScore(e.target.value)} type='number'  />
+                    </div>
+                    <div className={style.btn}>
+                      <button onClick={addAssesment}>submiit</button>
+                    </div>
                   </div>
                 </div>
               </div>
