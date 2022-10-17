@@ -20,7 +20,7 @@ const ProjectModal = ({showProjModal, onClose}) => {
 /*-----Converting string into Boolean and Number-----*/
   let grade = projGrade === 'true'
   let projectId = Number(projSelected)
-  // console.log(projectId,'here')
+  console.log(projectId,'here')
 
 
   const addProject = () => {
@@ -102,7 +102,7 @@ const ProjectModal = ({showProjModal, onClose}) => {
                     <textarea onChange={(e) => setProjNotes(e.target.value)}></textarea>
                   </div>
                   <div>
-                    <button onClick={addProject}>submiit</button>
+                    <button onClick={addProject}>submit</button>
                   </div>
                 </div>
               </div>
