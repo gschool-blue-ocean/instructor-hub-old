@@ -34,6 +34,7 @@ ChartJS.register(
 
 const CohortOverall = ({ children }) => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showUpdateProjectModal, setShowUpdateProjectModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [students, setStudents] = useRecoilState(studentsState)
@@ -73,6 +74,10 @@ const CohortOverall = ({ children }) => {
 
   const openUpdateModal = () => {
     setShowUpdateModal((prev) => !prev);
+  };
+
+  const openUpdateProjectModal = () => {
+    setShowUpdateProjectModal((prev) => !prev);
   };
 
 
@@ -167,13 +172,13 @@ const CohortOverall = ({ children }) => {
             }}
           />
           <div className={overallStyles.link}>
-            <u onClick={openUpdateModal}>Projects Grade Update</u>
+            <u onClick={openUpdateProjectModal}>Projects Grade Update</u>
           </div>
           <UpdateProjectsModal
-            showUpdateModal={showUpdateModal}
-            setShowUpdateModal={setShowUpdateModal}
+            showUpdateProjectModal={showUpdateProjectModal}
+            setShowUpdateProjectModal={setShowUpdateProjectModal}
             onClose={() => {
-              setShowUpdateModal(false);
+              setShowUpdateProjectModal(false);
             }}
           />
         </div>

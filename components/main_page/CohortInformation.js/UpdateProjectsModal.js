@@ -10,9 +10,9 @@ import {
         projectsState
       } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
-import axios from "axios";
+import axios from 'axios'
 
-const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
+const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal, onClose }) => {
   // What student is being updated at this moment
   const [currStudent, setCurrStudent] = useState(0);
   // This is derived state -- updated at same time as currStudent, one derives the other
@@ -56,9 +56,12 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
   // To reset the indexer value if modal is closed early
   onClose = () => {
     setCurrStudent((prev) => 0);
-    setShowUpdateModal(false);
+    setShowUpdateProjectModal(false);
   };
-
+  let grade = projGrade === 'true'
+  let projectId = Number(projSelected)
+  console.log("Here:", indexedStudent.student_id)
+  
   // submitHandler and enterListener are basically redundant, see about combining/creating helper
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
   const submitHandler = (e) => {
@@ -66,24 +69,37 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
     const stagedStudent = formGetter(e.target);
     // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
     axios.post('/api/projectGrades', {
-      "student_id": studentId,
+      "student_id": indexedStudent.student_id,
       "project_id": projectId,
       "project_passed": grade, 
       "notes": `${projNotes}`
     })
     .then(() => {
-      axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
+      axios.get(`/api/projectsAndProjectGradesId/${indexedStudent.student_id}`).then((res) => {
         setCurrStudentProjects(res.data);
-        // console.log(res.data, 'new');
+        set
+        console.log(res.data, 'new');
+        console.log(currStudentProjects)
+        // setStagedCohort((prev) => {
+        //   prev.push(stagedStudent);
+        //   console.log(prev)
+          console.log(stagedStudent)
+        //   return prev;
+        // })
+        // Until HERE ^
+        e.target.reset();
+        firstInput.current.focus();
       })
     }) 
-    setStagedCohort((prev) => {
-      prev.push(stagedStudent);
-      return prev;
-    });
-    // Until HERE ^
-    e.target.reset();
-    firstInput.current.focus();
+    // setStagedCohort((prev) => {
+    //   prev.push(stagedStudent);
+    //   console.log(prev)
+    //   console.log(stagedStudent)
+    //   return prev;
+    // });
+    // // Until HERE ^
+    // e.target.reset();
+    // firstInput.current.focus();
   };
 
   const enterListener = (e) => {
@@ -125,24 +141,24 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
 
   
 /*-----Converting string into Boolean and Number-----*/
-  let grade = projGrade === 'true'
-  let projectId = Number(projSelected)
-  // console.log(projectId,'here')
+  // let grade = projGrade === 'true'
+  // let projectId = Number(projSelected)
+  // // console.log(projectId,'here')
 
 
   const addProject = () => {
-    axios.post('/api/projectGrades', {
-      "student_id": studentId,
-      "project_id": projectId,
-      "project_passed": grade, 
-      "notes": `${projNotes}`
-    })
-    .then(() => {
-      axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
-        setCurrStudentProjects(res.data);
-        // console.log(res.data, 'new');
-      })
-    }) 
+    // axios.post('/api/projectGrades', {
+    //   "student_id": studentId,
+    //   "project_id": projectId,
+    //   "project_passed": grade, 
+    //   "notes": `${projNotes}`
+    // })
+    // .then(() => {
+    //   axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
+    //     setCurrStudentProjects(res.data);
+    //     // console.log(res.data, 'new');
+    //   })
+    // }) 
 
     let instructorNotes = ''
      axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
@@ -176,7 +192,7 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
 
   return (
     <>
-      {showUpdateModal ? (
+      {showUpdateProjectModal ? (
         <>
           <div className={styles.modalOverlay} onClick={onClose} />
 
@@ -204,36 +220,37 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
                     required
                     autoFocus={true}
                     ref={firstInput}
+                    onChange={(e) => setProjSelected(e.target.value)}
                   >
                     <option value="none" selected disabled hidden>
                       Select an Option
                     </option>
-                    <option value="1 - Needs improvement">
+                    <option value="1">
                       1 - Twiddler
                     </option>
-                    <option value="2 - Approaching standard">
+                    <option value="2">
                       2 - PixelArtMaker
                     </option>
-                    <option value="3 - Meets standard">
+                    <option value="3">
                       3 - ReactMVP
                     </option>
-                    <option value="4 - Exceeds standard">
+                    <option value="4">
                       4 - FoodTruck
                     </option>
-                    <option value="4 - Exceeds standard">
+                    <option value="5">
                       5 - Hackathon
                     </option>
                   </select>{" "}
                   <br />
                   <label htmlFor="Grade">Grade</label> <br />
-                  <select id="Grade" name="Grade" required>
+                  <select id="Grade" name="Grade" required onChange={(e) => setProjGrade(e.target.value)}>
                     <option value="none" selected disabled hidden>
                       Select an Option
                     </option>
-                    <option value="1 - Needs improvement">
+                    <option value={true}>
                       1 - Passed
                     </option>
-                    <option value="2 - Approaching standard">
+                    <option value={false}>
                       2 - Failed
                     </option>
                 
@@ -246,6 +263,7 @@ const UpdateProjectsModal = ({ showUpdateModal, setShowUpdateModal, onClose }) =
                     rows="10"
                     cols="30"
                     required
+                    onChange={(e) => setProjNotes(e.target.value)}
                   ></textarea>{" "}
                   <br />
                   <input type="submit" value="Submit" />
