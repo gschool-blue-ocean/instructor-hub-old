@@ -22,7 +22,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [techSkillGID, setTechSkillGID] = useState({});
   const [teamWorkGID, setTeamWorkGID] = useState({});
   // Merely to identify who is making the update, and possibly selecting the students of the user's default cohort
-  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
+  const [currentCohortName, setCurrentCohortName] =
+    useRecoilState(currentCohortState);
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [user, setUser] = useRecoilState(usersState);
   const [currentStudent, setCurrentStudent] =
@@ -34,10 +35,9 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const firstInput = useRef(null);
 
   const fetchData = async () => {
-    if (course.length > 0) {
-      console.log("What the fuck", course[currStudent].gid);
+    if (filteredCohort[currStudent]) {
       const projectInfo = await axios.get(
-        `https://app.asana.com/api/1.0/tasks/${course[currStudent].gid}`,
+        `https://app.asana.com/api/1.0/tasks/${filteredCohort[currStudent].gid}`,
         {
           headers: {
             Authorization: `Bearer ${user.asana_access_token}`,
@@ -59,39 +59,44 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
         Okay: projectInfo.data.data.custom_fields[1].enum_options[2].gid,
         Bad: projectInfo.data.data.custom_fields[1].enum_options[3].gid,
       });
+    } else {
+      return;
     }
   };
 
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
-    // let projectGID;
-    // cohorts.forEach((element) => {
-    //   if (element.name.toLowerCase() === currentCohort.toLowerCase()) {
-    //     console.log("What the hell is studentGID right now", element.gid);
-    //     projectGID = element.gid;
-    //   }
-    // });
-    // setStudentGID((prev) => {
-    //   // cohorts.forEach((element) => {
-    //   //   if (element.name.toLowerCase() === currentCohort.toLowerCase()) {
-    //   //     console.log("What the hell is studentGID right now", element.gid);
-    //   //     return element.gid;
-    //   //   }
-    //   // });
-    //   return projectGID;
-    // });
-    if (course[currStudent]) {
-      setIndexedStudent((prev) => course[currStudent]);
-    }
-    // console.log("what the stagedCohort look like?", stagedCohort);
-    // console.log(course[currStudent]);
-    console.log("what course?", course);
-    fetchData();
-  }, [currStudent, currentCohort]);
+    console.log("What's the whole cohort object?", cohortObject[0]);
+    if (filteredCohort[currStudent]) {
+      setIndexedStudent((prev) => filteredCohort[currStudent]);
+    } else if (
+      (currStudent = filteredCohort.length && filteredCohort.length > 0)
+    ) {
+      axios.put(
+        `https://app.asana.com/api/1.0/projects/${cohortObject[0].gid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.asana_access_token}`,
+          },
+          // data: {
+          //   data: {
 
-  // Filters students to be updated by matching their cohort value to currentCohort's name
-  let course = students.filter(
-    (classRoom) => classRoom.cohort == currentCohort
+          //   }
+          // }
+        }
+      );
+      setStagedCohort({});
+    }
+    console.log("what filteredCohort?", filteredCohort);
+    fetchData();
+  }, [currStudent, currentCohortName]);
+
+  // Filters students to be updated by matching their cohort value to currentCohortName's name
+  let filteredCohort = students.filter(
+    (classRoom) => classRoom.cohort == currentCohortName
+  );
+  let cohortObject = cohorts.filter(
+    (cohort) => cohort.name == currentCohortName
   );
 
   // To reset the indexer value if modal is closed early
@@ -106,10 +111,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     e.preventDefault();
     const stagedStudent = formGetter(e.target);
     // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
-    setStagedCohort((prev) => {
-      prev.push(stagedStudent);
-      return prev;
-    });
+    setStagedCohort((prev) => [...prev, stagedStudent]);
     // Until HERE ^
     e.target.reset();
     firstInput.current.focus();
@@ -132,16 +134,17 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const formGetter = (form) => {
     let stagedName = `${indexedStudent.name}`;
     console.log("Just staged for POST: ", stagedName);
-    let stagedStudent = { [stagedName]: { GID: [indexedStudent.gid] } };
+    let stagedStudent = { name: stagedName, GID: indexedStudent.gid };
     let formData = new FormData(form);
     for (const pair of formData.entries()) {
-      stagedStudent[stagedName][pair[0]] = pair[1];
+      stagedStudent[pair[0]] = pair[1];
     }
+    console.log("StagedStudent", stagedStudent);
     // In addition, it will be necessary to grab
     // "current student" from state.
     // these Setters MUST "return" a value, not merely increment or mutate
     setCurrStudent((prev) => {
-      if (prev < course.length) {
+      if (prev < filteredCohort.length) {
         return prev + 1;
       } else {
         return 0;
@@ -159,7 +162,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
           <div className={styles.UpdateModal}>
             <div className={styles.header}>
               Update -{" "}
-              {course[currStudent]
+              {filteredCohort[currStudent]
                 ? indexedStudent.name
                 : "Weekly Update COMPLETE"}
               <button className={styles.button} onClick={onClose}>
@@ -167,7 +170,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
               </button>
             </div>
             <div className={styles.update}>
-              {course[currStudent] ? (
+              {filteredCohort[currStudent] ? (
                 <form
                   className={styles.updateForm}
                   onSubmit={submitHandler}
@@ -229,7 +232,15 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                   <input type="submit" value="Submit" />
                 </form>
               ) : (
-                <span>{stagedCohort}</span>
+                <>
+                  {stagedCohort.map((student) => (
+                    <>
+                      <ul>
+                        <li key={student.GID}>{student.name}</li>
+                      </ul>
+                    </>
+                  ))}
+                </>
               )}
             </div>
           </div>
