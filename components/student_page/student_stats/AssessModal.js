@@ -15,9 +15,6 @@ const AssessModal = ({showAssessModal, onClose }) => {
   const [users, setUsers] = useRecoilState(usersState);
 
   
-  let asanaToken = sessionStorage.getItem('user asana access token')
- 
-
   const selectedOption = (e) => {
     setAssessId(e.target.value)
     // console.log(e.target.value, 'value')
@@ -28,6 +25,8 @@ const AssessModal = ({showAssessModal, onClose }) => {
 
   /*------------- On Submit------------*/
   const addAssesment = () => {
+    const assessmentName = learn.find((assessment) => assessment.assessment_id === assessmentId)
+
     // on submit it will do a post request to our local databse 
     console.log(asanaToken)
     axios.post("/api/learnGrades", {
@@ -47,7 +46,7 @@ const AssessModal = ({showAssessModal, onClose }) => {
         let instructorNotes = ""
         axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
             headers: {
-              Authorization: `Bearer ${asanaToken}`,
+              Authorization: `Bearer ${users.asana_access_token}`,
             },
           })
           .then((res) => {
@@ -62,14 +61,14 @@ const AssessModal = ({showAssessModal, onClose }) => {
               method: "PUT", //must be put method not patch
               url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
               headers: {
-                Authorization: `Bearer ${asanaToken} `, //need template literal for ALLLLL headers so global state dependant on user
+                Authorization: `Bearer ${users.asana_access_token} `, //need template literal for ALLLLL headers so global state dependant on user
               },
               data: {
                 data: {
                   workspace: "1213745087037",
                   assignee_section: null,
                   // in the body we are passing the first get request from asana to display the prev notes and then add the new note we wanted and not loose the prev notes in Asana 
-                  html_notes: `<body>${instructorNotes}\n ${"Name".toUpperCase()} : ${assessScore}</body>`, //need conditional or neeed to make this field mandatory
+                  html_notes: `<body>${instructorNotes}\n ${assessmentName.assessment_name.toUpperCase()} : ${assessScore}</body>`, //need conditional or neeed to make this field mandatory
                   parent: null,
                   resource_subtype: "default_task",
                   // "custom_fields": {
@@ -97,24 +96,26 @@ const AssessModal = ({showAssessModal, onClose }) => {
             <div className={style.content}>
               <div className={style.border}>
                 <div className={style.border2}>
-                  {/* <div>Assesment</div>  */}
-                  <div className={style.selectAssess}>
-                    <label>Assesment</label>
-                    <select id='select' type='select' onChange={(e) => selectedOption(e)} >
-                      <option>Select</option>
-                      { learn.map(assess => (
-                          <option key={assess.assessment_id} value={assess.assessment_id}>{assess.assessment_name}</option>
-                      ))
-                      }
-                    </select>
-                    {/* <input onChange={(e) => selectedOption(e)}  /> */}
-                  </div>
-                  <div className={style.selectScore}>
-                    <label>SCORE</label>
-                   <input onChange={(e) => setScore(e.target.value)} type='number' />
-                  </div>
                   <div>
-                    <button onClick={addAssesment}>submiit</button>
+                    <h3>Add an Assesment</h3> 
+                    <div className={style.selectAssess}>
+                      <label className={style.labels}>Assesment</label>
+                      <select id='select' type='select' onChange={(e) => selectedOption(e)} >
+                        <option>- Select -</option>
+                        { learn.map(assess => (
+                            <option key={assess.assessment_id} value={assess.assessment_id}>{assess.assessment_name}</option>
+                        ))
+                        }
+                      </select>
+                      {/* <input onChange={(e) => selectedOption(e)}  /> */}
+                    </div>
+                    <div className={style.selectScore}>
+                      <label className={style.labels}>Score</label>
+                    <input onChange={(e) => setScore(e.target.value)} type='number'  />
+                    </div>
+                    <div className={style.btn}>
+                      <button onClick={addAssesment}>submiit</button>
+                    </div>
                   </div>
                 </div>
               </div>

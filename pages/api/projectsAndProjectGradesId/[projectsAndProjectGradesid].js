@@ -27,10 +27,10 @@ export default async function getProjectsAndProjectGradesId(req, res) {
     }
   } else if (req.method === "PATCH") {
     try {
-      const { project_passed, notes } = req.body;
+      const { project_passed, notes, project_id } = req.body;
       const patchProjectGrade = await sql`
-                   UPDATE project_grades SET project_passed = ${project_passed}, notes = ${notes}
-                   WHERE project_id = ${id}`;
+                   UPDATE project_grades SET project_passed = ${project_passed} , notes = ${notes}, project_id = ${project_id }
+                   WHERE student_id = ${id}`;
       res.status(200).json(patchProjectGrade);
     } catch (error) {
       console.error("Bad news in index api: ", error);
