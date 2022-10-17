@@ -46,8 +46,8 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
     }
     // console.log("what the stagedCohort look like?", stagedCohort);
     // console.log(course[currStudent]);
-  }, [currStudent, currentCohort]);
-
+  }, [currStudent, currentCohort]); 
+console.log(currStudent)
   // Filters students to be updated by matching their cohort value to currentCohort's name
   let course = students.filter(
     (classRoom) => classRoom.cohort == currentCohort
@@ -66,30 +66,32 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
   const submitHandler = (e) => {
     e.preventDefault();
-    const stagedStudent = formGetter(e.target);
+    // const stagedStudent = formGetter(e.target);
     // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
-    axios.post('/api/projectGrades', {
-      "student_id": indexedStudent.student_id,
-      "project_id": projectId,
-      "project_passed": grade, 
-      "notes": `${projNotes}`
-    })
-    .then(() => {
-      axios.get(`/api/projectsAndProjectGradesId/${indexedStudent.student_id}`).then((res) => {
-        setCurrStudentProjects(res.data);
-        set
-        console.log(res.data, 'new');
-        console.log(currStudentProjects)
-        // setStagedCohort((prev) => {
-        //   prev.push(stagedStudent);
-        //   console.log(prev)
-          console.log(stagedStudent)
-        //   return prev;
-        // })
-        // Until HERE ^
-        e.target.reset();
-        firstInput.current.focus();
+    
+      axios.post('/api/projectGrades', {
+        "student_id": indexedStudent.student_id,
+        "project_id": projectId,
+        "project_passed": grade,
+        "notes": `${projNotes}`
       })
+        .then(() => {
+          axios.get(`/api/projectsAndProjectGradesId/${indexedStudent.student_id}`).then((res) => {
+            setCurrStudentProjects(res.data);
+            setCurrStudent(indexedStudent)
+            console.log(res.data, 'res.data/current project_grades');
+            console.log('current student projects:', currStudentProjects)
+            // setStagedCohort((prev) => {
+            //   prev.push(stagedStudent);
+            //   console.log(prev)
+            // console.log(stagedStudent)
+            //   return prev;
+            // })
+            // Until HERE ^
+            e.target.reset();
+            // firstInput.current.focus();
+          })
+       
     }) 
     // setStagedCohort((prev) => {
     //   prev.push(stagedStudent);
@@ -102,42 +104,42 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
     // firstInput.current.focus();
   };
 
-  const enterListener = (e) => {
-    if (e.key === "Enter" && e.shiftKey === false) {
-      e.preventDefault();
-      const stagedStudent = formGetter(e.target.form);
-      // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
-      setStagedCohort((prev) => {
-        prev.push(stagedStudent);
-        return prev;
-      });
-      // Until HERE ^
-      e.target.form.reset();
-      firstInput.current.focus();
-    }
-  };
+  // const enterListener = (e) => {
+  //   if (e.key === "Enter" && e.shiftKey === false) {
+  //     e.preventDefault();
+  //     const stagedStudent = formGetter(e.target.form);
+  //     // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
+  //     setStagedCohort((prev) => {
+  //       prev.push(stagedStudent);
+  //       return prev;
+  //     });
+  //     // Until HERE ^
+  //     e.target.form.reset();
+  //     firstInput.current.focus();
+  //   }
+  // };
 
   // formGetter grabs the entered data from the field and packages it for POST
-  const formGetter = (form) => {
-    let stagedName = `${indexedStudent.name}`;
-    console.log("Just staged for POST: ", stagedName);
-    let stagedStudent = { [stagedName]: {} };
-    let formData = new FormData(form);
-    for (const pair of formData.entries()) {
-      stagedStudent[stagedName][pair[0]] = pair[1];
-    }
-    // In addition, it will be necessary to grab
-    // "current student" from state.
-    // these Setters MUST "return" a value, not merely increment or mutate
-    setCurrStudent((prev) => {
-      if (prev < course.length) {
-        return prev + 1;
-      } else {
-        return 0;
-      }
-    });
-    return stagedStudent;
-  };
+  // const formGetter = (form) => {
+  //   let stagedName = `${indexedStudent.name}`;
+  //   console.log("Just staged for POST: ", stagedName);
+  //   let stagedStudent = { [stagedName]: {} };
+  //   let formData = new FormData(form);
+  //   for (const pair of formData.entries()) {
+  //     stagedStudent[stagedName][pair[0]] = pair[1];
+  //   }
+  //   // In addition, it will be necessary to grab
+  //   // "current student" from state.
+  //   // these Setters MUST "return" a value, not merely increment or mutate
+  //   setCurrStudent((prev) => {
+  //     if (prev < course.length) {
+  //       return prev + 1;
+  //     } else {
+  //       return 0;
+  //     }
+  //   });
+  //   return stagedStudent;
+  // };
 
   
 /*-----Converting string into Boolean and Number-----*/
@@ -146,7 +148,7 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
   // // console.log(projectId,'here')
 
 
-  const addProject = () => {
+  // const addProject = () => {
     // axios.post('/api/projectGrades', {
     //   "student_id": studentId,
     //   "project_id": projectId,
@@ -160,35 +162,35 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
     //   })
     // }) 
 
-    let instructorNotes = ''
-     axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
-      headers: {
-        Authorization: `Bearer ${users[3].asana_access_token}`,
-      }
-    })
-    .then((res) => {
-      console.log(res.data.data)
-      instructorNotes = res.data.data.notes
-    })
-    .then(() => {
-      instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null
-      axios({
-        method:"PUT",  //must be put method not patch
-        url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
-        headers: {
-          Authorization: `Bearer ${users[3].asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
-        }, data: { 
-            data: {
-              "workspace": "1213745087037",
-              "assignee_section": null,
-              "html_notes": `<body>${instructorNotes}\n ${"Name".toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
-              "parent": null,
-              "resource_subtype": "default_task",
-            }
-          }
-      })
-    })
-  }
+  //   let instructorNotes = ''
+  //    axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
+  //     headers: {
+  //       Authorization: `Bearer ${users[3].asana_access_token}`,
+  //     }
+  //   })
+  //   .then((res) => {
+  //     console.log(res.data.data)
+  //     instructorNotes = res.data.data.notes
+  //   })
+  //   .then(() => {
+  //     instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null
+  //     axios({
+  //       method:"PUT",  //must be put method not patch
+  //       url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
+  //       headers: {
+  //         Authorization: `Bearer ${users[3].asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
+  //       }, data: { 
+  //           data: {
+  //             "workspace": "1213745087037",
+  //             "assignee_section": null,
+  //             "html_notes": `<body>${instructorNotes}\n ${"Name".toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
+  //             "parent": null,
+  //             "resource_subtype": "default_task",
+  //           }
+  //         }
+  //     })
+  //   })
+  // }
 
   return (
     <>
@@ -211,7 +213,7 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
                 <form
                   className={styles.updateForm}
                   onSubmit={submitHandler}
-                  onKeyDown={enterListener}
+                  // onKeyDown={enterListener}
                 >
                   <label htmlFor="Projects">Projects</label> <br />
                   <select
