@@ -26,26 +26,30 @@ const StudentSummary = () => {
   // Allows the cohorts to be filter 
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
 
+  useEffect(() => {
+    let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
+  }, [students])
+
   // Determines Progress row words
   let progress = (num) => {
     if (num === 1) {
       return (
-        <div className={studentStyle.color}>At Risk</div>
+        <td className={studentStyle.color}>At Risk</td>
       )
     }
     if (num === 2) {
       return (
-        <div className={studentStyle.color3}>Below Avg</div>
+        <td className={studentStyle.color3}>Below Avg</td>
       )
     }
     if (num === 3) {
       return (
-        <div className={studentStyle.color2}>Average</div>
+        <td className={studentStyle.color2}>Average</td>
       )
     }
     if (num === 4) {
       return (
-        <div className={studentStyle.color4}>Above Avg</div>
+        <td className={studentStyle.color4}>Above Avg</td>
       )
     }
   }
@@ -87,15 +91,13 @@ const StudentSummary = () => {
   //Works in conjunction with the handleChange function. Needed to track who is selected and who is not
   useEffect(() => {
       let selectedStudents = selectedPeople.filter(unChecked => unChecked.isChecked == true)
-      console.log(selectedPeople)
-      console.log(selectedStudents)
   }, [selectedPeople])
 
-  //Used for sorting from ASC to DSC
-  const sorting= (name) => {
+  //Used for sorting from ASC to DSC for name/progress/Client-side/Server-side.
+  const wordSorting= (name) => {
       if(order === "ASC") {
         const sorted = [...course].sort((a,b) =>
-          a[name] > b[name]? 1 : -1
+          a[name].toUpperCase() > b[name].toUpperCase() ? 1 : -1
       );
       console.log(name, "name")
       console.log(sorted)
@@ -104,13 +106,34 @@ const StudentSummary = () => {
     }
     if(order === "DSC") {
       const sorted = [...course].sort((a,b) =>
-        a[name] < b[name] ? 1 : -1
+        a[name].toUpperCase() < b[name].toUpperCase() ? 1 : -1
       );
       setStudents(sorted);
       setOrder("ASC")
     }
   }
+
+  //Same function as above but used for values
+  const sorting= (name) => {
+    if(order === "ASC") {
+      const sorted = [...course].sort((a,b) =>
+        a[name] > b[name] ? 1 : -1
+    );
+    console.log(name, "name")
+    console.log(sorted)
+    setStudents(sorted);
+    setOrder("DSC")
+  }
+  if(order === "DSC") {
+    const sorted = [...course].sort((a,b) =>
+      a[name] < b[name] ? 1 : -1
+    );
+    setStudents(sorted);
+    setOrder("ASC")
+  }
+}
   
+  //Axios delete request. Removes from the database and Asana
   const handleDeleteClick = (studentId, studentGid) => {
     const newStudent = [...students] //Create New Array based on current students
     console.log(studentGid)
@@ -128,8 +151,7 @@ const StudentSummary = () => {
       }, 
     })
   }
-
-  
+ 
     const openGitHubModal = () => {
       setShowGitHubModal((prev) => !prev);
     };
@@ -174,13 +196,13 @@ const StudentSummary = () => {
               <thead className= {studentStyle.thead}>
                 <tr className= {studentStyle.headerRow}>
                   <th className= {studentStyle.smallHeader}></th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("name")}>Name</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => wordSorting("name")}>Name</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("learn_avg")}>Learn Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("client_side_test")}>Client-Side</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("server_side_test")}>Server-Side</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => wordSorting("client_side_test")}>Client-Side</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => wordSorting("server_side_test")}>Server-Side</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("teamwork_avg")}>Teamwork Avg</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("average")}>Progess</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("progress")}>Progess</th>
                   <th className= {studentStyle.header} scope="col">Notes</th>
                   <th className= {studentStyle.smallHeader} scope="col"></th>
                 </tr>
@@ -193,15 +215,15 @@ const StudentSummary = () => {
                     <input type="checkbox" id = {student.student_id} checked={student?.isChecked || false} onChange={handleChange} ></input>
                   </td>
                   <td  className= {studentStyle.nameContent}  onClick={() => setStudentId(student.student_id)}>
-                    <Link className= {studentStyle.nameSpace} key={student.student_id} href={`/student/${student.student_id}`}>{student.name}</Link>
+                    <Link className= {studentStyle.nameSpace} href={`/student/${student.student_id}`}>{student.name}</Link>
                   </td>
                   <td className= {studentStyle.content}>{student.learn_avg}%</td>
                   <td className= {studentStyle.content}>{student.client_side_test}</td>
                   <td className= {studentStyle.content}>{student.server_side_test}</td>
                   <td className= {studentStyle.content}>{colPercent(student.teamwork_avg)}</td>
                   <td className= {studentStyle.content}>{colPercent(student.tech_avg)}</td>
-                  <td className= {studentStyle.content} onClick={() => openGraphModel(student)}>
-                    <div>{progress(Math.ceil((student.teamwork_avg + student.tech_avg)/2))}</div>
+                  <td className= {studentStyle.content} onClick={() => openGraphModel(student)}>{progress(Math.ceil((student.teamwork_avg + student.tech_avg)/2))}
+                    {/* <div>{progress(Math.ceil((student.teamwork_avg + student.tech_avg)/2))}</div> */}
                   </td>
                   <td className= {studentStyle.content} onClick={() => openCommentModel(student)}>
                     <svg className={studentStyle.noteIcon} viewBox="0 0 22 22">
@@ -219,7 +241,7 @@ const StudentSummary = () => {
                       C13.7761424,14 14,14.2238576 14,14.5 C14,14.7761424 13.7761424,15 13.5,15 L8.5,15 Z"></path>
                     </svg>
                   </td>
-                  <td className= {studentStyle.smallContent}>
+                  <td className= {studentStyle.trashContent}>
                     <svg className={studentStyle.trash} viewBox="0 0 12 12" onClick={()=> handleDeleteClick(student.student_id, student.gid)}>
                       <path d="M6.5 17q-.625 0-1.062-.438Q5 16.125 5 15.5v-10H4V4h4V3h4v1h4v1.5h-1v10q0 .625-.438 1.062Q14.125 17 13.5 17Zm7-11.5h-7v10h7ZM8 14h1.5V7H8Zm2.5 0H12V7h-1.5Zm-4-8.5v10Z"></path>
                     </svg>{" "}
