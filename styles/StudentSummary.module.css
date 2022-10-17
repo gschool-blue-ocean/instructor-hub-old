@@ -224,6 +224,18 @@
     background: linear-gradient(109.6deg, rgb(255, 219, 47) 11.2%, rgb(244, 253, 0) 100.2%);
 }
 
+.color4 {
+    margin: auto;
+    width: 100px;
+    padding: 4px;
+    border-radius: 50px;
+    color: white;
+    background: #2E0DB2;
+    background: -webkit-linear-gradient(top left, #2E0DB2, #4F62EF);
+    background: -moz-linear-gradient(top left, #2E0DB2, #4F62EF);
+    background: linear-gradient(to bottom right, #2E0DB2, #4F62EF);
+}
+
 .trash {
     display: inline-block;
     overflow: visible !important;
