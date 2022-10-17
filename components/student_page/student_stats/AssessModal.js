@@ -15,7 +15,7 @@ const AssessModal = ({showAssessModal, onClose }) => {
   const [users, setUsers] = useRecoilState(usersState);
 
   
-  let asanaToken = sessionStorage.getItem('user asana access token')
+  // let asanaToken = sessionStorage.getItem('user asana access token')
  
 
   const selectedOption = (e) => {
