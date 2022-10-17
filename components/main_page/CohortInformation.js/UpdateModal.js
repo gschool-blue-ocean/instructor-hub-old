@@ -13,6 +13,8 @@ import axios from "axios";
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // What student is being updated at this moment
   const [currStudent, setCurrStudent] = useState(0);
+  const [filteredCohort, setFilteredCohort] = useState([]);
+  const [cohortObject, setCohortObject] = useState([]);
   // This is derived state -- updated at same time as currStudent, one derives the other
   const [indexedStudent, setIndexedStudent] = useState({});
   const [modal, setModal] = useState(false);
@@ -63,8 +65,23 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     }
   };
 
+  useEffect(() => {
+    console.log("Students: ", students);
+    if (students) {
+      const impendingCohort = students.filter(
+        (student) => student.cohort == user.default_cohort
+      );
+      setFilteredCohort(() => impendingCohort);
+      const impendingObject = cohorts.filter(
+        (cohort) => cohort.name == user.default_cohort
+      );
+      setCohortObject(() => impendingObject);
+    }
+  }, [user, students]);
+
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
+    // What the hell
     if (filteredCohort[currStudent]) {
       setIndexedStudent(() => filteredCohort[currStudent]);
     }
@@ -89,16 +106,17 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     // }
     console.log("What is currStudent?", currStudent);
     console.log("IndexedStudent is", indexedStudent);
+    console.log("filteredCohort come back", filteredCohort);
     // fetchData();
-  }, [currStudent, currentCohortName]);
+  }, [currStudent, filteredCohort]);
 
   // Filters students to be updated by matching their cohort value to currentCohortName's name
-  let filteredCohort = students.filter(
-    (student) => student.cohort == currentCohortName
-  );
-  let cohortObject = cohorts.filter(
-    (cohort) => cohort.name == currentCohortName
-  );
+  // let filteredCohort = students.filter(
+  //   (student) => student.cohort == currentCohortName
+  // );
+  // let cohortObject = cohorts.filter(
+  //   (cohort) => cohort.name == currentCohortName
+  // );
 
   // To reset the indexer value if modal is closed early
   onClose = () => {
