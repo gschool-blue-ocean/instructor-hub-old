@@ -15,15 +15,18 @@ const ProjectModal = ({showProjModal, onClose}) => {
   const [projGrade, setProjGrade] = useState([]); 
   const [projNotes, setProjNotes] = useState(''); 
 
-  // let asanaToken = sessionStorage.getItem('user asana access token')
-
 /*-----Converting string into Boolean and Number-----*/
   let grade = projGrade === 'true'
   let projectId = Number(projSelected)
   console.log(projectId,'here')
 
 
+
   const addProject = () => {
+
+    const selectedProjName = projects.find((project) => project.project_id === projectId)
+
+
     axios.post('/api/projectGrades', {
       "student_id": studentId,
       "project_id": projectId,
@@ -40,7 +43,7 @@ const ProjectModal = ({showProjModal, onClose}) => {
     let instructorNotes = ''
      axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
       headers: {
-        Authorization: `Bearer ${asanaToken}`,
+        Authorization: `Bearer ${users.asana_access_token}`,
       }
     })
     .then((res) => {
@@ -53,12 +56,12 @@ const ProjectModal = ({showProjModal, onClose}) => {
         method:"PUT",  //must be put method not patch
         url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
         headers: {
-          Authorization: `Bearer ${asanaToken}`,  //need template literal for ALLLLL headers so global state dependant on user
+          Authorization: `Bearer ${users.asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
         }, data: { 
             data: {
               "workspace": "1213745087037",
               "assignee_section": null,
-              "html_notes": `<body>${instructorNotes}\n ${"Name".toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
+              "html_notes": `<body>${instructorNotes}\n ${selectedProjName.project_name.toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
               "parent": null,
               "resource_subtype": "default_task",
             }
@@ -81,28 +84,33 @@ const ProjectModal = ({showProjModal, onClose}) => {
             <div className={style.content}>
               <div className={style.border}>
                 <div className={style.border2}>
-                  <div>Add a Project</div> 
-                  <div>
-                    <select id='select' type='select' onChange={(e) => setProjSelected(e.target.value)}>
-                      <option></option>
-                      { projects.map(proj => (
-                          <option key={proj.project_id} value={proj.project_id}>{proj.project_name}</option>
-                      ))
-                      }
-                    </select>
-                  </div>
-                  <div>
-                    <select id='select' type='select' onChange={(e) => setProjGrade(e.target.value)}>
-                     <option></option>
-                      <option value={true}>Passed</option>
-                      <option value={false}>Failed</option>
-                    </select>
-                  </div>
-                  <div>
-                    <textarea onChange={(e) => setProjNotes(e.target.value)}></textarea>
-                  </div>
-                  <div>
-                    <button onClick={addProject}>submit</button>
+                  <div className='hello'>
+                    <h3>Add a Project</h3> 
+                    <div className={style.section}>
+                      <lable className={style.labels}>Name</lable>
+                      <select id='select' type='select' onChange={(e) => setProjSelected(e.target.value)}>
+                        <option>- Select -</option>
+                        { projects.map(proj => (
+                            <option key={proj.project_id} value={proj.project_id}>{proj.project_name}</option>
+                        ))
+                        }
+                      </select>
+                    </div>
+                    <div className={style.section}>
+                      <lable className={style.labels} >Score</lable>
+                      <select id='select' type='select' onChange={(e) => setProjGrade(e.target.value)}>
+                      <option>- Select -</option>
+                        <option value={true}>Passed</option>
+                        <option value={false}>Failed</option>
+                      </select>
+                    </div>
+                    <div className={style.section}>
+                      <label className={style.labels} >Notes</label>
+                      <textarea className={style.input} onChange={(e) => setProjNotes(e.target.value)}></textarea>
+                    </div>
+                    <div className={style.btn}>
+                      <button onClick={addProject}>submiit</button>
+                    </div>
                   </div>
                 </div>
               </div>

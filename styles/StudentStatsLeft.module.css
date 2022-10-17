@@ -118,7 +118,15 @@ background: pink;
   }
 
 .noValueContainer {
-    background: #00000026;
+    background: #1b4a49cf;
     height: 100px;
     border-radius: 5px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+.editScore {
+    width: 60px;
 }

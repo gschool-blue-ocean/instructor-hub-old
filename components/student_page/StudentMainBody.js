@@ -21,7 +21,6 @@ const StudentMainBody = () => {
   const [newNote, setNewNote] = useState(''); 
   const [users, setUsers] = useRecoilState(usersState);
 
-  // let asanaToken = sessionStorage.getItem('user asana access token')
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
   // converting ETs date into MM DAY YYYY
@@ -130,7 +129,7 @@ const StudentMainBody = () => {
                         <button onClick={() => setIsEditing(false)}>X</button>
                       </> 
                     :
-                      <li id={note.note_id}
+                      <li className={styles.bullet} id={note.note_id}
                        onDoubleClick={(e) => editNote(e)}>
                        {note.notes}
                       </li>
