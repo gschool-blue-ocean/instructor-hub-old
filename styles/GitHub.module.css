@@ -76,13 +76,15 @@
 }
 
 .tableList {
-    display: table;
+    display: block;
     table-layout: fixed;
     max-width: 1442px;
     min-width: 500px;
+    max-height: 400px;
     padding-left: 0;
     margin-top: 0;
     margin-bottom: 0;
+    overflow: auto;
 }
 
 .tableListItem {

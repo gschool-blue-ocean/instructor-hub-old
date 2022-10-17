@@ -15,12 +15,10 @@ const ProjectModal = ({showProjModal, onClose}) => {
   const [projGrade, setProjGrade] = useState([]); 
   const [projNotes, setProjNotes] = useState(''); 
 
-
-
 /*-----Converting string into Boolean and Number-----*/
   let grade = projGrade === 'true'
   let projectId = Number(projSelected)
-  // console.log(projectId,'here')
+  console.log(projectId,'here')
 
 
 
