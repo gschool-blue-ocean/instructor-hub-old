@@ -108,12 +108,12 @@ VALUES ('PixelArtMaker');
 INSERT INTO projects (project_name)
 VALUES ('ReactMVP');
 
-INSERT INTO project_grades (project_grades_id, student_id, project_id, project_passed, notes)
-VALUES (1, '1', '1', 'TRUE', 'Great job. They are so smart');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES (2, '1', '2', 'TRUE', 'not very good');
+VALUES ('1', '1', 'TRUE', 'Great job. They are so smart');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES (1, '1', '3', 'FALSE', 'good effort but missed the mark');
+VALUES ('1', '2', 'TRUE', 'not very good');
+INSERT INTO project_grades (student_id, project_id, project_passed, notes)
+VALUES ('1', '3', 'FALSE', 'good effort but missed the mark');
 
 --Fake Data
 INSERT INTO learn (assessment_name)
@@ -125,12 +125,12 @@ VALUES ('Arrays');
 
 
 -- Fake Data
-INSERT INTO learn_grades (learn_grade_id ,student_id, assessment_id, assessment_grade)
-VALUES (1, '1', '1', '99');
-INSERT INTO learn_grades (learn_grade_id ,student_id, assessment_id, assessment_grade)
-VALUES (2, '1', '2', '90');
-INSERT INTO learn_grades (learn_grade_id ,student_id, assessment_id, assessment_grade)
-VALUES (1, '1', '3', '60');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('1', '1', '99');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('1', '2', '90');
+INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
+VALUES ('1', '3', '60');
 
 
 
