@@ -28,7 +28,6 @@ const AssessModal = ({showAssessModal, onClose }) => {
     const assessmentName = learn.find((assessment) => assessment.assessment_id === assessmentId)
 
     // on submit it will do a post request to our local databse 
-    console.log(asanaToken)
     axios.post("/api/learnGrades", {
         student_id: studentId,
         assessment_id: assessmentId,
