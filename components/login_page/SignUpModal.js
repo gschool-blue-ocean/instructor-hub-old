@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react'
-import styles from '../../styles/NewCohortModal.module.css'
+import styles from '../../styles/SignUpModal.module.css'
 import { useRouter } from "next/router"
 import { useRecoilState } from "recoil"
 import { loggedIn, usersState, cohortsState, studentsState } from "../state"
@@ -17,13 +17,10 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
 
     const selectedCohort = (e) => {
         setCohort_Asana_Gid(e.target.value);
-        // for(let i = 0; i<listOfCohorts.length; i++){
         for(let i = 0; i<cohorts.length; i++){
             if(e.target.value === cohorts[i].gid){
-            // if(e.target.value === listOfCohorts[i].gid){
                 setDefault_Cohort(cohorts[i].name)
                 setDefaultCohortGid(cohorts[i])
-                // setDefault_Cohort(listOfCohorts[i].name)
             }
         }
         console.log(cohorts, 'made it here')
@@ -57,7 +54,11 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
             "default_cohort": default_cohort,
             "asana_access_token": asana_access_token,
             "gid": cohort_asana_gid
-        }).then((res) => setUser(res.data))
+        }).then((res) =>{
+            console.log(res.data)
+         setUser(res.data)
+        })
+        sessionStorage.setItem('logged_in_Status', 'true');
         setLoggedInStatus(true)
         getStudents();
         router.push("/home")

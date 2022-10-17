@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import headerStyle from "../../styles/Header.module.css";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
@@ -15,15 +15,17 @@ const Header = () => {
   const router = useRouter();
 
   //function allows for logging out and rerouting to sign in page. Also resets the dropDown menu to the hidden state
-  const logoutFunc = (e)=>{
-    setLoggedInStatus(false);
-    axios.get("/api/users").then((res) => {
-      setUsers(res.data.users);
-    });
-    showDropDown(!dropDown)
+  const logoutFunc = ()=>{
+    showDropDown(false)
+    axios.get("/api/users").then((res)=>setUsers(res.data.users))
     router.push("/")
   }
-  
+  const signInStatus = ()=>{
+    if(loggedInStatus){
+      return true
+    }
+  }
+
   return (
     <>
       <header className={headerStyle.header}>
@@ -33,26 +35,20 @@ const Header = () => {
             GALVANIZE
           </div>
           <div className={headerStyle.userDropDown}>
+            {/* this is to make it so the sign In button doesn't show on the login or signup pages */}
             {(router.route !== "/" && router.route !== "/signup") ? (
-              <button
               // the ternary is to make it so that you can't change the status when you are not logged in
-                onClick={() => loggedInStatus ? showDropDown(!dropDown): ""}
-                className={headerStyle.userButton}
-                >
+              <button onClick={() => signInStatus() ? showDropDown(!dropDown): logoutFunc()} className={headerStyle.userButton}>
                 {/* This shows the username of the person who is logged in */}
-                {loggedInStatus ? `${users.username}`: "Sign In"}
+                {signInStatus() ? `${users.username}`: "Sign In"}
                 <img src="https://store.akamai.steamstatic.com/public/shared/images/popups/btn_arrow_down_padded.png" />
               </button>
-            ): ""
-            }
-            <div
-              className={headerStyle.dropDown}
-              style={dropDown ? { display: "flex" } : { display: "none" }}
-            >
+            ): ""}
+            <div className={headerStyle.dropDown} style={dropDown ? { display: "flex" } : { display: "none" }}>
               {/* this will allow the menu to only be shown if logged in */}
-              {loggedInStatus ? (
+              {signInStatus ? (
                 <>
-                  <a onClick={(e) =>logoutFunc(e)}>Logout</a>
+                  <a onClick={() =>logoutFunc()}>Logout</a>
                   <a>Settings</a>
                   <a>Cohort</a>
                 </>

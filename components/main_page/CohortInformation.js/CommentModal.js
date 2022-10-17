@@ -26,21 +26,11 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
                   </div>
                 </div>
               </div>
-              <div>
+              <div className={commentStyle.content_outerContainer}>
               <div className={commentStyle.content_container}>
                 {userNotes.map((note) => (
-                <div className={commentStyle.content}>
+                  <div className={commentStyle.content} key={"keycomment"}>
                   <div className={commentStyle.commentBorder}>
-                    <div className={commentStyle.rightBorder}>
-                      <div className={commentStyle.rightInline}>
-                        <Image
-                          src="/pic1.jpg"
-                          width="44"
-                          height="44"
-                          className={commentStyle.instructorIcon}
-                          />
-                      </div>
-                    </div>
                     <div className={commentStyle.headerContainer}>
                       <div className={commentStyle.headerLayout}>
                         <div className={commentStyle.textColor}>
@@ -57,12 +47,12 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
                   </div>
                 </div>
                 ))}
-                </div>
               </div>
-              <div className={commentStyle.btn_container}>
-                <div onClick={onClose} className={commentStyle.close_btn}>
-                  <div className={commentStyle.close_btn_medium}>
-                    <span className={commentStyle.cancel}> Close</span>
+                <div className={commentStyle.btn_container}>
+                  <div onClick={onClose} className={commentStyle.close_btn}>
+                    <div className={commentStyle.close_btn_medium}>
+                      <span className={commentStyle.cancel}> Close</span>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -54,3 +54,17 @@
     min-width: 400px;
     height: 50px;
 }
+.newNote {
+    width: 300px;
+    min-height: 50px;
+    background: #1b4a49cf;
+    padding: 10px;
+    color: white;
+}
+
+.newNoteCon {
+    padding: 20px 0px 0px 20px;
+}
+.bullet{
+    padding: 8px;
+}

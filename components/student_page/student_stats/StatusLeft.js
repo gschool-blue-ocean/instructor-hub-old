@@ -3,8 +3,9 @@ import ProjNoteModal from "./ProjNoteModal.js";
 import ProjectModal from "./ProjectModal.js";
 import AssessModal from "./AssessModal.js";
 import React, { useState } from "react";
-import {currentlearnAndLearnGradesState, currStudentProjectsState} from "../../state";
+import {currentlearnAndLearnGradesState,studentIdState, currStudentProjectsState,accessToken, currentStudentState} from "../../state";
 import { useRecoilState } from "recoil";
+import axios from "axios";
 
 const StatusLeft = () => {
   const [showNoteModal, setShowNoteModal] = useState(false);
@@ -13,6 +14,15 @@ const StatusLeft = () => {
   const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState)
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState);
   const [currNote, setCurrNote] = useState(''); 
+  const [editProjGrade, setEditPojGrade] = useState(false)
+  const [editLeanrScore, setEditLearnScore] = useState(false)
+  const [projGradeId, setProjGradeId] = useState(''); 
+  const [learnGradeId, setLearnGradeId] = useState(''); 
+  const [newLearnScore, setNewLearnScore] = useState(''); 
+  const [newSelectedGrade, setNewSelectedGrade] = useState('')
+  const [gradesId, setGradesId] = useState(''); 
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
+
 
   const openNoteModel = (currNote) => {
     setShowNoteModal(true);
@@ -25,6 +35,44 @@ const StatusLeft = () => {
     setShowAssessModal(true)
   }
 
+  const editGrade = (projId) => {
+    setEditPojGrade(true)
+    setProjGradeId(projId)
+  }
+
+  const newGrade = (selectOpt) => {
+    setEditPojGrade(false)
+    const optionSelected = selectOpt === 'true'
+
+    axios.patch(`/api/projectGradesId/${projGradeId}`, {
+      "project_passed": optionSelected 
+    }).then(() => {
+      axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
+        setCurrStudentProjects(res.data);
+      });
+    })
+  }
+  const editScore = (assesmentId ) => {
+    setEditLearnScore(true)
+    setLearnGradeId(assesmentId)
+  }
+
+  const enterListener = (e) => {
+    const updateScore = Number(newLearnScore); 
+
+    if (e.key === "Enter" && e.shiftKey === false) {
+      e.preventDefault();
+      setEditLearnScore(false)
+      axios.patch(`/api/learnGradesId/${learnGradeId}`, {
+        "assessment_grade": updateScore 
+      }).then(() => 
+      axios.get(`/api/learnAndLearnGradesId/${studentId}`).then((res) => {
+        setCurrentLearnAndLearnGrades(res.data);
+        // console.log(res.data);
+      })
+    )}
+  };
+  
   return (
     <>
       <ProjNoteModal
@@ -56,11 +104,13 @@ const StatusLeft = () => {
               <span className={style.title}>Projects</span>
               <span className={style.add} onClick={projectModal }>&#10133;</span>
             </div>
+            {
+              currStudentProjects.length ? 
             <table className={style.table}>
               <thead className={style.tableHead}>
                 <tr className={style.headerRow}>
                   <th className={`${(style.header, style.headName)}`}>Name</th>
-                  <th className={`${(style.header, style.headScore)}`}>
+                  <th className={`${(style.header, style.headScore)}`} onClick={() => setEditPojGrade(false)}>
                     Score
                   </th>
                   <th className={`${(style.header, style.headScore)}`}>
@@ -70,12 +120,21 @@ const StatusLeft = () => {
               </thead>
               <tbody className={`${style.tableBody}, ${style.tbody}`}>
                 {currStudentProjects.map((project) => (
-                <tr key={project.project_id} className={style.tBodyRow}>
+                <tr key={project.project_id} className={style.tBodyRow} >
                   <td className={style.projNamCell}>{project.project_name}</td>
-                  <td className={style.scoreCell}>{project.project_passed ? 'Passed' : 'Failed'}</td>
-                  <td onClick={() => openNoteModel(project)}  className={style.scoreCell}>
+                  { editProjGrade && projGradeId == project.project_id ?
+                    <td className={style.scoreCell}>
+                      <select type='select' onChange={(e) => newGrade(e.target.value, project.project_grades_id)}>
+                        <option value={project.project_passed ? 'true' : 'false'}>{project.project_passed ? 'Passed' : 'Failed'}</option>
+                        <option value={project.project_passed ? 'false' : 'true'}>{project.project_passed ? 'Failed' : 'Passed'}</option>
+                      </select>
+                    </td> :
+                    <td onDoubleClick={() => editGrade(project.project_id)} className={style.scoreCell}>{project.project_passed ? 'Passed' : 'Failed'}</td>
+
+                  }
+                  <td   className={style.scoreCell}>
                     {" "}
-                    <svg className={style.noteIcon} viewBox="0 0 22 22">
+                    <svg className={style.noteIcon} viewBox="0 0 22 22" onClick={() => openNoteModel(project)} >
                       {" "}
                       <path
                         d="M13.5,20 C14.3284271,20 15,19.3284271 15,18.5 C15,17.1192881 16.1192881,16 17.5,16 C18.3284271,16 19,15.3284271
@@ -97,6 +156,13 @@ const StatusLeft = () => {
                 ))}
               </tbody>
             </table>
+            :
+            <>
+            <div className={style.noValueContainer}>
+                <div>NO CURRENT PROJECT</div> 
+            </div>
+            </>
+            }
           </div>
           <div className={style.tableContainer}>
             <div className={style.titleBox}>
@@ -104,13 +170,15 @@ const StatusLeft = () => {
               <span className={style.add} onClick={assesModal} >&#10133;</span>
             </div>
             <div>
+              {
+                currentLearnAndLearnGrades.length ?
               <table className={style.table}>
                 <thead className={style.tableHead}>
                   <tr className={style.headerRow}>
                     <th className={`${(style.header, style.headName)}`}>
                       Name
                     </th>
-                    <th className={`${(style.header, style.headScore)}`}>
+                    <th className={`${(style.header, style.headScore)}`} onClick={() => setEditLearnScore(false)}>
                       Score
                     </th>
                   </tr>
@@ -119,11 +187,28 @@ const StatusLeft = () => {
                   {currentLearnAndLearnGrades.map((assessment) =>(
                     <tr key={assessment.assessment_id}className={style.tBodyRow}>
                     <td className={style.projNamCell}>{assessment.assessment_name}</td>
-                    <td className={style.scoreCell}>{`${assessment.assessment_grade} %`}</td>
+                    {
+                      editLeanrScore && learnGradeId == assessment.learn_grade_id ?
+                        <td className={style.scoreCell} onChange={(e) => setNewLearnScore(e.target.value)}>
+                          <form onKeyDown={enterListener} >
+                            <input type='number' placeholder={assessment.assessment_grade} ></input>
+                          </form>
+                        </td>
+                      :
+                      <td className={style.scoreCell} onDoubleClick={() => editScore(assessment.learn_grade_id)}>{`${assessment.assessment_grade} %`}</td>
+                    }
                     </tr>
                   ))}
                 </tbody>
               </table>
+              : 
+            <>
+            <div className={style.noValueContainer}>
+                <div>NO CURRENT ASSESSMENTS</div>
+            </div>
+            </>
+
+              }
             </div>
           </div>
         </div>

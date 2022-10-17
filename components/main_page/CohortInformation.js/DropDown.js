@@ -22,8 +22,6 @@ const GroupMaker = () => {
     const [customOpen, setCustomOpen] = useState(false);
     const [toggle, setToggle] = useState(false);
 
-    console.log(student);
-
 
     function buttonClicked() {
       setCustomOpen(prev => !prev);
@@ -65,9 +63,9 @@ return (
                 <button as="div" onClick={() => setToggle(true)}>Create Groups!</button>
                 <div as="div">
                   {toggle ? 
-                    <div as="div">
+                    <div as="div" >
                       {student.map((s) => (
-                        <div as="div">
+                        <div as="div" key={"key"}>
                           {s.name}
                         </div>
                       ))}

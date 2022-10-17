@@ -21,10 +21,11 @@
     rgba(0, 69, 74, 1) 31%,
     rgba(60, 101, 98, 1) 89%
   );
-  color: rgb(0, 0, 0);
+  color: white;
   padding: 50px;
   z-index: 1000;
-  width: 840px;
+  width: fit-content;
+  max-width: 840px;
   height: 680px;
   flex-wrap: wrap;
   border: 1px solid black;
@@ -40,11 +41,11 @@
   height: fit-content;
   position: fixed;
   top: 0;
-  left: 15px;
+  left: 0px;
   padding: 10px;
-  overflow: hidden;
   text-align: center;
   border-bottom: 2px solid silver;
+  font-weight: bolder;
 }
 
 .button {
@@ -75,6 +76,7 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
+  font-weight: bold;
 }
 
 .updateForm {

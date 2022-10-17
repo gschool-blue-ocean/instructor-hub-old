@@ -19,6 +19,7 @@ const SignUp = () => {
     const [listOfCohorts, setListOfCohorts] = useState([])
     const [asana_access_token, setAsana_Access_Token] = useRecoilState(accessToken)
     const [students, setStudents] = useRecoilState(studentsState)
+    const [duplicateAccounts, setDuplicateAccounts] = useState(false)
 
     const createUsername= (e)=> {
         setUsername(e.target.value)
@@ -30,11 +31,25 @@ const SignUp = () => {
     const passwordVerification = (e) =>{
         setConfirmPassword(e.target.value)
     }
-
-    function showDisplayCohortModal(e){
+    function duplicateCheck(){
+        axios.get('/api/users').then((res) => {
+            let duplicated = res.data.users.find((existingAccount) => existingAccount.username === username)
+            if(duplicated){
+                alert(`${username} already exists.`)
+                setDuplicateAccounts(true)
+            }else{
+                setDuplicateAccounts(false)
+            }
+        }).then(()=> {
+            console.log(duplicateAccounts)
+            return
+        })
+    }
+    async function showDisplayCohortModal(e){
         e.preventDefault();
-        console.log(usersState)
-        if(confirmPassword === password && username.length >= 6 && password.length >= 8 && asana_access_token){
+        duplicateCheck()
+        // console.log(duplicateAccounts)
+        if(confirmPassword === password && username.length >= 6 && password.length >= 8 && asana_access_token && !duplicateAccounts){
             axios.get('https://app.asana.com/api/1.0/projects/', {
                 headers: {
                     Authorization: `Bearer ${asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
@@ -43,7 +58,7 @@ const SignUp = () => {
                 (res.data.data).forEach((asanaCohort) => {
                     const found = cohorts.find(element => element.gid === asanaCohort.gid)
                     if(found === undefined){
-                        console.log(asanaCohort, "success on signup")
+                        // console.log(asanaCohort, "success on signup")
                         axios.put('/api/cohorts', {
                             "name": `${asanaCohort.name}`,
                             "gid": `${asanaCohort.gid}`
@@ -137,7 +152,7 @@ const SignUp = () => {
                                 </div>
                                 <div>
                                     {"Already have an account? Click "}
-                                    <a href='/' className={styles.linkText}>here</a>
+                                    <Link href='/' className={styles.linkText}>here</Link>
                                     {" to sign in."}
                                 </div>
                             </form>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react"
 import { useRecoilState } from "recoil";
 import { usersState, loggedIn, currentCohortState } from "../state.js";
-import { useRouter} from "next/router"
+import { useRouter } from "next/router"
 
 
 const LoginScreen = () => {
@@ -28,7 +28,6 @@ const LoginScreen = () => {
         setVerifiedUser(true)
         setUser(element)
         setCurrentCohort(element.default_cohort)
-        console.log(element)
         router.push("/home")
       }
     }
@@ -65,9 +64,9 @@ const LoginScreen = () => {
                     </div>
                     <div>
                       {"Don't have an account? Click "}
-                      <a href="/signup" className={styles.linkText}>
+                      <Link href="/signup" className={styles.linkText}>
                         here!
-                      </a>
+                      </Link>
                     </div>
                     {/* <div className='text-[12px] font-[500] text-center'>&nbsp;</div> */}
                   </form>
