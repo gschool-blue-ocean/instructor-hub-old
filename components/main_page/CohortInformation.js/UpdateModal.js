@@ -73,15 +73,15 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     console.log("What happened to the user?", user);
     if (students) {
       const impendingCohort = students.filter(
-        (student) => student.cohort == user.default_cohort
+        (student) => student.cohort == currentCohortName
       );
       setFilteredCohort(() => impendingCohort);
       const impendingObject = cohorts.filter(
-        (cohort) => cohort.name == user.default_cohort
+        (cohort) => cohort.name == currentCohortName
       );
       setCohortObject(() => impendingObject);
     }
-  }, [user, students]);
+  }, [user, students, currentCohortName]);
 
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
