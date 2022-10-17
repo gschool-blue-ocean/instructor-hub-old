@@ -15,7 +15,7 @@ const ProjectModal = ({showProjModal, onClose}) => {
   const [projGrade, setProjGrade] = useState([]); 
   const [projNotes, setProjNotes] = useState(''); 
 
-  let asanaToken = sessionStorage.getItem('user asana access token')
+  // let asanaToken = sessionStorage.getItem('user asana access token')
 
 /*-----Converting string into Boolean and Number-----*/
   let grade = projGrade === 'true'
