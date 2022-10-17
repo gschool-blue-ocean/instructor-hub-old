@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
 import GraphModal from "./GraphModal";
-import { studentsState, currentStudentState ,studentIdState, cohortsState, currentCohortState, checkedPeopleState } from "../../state";
+import { studentsState, currentStudentState ,studentIdState, cohortsState, currentCohortState, checkedPeopleState, usersState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
 
@@ -21,8 +21,7 @@ const StudentSummary = () => {
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
-
-  let asanaToken = sessionStorage.getItem('user asana access token');
+  const [user, setUser] = useRecoilState(usersState);
 
   // Allows the cohorts to be filter 
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
@@ -125,7 +124,7 @@ const StudentSummary = () => {
       method:"DELETE", 
       url: `https://app.asana.com/api/1.0/tasks/${studentGid}`, 
       headers: {
-        Authorization: `Bearer ${asanaToken}`, 
+        Authorization: `Bearer ${user.asana_access_token}`, 
       }, 
     })
   }
