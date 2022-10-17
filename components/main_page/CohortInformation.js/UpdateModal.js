@@ -44,7 +44,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
           },
         }
       );
-      console.log("wut projectinfo", projectInfo.data);
       setTechSkillGID({
         GID: projectInfo.data.data.custom_fields[0].gid,
         Great: projectInfo.data.data.custom_fields[0].enum_options[0].gid,
@@ -66,13 +65,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
-    console.log("What's the whole cohort object?", cohortObject[0]);
-    console.log(
-      "Don't mess with me and try to say this isn't a array",
-      stagedCohort
-    );
     if (filteredCohort[currStudent]) {
-      setIndexedStudent((prev) => filteredCohort[currStudent]);
+      setIndexedStudent(() => filteredCohort[currStudent]);
     }
     // else if (
     //   currStudent === filteredCohort.length &&
@@ -93,7 +87,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     //   );
     //   // setStagedCohort({});
     // }
-    console.log("what filteredCohort?", filteredCohort);
+    console.log("What is currStudent?", currStudent);
+    console.log("IndexedStudent is", indexedStudent);
     // fetchData();
   }, [currStudent, currentCohortName]);
 
@@ -127,13 +122,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     if (e.key === "Enter" && e.shiftKey === false) {
       e.preventDefault();
       const stagedStudent = formGetter(e.target.form);
-      console.log(
-        "Here's what the e.target.form is",
-        formGetter(e.target.form)
-      );
       // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
       setStagedCohort((prev) => [...prev, stagedStudent]);
-      console.log("IndexedStudent is", indexedStudent);
 
       // Until HERE ^
       e.target.form.reset();
