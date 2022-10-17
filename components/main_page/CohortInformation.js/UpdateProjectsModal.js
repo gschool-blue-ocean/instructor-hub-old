@@ -77,7 +77,7 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
     .then(() => {
       axios.get(`/api/projectsAndProjectGradesId/${indexedStudent.student_id}`).then((res) => {
         setCurrStudentProjects(res.data);
-        set
+        // set
         console.log(res.data, 'new');
         console.log(currStudentProjects)
         // setStagedCohort((prev) => {

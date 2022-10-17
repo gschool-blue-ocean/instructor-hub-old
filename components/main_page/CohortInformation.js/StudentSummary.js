@@ -5,21 +5,23 @@ import { useRecoilState } from "recoil";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
 import GraphModal from "./GraphModal";
-import { studentsState, notesState,studentIdState, cohortsState, currentCohortState, checkedPeopleState } from "../../state";
+import { studentsState, currentStudentState ,studentIdState, cohortsState, currentCohortState, checkedPeopleState, usersState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
 
 const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCommentModal, setShowCommenttModal] = useState(false);
   const [showGraphModal, setShowGraphModal] = useState(false);
-  const [noteStudent, setNoteStudent] = useState(" ")
-  const [order, setOrder] = useState("ASC")
+  const [noteStudent, setNoteStudent] = useState(" ");
+  const [studentGraph, setStudentGraph] = useState(" ");
+  const [order, setOrder] = useState("ASC");
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
-  const [studentId, setStudentId] = useRecoilState(studentIdState);
+  const [user, setUser] = useRecoilState(usersState);
 
   // Allows the cohorts to be filter 
   let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
@@ -27,16 +29,24 @@ const StudentSummary = () => {
   // Determines Progress row words
   let progress = (num) => {
     if (num === 1) {
-      return "At Risk"
+      return (
+        <div className={studentStyle.color}>At Risk</div>
+      )
     }
     if (num === 2) {
-      return "Below Avg";
+      return (
+        <div className={studentStyle.color3}>Below Avg</div>
+      )
     }
     if (num === 3) {
-      return "Average";
+      return (
+        <div className={studentStyle.color2}>Average</div>
+      )
     }
     if (num === 4) {
-      return "Above Avg";
+      return (
+        <div className={studentStyle.color4}>Above Avg</div>
+      )
     }
   }
 
@@ -101,15 +111,24 @@ const StudentSummary = () => {
     }
   }
   
-  const handleDeleteClick = (studentId) => {
+  const handleDeleteClick = (studentId, studentGid) => {
     const newStudent = [...students] //Create New Array based on current students
-    console.log(studentId)
+    console.log(studentGid)
     const index = students.findIndex((student) => student.student_id === studentId)
     newStudent.splice(index, 1);
     axios.delete(`/api/students/${studentId}`).then(() => {
       setStudents(newStudent)
     });
+
+    axios({
+      method:"DELETE", 
+      url: `https://app.asana.com/api/1.0/tasks/${studentGid}`, 
+      headers: {
+        Authorization: `Bearer ${user.asana_access_token}`, 
+      }, 
+    })
   }
+
   
     const openGitHubModal = () => {
       setShowGitHubModal((prev) => !prev);
@@ -120,8 +139,9 @@ const StudentSummary = () => {
       setNoteStudent(student)
     };
 
-    const openGraphModel = () => {
+    const openGraphModel = (student) => {
       setShowGraphModal((prev) => !prev);
+      setStudentGraph(student)
     }
   
     useEffect(() => {
@@ -133,7 +153,7 @@ const StudentSummary = () => {
     <div>
       <GitHubModal showGitHubModal={showGitHubModal} setShowGitHubModal={setShowGitHubModal} onClose={() => {setShowGitHubModal(false);}}/>
       <CommentModal showCommentModal={showCommentModal} setShowCommenttModal={setShowCommenttModal} onClose={() => {setShowCommenttModal(false)}} noteStudent = {noteStudent}/>
-      <GraphModal showGraphModal={showGraphModal} setShowGraphModal={setShowGraphModal} onClose={() => {setShowGraphModal(false)}}></GraphModal>
+      <GraphModal showGraphModal={showGraphModal} setShowGraphModal={setShowGraphModal} onClose={() => {setShowGraphModal(false)}} studentGraph = {studentGraph}/>
       <div className={studentStyle.container}>
         <div className={studentStyle.topBorder}>
           <div className={studentStyle.selectRow}>
@@ -160,7 +180,7 @@ const StudentSummary = () => {
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("server_side_test")}>Server-Side</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("teamwork_avg")}>Teamwork Avg</th>
                   <th className= {studentStyle.header} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("progress")}>Progess</th>
+                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("average")}>Progess</th>
                   <th className= {studentStyle.header} scope="col">Notes</th>
                   <th className= {studentStyle.smallHeader} scope="col"></th>
                 </tr>
@@ -180,8 +200,8 @@ const StudentSummary = () => {
                   <td className= {studentStyle.content}>{student.server_side_test}</td>
                   <td className= {studentStyle.content}>{colPercent(student.teamwork_avg)}</td>
                   <td className= {studentStyle.content}>{colPercent(student.tech_avg)}</td>
-                  <td className= {studentStyle.content} onClick={openGraphModel}>
-                    <div className={studentStyle.color}>{progress(Math.ceil((student.teamwork_avg + student.tech_avg)/2))}</div>
+                  <td className= {studentStyle.content} onClick={() => openGraphModel(student)}>
+                    <div>{progress(Math.ceil((student.teamwork_avg + student.tech_avg)/2))}</div>
                   </td>
                   <td className= {studentStyle.content} onClick={() => openCommentModel(student)}>
                     <svg className={studentStyle.noteIcon} viewBox="0 0 22 22">
@@ -200,7 +220,7 @@ const StudentSummary = () => {
                     </svg>
                   </td>
                   <td className= {studentStyle.smallContent}>
-                    <svg className={studentStyle.trash} viewBox="0 0 12 12" onClick={()=> handleDeleteClick(student.student_id)}>
+                    <svg className={studentStyle.trash} viewBox="0 0 12 12" onClick={()=> handleDeleteClick(student.student_id, student.gid)}>
                       <path d="M6.5 17q-.625 0-1.062-.438Q5 16.125 5 15.5v-10H4V4h4V3h4v1h4v1.5h-1v10q0 .625-.438 1.062Q14.125 17 13.5 17Zm7-11.5h-7v10h7ZM8 14h1.5V7H8Zm2.5 0H12V7h-1.5Zm-4-8.5v10Z"></path>
                     </svg>{" "}
                   </td>

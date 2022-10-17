@@ -141,6 +141,7 @@ CREATE TABLE projects (
 );
 
 CREATE TABLE project_grades (
+  project_grades_id SERIAL PRIMARY KEY,
   student_id INT,
   project_id INT,
   project_passed BOOLEAN,
@@ -159,6 +160,7 @@ CREATE TABLE learn (
 );
 
 CREATE TABLE learn_grades (
+  learn_grade_id SERIAL PRIMARY KEY,
   student_id INT,
   assessment_id INT,
   assessment_grade INT,

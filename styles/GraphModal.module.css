@@ -6,6 +6,7 @@
     right: 0;
     bottom: 0;
     left: 0;
+    cursor: pointer;
 }
 
 .container {
@@ -21,7 +22,6 @@
     -webkit-box-orient: vertical;
     max-height: 80%;
     transform: translate(-50%, -50%);
-    cursor: pointer;
 }
 
 .topBar {
@@ -52,4 +52,28 @@
     height: 16px;
     width: 16px;
     opacity: 0.7;
+}
+
+.name {
+    padding: 10px 50px 5px 50px;
+    display: block;
+    font-size:30px;
+}
+
+.outerContainer {
+    display:flex;
+    justify-content: center;
+    padding: 10px 10px 40px 10px;
+}
+
+.graphContainer {
+    background: rgba(255, 255, 255, 0.806);
+    border-radius: 10px;
+    max-width: 1200px;
+    width: 500px;
+}
+
+.graph{
+    padding:15px; 
+    cursor: pointer;
 }
