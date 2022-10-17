@@ -7,6 +7,7 @@ import CommentModal from "./CommentModal";
 import { studentsState, notesState,studentIdState, cohortsState, currentCohortState, checkedPeopleState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
+import GroupMaker from "./DropDown";
 
 const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
@@ -116,6 +117,7 @@ let colPercent = (num) => {
               <input className={studentStyle.checkBox} type="checkbox" name="allSelect" checked={!students.some((student) => student?.isChecked !== true)} onChange={handleChange}/>
               <label htmlFor="selectMe"> Select/Deselect All</label>
             </div>
+            <GroupMaker/>
             <div className={studentStyle.addGit}>
               <a className={studentStyle.gitBtn}>
                 <span onClick={openGitHubModal} className={` ${studentStyle.gitBtn_medium} ${studentStyle.span}`}>Github Accounts</span>
