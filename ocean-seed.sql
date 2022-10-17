@@ -84,16 +84,7 @@ VALUES (
 
 -- Fake Data
 INSERT INTO notes (student_id, name, note_date, notes)
-VALUES ('1', 'Egg',NOW(), 'Cat ipsum dolor sit amet, intrigued by the shower for chase red laser dot, 
-or always ensure to lay down in such a manner that tail can lightly brush human`s nose love me!. 
-Demand to have some of whatever the human is cooking, then sniff the offering and walk away jump up to edge of bath, 
-fall in then scramble in a mad panic to get out scratch leg; 
-meow for can opener to feed me but bathe private parts with tongue then lick owner`s face and cata**trophe. 
-Pounce on unsuspecting person. Bring your owner a dead bird cat meoooow i iz master of hoomaan, not hoomaan master of i, 
-oooh damn dat dog. Meow meow you are my owner so here is a dead rat oooo! dangly balls! 
-jump swat swing flies so sweetly to the floor crash move on wash belly nap going to catch the red dot today going to catch the red dot today,
- thug cat and hack up furballs paw at your fat belly. Walk on keyboard, scream for no reason at 4 am, show belly for poop in the plant pot but hack. 
- Cat snacks attack feet.');
+VALUES ('1', 'Egg',NOW(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
 
 
 
@@ -111,7 +102,7 @@ VALUES ('ReactMVP');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
 VALUES ('1', '1', 'TRUE', 'Great job. They are so smart');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '2', 'TRUE', 'not very good');
+VALUES ('1', '2', 'TRUE', 'Needs improvement');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
 VALUES ('1', '3', 'FALSE', 'good effort but missed the mark');
 

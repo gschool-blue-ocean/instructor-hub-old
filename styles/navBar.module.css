@@ -2,6 +2,7 @@
     width: 950px; 
     min-width: 450px;
     margin: 25px auto;
+    background: rgb(97 69 106 / 40%);
 }
 .worddisplay{
     display: flex; 
