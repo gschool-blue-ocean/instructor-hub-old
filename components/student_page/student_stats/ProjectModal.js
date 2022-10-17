@@ -89,7 +89,10 @@ const ProjectModal = ({showProjModal, onClose}) => {
                   <div className='hello'>
                     <h3>Add a Project</h3> 
                     <div className={style.section}>
-                      <lable className={style.labels}>Name</lable>
+                      <div>
+                        <lable className={style.labels}>Name</lable>
+                        <span className={style.addBtn} >&#10133;</span>
+                      </div>
                       <select id='select' type='select' onChange={(e) => setProjSelected(e.target.value)}>
                         <option>- Select -</option>
                         { projects.map(proj => (
