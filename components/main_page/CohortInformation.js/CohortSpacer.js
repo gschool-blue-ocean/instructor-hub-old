@@ -76,7 +76,7 @@ const CohortSpacer = () => {
             const studentInAsana = res.data.data.find((element) => element.gid === localStudent.gid);
             if (studentInAsana === undefined && localStudent.cohort === asanaCohort.name) {
               axios.delete(`/api/students/${localStudent.student_id}`).then((res) => {
-                // console.log(localStudent, "student that was not in asana")
+                console.log(localStudent, "student that was not in asana")
               }).then(()=>{
                 axios.get("/api/students").then((res) => setStudents(res.data.students))
               })

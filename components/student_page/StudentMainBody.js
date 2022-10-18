@@ -103,7 +103,7 @@ const StudentMainBody = () => {
           <div className={styles.notes}>
             <div className={styles.notesTitle}>
               Notes
-            <span  onClick={() => setAddNote(!addNote)}>&#10133;</span>
+            <span className={styles.space} onClick={() => setAddNote(!addNote)}>&#10133;</span>
             </div>
             <div>
               {
