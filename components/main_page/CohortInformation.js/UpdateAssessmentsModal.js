@@ -203,8 +203,8 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
                 }}></input>
                 <div>%</div>                  
                 <br />
-                {/* <label htmlFor="Notes">Notes</label> <br />
-                <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea> */}
+                <label htmlFor="Notes">Notes</label> <br />
+                <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea>
                 <br />
                 <button type="submit"  value="Submit" onClick={(e) => submitHandler(e)}>Submit</button>
               </form>
