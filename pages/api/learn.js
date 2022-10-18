@@ -23,11 +23,11 @@ export default async function learnHandler(req, res) {
     }
   } else if (req.method === "POST") {
     try {
-      const { assessment_id, assessment_name } = req.body;
+      const { assessment_name } = req.body;
       console.log(req.body);
       const createAssessment = await sql`
-               INSERT INTO learn ( assessment_id, assessment_name ) VALUES ( ${assessment_id}, ${assessment_name}) RETURNING *`;
-      res.status(200).json({ createAssessment });
+               INSERT INTO learn ( assessment_name ) VALUES (${assessment_name}) RETURNING *`;
+      res.status(200).json(createAssessment[0]);
     } catch (error) {
       console.error("Bad news in index api: ", error);
       return res.status(500).json({ msg: "Messed up on our end" });
