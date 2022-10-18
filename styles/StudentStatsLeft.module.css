@@ -53,6 +53,7 @@
 }
 .headScore{
     text-align: center;
+    cursor: pointer;
 }
 .tableBody{
 display: table;
@@ -129,4 +130,7 @@ background: pink;
 }
 .editScore {
     width: 60px;
+}
+.select{
+    cursor: pointer;
 }
