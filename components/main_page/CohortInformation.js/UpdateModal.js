@@ -5,7 +5,6 @@ import {
   studentsState,
   currentCohortState,
   cohortsState,
-  currentStudentState,
 } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
 import axios from "axios";
@@ -13,91 +12,106 @@ import axios from "axios";
 const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // What student is being updated at this moment
   const [currStudent, setCurrStudent] = useState(0);
+  // Array of students checked against currentCohortName to determine cohort for iterating through
+  const [filteredCohort, setFilteredCohort] = useState([]);
+  // Same as filteredCohort, but checks cohorts against the currentCohortName to grab the cohort GID
+  const [cohortObject, setCohortObject] = useState([]);
   // This is derived state -- updated at same time as currStudent, one derives the other
   const [indexedStudent, setIndexedStudent] = useState({});
   const [modal, setModal] = useState(false);
   // This is a rough draft idea, probably obscelesced by simply POSTing each student to Asana
   const [stagedCohort, setStagedCohort] = useState([]);
-  const [studentGID, setStudentGID] = useState([]);
+  // techSkill and teamWorkGID hold the K-V pairs describing the custom fields in Asana that instructors use for their weekly updates
   const [techSkillGID, setTechSkillGID] = useState({});
   const [teamWorkGID, setTeamWorkGID] = useState({});
   // Merely to identify who is making the update, and possibly selecting the students of the user's default cohort
   const [currentCohortName, setCurrentCohortName] =
     useRecoilState(currentCohortState);
-  const [cohorts, setCohorts] = useRecoilState(cohortsState);
-  const [user, setUser] = useRecoilState(usersState);
-  const [currentStudent, setCurrentStudent] =
-    useRecoilState(currentStudentState);
-  // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
-  // (by going through the students)
+  // Unless these two [cohorts, students] are replaced by some "selected students" state, and/or "current cohort" state, this determines how the updater iterates
+  // (by going through the students)...
   const [students, setStudents] = useRecoilState(studentsState);
+  // ... as well as through the available cohorts
+  const [cohorts, setCohorts] = useRecoilState(cohortsState);
+  // useful for stating who is making the updates, and for grabbing the default_cohort value
+  const [user, setUser] = useRecoilState(usersState);
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
     if (filteredCohort[currStudent]) {
       const projectInfo = await axios.get(
-        `https://app.asana.com/api/1.0/tasks/${filteredCohort[currStudent].gid}`,
+        `https://app.asana.com/api/1.0/projects/${cohortObject[0].gid}`,
         {
           headers: {
             Authorization: `Bearer ${user.asana_access_token}`,
           },
         }
       );
-      console.log("wut projectinfo", projectInfo.data);
-      setTechSkillGID({
-        GID: projectInfo.data.data.custom_fields[0].gid,
-        Great: projectInfo.data.data.custom_fields[0].enum_options[0].gid,
-        Good: projectInfo.data.data.custom_fields[0].enum_options[1].gid,
-        Okay: projectInfo.data.data.custom_fields[0].enum_options[2].gid,
-        Bad: projectInfo.data.data.custom_fields[0].enum_options[3].gid,
+      setTechSkillGID(() => {
+        return {
+          GID: projectInfo.data.data.custom_field_settings[0].custom_field.gid,
+          // 1 = Exceeds expectations
+          1: projectInfo.data.data.custom_field_settings[0].custom_field
+            .enum_options[0].gid,
+          // Meets Expectations
+          2: projectInfo.data.data.custom_field_settings[0].custom_field
+            .enum_options[1].gid,
+          // Approaching expecations
+          3: projectInfo.data.data.custom_field_settings[0].custom_field
+            .enum_options[2].gid,
+          // Not yet approaching
+          4: projectInfo.data.data.custom_field_settings[0].custom_field
+            .enum_options[3].gid,
+        };
       });
-      setTeamWorkGID({
-        GID: projectInfo.data.data.custom_fields[1].gid,
-        Great: projectInfo.data.data.custom_fields[1].enum_options[0].gid,
-        Good: projectInfo.data.data.custom_fields[1].enum_options[1].gid,
-        Okay: projectInfo.data.data.custom_fields[1].enum_options[2].gid,
-        Bad: projectInfo.data.data.custom_fields[1].enum_options[3].gid,
+      setTeamWorkGID(() => {
+        return {
+          GID: projectInfo.data.data.custom_field_settings[1].custom_field.gid,
+          // 1 = Exceeds expectations
+          1: projectInfo.data.data.custom_field_settings[1].custom_field
+            .enum_options[0].gid,
+          // Meets Expectations
+          2: projectInfo.data.data.custom_field_settings[1].custom_field
+            .enum_options[1].gid,
+          // Approaching expecations
+          3: projectInfo.data.data.custom_field_settings[1].custom_field
+            .enum_options[2].gid,
+          // Not yet approaching
+          4: projectInfo.data.data.custom_field_settings[1].custom_field
+            .enum_options[3].gid,
+        };
       });
     } else {
       return;
     }
   };
 
+  useEffect(() => {
+    // console.log("user, students, or currentCohortName has changed");
+    if (students) {
+      const impendingCohort = students.filter(
+        (student) => student.cohort == currentCohortName
+      );
+      setFilteredCohort(() => impendingCohort);
+    }
+    if (cohorts) {
+      const impendingObject = cohorts.filter(
+        (cohort) => cohort.name == currentCohortName
+      );
+      setCohortObject(() => impendingObject);
+    }
+  }, [user, students, currentCohortName]);
+
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
-    console.log("What's the whole cohort object?", cohortObject[0]);
+    // console.log("currStudent or filteredCohort has changed");
     if (filteredCohort[currStudent]) {
-      setIndexedStudent((prev) => filteredCohort[currStudent]);
-    } else if (
-      (currStudent = filteredCohort.length && filteredCohort.length > 0)
-    ) {
-      axios.put(
-        `https://app.asana.com/api/1.0/projects/${cohortObject[0].gid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.asana_access_token}`,
-          },
-          // data: {
-          //   data: {
-
-          //   }
-          // }
-        }
-      );
-      setStagedCohort({});
+      setIndexedStudent(() => filteredCohort[currStudent]);
     }
-    console.log("what filteredCohort?", filteredCohort);
     fetchData();
-  }, [currStudent, currentCohortName]);
-
-  // Filters students to be updated by matching their cohort value to currentCohortName's name
-  let filteredCohort = students.filter(
-    (classRoom) => classRoom.cohort == currentCohortName
-  );
-  let cohortObject = cohorts.filter(
-    (cohort) => cohort.name == currentCohortName
-  );
+    console.log("filteredCohort come back", filteredCohort);
+  }, [currStudent, filteredCohort]);
 
   // To reset the indexer value if modal is closed early
   onClose = () => {
@@ -132,17 +146,24 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   // formGetter grabs the entered data from the field and packages it for POST
   const formGetter = (form) => {
-    let stagedName = `${indexedStudent.name}`;
-    console.log("Just staged for POST: ", stagedName);
-    let stagedStudent = { name: stagedName, GID: indexedStudent.gid };
+    let stagedStudent = {
+      ID: indexedStudent.student_id,
+      GID: indexedStudent.gid,
+      Name: indexedStudent.name,
+    };
     let formData = new FormData(form);
     for (const pair of formData.entries()) {
-      stagedStudent[pair[0]] = pair[1];
+      if (pair[0] === "Tech" || pair[0] === "Team") {
+        stagedStudent[pair[0]] = parseInt(pair[1]);
+      } else {
+        stagedStudent[pair[0]] = pair[1];
+      }
     }
-    console.log("StagedStudent", stagedStudent);
     // In addition, it will be necessary to grab
     // "current student" from state.
     // these Setters MUST "return" a value, not merely increment or mutate
+
+    // Can I replace each usage of setCurrStudent with a way to just setIndexedStudent to filteredCohort[prev + 1]
     setCurrStudent((prev) => {
       if (prev < filteredCohort.length) {
         return prev + 1;
@@ -151,6 +172,56 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       }
     });
     return stagedStudent;
+  };
+
+  const asanaRoute = async () => {
+    setIsLoading(() => true);
+    stagedCohort.map(async (student) => {
+      await axios({
+        method: "PUT",
+        url: `https://app.asana.com/api/1.0/tasks/${student.GID}`,
+        headers: {
+          Authorization: `Bearer ${user.asana_access_token}`,
+        },
+        data: {
+          data: {
+            custom_fields: {
+              [techSkillGID.GID]: techSkillGID[student.Tech],
+              [teamWorkGID.GID]: teamWorkGID[student.Team],
+            },
+          },
+        },
+      });
+      await axios({
+        method: "POST",
+        url: `https://app.asana.com/api/1.0/tasks/${student.GID}/subtasks`,
+        headers: {
+          Authorization: `Bearer ${user.asana_access_token}`,
+        },
+        data: {
+          data: {
+            name: student.Notes,
+          },
+        },
+      });
+      await axios.post("/api/studentTechSkills", {
+        student_id: student.ID,
+        score: parseInt(student.Tech),
+      });
+      await axios.post("api/studentTeamworkSkills", {
+        student_id: student.ID,
+        score: parseInt(student.Team),
+      });
+      await axios.post("/api/notes", {
+        student_id: student.ID,
+        notes: student.Notes,
+        name: null,
+        note_date: new Date(),
+      });
+    });
+    setIsLoading(() => false);
+    onClose();
+    setStagedCohort(() => {});
   };
 
   return (
@@ -177,73 +248,69 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                     onSubmit={submitHandler}
                     onKeyDown={enterListener}
                   >
-                    <label htmlFor="Tech">Technical Aptitude</label> <br />
-                    <select
-                      id="Tech"
-                      name="Tech"
-                      required
-                      autoFocus={true}
-                      ref={firstInput}
-                    >
-                      <option value="none" selected disabled hidden>
-                        Select an Option
-                      </option>
-                      <option value="1 - Needs improvement">
-                        1 - Needs improvement
-                      </option>
-                      <option value="2 - Approaching standard">
-                        2 - Approaching standard
-                      </option>
-                      <option value="3 - Meets standard">
-                        3 - Meets standard
-                      </option>
-                      <option value="4 - Exceeds standard">
-                        4 - Exceeds standard
-                      </option>
-                    </select>{" "}
-                    <br />
-                    <label htmlFor="Team">Teamwork Aptitude</label> <br />
-                    <select id="Team" name="Team" required>
-                      <option value="none" selected disabled hidden>
-                        Select an Option
-                      </option>
-                      <option value="1 - Needs improvement">
-                        1 - Needs improvement
-                      </option>
-                      <option value="2 - Approaching standard">
-                        2 - Approaching standard
-                      </option>
-                      <option value="3 - Meets standard">
-                        3 - Meets standard
-                      </option>
-                      <option value="4 - Exceeds standard">
-                        4 - Exceeds standard
-                      </option>
-                    </select>{" "}
-                    <br />
-                    <label htmlFor="Notes">Notes</label> <br />
-                    <textarea
-                      id="Notes"
-                      name="Notes"
-                      rows="10"
-                      cols="30"
-                      required
-                    ></textarea>{" "}
-                    <br />
-                    <input type="submit" value="Submit" />
-                  </form>
-                ) : (
-                  <>
+                    <option value="none" selected disabled hidden>
+                      Select an Option
+                    </option>
+                    <option value="4 - Needs improvement">
+                      4 - Needs improvement
+                    </option>
+                    <option value="3 - Approaching standard">
+                      3 - Approaching standard
+                    </option>
+                    <option value="2 - Meets standard">
+                      2 - Meets standard
+                    </option>
+                    <option value="1 - Exceeds standard">
+                      1 - Exceeds standard
+                    </option>
+                  </select>{" "}
+                  <br />
+                  <label htmlFor="Team">Teamwork Aptitude</label> <br />
+                  <select id="Team" name="Team" required>
+                    <option value="none" selected disabled hidden>
+                      Select an Option
+                    </option>
+                    <option value="4 - Needs improvement">
+                      4 - Needs improvement
+                    </option>
+                    <option value="3 - Approaching standard">
+                      3 - Approaching standard
+                    </option>
+                    <option value="2 - Meets standard">
+                      2 - Meets standard
+                    </option>
+                    <option value="1 - Exceeds standard">
+                      1 - Exceeds standard
+                    </option>
+                  </select>{" "}
+                  <br />
+                  <label htmlFor="Notes">Notes</label> <br />
+                  <textarea
+                    id="Notes"
+                    name="Notes"
+                    rows="10"
+                    cols="30"
+                    required
+                  ></textarea>{" "}
+                  <br />
+                  <input type="submit" value="Submit" />
+                </form>
+              ) : (
+                <>
+                  <ul>
                     {stagedCohort.map((student) => (
-                      <>
-                        <ul>
-                          <li key={student.GID}>{student.name}</li>
-                        </ul>
-                      </>
+                      <li key={student.GID}>
+                        {student.Name} - Tech: {student.Tech}
+                        <br />
+                        Team: {student.Team}
+                        <br />
+                        Notes: {student.Notes}
+                      </li>
                     ))}
-                  </>
-                )}
-              </div>
+                  </ul>
+                  <button onClick={asanaRoute}>Click to Update</button>
+                </>
+              )}
             </div>
           </div>
         </>
