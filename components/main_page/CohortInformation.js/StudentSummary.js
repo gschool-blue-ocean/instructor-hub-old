@@ -8,7 +8,7 @@ import GraphModal from "./GraphModal";
 import { studentsState, currentStudentState ,studentIdState, cohortsState, currentCohortState, checkedPeopleState, usersState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
-import GroupMaker from "./DropDown";
+import GroupMaker from "./GroupMaker";
 
 const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);

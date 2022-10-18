@@ -23,6 +23,8 @@
     width: 450px;
     margin: 15px;
     border-radius: 10px;
+    height: 230px;
+    /* overflow-y: scroll; */
 }
 
 .textContent {
@@ -30,6 +32,8 @@
 }
 
 .link {
+    display: flex;
+    flex-direction: column;
     border-bottom: 1px solid lightgray;
     padding: 5px;
     padding-left: 15px;
@@ -48,3 +52,10 @@
     cursor: pointer;
 }
 
+.groups {
+    display: flex;
+    flex-direction: column;
+    height: 132.5px;
+    overflow-y: scroll;
+    /* flex-wrap: wrap; */
+}
