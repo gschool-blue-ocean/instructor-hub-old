@@ -1,5 +1,6 @@
 import postgres from "postgres";
 
+
 // const { DB_CONNECTION_URL, PORT, NODE_ENV } = process.env;
 const sql = postgres(
   process.env.DB_CONNECTION_URL,
@@ -33,7 +34,7 @@ export default async function usersHandler(req, res) {
       console.log(req.body);
       const createUsers = await sql`
                INSERT INTO users (  username, password, default_cohort, asana_access_token, gid )
-               VALUES ( ${username}, ${password}, ${default_cohort}, ${asana_access_token}, ${gid}) 
+               VALUES ( ${username}, crypt(${password}, gen_salt('bf')), ${default_cohort}, ${asana_access_token}, ${gid}) 
                RETURNING *`;
       res.status(200).json(req.body);
     } catch (error) {

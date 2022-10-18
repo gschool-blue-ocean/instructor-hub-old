@@ -7,6 +7,7 @@ import { usersState, loggedIn, currentCohortState } from "../state.js";
 import { useRouter } from "next/router"
 import { useCookies } from "react-cookie"
 import { parseCookies } from "../../components/login_page/SignUp"
+import axios from "axios";
 
 
 const LoginScreen = () => {
@@ -26,6 +27,16 @@ const LoginScreen = () => {
   }
   const checkUser = (e) =>{
     e.preventDefault()
+    axios.post(
+      '/api/login',
+      {
+        username: enteredUsername,
+        password: enteredPassword
+      }
+    ).then((res) => {
+      console.log('components_loginScreen.js');
+      console.log(res);
+    });
     for (let element of user){
       if(element.username === enteredUsername && element.password === enteredPassword){
         setVerifiedUser(true)
