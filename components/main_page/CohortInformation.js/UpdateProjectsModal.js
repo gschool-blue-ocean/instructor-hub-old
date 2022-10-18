@@ -64,10 +64,14 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
   console.log("Here:", indexedStudent.student_id)
   
   // submitHandler and enterListener are basically redundant, see about combining/creating helper
+  const postAndPut = async (e) => {
+    const doit = await submitHandler(e)
+    const enterit = await enterListener(e)
+  }
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
   const submitHandler = async (e) => {
     e.preventDefault();
-    // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
+    // post request to local database
     try {
       const add = await axios.post('/api/projectGrades', {
         "student_id": indexedStudent.student_id,
@@ -77,7 +81,6 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
       })
     } catch (error) {     
         alert(`This project has already been added for ${indexedStudent.name}`) 
-        console.log('wtf')
     }  
     const getIt = await axios.get(`/api/projectsAndProjectGradesId/${indexedStudent.student_id}`).then((res) => {
           setCurrStudentProjects(res.data);
@@ -96,20 +99,43 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
         })
   };
 
-  // const enterListener = (e) => {
-  //   if (e.key === "Enter" && e.shiftKey === false) {
-  //     e.preventDefault();
-  //     const stagedStudent = formGetter(e.target.form);
-  //     // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
-  //     setStagedCohort((prev) => {
-  //       prev.push(stagedStudent);
-  //       return prev;
-  //     });
-  //     // Until HERE ^
-  //     e.target.form.reset();
-  //     firstInput.current.focus();
-  //   }
-  // };
+  const enterListener = async (e) => {
+    const selectedProjName = projects.find((project) => project.project_id === projectId)
+    if (e.key === "Enter" && e.shiftKey === false) {
+      e.preventDefault();
+
+      let instructorNotes = ''
+     axios.get(`https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, {
+      headers: {
+        Authorization: `Bearer ${users.asana_access_token}`,
+      }
+    })
+    .then((res) => {
+      console.log(res.data.data)
+      instructorNotes = res.data.data.notes
+    })
+    .then(() => {
+      instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null
+      axios({
+        method:"PUT",  //must be put method not patch
+        url: `https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
+        headers: {
+          Authorization: `Bearer ${users.asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
+        }, data: { 
+            data: {
+              "workspace": "1213745087037",
+              "assignee_section": null,
+              "html_notes": `<body>${instructorNotes}\n ${selectedProjName.project_name.toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
+              "parent": null,
+              "resource_subtype": "default_task",
+            }
+          }
+      })
+    })
+    // e.target.reset();
+    // firstInput.current.focus();
+    }
+  };
 
 
   return (
@@ -133,7 +159,8 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
                 <form
                   className={styles.updateForm}
                   onSubmit={submitHandler}
-                  // onKeyDown={enterListener}
+                  onKeyDown={enterListener}
+                  
                 >
                   <label htmlFor="Projects">Projects</label> <br />
                   <select
@@ -223,32 +250,32 @@ export default UpdateProjectsModal;
     //   })
     // }) 
 
-  //   let instructorNotes = ''
-  //    axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
-  //     headers: {
-  //       Authorization: `Bearer ${users[3].asana_access_token}`,
-  //     }
-  //   })
-  //   .then((res) => {
-  //     console.log(res.data.data)
-  //     instructorNotes = res.data.data.notes
-  //   })
-  //   .then(() => {
-  //     instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null
-  //     axios({
-  //       method:"PUT",  //must be put method not patch
-  //       url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
-  //       headers: {
-  //         Authorization: `Bearer ${users[3].asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
-  //       }, data: { 
-  //           data: {
-  //             "workspace": "1213745087037",
-  //             "assignee_section": null,
-  //             "html_notes": `<body>${instructorNotes}\n ${"Name".toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
-  //             "parent": null,
-  //             "resource_subtype": "default_task",
-  //           }
-  //         }
-  //     })
-  //   })
+    // let instructorNotes = ''
+    //  axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
+    //   headers: {
+    //     Authorization: `Bearer ${users[3].asana_access_token}`,
+    //   }
+    // })
+    // .then((res) => {
+    //   console.log(res.data.data)
+    //   instructorNotes = res.data.data.notes
+    // })
+    // .then(() => {
+    //   instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null
+    //   axios({
+    //     method:"PUT",  //must be put method not patch
+    //     url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
+    //     headers: {
+    //       Authorization: `Bearer ${users[3].asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
+    //     }, data: { 
+    //         data: {
+    //           "workspace": "1213745087037",
+    //           "assignee_section": null,
+    //           "html_notes": `<body>${instructorNotes}\n ${"Name".toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
+    //           "parent": null,
+    //           "resource_subtype": "default_task",
+    //         }
+    //       }
+    //   })
+    // })
   // }
