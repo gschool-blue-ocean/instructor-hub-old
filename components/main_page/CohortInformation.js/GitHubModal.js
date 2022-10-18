@@ -15,7 +15,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
 
   //Filter required to make current cohort students appear
-  let course = students.filter(classRoom => classRoom.cohort == currentCohort)
+  let course = students.filter(studentCohort => studentCohort.cohort == currentCohort)
   
   // edit github accounts
   const patchGithub = (e) => {

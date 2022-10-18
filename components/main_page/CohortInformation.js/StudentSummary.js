@@ -16,19 +16,23 @@ const StudentSummary = () => {
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCommentModal, setShowCommenttModal] = useState(false);
   const [showGraphModal, setShowGraphModal] = useState(false);
-  const [noteStudent, setNoteStudent] = useState(" ");
+  const [studentNote, setStudentNote] = useState(" ");
   const [studentGraph, setStudentGraph] = useState(" ");
   const [tableData, setTableData ] = useState({});
   const [order, setOrder] = useState("ASC");
-  const [cohorts, setCohorts] = useRecoilState(cohortsState);
+  const [selectedUsers, setSelectedUsers] = useState([])
+  const [sort, setSort] = useState([])
+  const [currentCourse, setCurrentCourse] = useState([])
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
   const [user, setUser] = useRecoilState(usersState);
 
   // Allows the cohorts to be filter/Possible problem with removing course randomly 
-  let course = students.filter(classRoom => classRoom.cohort == currentCohort)
-  console.log(students)
-  console.log(course)
+  useEffect(() => {
+    let course = students.filter(studentCohort => studentCohort.cohort == currentCohort)
+    setCurrentCourse(course)
+  }, [currentCohort])
+  
 
   // Work-in-progress, hope is to pull information in from the database for update at a constant rate. 
   useEffect(() => {
@@ -46,22 +50,22 @@ const StudentSummary = () => {
   let progress = (num) => {
     if (num === 1) {
       return (
-        <td className={studentStyle.color}>At Risk</td>
+        <div className={studentStyle.color}>At Risk</div>
       )
     }
     if (num === 2) {
       return (
-        <td className={studentStyle.color3}>Below Avg</td>
+        <div className={studentStyle.color3}>Below Avg</div>
       )
     }
     if (num === 3) {
       return (
-        <td className={studentStyle.color2}>Average</td>
+        <div className={studentStyle.color2}>Average</div>
       )
     }
     if (num === 4) {
       return (
-        <td className={studentStyle.color4}>Above Avg</td>
+        <div className={studentStyle.color4}>Above Avg</div>
       )
     }
   }
@@ -82,45 +86,49 @@ const StudentSummary = () => {
     }
   }
 
-  //[CheckBoxs] Allows the Select Box to check everybox/uncheck based on the student clicked
-  const handleChange = (e) => {
-    const { id , checked } = e.target;
-    if (id === "allSelect") {
-      let tempStudent = course.map((student) => {
-        return { ...student, isChecked: checked };
-      });
-      setStudents(tempStudent);
-      setSelectPeople(tempStudent)
+  //[CheckBoxs] Allows the individual checkboxs to work based on the userId
+  const handleSelectUser =(event) => {
+      const userId = Number(event.target.value);
+      console.log(selectedUsers, "SelectedUsers")
+
+      if(!selectedUsers.includes(userId)) {
+        setSelectedUsers([...selectedUsers, userId])
+      } else {
+        setSelectedUsers(
+          selectedUsers.filter((selectedUserId) => {
+            return selectedUserId !== userId;
+          })
+        )
+      }
+    }
+
+  const handleSelectAllUsers = () => {
+    if(selectedUsers.length < course.length) {
+      setSelectedUsers(course.map((student) => student.student_id))
+        console.log(selectedUsers)
     } else {
-      let tempStudent = course.map((student) => 
-      student.student_id == id ? { ...student, isChecked: checked } : student 
-    );
-      setStudents(tempStudent);
-      setSelectPeople(tempStudent)
+      setSelectedUsers([])
     }
   }
 
   //Works in conjunction with the handleChange function. Plus all checked students into an array.
-  useEffect(() => {
-      let selectedStudents = selectedPeople.filter(unChecked => unChecked.isChecked == true)
-  }, [selectedPeople])
-
+  
   //[Sort] Used for sorting from ASC to DSC for name/progress/Client-side/Server-side.
   const wordSorting= (name) => {
       if(order === "ASC") {
-        const sorted = [...course].sort((a,b) =>
+        const sorted = [...currentCourse].sort((a,b) =>
           a[name].toUpperCase() > b[name].toUpperCase() ? 1 : -1
       );
       console.log(name, "name")
       console.log(sorted)
-      setStudents(sorted);
+      setCurrentCourse(sorted);
       setOrder("DSC")
     }
     if(order === "DSC") {
-      const sorted = [...course].sort((a,b) =>
+      const sorted = [...currentCourse].sort((a,b) =>
         a[name].toUpperCase() < b[name].toUpperCase() ? 1 : -1
       );
-      setStudents(sorted);
+      setCurrentCourse(sorted);
       setOrder("ASC")
     }
   }
@@ -128,22 +136,23 @@ const StudentSummary = () => {
   //Same function as above but used for values
   const sorting= (name) => {
     if(order === "ASC") {
-      const sorted = [...course].sort((a,b) =>
+      const sorted = [...currentCourse].sort((a,b) =>
         a[name] > b[name] ? 1 : -1
     );
     console.log(name, "name")
     console.log(sorted)
-    setStudents(sorted);
+    setCurrentCourse(sorted);
     setOrder("DSC")
   }
   if(order === "DSC") {
-    const sorted = [...course].sort((a,b) =>
+    const sorted = [...currentCourse].sort((a,b) =>
       a[name] < b[name] ? 1 : -1
     );
-    setStudents(sorted);
+    setCurrentCourse(sorted);
     setOrder("ASC")
   }
 }
+
   
   //[Delete Request] Axios delete request. Removes from the database and Asana
   const handleDeleteClick = (studentId, studentGid) => {
@@ -170,7 +179,7 @@ const StudentSummary = () => {
   
   const openCommentModel = (student) => {
     setShowCommenttModal((prev) => !prev);
-    setNoteStudent(student)
+    setStudentNote(student)
   };
 
   const openGraphModel = (student) => {
@@ -186,13 +195,13 @@ const StudentSummary = () => {
   return (
     <div>
       <GitHubModal showGitHubModal={showGitHubModal} setShowGitHubModal={setShowGitHubModal} onClose={() => {setShowGitHubModal(false);}}/>
-      <CommentModal showCommentModal={showCommentModal} setShowCommenttModal={setShowCommenttModal} onClose={() => {setShowCommenttModal(false)}} noteStudent = {noteStudent}/>
+      <CommentModal showCommentModal={showCommentModal} setShowCommenttModal={setShowCommenttModal} onClose={() => {setShowCommenttModal(false)}} studentNote = {studentNote}/>
       <GraphModal showGraphModal={showGraphModal} setShowGraphModal={setShowGraphModal} onClose={() => {setShowGraphModal(false)}} studentGraph = {studentGraph}/>
       <div className={studentStyle.container}>
         <div className={studentStyle.topBorder}>
           <div className={studentStyle.selectRow}>
             <div className={studentStyle.selectAllBox}>
-              <input className={studentStyle.checkBox} type="checkbox" id="allSelect" checked={!students.some((student) => student?.isChecked !== true)} onChange={handleChange}/>
+              <input className={studentStyle.checkBox} type="checkbox" id="allSelect" checked={selectedUsers.length === currentCourse.length} onChange={handleSelectAllUsers}/>
               <label htmlFor="selectMe"> Select/Deselect All</label>
             </div>
             <GroupMaker />
@@ -222,10 +231,10 @@ const StudentSummary = () => {
               </thead>
               <tbody className= {studentStyle.tbody}>
               {/* Iterate through the students data, ties in with the variable course */}
-              {course.map((student) => (
+              {currentCourse.map((student) => (
                 <tr className= {studentStyle.tbodyRow} id={student.student_id} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
-                    <input type="checkbox" id = {student.student_id} checked={student?.isChecked || false} onChange={handleChange} ></input>
+                    <input type="checkbox" value = {student.student_id} checked={selectedUsers.includes(student.student_id)} onChange={handleSelectUser}></input>
                   </td>
                   <td  className= {studentStyle.nameContent}  onClick={() => setStudentId(student.student_id)}>
                     <Link className= {studentStyle.nameSpace} href={`/student/${student.student_id}`}>{student.name}</Link>

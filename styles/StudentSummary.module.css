@@ -31,6 +31,7 @@
 .selectAllBox {
   float: left;
   white-space: nowrap;
+  padding-left:10px;
 }
 
 .checkBox {
