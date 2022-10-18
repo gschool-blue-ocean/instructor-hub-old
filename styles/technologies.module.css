@@ -15,19 +15,19 @@
 }
 
 .subContainer {
-    max-width: 1200px;
+    max-width: 950px;
     margin: auto;
-    padding: 48px 0;
+    padding: 48px;
     display: flex;
     flex-direction: column;
 }
 
 .technology_1 {
     display: flex;
-    border-radius: 20px;
+    /* border-radius: 20px; */
     width: 80%;
     margin: 10px;
-    margin-right: 20%;
+    /* margin-right: 20%; */
     background-color:  rgb(25, 74, 72);
     padding: 22px;
     cursor: pointer;
@@ -38,10 +38,10 @@
 
 .technology_2 {
     display: flex;
-    border-radius: 20px;
+    /* border-radius: 20px; */
     width: 80%;
     margin: 10px;
-    margin-left: 20%;
+    /* margin-left: 20%; */
     background-color:  rgba(60,101,98,1);
     padding: 22px;
     cursor: pointer;
@@ -52,13 +52,13 @@
 
 .technology_1:hover{
     background: rgb(8, 56, 54);
-    border-radius: 5px;
+    border-radius: 25px;
     color:skyblue;
 }
 
 .technology_2:hover{
     background:   rgb(8, 56, 54);
-    border-radius: 5px;
+    border-radius: 25px;
     color:skyblue;
 }
 
