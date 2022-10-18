@@ -17,20 +17,31 @@ const StudentSummary = () => {
   const [showGraphModal, setShowGraphModal] = useState(false);
   const [noteStudent, setNoteStudent] = useState(" ");
   const [studentGraph, setStudentGraph] = useState(" ");
+  const [tableData, setTableData ] = useState({});
   const [order, setOrder] = useState("ASC");
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
   const [user, setUser] = useRecoilState(usersState);
 
-  // Allows the cohorts to be filter 
-  let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
+  // Allows the cohorts to be filter/Possible problem with removing course randomly 
+  let course = students.filter(classRoom => classRoom.cohort == currentCohort)
+  console.log(students)
+  console.log(course)
 
+  // Work-in-progress, hope is to pull information in from the database for update at a constant rate. 
   useEffect(() => {
-    let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
-  }, [students])
+    const fetchData = async () => {
+      const result = await axios.get(`/api/students`);
+      const data = await result.data
+      console.log(data)
+      setTableData(data)
+    }
+    console.log(tableData, "Table Data")
+    fetchData()
+  }, [])
 
-  // Determines Progress row words
+  // [Progress Conversion] Determines Progress row words
   let progress = (num) => {
     if (num === 1) {
       return (
@@ -54,7 +65,7 @@ const StudentSummary = () => {
     }
   }
 
-  //Converts teamWork_avg and Tech_avg to percentage
+  //[Percent Conversion] Converts teamWork_avg and Tech_avg to percentage
   let colPercent = (num) => {
     if (num === 1) {
       return "25%"
@@ -70,7 +81,7 @@ const StudentSummary = () => {
     }
   }
 
-  //Handles the Select All checkbox.
+  //[CheckBoxs] Allows the Select Box to check everybox/uncheck based on the student clicked
   const handleChange = (e) => {
     const { id , checked } = e.target;
     if (id === "allSelect") {
@@ -88,12 +99,12 @@ const StudentSummary = () => {
     }
   }
 
-  //Works in conjunction with the handleChange function. Needed to track who is selected and who is not
+  //Works in conjunction with the handleChange function. Plus all checked students into an array.
   useEffect(() => {
       let selectedStudents = selectedPeople.filter(unChecked => unChecked.isChecked == true)
   }, [selectedPeople])
 
-  //Used for sorting from ASC to DSC for name/progress/Client-side/Server-side.
+  //[Sort] Used for sorting from ASC to DSC for name/progress/Client-side/Server-side.
   const wordSorting= (name) => {
       if(order === "ASC") {
         const sorted = [...course].sort((a,b) =>
@@ -133,10 +144,9 @@ const StudentSummary = () => {
   }
 }
   
-  //Axios delete request. Removes from the database and Asana
+  //[Delete Request] Axios delete request. Removes from the database and Asana
   const handleDeleteClick = (studentId, studentGid) => {
     const newStudent = [...students] //Create New Array based on current students
-    console.log(studentGid)
     const index = students.findIndex((student) => student.student_id === studentId)
     newStudent.splice(index, 1);
     axios.delete(`/api/students/${studentId}`).then(() => {
@@ -152,23 +162,24 @@ const StudentSummary = () => {
     })
   }
  
-    const openGitHubModal = () => {
-      setShowGitHubModal((prev) => !prev);
-    };
+  //[Modals] Allows the modals to be opened
+  const openGitHubModal = () => {
+    setShowGitHubModal((prev) => !prev);
+  };
   
-    const openCommentModel = (student) => {
-      setShowCommenttModal((prev) => !prev);
-      setNoteStudent(student)
-    };
+  const openCommentModel = (student) => {
+    setShowCommenttModal((prev) => !prev);
+    setNoteStudent(student)
+  };
 
-    const openGraphModel = (student) => {
-      setShowGraphModal((prev) => !prev);
-      setStudentGraph(student)
-    }
+  const openGraphModel = (student) => {
+    setShowGraphModal((prev) => !prev);
+    setStudentGraph(student)
+  }
   
-    useEffect(() => {
-      setStudents(students);
-    }, []);
+  useEffect(() => {
+    setStudents(students);
+  }, []);
   
   
   return (

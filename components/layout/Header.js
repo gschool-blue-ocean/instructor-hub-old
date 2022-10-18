@@ -42,12 +42,10 @@ const Header = () => {
       "default_cohort" : `${e.target.value}`
     })
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data, "newDefault")
         setUsers(users);
       })
   }
-
-
 
   return (
     <>
@@ -72,11 +70,11 @@ const Header = () => {
               {signInStatus ? (
                 <>
                   <a onClick={() =>logoutFunc()}>Logout</a>
-                  <select name={currentCohort}>
+                  <select onChange={(e) => newDefault(e)}>
                     <option value= "" disabled selected hidden>Choose A Cohort</option>
                     {/* <option value={currentCohort}>{currentCohort}</option> */}
                     {cohorts.filter((course) => course.name !== currentCohort).map((cohortList) => (
-                      <option onChange={(e) => newDefault(e)} key= {cohortList.cohort_id} value={cohortList.name}>{cohortList.name}</option>
+                      <option key= {cohortList.cohort_id} value={cohortList.name}>{cohortList.name}</option>
                     ))}
                   </select>
                 </>
