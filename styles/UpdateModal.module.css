@@ -48,7 +48,7 @@
   font-weight: bolder;
 }
 
-.button {
+.header button {
   float: right;
   margin-right: 8px;
   display: block;
@@ -59,7 +59,7 @@
   border: none;
 }
 
-.button:hover {
+.header button:hover {
   cursor: pointer;
   background-color: rgba(92, 92, 92, 0.5);
 }
@@ -88,8 +88,8 @@
   margin-bottom: 10px;
 }
 
-.graph {
-  float: right;
-  display: block;
-  top: 10px;
+.formFooter {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
 }

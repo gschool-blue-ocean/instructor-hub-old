@@ -5,7 +5,6 @@ import {
   studentsState,
   currentCohortState,
   cohortsState,
-  studentIdState,
 } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
 import axios from "axios";
@@ -132,6 +131,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     firstInput.current.focus();
   };
 
+  // This allows you to Shift+Enter to create a new line in the textArea, and Enter to submit the form
   const enterListener = (e) => {
     if (e.key === "Enter" && e.shiftKey === false) {
       e.preventDefault();
@@ -143,6 +143,30 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       e.target.form.reset();
       firstInput.current.focus();
     }
+  };
+
+  // A function to allow moving back and forth through the filteredCohort
+  const prevStudent = () => {
+    // It will be necessary to grab "current student" from state.
+    // these Setters MUST "return" a value, not merely increment or mutate
+    // Can I replace each usage of setCurrStudent with a way to
+    // just setIndexedStudent to filteredCohort[prev + 1] or something like that?
+    setCurrStudent((prev) => {
+      if (prev !== 0) {
+        return prev - 1;
+      } else {
+        return 0;
+      }
+    });
+  };
+  const nextStudent = () => {
+    setCurrStudent((prev) => {
+      if (prev !== filteredCohort.length - 1) {
+        return prev + 1;
+      } else {
+        return 0;
+      }
+    });
   };
 
   // formGetter grabs the entered data from the field and packages it for POST
@@ -160,18 +184,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
         stagedStudent[pair[0]] = pair[1];
       }
     }
-    // In addition, it will be necessary to grab
-    // "current student" from state.
-    // these Setters MUST "return" a value, not merely increment or mutate
 
-    // Can I replace each usage of setCurrStudent with a way to just setIndexedStudent to filteredCohort[prev + 1]
-    setCurrStudent((prev) => {
-      if (prev < filteredCohort.length) {
-        return prev + 1;
-      } else {
-        return 0;
-      }
-    });
     return stagedStudent;
   };
 
@@ -222,6 +235,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     });
     setIsLoading(() => false);
     onClose();
+    setCurrStudent(() => 0);
     setStagedCohort(() => {});
   };
 
@@ -243,66 +257,84 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
             </div>
             <div className={styles.update}>
               {filteredCohort[currStudent] ? (
-                <form
-                  className={styles.updateForm}
-                  onSubmit={submitHandler}
-                  onKeyDown={enterListener}
-                >
-                  <label htmlFor="Tech">Technical Aptitude</label> <br />
-                  <select
-                    id="Tech"
-                    name="Tech"
-                    required
-                    autoFocus={true}
-                    ref={firstInput}
+                <>
+                  <form
+                    className={styles.updateForm}
+                    onSubmit={submitHandler}
+                    onKeyDown={enterListener}
                   >
-                    <option value="none" selected disabled hidden>
-                      Select an Option
-                    </option>
-                    <option value="4 - Needs improvement">
-                      4 - Needs improvement
-                    </option>
-                    <option value="3 - Approaching standard">
-                      3 - Approaching standard
-                    </option>
-                    <option value="2 - Meets standard">
-                      2 - Meets standard
-                    </option>
-                    <option value="1 - Exceeds standard">
-                      1 - Exceeds standard
-                    </option>
-                  </select>{" "}
-                  <br />
-                  <label htmlFor="Team">Teamwork Aptitude</label> <br />
-                  <select id="Team" name="Team" required>
-                    <option value="none" selected disabled hidden>
-                      Select an Option
-                    </option>
-                    <option value="4 - Needs improvement">
-                      4 - Needs improvement
-                    </option>
-                    <option value="3 - Approaching standard">
-                      3 - Approaching standard
-                    </option>
-                    <option value="2 - Meets standard">
-                      2 - Meets standard
-                    </option>
-                    <option value="1 - Exceeds standard">
-                      1 - Exceeds standard
-                    </option>
-                  </select>{" "}
-                  <br />
-                  <label htmlFor="Notes">Notes</label> <br />
-                  <textarea
-                    id="Notes"
-                    name="Notes"
-                    rows="10"
-                    cols="30"
-                    required
-                  ></textarea>{" "}
-                  <br />
-                  <input type="submit" value="Submit" />
-                </form>
+                    <label htmlFor="Tech">Technical Aptitude</label> <br />
+                    <select
+                      id="Tech"
+                      name="Tech"
+                      required
+                      autoFocus={true}
+                      ref={firstInput}
+                    >
+                      <option value="none" selected disabled hidden>
+                        Select an Option
+                      </option>
+                      <option value="4 - Needs improvement">
+                        4 - Needs improvement
+                      </option>
+                      <option value="3 - Approaching standard">
+                        3 - Approaching standard
+                      </option>
+                      <option value="2 - Meets standard">
+                        2 - Meets standard
+                      </option>
+                      <option value="1 - Exceeds standard">
+                        1 - Exceeds standard
+                      </option>
+                    </select>{" "}
+                    <br />
+                    <label htmlFor="Team">Teamwork Aptitude</label> <br />
+                    <select id="Team" name="Team" required>
+                      <option value="none" selected disabled hidden>
+                        Select an Option
+                      </option>
+                      <option value="4 - Needs improvement">
+                        4 - Needs improvement
+                      </option>
+                      <option value="3 - Approaching standard">
+                        3 - Approaching standard
+                      </option>
+                      <option value="2 - Meets standard">
+                        2 - Meets standard
+                      </option>
+                      <option value="1 - Exceeds standard">
+                        1 - Exceeds standard
+                      </option>
+                    </select>{" "}
+                    <br />
+                    <label htmlFor="Notes">Notes</label> <br />
+                    <textarea
+                      id="Notes"
+                      name="Notes"
+                      rows="10"
+                      cols="30"
+                      required
+                    ></textarea>{" "}
+                    <br />
+                    <input type="submit" value="Submit" />
+                  </form>
+                  <div className={styles.formFooter}>
+                    <button
+                      onClick={prevStudent}
+                      disabled={currStudent === 0 ? true : false}
+                    >
+                      Previous Student
+                    </button>
+                    <button
+                      onClick={nextStudent}
+                      disabled={
+                        currStudent === filteredCohort.length - 1 ? true : false
+                      }
+                    >
+                      Next Student
+                    </button>
+                  </div>
+                </>
               ) : (
                 <>
                   <ul>
