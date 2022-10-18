@@ -131,7 +131,7 @@ const CohortOverall = ({ children }) => {
     labels: ["Cohort Averages"],
     datasets: [
       {
-        label: "Cohort Average",
+        label: "Cohort Avg",
         data: [cohortAvg],
         borderColor: "black",
         backgroundColor: ["green"],
