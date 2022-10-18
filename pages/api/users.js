@@ -17,6 +17,7 @@ export default async function usersHandler(req, res) {
       const users = await sql`
       SELECT * FROM users`;
       res.status(200).json({ users });
+      console.log(users);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
@@ -33,7 +34,7 @@ export default async function usersHandler(req, res) {
       console.log(req.body);
       const createUsers = await sql`
                INSERT INTO users (  username, password, default_cohort, asana_access_token, gid )
-               VALUES ( ${username}, ${password}, ${default_cohort}, ${asana_access_token}, ${gid}) 
+               VALUES ( ${username}, crypt(${password}, gen_salt('bf')), ${default_cohort}, ${asana_access_token}, ${gid}) 
                RETURNING *`;
       res.status(200).json(req.body);
     } catch (error) {
