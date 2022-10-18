@@ -124,3 +124,8 @@ export const checkedPeopleState = atom({
   key: 'checked people',
   default: [],
 });
+
+export const groupsState = atom({
+  key: 'groups',
+  default: []
+})
