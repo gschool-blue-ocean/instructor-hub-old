@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import headerStyle from "../../styles/Header.module.css";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { usersState, loggedIn } from "../state";
+import { usersState, loggedIn, currentCohortState, cohortsState } from "../state";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/router"
@@ -12,7 +12,17 @@ const Header = () => {
   const [dropDown, showDropDown] = useState(false);
   const [users, setUsers] = useRecoilState(usersState);
   const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
+  const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
+  const [defaultCohort, setDefaultCohort] = useState("");
+  const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const router = useRouter();
+
+  useEffect(() => {
+    if (users) {
+      setCurrentCohort(users.default_cohort);
+      // console.log(currentCohort)
+    }
+  }, [users]);
 
   //function allows for logging out and rerouting to sign in page. Also resets the dropDown menu to the hidden state
   const logoutFunc = ()=>{
@@ -25,6 +35,19 @@ const Header = () => {
       return true
     }
   }
+
+  const newDefault = (e) => {
+    let userId = users.user_id
+    axios.patch(`/api/users/${userId}`, {
+      "default_cohort" : `${e.target.value}`
+    })
+      .then((res) => {
+        console.log(res.data)
+        setUsers(users);
+      })
+  }
+
+
 
   return (
     <>
@@ -49,8 +72,13 @@ const Header = () => {
               {signInStatus ? (
                 <>
                   <a onClick={() =>logoutFunc()}>Logout</a>
-                  <a>Settings</a>
-                  <a>Cohort</a>
+                  <select name={currentCohort}>
+                    <option value= "" disabled selected hidden>Choose A Cohort</option>
+                    {/* <option value={currentCohort}>{currentCohort}</option> */}
+                    {cohorts.filter((course) => course.name !== currentCohort).map((cohortList) => (
+                      <option onChange={(e) => newDefault(e)} key= {cohortList.cohort_id} value={cohortList.name}>{cohortList.name}</option>
+                    ))}
+                  </select>
                 </>
               ): ""}
             </div>
