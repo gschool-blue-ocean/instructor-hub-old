@@ -1,0 +1,33 @@
+.groupMakerDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+.warning {
+    color: red;
+    position: absolute;
+    top: 180px;
+    right: 540px;
+}
+
+.selector {
+    border-radius: 10px;
+    border: none;
+    padding: 10px 15px;
+    /* display: inline-block; */
+    cursor: pointer;
+    text-decoration: none !important;
+    color: white !important;
+    /* background-image: linear-gradient(to right, #47598b, #2f77ca); */
+    /* background-color: rgba(33, 48, 33, 0.781); */
+    /* background: linear-gradient(129deg, rgb(33, 47, 32) 0%, rgb(0, 45, 2) 71%, rgba(0,0,0,1) 100%); */
+    background: #0b131b61;
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-top: auto; */
+    margin-bottom: auto;
+}
+
+.button:hover {
+    background: rgba(3, 29, 52, 0.776); 
+}
