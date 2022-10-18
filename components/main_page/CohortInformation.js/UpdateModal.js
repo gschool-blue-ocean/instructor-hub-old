@@ -194,7 +194,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     console.log("Where the fuck is my stuff", techSkillGID);
     console.log("Where is the teamwork", teamWorkGID);
     stagedCohort.map(async (student) => {
-      axios({
+      await axios({
         method: "PUT",
         url: `https://app.asana.com/api/1.0/tasks/${student.GID}`,
         headers: {
@@ -208,29 +208,28 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
             },
           },
         },
-      }).then(() =>
-        axios({
-          method: "POST",
-          url: `https://app.asana.com/api/1.0/tasks/${student.GID}/subtasks`,
-          headers: {
-            Authorization: `Bearer ${user.asana_access_token}`,
-          },
+      });
+      await axios({
+        method: "POST",
+        url: `https://app.asana.com/api/1.0/tasks/${student.GID}/subtasks`,
+        headers: {
+          Authorization: `Bearer ${user.asana_access_token}`,
+        },
+        data: {
           data: {
-            data: {
-              name: student.Notes,
-            },
+            name: student.Notes,
           },
-        })
-      );
-      const sentTech = await axios.post("/api/studentTechSkills", {
+        },
+      });
+      await axios.post("/api/studentTechSkills", {
         student_id: student.ID,
         score: parseInt(student.Tech),
       });
-      const sentTeam = await axios.post("api/studentTeamworkSkills", {
+      await axios.post("api/studentTeamworkSkills", {
         student_id: student.ID,
         score: parseInt(student.Team),
       });
-      const sentNotes = await axios.post("/api/notes", {
+      await axios.post("/api/notes", {
         student_id: student.ID,
         notes: student.Notes,
         name: null,
@@ -238,6 +237,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       });
     });
     setIsLoading(() => false);
+    onClose();
+    setStagedCohort(() => {});
   };
 
   return (
