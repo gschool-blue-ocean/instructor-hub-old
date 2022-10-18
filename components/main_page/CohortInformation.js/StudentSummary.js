@@ -25,7 +25,7 @@ const StudentSummary = () => {
   const [user, setUser] = useRecoilState(usersState);
 
   // Allows the cohorts to be filter 
-  let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
+  // let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
 
   useEffect(() => {
     let course = students.filter(classRoom => classRoom.cohort == currentCohort) 

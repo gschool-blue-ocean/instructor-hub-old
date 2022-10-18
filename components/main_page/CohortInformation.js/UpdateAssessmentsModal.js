@@ -87,7 +87,6 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
     console.log(learnGrades) 
     // post request to local database
     try {
-        console.log('hi')
       await axios.post('/api/learnGrades', {
         "student_id": indexedStudent.student_id,
         "assessment_id": assessmentId,
