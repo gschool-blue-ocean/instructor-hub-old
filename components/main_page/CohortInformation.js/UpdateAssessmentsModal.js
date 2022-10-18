@@ -83,8 +83,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
 
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
   const submitHandler = async (e) => {
-    e.preventDefault();  
-    console.log(learnGrades) 
+    e.preventDefault();   
     // post request to local database
     try {
       await axios.post('/api/learnGrades', {
@@ -92,18 +91,10 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
         "assessment_id": assessmentId,
         "assessment_grade": assessScore,
         // "notes": `${projNotes}`
-      }).then((res) => {
-            console.log(res.data)
-            setLearnGrades((prev)=> [...prev, res.data])
-      }).then(() => {
-            axios.get('/api/students').then((res) => {
-            console.log(res, 'it works')
-            setStudents(res.data)
-            })
-      })
+      }).then((res) => setLearnGrades((prev)=> [...prev, ...res.data]))
     } 
     catch(error) {     
-    //   alert(`This assessment has already been added for ${indexedStudent.name}`) 
+      console.log("from catch")
     } 
     // increments to the next student
     setCurrStudent((prev) => {
@@ -116,7 +107,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
     
     setAssessNotes("")
     onSubmit(e);
-    // enterListener(e);
+    enterListener(e);
     firstInput.current.focus();
   };
 
@@ -203,8 +194,8 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
                 }}></input>
                 <div>%</div>                  
                 <br />
-                <label htmlFor="Notes">Notes</label> <br />
-                <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea>
+                {/* <label htmlFor="Notes">Notes</label> <br />
+                <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea> */}
                 <br />
                 <button type="submit"  value="Submit" onClick={(e) => submitHandler(e)}>Submit</button>
               </form>

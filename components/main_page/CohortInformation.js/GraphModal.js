@@ -14,7 +14,7 @@ const GraphModal = ({ studentGraph, showGraphModal, setShowGraphModal, onClose }
     const [studentTeamworkSkills, setStudentTeamworkSkills] = useRecoilState(studentTeamworkSkillsState);
     const [studentId, setStudentId] = useRecoilState(studentIdState);
 
-    console.log(studentGraph)
+    // console.log(studentGraph)
 
     let currTechSkills = studentTechSkills.filter(teckSkill => teckSkill.student_id == studentGraph.student_id); 
     let arrTeckSkills = currTechSkills.map((skill) => skill.score); 
