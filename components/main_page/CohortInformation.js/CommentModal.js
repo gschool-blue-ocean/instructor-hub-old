@@ -4,11 +4,11 @@ import { studentsState, notesState } from "../../state.js";
 import Image from "next/image";
 import commentStyle from "../../../styles/CommentModal.module.css";
 
-const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onClose }) => {
+const CommentModal = ({ studentNote, showCommentModal, setShowCommenttModal, onClose }) => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [notes, setNotes] = useRecoilState(notesState);
 
-  let userNotes = notes.filter(note => note.student_id == noteStudent.student_id); 
+  let userNotes = notes.filter(note => note.student_id == studentNote.student_id); 
 
   return (
     <>
@@ -22,7 +22,7 @@ const CommentModal = ({ noteStudent, showCommentModal, setShowCommenttModal, onC
                 <div>
                   <div onClick={onClose} className={commentStyle.close}></div>
                   <div className={commentStyle.studentName}>
-                    {noteStudent.name}
+                    {studentNote.name}
                   </div>
                 </div>
               </div>

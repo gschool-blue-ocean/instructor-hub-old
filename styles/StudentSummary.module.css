@@ -31,6 +31,7 @@
 .selectAllBox {
   float: left;
   white-space: nowrap;
+  padding-left:10px;
 }
 
 .checkBox {
@@ -91,7 +92,6 @@
 .thead {
     background: #0b131b61;
     display: table;
-    table-layout: fixed;
     width: 100%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -101,7 +101,56 @@
     border-bottom: 1px solid;
 }
 
-.header {
+.nameColumn {
+    padding: 10px 0px;
+    font-size: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.learnColumn {
+    padding: 10px 5px;
+    font-size: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.clientColumn {
+    padding: 10px 0px;
+    font-size: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.serverColumn {
+    padding: 10px 0px;
+    font-size: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.teamColumn {
+    padding: 10px 12px 10px 0px;
+    font-size: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.techColumn {
+    padding: 10px 0px;
+    font-size: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.progressColumn {
+    padding: 10px 0px;
+    font-size: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.noteColumn {
     padding: 10px 0px;
     font-size: 15px;
     width: 15px;
@@ -109,7 +158,7 @@
 }
 
 .smallHeader {
-    width: 3.8px !important;
+    width: 15px !important;
 }
 
 .header:hover{
