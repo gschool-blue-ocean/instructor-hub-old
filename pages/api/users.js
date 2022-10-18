@@ -17,7 +17,7 @@ export default async function usersHandler(req, res) {
       const users = await sql`
       SELECT * FROM users`;
       res.status(200).json({ users });
-      console.log(users);
+      // console.log(users);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: "Messed up on our end" });
