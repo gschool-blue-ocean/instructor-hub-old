@@ -13,6 +13,8 @@ const AssessModal = ({showAssessModal, onClose }) => {
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
   const [assessId, setAssessId] = useState(''); 
   const [users, setUsers] = useRecoilState(usersState);
+  const [addAssessName, setAddAssessName] = useState(false); 
+  const [newAssessName, setNewAssessName] = useState(''); 
 
   
   const selectedOption = (e) => {
@@ -23,12 +25,23 @@ const AssessModal = ({showAssessModal, onClose }) => {
   let assessmentId = Number(assessId)
   let assessScore = Number(score)
 
-  /*------------- On Submit------------*/
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    axios.post("/api/learn", {
+      "assessment_name": newAssessName, 
+    }).then((res) => {
+      setAssessId((prev) =>  res.data.assessment_id)
+      const newLearn = [...learn, res.data]
+      setLearn(newLearn);
+    })
+  }
+
+  /*------------- On click Button------------*/
   const addAssesment = () => {
     const assessmentName = learn.find((assessment) => assessment.assessment_id === assessmentId)
 
     // on submit it will do a post request to our local databse 
-    console.log(asanaToken)
     axios.post("/api/learnGrades", {
         student_id: studentId,
         assessment_id: assessmentId,
@@ -99,18 +112,28 @@ const AssessModal = ({showAssessModal, onClose }) => {
                   <div>
                     <h3>Add an Assesment</h3> 
                     <div className={style.selectAssess}>
-                      <label className={style.labels}>Assesment</label>
-                      <select id='select' type='select' onChange={(e) => selectedOption(e)} >
+                      <div className={style.lableContainer}>
+                        <label className={style.labels}>Assesment</label>
+                        <span onClick={() => setAddAssessName(!addAssessName)} className={style.addBtn} >&#10009;</span>
+                      </div>
+                      { addAssessName ?
+                        <form onSubmit={(e) => onSubmit(e)}>
+                          <input onChange={(e) => setNewAssessName(e.target.value)}></input>
+                        </form>
+                      :
+                      <select className={style.select} id='select' type='select' onChange={(e) => selectedOption(e)} >
                         <option>- Select -</option>
                         { learn.map(assess => (
                             <option key={assess.assessment_id} value={assess.assessment_id}>{assess.assessment_name}</option>
                         ))
                         }
                       </select>
-                      {/* <input onChange={(e) => selectedOption(e)}  /> */}
+                      }
                     </div>
                     <div className={style.selectScore}>
+                      <div className={style.lableContainer} >
                       <label className={style.labels}>Score</label>
+                      </div>
                     <input onChange={(e) => setScore(e.target.value)} type='number'  />
                     </div>
                     <div className={style.btn}>

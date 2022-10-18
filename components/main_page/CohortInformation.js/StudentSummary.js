@@ -8,6 +8,7 @@ import GraphModal from "./GraphModal";
 import { studentsState, currentStudentState ,studentIdState, cohortsState, currentCohortState, checkedPeopleState, usersState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
+import GroupMaker from "./DropDown";
 
 const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
@@ -194,6 +195,7 @@ const StudentSummary = () => {
               <input className={studentStyle.checkBox} type="checkbox" id="allSelect" checked={!students.some((student) => student?.isChecked !== true)} onChange={handleChange}/>
               <label htmlFor="selectMe"> Select/Deselect All</label>
             </div>
+            <GroupMaker />
             <div className={studentStyle.addGit}>
               <a className={studentStyle.gitBtn}>
                 <span onClick={openGitHubModal} className={` ${studentStyle.gitBtn_medium} ${studentStyle.span}`}>Github Accounts</span>
