@@ -28,7 +28,7 @@
     width: 80%;
     margin: 10px;
     margin-right: 20%;
-    background-color: steelblue;
+    background-color:  rgb(25, 74, 72);
     padding: 22px;
     cursor: pointer;
     transition: 0.4s;
@@ -42,7 +42,7 @@
     width: 80%;
     margin: 10px;
     margin-left: 20%;
-    background-color: rgb(41, 95, 139);
+    background-color:  rgb(25, 74, 72);
     padding: 22px;
     cursor: pointer;
     transition: 0.4s;
@@ -51,13 +51,15 @@
 }
 
 .technology_1:hover{
-    background: rgb(75, 159, 58);
-    border-radius: 12px;
+    background: rgb(8, 56, 54);
+    border-radius: 5px;
+    color:skyblue;
 }
 
 .technology_2:hover{
-    background:  rgb(75, 159, 58);
-    border-radius: 12px;
+    background:   rgb(8, 56, 54);
+    border-radius: 5px;
+    color:skyblue;
 }
 
 .imageDiv {
