@@ -100,11 +100,11 @@ INSERT INTO projects (project_name)
 VALUES ('ReactMVP');
 
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '1', 'TRUE', 'Great job. They are so smart');
+VALUES ('1', '1', 'TRUE', 'John demonstrated remarkable ability on this project.  His application provded able to handle the large volume of generated data, and his display was both pleasing to the eye and practical.');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '2', 'TRUE', 'Needs improvement');
+VALUES ('1', '2', 'TRUE', 'John demonstrated sufficient proficiency on this project.  His color pallete was rather limited, and his pixels large, but he understands the concepts.');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '3', 'FALSE', 'good effort but missed the mark');
+VALUES ('1', '3', 'FALSE', 'John needs some assistance working with React - he is not using the full functionality, which extends beyond simple components.  Provided some tips and gudiance to the student today during a 1 to 1, and student will resubmit after making corrections and additions.  Almost there!');
 
 --Fake Data
 INSERT INTO learn (assessment_name)
@@ -180,7 +180,7 @@ VALUES ('FoodTruck');
 INSERT INTO learn (assessment_name)
 VALUES('DOM_API');
 INSERT INTO project_grades (student_id, project_id, project_passed, notes)
-VALUES ('1', '4', 'FALSE', 'They SUCK!!');
+VALUES ('1', '4', 'FALSE', 'John`s submission was not sufficiently complete or functional to pass.  This may have been due to an unplanned absence (the student needed to take his pet turtle to the vet). Student will have a chance to complete the assignment again to demonstrate proficiency. ');
 INSERT INTO learn_grades (student_id, assessment_id, assessment_grade)
 VALUES ('1', '4', '100');
 
