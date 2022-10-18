@@ -40,47 +40,78 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
+    // console.log("What is cohortObject[0].gid?", cohortObject[0].gid);
     if (filteredCohort[currStudent]) {
       const projectInfo = await axios.get(
-        `https://app.asana.com/api/1.0/tasks/${filteredCohort[currStudent].gid}`,
+        `https://app.asana.com/api/1.0/projects/${cohortObject[0].gid}`,
         {
           headers: {
             Authorization: `Bearer ${user.asana_access_token}`,
           },
         }
       );
-      setTechSkillGID({
-        GID: projectInfo.data.data.custom_fields[0].gid,
-        4: projectInfo.data.data.custom_fields[0].enum_options[0].gid,
-        3: projectInfo.data.data.custom_fields[0].enum_options[1].gid,
-        2: projectInfo.data.data.custom_fields[0].enum_options[2].gid,
-        1: projectInfo.data.data.custom_fields[0].enum_options[3].gid,
+      console.log(
+        "Big project",
+        projectInfo.data.data.custom_field_settings[0].custom_field
+          .enum_options[0]
+      );
+      setTechSkillGID(() => {
+        return {
+          GID: projectInfo.data.data.custom_field_settings[0].gid,
+          // 1 = Exceeds expectations
+          1: projectInfo.data.data.custom_field_settings[0].custom_field
+            .enum_options[0].gid,
+          // Meets Expectations
+          2: projectInfo.data.data.custom_field_settings[0].custom_field
+            .enum_options[1].gid,
+          // Approaching expecations
+          3: projectInfo.data.data.custom_field_settings[0].custom_field
+            .enum_options[2].gid,
+          // Not yet approaching
+          4: projectInfo.data.data.custom_field_settings[0].custom_field
+            .enum_options[3].gid,
+        };
       });
-      setTeamWorkGID({
-        GID: projectInfo.data.data.custom_fields[1].gid,
-        4: projectInfo.data.data.custom_fields[1].enum_options[0].gid,
-        3: projectInfo.data.data.custom_fields[1].enum_options[1].gid,
-        2: projectInfo.data.data.custom_fields[1].enum_options[2].gid,
-        1: projectInfo.data.data.custom_fields[1].enum_options[3].gid,
+      setTeamWorkGID(() => {
+        return {
+          GID: projectInfo.data.data.custom_field_settings[1].gid,
+          // 1 = Exceeds expectations
+          1: projectInfo.data.data.custom_field_settings[1].custom_field
+            .enum_options[0].gid,
+          // Meets Expectations
+          2: projectInfo.data.data.custom_field_settings[1].custom_field
+            .enum_options[1].gid,
+          // Approaching expecations
+          3: projectInfo.data.data.custom_field_settings[1].custom_field
+            .enum_options[2].gid,
+          // Not yet approaching
+          4: projectInfo.data.data.custom_field_settings[1].custom_field
+            .enum_options[3].gid,
+        };
       });
+      console.log("I have set the GID data, sire");
     } else {
       return;
     }
   };
 
   useEffect(() => {
-    console.log("Students: ", students);
-    console.log("What happened to the user?", user);
+    // console.log("Students: ", students);
+    // console.log("What happened to the user?", user);
     if (students) {
       const impendingCohort = students.filter(
         (student) => student.cohort == currentCohortName
       );
       setFilteredCohort(() => impendingCohort);
+    }
+    if (cohorts) {
       const impendingObject = cohorts.filter(
         (cohort) => cohort.name == currentCohortName
       );
       setCohortObject(() => impendingObject);
     }
+
+    fetchData();
   }, [user, students, currentCohortName]);
 
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
@@ -88,15 +119,9 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
     if (filteredCohort[currStudent]) {
       setIndexedStudent(() => filteredCohort[currStudent]);
     }
-    // else if (
-    //   currStudent === filteredCohort.length &&
-    //   filteredCohort.length > 0
-    // ) {
-    // }
     console.log("What is currStudent?", currStudent);
     console.log("IndexedStudent is", indexedStudent);
     console.log("filteredCohort come back", filteredCohort);
-    // fetchData();
   }, [currStudent, filteredCohort]);
 
   // To reset the indexer value if modal is closed early
@@ -165,36 +190,37 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   const asanaRoute = async () => {
     setIsLoading(() => true);
+    console.log("Where the fuck is my stuff", techSkillGID);
+    console.log("Where is the teamwork", teamWorkGID);
     stagedCohort.map(async (student) => {
-      axios
-        .put(`https://app.asana.com/api/1.0/tasks/${student.GID}`, {
+      axios({
+        method: "PUT",
+        url: `https://app.asana.com/api/1.0/tasks/${student.GID}`,
+        headers: {
+          Authorization: `Bearer ${user.asana_access_token}`,
+        },
+        data: {
+          data: {
+            custom_fields: {
+              [techSkillGID.GID]: techSkillGID[student.Tech],
+              [teamWorkGID.GID]: teamWorkGID[student.Team],
+            },
+          },
+        },
+      }).then(() =>
+        axios({
+          method: "POST",
+          url: `https://app.asana.com/api/1.0/tasks/${student.GID}/subtasks`,
           headers: {
             Authorization: `Bearer ${user.asana_access_token}`,
           },
           data: {
             data: {
-              custom_fields: {
-                [techSkillGID.GID]: techSkillGID[student.Tech],
-                [teamWorkGID.GID]: teamWorkGID[student.Team],
-              },
+              name: student.Notes,
             },
           },
         })
-        .then(() =>
-          axios.post(
-            `https://app.asana.com/api/1.0/tasks/${student.GID}/subtasks`,
-            {
-              headers: {
-                Authorization: `Bearer ${user.asana_access_token}`,
-              },
-              data: {
-                data: {
-                  name: student.Notes,
-                },
-              },
-            }
-          )
-        );
+      );
       const sentTech = await axios.post("/api/studentTechSkills", {
         student_id: student.ID,
         score: parseInt(student.Tech),
@@ -210,6 +236,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
         note_date: new Date(),
       });
     });
+    setIsLoading(() => false);
   };
 
   return (
@@ -246,17 +273,17 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                     <option value="none" selected disabled hidden>
                       Select an Option
                     </option>
-                    <option value="1 - Needs improvement">
-                      1 - Needs improvement
+                    <option value="4 - Needs improvement">
+                      4 - Needs improvement
                     </option>
-                    <option value="2 - Approaching standard">
-                      2 - Approaching standard
+                    <option value="3 - Approaching standard">
+                      3 - Approaching standard
                     </option>
-                    <option value="3 - Meets standard">
-                      3 - Meets standard
+                    <option value="2 - Meets standard">
+                      2 - Meets standard
                     </option>
-                    <option value="4 - Exceeds standard">
-                      4 - Exceeds standard
+                    <option value="1 - Exceeds standard">
+                      1 - Exceeds standard
                     </option>
                   </select>{" "}
                   <br />
@@ -265,17 +292,17 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                     <option value="none" selected disabled hidden>
                       Select an Option
                     </option>
-                    <option value="1 - Needs improvement">
-                      1 - Needs improvement
+                    <option value="4 - Needs improvement">
+                      4 - Needs improvement
                     </option>
-                    <option value="2 - Approaching standard">
-                      2 - Approaching standard
+                    <option value="3 - Approaching standard">
+                      3 - Approaching standard
                     </option>
-                    <option value="3 - Meets standard">
-                      3 - Meets standard
+                    <option value="2 - Meets standard">
+                      2 - Meets standard
                     </option>
-                    <option value="4 - Exceeds standard">
-                      4 - Exceeds standard
+                    <option value="1 - Exceeds standard">
+                      1 - Exceeds standard
                     </option>
                   </select>{" "}
                   <br />
