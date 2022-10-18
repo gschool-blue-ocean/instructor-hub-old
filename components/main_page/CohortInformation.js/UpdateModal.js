@@ -5,7 +5,6 @@ import {
   studentsState,
   currentCohortState,
   cohortsState,
-  studentIdState,
 } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
 import axios from "axios";
