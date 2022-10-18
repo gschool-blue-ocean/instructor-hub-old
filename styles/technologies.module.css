@@ -15,7 +15,7 @@
 }
 
 .subContainer {
-    max-width: 950px;
+    max-width: 1200px;
     margin: auto;
     padding: 48px;
     display: flex;
@@ -27,7 +27,7 @@
     /* border-radius: 20px; */
     width: 80%;
     margin: 10px;
-    /* margin-right: 20%; */
+    margin-right: 20%;
     background-color:  rgb(25, 74, 72);
     padding: 22px;
     cursor: pointer;
@@ -41,7 +41,7 @@
     /* border-radius: 20px; */
     width: 80%;
     margin: 10px;
-    /* margin-left: 20%; */
+    margin-left: 15%;
     background-color:  rgba(60,101,98,1);
     padding: 22px;
     cursor: pointer;
