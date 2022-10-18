@@ -40,7 +40,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
-    // console.log("What is cohortObject[0].gid?", cohortObject[0].gid);
     if (filteredCohort[currStudent]) {
       const projectInfo = await axios.get(
         `https://app.asana.com/api/1.0/projects/${cohortObject[0].gid}`,
@@ -49,11 +48,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
             Authorization: `Bearer ${user.asana_access_token}`,
           },
         }
-      );
-      console.log(
-        "Big project",
-        projectInfo.data.data.custom_field_settings[0].custom_field
-          .enum_options[0]
       );
       setTechSkillGID(() => {
         return {
@@ -89,16 +83,13 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
             .enum_options[3].gid,
         };
       });
-      console.log("I have set the GID data, sire");
     } else {
       return;
     }
   };
 
   useEffect(() => {
-    // console.log("Students: ", students);
-    // console.log("What happened to the user?", user);
-    console.log("user, students, or currentCohortName has changed");
+    // console.log("user, students, or currentCohortName has changed");
     if (students) {
       const impendingCohort = students.filter(
         (student) => student.cohort == currentCohortName
@@ -115,13 +106,11 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
-    console.log("currStudent or filteredCohort has changed");
+    // console.log("currStudent or filteredCohort has changed");
     if (filteredCohort[currStudent]) {
       setIndexedStudent(() => filteredCohort[currStudent]);
     }
     fetchData();
-    // console.log("What is currStudent?", currStudent);
-    // console.log("IndexedStudent is", indexedStudent);
     console.log("filteredCohort come back", filteredCohort);
   }, [currStudent, filteredCohort]);
 
@@ -158,8 +147,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   // formGetter grabs the entered data from the field and packages it for POST
   const formGetter = (form) => {
-    // let stagedName = `${indexedStudent.name}`;
-    // console.log("Just staged for POST: ", stagedName);
     let stagedStudent = {
       ID: indexedStudent.student_id,
       GID: indexedStudent.gid,
@@ -173,7 +160,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
         stagedStudent[pair[0]] = pair[1];
       }
     }
-    console.log("StagedStudent", stagedStudent);
     // In addition, it will be necessary to grab
     // "current student" from state.
     // these Setters MUST "return" a value, not merely increment or mutate
@@ -191,8 +177,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   const asanaRoute = async () => {
     setIsLoading(() => true);
-    console.log("Where the fuck is my stuff", techSkillGID);
-    console.log("Where is the teamwork", teamWorkGID);
     stagedCohort.map(async (student) => {
       await axios({
         method: "PUT",
