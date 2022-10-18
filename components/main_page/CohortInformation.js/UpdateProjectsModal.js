@@ -45,7 +45,7 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
       setIndexedStudent((prev) => course[currStudent]);
     }
     // console.log("what the stagedCohort look like?", stagedCohort);
-    // console.log(course[currStudent]);
+    console.log(currStudentProjects);
   }, [currStudent, currentCohort]); 
   console.log('indexedStudent:',indexedStudent)
   
@@ -93,7 +93,7 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
             } else {
               return 0;
             }
-          })
+          });
           e.target.reset();
           firstInput.current.focus();
         })
@@ -117,20 +117,23 @@ const UpdateProjectsModal = ({ showUpdateProjectModal, setShowUpdateProjectModal
     .then(() => {
       instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null
       axios({
-        method:"PUT",  //must be put method not patch
+        method: "PUT", //must be put method not patch
         url: `https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
         headers: {
-          Authorization: `Bearer ${users.asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
-        }, data: { 
-            data: {
-              "workspace": "1213745087037",
-              "assignee_section": null,
-              "html_notes": `<body>${instructorNotes}\n ${selectedProjName.project_name.toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
-              "parent": null,
-              "resource_subtype": "default_task",
-            }
-          }
-      })
+          Authorization: `Bearer ${users.asana_access_token}`, //need template literal for ALLLLL headers so global state dependant on user
+        },
+        data: {
+          data: {
+            workspace: "1213745087037",
+            assignee_section: null,
+            html_notes: `<body>${instructorNotes}\n ${selectedProjName.project_name.toUpperCase()}: ${
+              grade ? "Passed" : "Failed"
+            }</body>`, //need conditional or neeed to make this field mandatory
+            parent: null,
+            resource_subtype: "default_task",
+          },
+        },
+      });
     })
     // e.target.reset();
     // firstInput.current.focus();
