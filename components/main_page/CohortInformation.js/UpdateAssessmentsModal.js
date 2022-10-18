@@ -83,17 +83,28 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
 
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
   const submitHandler = async (e) => {
-    e.preventDefault();   
+    e.preventDefault();  
+    console.log(learnGrades) 
     // post request to local database
     try {
+        console.log('hi')
       await axios.post('/api/learnGrades', {
         "student_id": indexedStudent.student_id,
         "assessment_id": assessmentId,
         "assessment_grade": assessScore,
         // "notes": `${projNotes}`
-      }).then((res) => setCurrStudentAssessment((prev)=> [...prev, ...res.data]))
-    } catch(error) {     
-      alert(`This project has already been added for ${indexedStudent.name}`) 
+      }).then((res) => {
+            console.log(res.data)
+            setLearnGrades((prev)=> [...prev, res.data])
+      }).then(() => {
+            axios.get('/api/students').then((res) => {
+            console.log(res, 'it works')
+            setStudents(res.data)
+            })
+      })
+    } 
+    catch(error) {     
+    //   alert(`This assessment has already been added for ${indexedStudent.name}`) 
     } 
     // increments to the next student
     setCurrStudent((prev) => {
@@ -105,15 +116,15 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
     })
     
     setAssessNotes("")
+    onSubmit(e);
+    // enterListener(e);
     firstInput.current.focus();
-    enterListener(e)
   };
 
   const enterListener = (e) => {
     e.preventDefault();
-    const selectedProjName = projects.find((project) => project.project_id === projectId)
+    const assessmentName = learn.find((assessment) => assessment.assessment_id === assessmentId)
     let instructorNotes = ''
-    
     axios.get(`https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, {
       headers: {
         Authorization: `Bearer ${users.asana_access_token}`,
@@ -123,9 +134,10 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
       setAssessNotes("")
       instructorNotes = res.data.data.notes
     })
+    // Once you gotten your previews notes in Asana it checks the if there was previews note is empty or not to add <u> tag as the title 
     .then(() => {
       !instructorNotes.length ? instructorNotes = "<u>Test Name: Test Score</u>" : null
-      
+      // Once it checks it then it will do a put request to Asana 
       axios({
         method: "PUT", //must be put method not patch
         url: `https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
@@ -136,7 +148,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
           data: {
             "workspace": "1213745087037",
             "assignee_section": null,
-            "html_notes": `<body>${instructorNotes}\n ${selectedProjName.project_name.toUpperCase()}: ${grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
+            "html_notes": `<body>${instructorNotes}\n ${assessmentName.assessment_name.toUpperCase()}: ${assessScore}</body>`, //need conditional or neeed to make this field mandatory
             "parent": null,
             "resource_subtype": "default_task",
           }
@@ -178,29 +190,12 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
                   <option value="none" selected disabled hidden>
                     Select an Option
                   </option>
-                  {/* <option> */}
                     {learn.map((assessment) => {
                           return (
                           <option key={assessment.assessment_id} value={assessment.assessment_name}>
                               {assessment.assessment_name}
                           </option>)
                       })}
-                  {/* </option> */}
-                  {/* <option value="Functions">
-                    1 - Functions
-                  </option>
-                  <option value="Objects">
-                    2 - Objects
-                  </option>
-                  <option value="Arrays">
-                    3 - Arrays
-                  </option>
-                  <option value="DOM_API">
-                    4 - DOM_API
-                  </option>
-                  <option value="JQUERY">
-                    5 - JQUERY
-                  </option> */}
                 </select>
                 }
                 <br />
@@ -209,11 +204,12 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
                 }}></input>
                 <div>%</div>                  
                 <br />
-                <label htmlFor="Notes">Notes</label> <br />
-                <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea>
+                {/* <label htmlFor="Notes">Notes</label> <br />
+                <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea> */}
                 <br />
-                <button type="submit" onClick={(e) => onSubmit(e)} value="Submit">Submit</button>
+                <button type="submit"  value="Submit" onClick={(e) => submitHandler(e)}>Submit</button>
               </form>
+            //   onClick={(e) => onSubmit(e)
             ) : (
               <span>Go code with your buds, you're done</span>
             )}
@@ -227,57 +223,3 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
 
 export default UpdateAssessmentsModal;
 
-// const assessmentName = learn.find((assessment) => assessment.assessment_id === assessmentId)
-
-// // on submit it will do a post request to our local databse 
-// axios.post("/api/learnGrades", {
-//     student_id: studentId,
-//     assessment_id: assessmentId,
-//     assessment_grade: assessScore,
-//   })
-//   // then it will do a get request to update the new added learn grade 
-//   .then(() => {
-//     axios.get(`/api/learnAndLearnGradesId/${studentId}`).then((res) => {
-//       setCurrentLearnAndLearnGrades(res.data)
-//     })
-//   })
-//   // Then it will add it to ASANA 
-//   .then(() => {
-//     // we have to get the current notes on ASANa first so you can paste it so you dont loose your inf when you do a post request to Asana
-//     let instructorNotes = ""
-//     axios.get(`https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, {
-//         headers: {
-//           Authorization: `Bearer ${users.asana_access_token}`,
-//         },
-//       })
-//       .then((res) => {
-//         console.log(res.data.data)
-//         instructorNotes = res.data.data.notes
-//       })
-//       // Once you gotten your previews notes in Asana it checks the if there was previews note is empty or not to add <u> tag as the title 
-//       .then(() => {
-//         instructorNotes.length === 0 ? (instructorNotes = "<u>Test Name: Test Score</u>") : null
-//         // Once it checks it then it will do a put request to Asana 
-//         axios({
-//           method: "PUT", //must be put method not patch
-//           url: `https://app.asana.com/api/1.0/tasks/${currentStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
-//           headers: {
-//             Authorization: `Bearer ${users.asana_access_token} `, //need template literal for ALLLLL headers so global state dependant on user
-//           },
-//           data: {
-//             data: {
-//               workspace: "1213745087037",
-//               assignee_section: null,
-//               // in the body we are passing the first get request from asana to display the prev notes and then add the new note we wanted and not loose the prev notes in Asana 
-//               html_notes: `<body>${instructorNotes}\n ${assessmentName.assessment_name.toUpperCase()} : ${assessScore}</body>`, //need conditional or neeed to make this field mandatory
-//               parent: null,
-//               resource_subtype: "default_task",
-//               // "custom_fields": {
-//               //   [techSkillGid]: `${cohort.studentInfo.Tech}`,  //template literal - done
-//               //   [teamWorkGid]: `${cohort.studentInfo.Team}`   //template literal - done
-//               // }
-//             },
-//           },
-//         })
-//       })
-//   })
