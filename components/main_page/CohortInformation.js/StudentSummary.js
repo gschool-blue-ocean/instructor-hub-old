@@ -31,6 +31,10 @@ const StudentSummary = () => {
     let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
   }, [students])
 
+  // useEffect(()=>{
+
+  // },[currentCohort])
+  
   // Determines Progress row words
   let progress = (num) => {
     if (num === 1) {

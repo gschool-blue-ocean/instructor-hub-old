@@ -20,7 +20,7 @@ const Header = () => {
   useEffect(() => {
     if (users) {
       setCurrentCohort(users.default_cohort);
-      console.log(currentCohort)
+      // console.log(currentCohort)
     }
   }, [users]);
 
