@@ -57,7 +57,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       );
       setTechSkillGID(() => {
         return {
-          GID: projectInfo.data.data.custom_field_settings[0].gid,
+          GID: projectInfo.data.data.custom_field_settings[0].custom_field.gid,
           // 1 = Exceeds expectations
           1: projectInfo.data.data.custom_field_settings[0].custom_field
             .enum_options[0].gid,
@@ -74,7 +74,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       });
       setTeamWorkGID(() => {
         return {
-          GID: projectInfo.data.data.custom_field_settings[1].gid,
+          GID: projectInfo.data.data.custom_field_settings[1].custom_field.gid,
           // 1 = Exceeds expectations
           1: projectInfo.data.data.custom_field_settings[1].custom_field
             .enum_options[0].gid,
@@ -98,6 +98,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   useEffect(() => {
     // console.log("Students: ", students);
     // console.log("What happened to the user?", user);
+    console.log("user, students, or currentCohortName has changed");
     if (students) {
       const impendingCohort = students.filter(
         (student) => student.cohort == currentCohortName
@@ -110,17 +111,17 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       );
       setCohortObject(() => impendingObject);
     }
-
-    fetchData();
   }, [user, students, currentCohortName]);
 
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
+    console.log("currStudent or filteredCohort has changed");
     if (filteredCohort[currStudent]) {
       setIndexedStudent(() => filteredCohort[currStudent]);
     }
-    console.log("What is currStudent?", currStudent);
-    console.log("IndexedStudent is", indexedStudent);
+    fetchData();
+    // console.log("What is currStudent?", currStudent);
+    // console.log("IndexedStudent is", indexedStudent);
     console.log("filteredCohort come back", filteredCohort);
   }, [currStudent, filteredCohort]);
 
