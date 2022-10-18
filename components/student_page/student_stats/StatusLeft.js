@@ -84,6 +84,7 @@ const StatusLeft = () => {
       />
       <ProjectModal 
         showProjModal={showProjModal}
+        setShowProjModal={setShowProjModal}
         onClose={() => {
           setShowProjModal(false); 
         }}
@@ -122,14 +123,14 @@ const StatusLeft = () => {
                 {currStudentProjects.map((project) => (
                 <tr key={project.project_id} className={style.tBodyRow} >
                   <td className={style.projNamCell}>{project.project_name}</td>
-                  { editProjGrade && projGradeId == project.project_id ?
+                  { editProjGrade && projGradeId == project.project_grades_id ?
                     <td className={style.scoreCell}>
-                      <select type='select' onChange={(e) => newGrade(e.target.value, project.project_grades_id)}>
+                      <select className={style.select} type='select' onChange={(e) => newGrade(e.target.value)}>
                         <option value={project.project_passed ? 'true' : 'false'}>{project.project_passed ? 'Passed' : 'Failed'}</option>
                         <option value={project.project_passed ? 'false' : 'true'}>{project.project_passed ? 'Failed' : 'Passed'}</option>
                       </select>
                     </td> :
-                    <td onDoubleClick={() => editGrade(project.project_id)} className={style.scoreCell}>{project.project_passed ? 'Passed' : 'Failed'}</td>
+                    <td onDoubleClick={() => editGrade(project.project_grades_id)} className={`${style.scoreCell} ${style.select}`}>{project.project_passed ? 'Passed' : 'Failed'}</td>
 
                   }
                   <td   className={style.scoreCell}>
@@ -195,7 +196,7 @@ const StatusLeft = () => {
                           </form>
                         </td>
                       :
-                      <td className={style.scoreCell} onDoubleClick={() => editScore(assessment.learn_grade_id)}>{`${assessment.assessment_grade} %`}</td>
+                      <td className={`${style.scoreCell} ${style.select}`} onDoubleClick={() => editScore(assessment.learn_grade_id)}>{`${assessment.assessment_grade} %`}</td>
                     }
                     </tr>
                   ))}
