@@ -103,15 +103,13 @@ const StudentSummary = () => {
     }
 
   const handleSelectAllUsers = () => {
-    if(selectedUsers.length < course.length) {
-      setSelectedUsers(course.map((student) => student.student_id))
+    if(selectedUsers.length < currentCourse.length) {
+      setSelectedUsers(currentCourse.map((student) => student.student_id))
         console.log(selectedUsers)
     } else {
       setSelectedUsers([])
     }
   }
-
-  //Works in conjunction with the handleChange function. Plus all checked students into an array.
   
   //[Sort] Used for sorting from ASC to DSC for name/progress/Client-side/Server-side.
   const wordSorting= (name) => {
@@ -218,14 +216,14 @@ const StudentSummary = () => {
               <thead className= {studentStyle.thead}>
                 <tr className= {studentStyle.headerRow}>
                   <th className= {studentStyle.smallHeader}></th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => wordSorting("name")}>Name</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("learn_avg")}>Learn Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => wordSorting("client_side_test")}>Client-Side</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => wordSorting("server_side_test")}>Server-Side</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("teamwork_avg")}>Teamwork Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("progress")}>Progess</th>
-                  <th className= {studentStyle.header} scope="col">Notes</th>
+                  <th className= {studentStyle.nameColumn} scope="col" onClick={() => wordSorting("name")}>Name</th>
+                  <th className= {studentStyle.learnColumn} scope="col" onClick={() => sorting("learn_avg")}>Learn Avg</th>
+                  <th className= {studentStyle.clientColumn} scope="col" onClick={() => wordSorting("client_side_test")}>Client-Side</th>
+                  <th className= {studentStyle.serverColumn} scope="col" onClick={() => wordSorting("server_side_test")}>Server-Side</th>
+                  <th className= {studentStyle.teamColumn} scope="col" onClick={() => sorting("teamwork_avg")}>Team Avg</th>
+                  <th className= {studentStyle.techColumn} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
+                  <th className= {studentStyle.progressColumn} scope="col" onClick={() => sorting("progress")}>Progess</th>
+                  <th className= {studentStyle.noteColumn} scope="col">Notes</th>
                   <th className= {studentStyle.smallHeader} scope="col"></th>
                 </tr>
               </thead>
