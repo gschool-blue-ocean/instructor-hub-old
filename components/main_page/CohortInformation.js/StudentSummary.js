@@ -18,7 +18,6 @@ const StudentSummary = () => {
   const [showGraphModal, setShowGraphModal] = useState(false);
   const [studentNote, setStudentNote] = useState(" ");
   const [studentGraph, setStudentGraph] = useState(" ");
-  const [tableData, setTableData ] = useState({});
   const [order, setOrder] = useState("ASC");
   const [selectedUsers, setSelectedUsers] = useState([])
   const [sort, setSort] = useState([])
@@ -28,23 +27,22 @@ const StudentSummary = () => {
   const [user, setUser] = useRecoilState(usersState);
 
   // Allows the cohorts to be filter/Possible problem with removing course randomly 
-  useEffect(() => {
-    let course = students.filter(studentCohort => studentCohort.cohort == currentCohort)
-    setCurrentCourse(course)
-  }, [currentCohort])
-  
-
-  // Work-in-progress, hope is to pull information in from the database for update at a constant rate. 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(`/api/students`);
-      const data = await result.data
-      console.log(data)
-      setTableData(data)
+  useEffect(() => { //pulls the incompleted array
+    if(students) {
+      setCurrentCourse(students.filter(studentCohort => studentCohort.cohort == currentCohort))
     }
-    console.log(tableData, "Table Data")
-    fetchData()
-  }, [students])
+  }, [currentCohort, students])
+
+  // [Delete] Needed to delete the student from the database and asana
+  useEffect(() => {
+    setStudents(students);
+  }, []);
+
+  // useEffect(() => {
+  //   if(students) {
+
+  //   }
+  // }, [students])
 
   // [Progress Conversion] Determines Progress row words
   let progress = (num) => {
@@ -184,11 +182,6 @@ const StudentSummary = () => {
     setShowGraphModal((prev) => !prev);
     setStudentGraph(student)
   }
-  
-  useEffect(() => {
-    setStudents(students);
-  }, []);
-  
   
   return (
     <div>
