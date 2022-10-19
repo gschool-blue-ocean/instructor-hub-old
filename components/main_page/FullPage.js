@@ -11,13 +11,13 @@ const FullPage = () => {
   const [loggedInStatus, setLoggedInStatus] = useRecoilState(loggedIn)
   const router = useRouter();
   
-  useLayoutEffect(()=>{
-    const status = sessionStorage.getItem('logged_in_Status')
-      if(!status){
-        sessionStorage.clear();
-        router.push("/")
-      }
-    },[])
+  // useLayoutEffect(()=>{
+  //   const status = sessionStorage.getItem('logged_in_Status')
+  //     if(!status){
+  //       sessionStorage.clear();
+  //       router.push("/")
+  //     }
+  //   },[])
   
   return (
     <div>

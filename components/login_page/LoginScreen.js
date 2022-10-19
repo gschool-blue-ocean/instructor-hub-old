@@ -35,17 +35,23 @@ const LoginScreen = () => {
       }
     ).then((res) => {
       console.log('components_loginScreen.js');
-      console.log(res);
-    });
-    for (let element of user){
-      if(element.username === enteredUsername && element.password === enteredPassword){
+      console.log(res.data.message);
+      if (res.status === 200) {
         setVerifiedUser(true)
-        setUser(element)
-        setCurrentCohort(element.default_cohort)
+        setUser(res.data.message)
+        setCurrentCohort(res.data.message.default_cohort)
         router.push("/home")
-        // return {data: enteredUsername}
       }
-    }
+    });
+    // for (let element of user){
+    //   if(element.username === enteredUsername && element.password === enteredPassword){
+    //     setVerifiedUser(true)
+    //     setUser(element)
+    //     setCurrentCohort(element.default_cohort)
+    //     router.push("/home")
+    //     // return {data: enteredUsername}
+    //   }
+    // }
   }
   
   // const handleSignIn = async () => {

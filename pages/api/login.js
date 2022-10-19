@@ -43,7 +43,8 @@ const sql = postgres(
     
                     const authToken = sign(
                         user, 
-                        "0eb9b871-55be-470e-bd1b-80280585cd9a", 
+                        //"0eb9b871-55be-470e-bd1b-80280585cd9a", 
+                        process.env.COOKIE_SECRET_KEY,
                         {expiresIn: '24hr'}
                     );
                     res.setHeader('Set-Cookie', cookie.serialize('authCookie', authToken, {
@@ -53,16 +54,24 @@ const sql = postgres(
                         maxAge: 86400,
                         path: '/'
                     }))
-                    return res.json({msessage : `Welcome back, ${user_query.username}!`})
+                    res.send({message : {
+                        asana_access_token: user_query.asana_access_token,
+                        default_cohort: user_query.default_cohort,
+                        gid: user_query.gid,
+                        user_id: user_query.user_id,
+                        username: user_query.username
+                    }});
+                    return;
                 } else {
-                return res.status(500).json({ msg: "Username or Password is wrong" })
+                res.status(500).send({ msg: "Username or Password is wrong" });
+                return;
                 }
             });
         } catch (err) {
         console.error(err);
-        return res.status(500).json({ msg: "Messed up on our end" });
+        return res.status(500).send({ msg: "Messed up on our end" });
       }
     } else {
-      return res.status(400).json({ msg: "You messed up" });
+      return res.status(400).send({ msg: "You messed up" });
     }
   };
