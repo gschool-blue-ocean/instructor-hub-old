@@ -76,7 +76,7 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
                             {/* {listOfCohorts.map(ele=> { */}
                             {cohorts.map(ele=> {
                                 return(
-                                    <option key={ele.gid} value={ele.gid} >{ele.name}</option>
+                                    <option key={ele.gid} value={ele.gid} required>{ele.name}</option>
                                 )
                             })}
                        </select>

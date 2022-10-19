@@ -15,11 +15,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
-import { studentsState, cohortsState, currentCohortState } from "../../state.js";
+import { studentsState, cohortsState, currentCohortState, groupsState } from "../../state.js";
 import { useRecoilState } from "recoil";
-import GroupMaker from "./DropDown";
 import UpdateProjectsModal from "./UpdateProjectsModal";
 import UpdateAssessmentsModal from './UpdateAssessmentsModal';
+
 
 ChartJS.register(
   CategoryScale,
@@ -42,6 +42,8 @@ const CohortOverall = ({ children }) => {
   const [students, setStudents] = useRecoilState(studentsState)
   const [cohortAvg, setCohortAvg] = useState(0)
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
+  const [groups, setGroups] = useRecoilState(groupsState)
+  // const [groupsDivs, setGroupsDivs] = useState('')
  
   const studentsInCohort = students.filter(student => student.cohort === currentCohort) 
   const currentClass = cohorts.filter(classNow => classNow.name === currentCohort)
@@ -196,7 +198,18 @@ const CohortOverall = ({ children }) => {
               setShowUpdateAssessmentModal(false);
             }}/>
         </div>
-       
+        <div className={overallStyles.link}>
+            <u>Groups</u>
+        </div>
+          <div className={overallStyles.groups}>
+              {groups ? (
+                // console.log(Object.values(groups).map())
+                Object.values(groups).map((group) => {
+                  // {console.log(group)}
+                  return <div>{group.join(', ')}</div>
+                })
+                ) : ('')}
+          </div>
       </div>
     </div>
   );

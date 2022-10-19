@@ -51,34 +51,34 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
       setTechSkillGID(() => {
         return {
           GID: projectInfo.data.data.custom_field_settings[0].custom_field.gid,
-          // 1 = Exceeds expectations
-          1: projectInfo.data.data.custom_field_settings[0].custom_field
+          // 4 = Exceeds expectations
+          4: projectInfo.data.data.custom_field_settings[0].custom_field
             .enum_options[0].gid,
           // Meets Expectations
-          2: projectInfo.data.data.custom_field_settings[0].custom_field
+          3: projectInfo.data.data.custom_field_settings[0].custom_field
             .enum_options[1].gid,
           // Approaching expecations
-          3: projectInfo.data.data.custom_field_settings[0].custom_field
+          2: projectInfo.data.data.custom_field_settings[0].custom_field
             .enum_options[2].gid,
           // Not yet approaching
-          4: projectInfo.data.data.custom_field_settings[0].custom_field
+          1: projectInfo.data.data.custom_field_settings[0].custom_field
             .enum_options[3].gid,
         };
       });
       setTeamWorkGID(() => {
         return {
           GID: projectInfo.data.data.custom_field_settings[1].custom_field.gid,
-          // 1 = Exceeds expectations
-          1: projectInfo.data.data.custom_field_settings[1].custom_field
+          // 4 = Exceeds expectations
+          4: projectInfo.data.data.custom_field_settings[1].custom_field
             .enum_options[0].gid,
           // Meets Expectations
-          2: projectInfo.data.data.custom_field_settings[1].custom_field
+          3: projectInfo.data.data.custom_field_settings[1].custom_field
             .enum_options[1].gid,
           // Approaching expecations
-          3: projectInfo.data.data.custom_field_settings[1].custom_field
+          2: projectInfo.data.data.custom_field_settings[1].custom_field
             .enum_options[2].gid,
           // Not yet approaching
-          4: projectInfo.data.data.custom_field_settings[1].custom_field
+          1: projectInfo.data.data.custom_field_settings[1].custom_field
             .enum_options[3].gid,
         };
       });
@@ -116,6 +116,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // To reset the indexer value if modal is closed early
   onClose = () => {
     setCurrStudent((prev) => 0);
+    setStagedCohort(() => []);
     setShowUpdateModal(false);
   };
 
@@ -124,24 +125,45 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     const stagedStudent = formGetter(e.target);
-    // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
     setStagedCohort((prev) => [...prev, stagedStudent]);
-    // Until HERE ^
+    nextStudent();
     e.target.reset();
     firstInput.current.focus();
   };
 
-  const enterListener = (e) => {
-    if (e.key === "Enter" && e.shiftKey === false) {
-      e.preventDefault();
-      const stagedStudent = formGetter(e.target.form);
-      // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
-      setStagedCohort((prev) => [...prev, stagedStudent]);
+  // This allows you to Shift+Enter to create a new line in the textArea, and Enter to submit the form
+  // const enterListener = (e) => {
+  //   if (e.key === "Enter" && e.shiftKey === false) {
+  //     e.preventDefault();
+  //     const stagedStudent = formGetter(e.target.form);
+  //     // This bit will be replaced by the actual ASANA POST and subsequent DB stowing v
+  //     setStagedCohort((prev) => [...prev, stagedStudent]);
 
-      // Until HERE ^
-      e.target.form.reset();
-      firstInput.current.focus();
-    }
+  //     // Until HERE ^
+  //     e.target.form.reset();
+  //     firstInput.current.focus();
+  //   }
+  // };
+
+  // A function to allow moving back and forth through the filteredCohort
+  // It will be necessary to grab "current student" from state.
+  // these Setters MUST "return" a value, not merely increment or mutate
+  // Can I replace each usage of setCurrStudent with a way to
+  // just setIndexedStudent to filteredCohort[prev + 1] or something like that?
+  const prevStudent = () => {
+    setCurrStudent((prev) => {
+      if (prev !== 0) {
+        return prev - 1;
+      } else {
+        return 0;
+      }
+    });
+  };
+
+  const nextStudent = () => {
+    setCurrStudent((prev) => {
+      return prev + 1;
+    });
   };
 
   // formGetter grabs the entered data from the field and packages it for POST
@@ -159,69 +181,67 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
         stagedStudent[pair[0]] = pair[1];
       }
     }
-    // In addition, it will be necessary to grab
-    // "current student" from state.
-    // these Setters MUST "return" a value, not merely increment or mutate
 
-    // Can I replace each usage of setCurrStudent with a way to just setIndexedStudent to filteredCohort[prev + 1]
-    setCurrStudent((prev) => {
-      if (prev < filteredCohort.length) {
-        return prev + 1;
-      } else {
-        return 0;
-      }
-    });
     return stagedStudent;
   };
 
   const asanaRoute = async () => {
-    setIsLoading(() => true);
-    stagedCohort.map(async (student) => {
-      await axios({
-        method: "PUT",
-        url: `https://app.asana.com/api/1.0/tasks/${student.GID}`,
-        headers: {
-          Authorization: `Bearer ${user.asana_access_token}`,
-        },
-        data: {
+    if (stagedCohort.length < 1) {
+      setCurrStudent(() => 0);
+      alert("Nice try, submit an actual update this time");
+    } else {
+      const timestamp = new Date();
+      const preText = `${user.username} @ ${timestamp.toLocaleDateString()}: `;
+      setIsLoading(() => true);
+      stagedCohort.map(async (student) => {
+        await axios({
+          method: "PUT",
+          url: `https://app.asana.com/api/1.0/tasks/${student.GID}`,
+          headers: {
+            Authorization: `Bearer ${user.asana_access_token}`,
+          },
           data: {
-            custom_fields: {
-              [techSkillGID.GID]: techSkillGID[student.Tech],
-              [teamWorkGID.GID]: teamWorkGID[student.Team],
+            data: {
+              custom_fields: {
+                [techSkillGID.GID]: techSkillGID[student.Tech],
+                [teamWorkGID.GID]: teamWorkGID[student.Team],
+              },
             },
           },
-        },
-      });
-      await axios({
-        method: "POST",
-        url: `https://app.asana.com/api/1.0/tasks/${student.GID}/subtasks`,
-        headers: {
-          Authorization: `Bearer ${user.asana_access_token}`,
-        },
-        data: {
-          data: {
-            name: student.Notes,
+        });
+        await axios({
+          method: "POST",
+          url: `https://app.asana.com/api/1.0/tasks/${student.GID}/subtasks`,
+          headers: {
+            Authorization: `Bearer ${user.asana_access_token}`,
           },
-        },
+          data: {
+            data: {
+              name: `${preText}${student.Notes}`,
+            },
+          },
+        });
+        await axios.post("/api/studentTechSkills", {
+          student_id: student.ID,
+          score: parseInt(student.Tech),
+        });
+        await axios.post("api/studentTeamworkSkills", {
+          student_id: student.ID,
+          score: parseInt(student.Team),
+        });
+        await axios.post("/api/notes", {
+          student_id: student.ID,
+          notes: student.Notes,
+          name: null,
+          note_date: new Date(),
+        });
       });
-      await axios.post("/api/studentTechSkills", {
-        student_id: student.ID,
-        score: parseInt(student.Tech),
-      });
-      await axios.post("api/studentTeamworkSkills", {
-        student_id: student.ID,
-        score: parseInt(student.Team),
-      });
-      await axios.post("/api/notes", {
-        student_id: student.ID,
-        notes: student.Notes,
-        name: null,
-        note_date: new Date(),
-      });
-    });
-    setIsLoading(() => false);
-    onClose();
-    setStagedCohort(() => {});
+      setIsLoading(() => false);
+      onClose();
+      setCurrStudent(() => 0);
+      setStagedCohort(() => []);
+      alert("You did it, verify your update went to Asana correctly");
+    }
   };
 
   return (
@@ -242,66 +262,87 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
             </div>
             <div className={styles.update}>
               {filteredCohort[currStudent] ? (
-                <form
-                  className={styles.updateForm}
-                  onSubmit={submitHandler}
-                  onKeyDown={enterListener}
-                >
-                  <label htmlFor="Tech">Technical Aptitude</label> <br />
-                  <select
-                    id="Tech"
-                    name="Tech"
-                    required
-                    autoFocus={true}
-                    ref={firstInput}
+                <>
+                  <form
+                    className={styles.updateForm}
+                    onSubmit={submitHandler}
+                    // onKeyDown={enterListener}
                   >
-                    <option value="none" selected disabled hidden>
-                      Select an Option
-                    </option>
-                    <option value="4 - Needs improvement">
-                      4 - Needs improvement
-                    </option>
-                    <option value="3 - Approaching standard">
-                      3 - Approaching standard
-                    </option>
-                    <option value="2 - Meets standard">
-                      2 - Meets standard
-                    </option>
-                    <option value="1 - Exceeds standard">
-                      1 - Exceeds standard
-                    </option>
-                  </select>{" "}
-                  <br />
-                  <label htmlFor="Team">Teamwork Aptitude</label> <br />
-                  <select id="Team" name="Team" required>
-                    <option value="none" selected disabled hidden>
-                      Select an Option
-                    </option>
-                    <option value="4 - Needs improvement">
-                      4 - Needs improvement
-                    </option>
-                    <option value="3 - Approaching standard">
-                      3 - Approaching standard
-                    </option>
-                    <option value="2 - Meets standard">
-                      2 - Meets standard
-                    </option>
-                    <option value="1 - Exceeds standard">
-                      1 - Exceeds standard
-                    </option>
-                  </select>{" "}
-                  <br />
-                  <label htmlFor="Notes">Notes</label> <br />
-                  <textarea
-                    id="Notes"
-                    name="Notes"
-                    rows="10"
-                    cols="30"
-                    required
-                  ></textarea>{" "}
-                  <br />
-                  <input type="submit" value="Submit" />
-                </form>
+                    <label htmlFor="Tech">Technical Aptitude</label> <br />
+                    <select
+                      id="Tech"
+                      name="Tech"
+                      required
+                      autoFocus={true}
+                      ref={firstInput}
+                    >
+                      <option
+                        value="none"
+                        selected={true}
+                        disabled={true}
+                        hidden={true}
+                      >
+                        Select an Option
+                      </option>
+                      <option value="1 - Needs improvement">
+                        1 - Needs improvement
+                      </option>
+                      <option value="2 - Approaching standard">
+                        2 - Approaching standard
+                      </option>
+                      <option value="3 - Meets standard">
+                        3 - Meets standard
+                      </option>
+                      <option value="4 - Exceeds standard">
+                        4 - Exceeds standard
+                      </option>
+                    </select>{" "}
+                    <br />
+                    <label htmlFor="Team">Teamwork Aptitude</label> <br />
+                    <select id="Team" name="Team" required>
+                      <option
+                        value="none"
+                        selected={true}
+                        disabled={true}
+                        hidden={true}
+                      >
+                        Select an Option
+                      </option>
+                      <option value="1 - Needs improvement">
+                        1 - Needs improvement
+                      </option>
+                      <option value="2 - Approaching standard">
+                        2 - Approaching standard
+                      </option>
+                      <option value="3 - Meets standard">
+                        3 - Meets standard
+                      </option>
+                      <option value="4 - Exceeds standard">
+                        4 - Exceeds standard
+                      </option>
+                    </select>{" "}
+                    <br />
+                    <label htmlFor="Notes">Notes</label> <br />
+                    <textarea
+                      id="Notes"
+                      name="Notes"
+                      rows="10"
+                      cols="30"
+                      required
+                    ></textarea>{" "}
+                    <br />
+                    <input type="submit" value="Submit" />
+                  </form>
+                  <div className={styles.formFooter}>
+                    <button
+                      onClick={prevStudent}
+                      disabled={currStudent === 0 ? true : false}
+                    >
+                      Previous Student
+                    </button>
+                    <button onClick={nextStudent}>Next Student</button>
+                  </div>
+                </>
               ) : (
                 <>
                   <ul>
