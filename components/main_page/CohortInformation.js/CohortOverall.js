@@ -17,7 +17,6 @@ import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
 import { studentsState, cohortsState, currentCohortState, groupsState } from "../../state.js";
 import { useRecoilState } from "recoil";
-import GroupMaker from "./DropDown";
 import UpdateProjectsModal from "./UpdateProjectsModal";
 import UpdateAssessmentsModal from './UpdateAssessmentsModal';
 
