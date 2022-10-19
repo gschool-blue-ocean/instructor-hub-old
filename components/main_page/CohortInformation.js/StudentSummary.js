@@ -8,7 +8,7 @@ import GraphModal from "./GraphModal";
 import { studentsState, currentStudentState ,studentIdState, cohortsState, currentCohortState, checkedPeopleState, usersState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
-import GroupMaker from "./DropDown";
+import GroupMaker from "./GroupMaker";
 
 const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
@@ -16,50 +16,61 @@ const StudentSummary = () => {
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCommentModal, setShowCommenttModal] = useState(false);
   const [showGraphModal, setShowGraphModal] = useState(false);
-  const [noteStudent, setNoteStudent] = useState(" ");
+  const [studentNote, setStudentNote] = useState(" ");
   const [studentGraph, setStudentGraph] = useState(" ");
+  const [tableData, setTableData ] = useState({});
   const [order, setOrder] = useState("ASC");
-  const [cohorts, setCohorts] = useRecoilState(cohortsState);
+  const [selectedUsers, setSelectedUsers] = useState([])
+  const [sort, setSort] = useState([])
+  const [currentCourse, setCurrentCourse] = useState([])
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
   const [user, setUser] = useRecoilState(usersState);
 
-  // Allows the cohorts to be filter 
-  let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
-
+  // Allows the cohorts to be filter/Possible problem with removing course randomly 
   useEffect(() => {
-    let course = students.filter(classRoom => classRoom.cohort == currentCohort) 
-  }, [students])
-
-  // useEffect(()=>{
-
-  // },[currentCohort])
+    let course = students.filter(studentCohort => studentCohort.cohort == currentCohort)
+    setCurrentCourse(course)
+  }, [currentCohort])
   
-  // Determines Progress row words
+
+  // Work-in-progress, hope is to pull information in from the database for update at a constant rate. 
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get(`/api/students`);
+      const data = await result.data
+      console.log(data)
+      setTableData(data)
+    }
+    console.log(tableData, "Table Data")
+    fetchData()
+  }, [])
+
+  // [Progress Conversion] Determines Progress row words
   let progress = (num) => {
     if (num === 1) {
       return (
-        <td className={studentStyle.color}>At Risk</td>
+        <div className={studentStyle.color}>At Risk</div>
       )
     }
     if (num === 2) {
       return (
-        <td className={studentStyle.color3}>Below Avg</td>
+        <div className={studentStyle.color3}>Below Avg</div>
       )
     }
     if (num === 3) {
       return (
-        <td className={studentStyle.color2}>Average</td>
+        <div className={studentStyle.color2}>Average</div>
       )
     }
     if (num === 4) {
       return (
-        <td className={studentStyle.color4}>Above Avg</td>
+        <div className={studentStyle.color4}>Above Avg</div>
       )
     }
   }
 
-  //Converts teamWork_avg and Tech_avg to percentage
+  //[Percent Conversion] Converts teamWork_avg and Tech_avg to percentage
   let colPercent = (num) => {
     if (num === 1) {
       return "25%"
@@ -75,45 +86,47 @@ const StudentSummary = () => {
     }
   }
 
-  //Handles the Select All checkbox.
-  const handleChange = (e) => {
-    const { id , checked } = e.target;
-    if (id === "allSelect") {
-      let tempStudent = course.map((student) => {
-        return { ...student, isChecked: checked };
-      });
-      setStudents(tempStudent);
-      setSelectPeople(tempStudent)
+  //[CheckBoxs] Allows the individual checkboxs to work based on the userId
+  const handleSelectUser =(event) => {
+      const userId = Number(event.target.value);
+      console.log(selectedUsers, "SelectedUsers")
+
+      if(!selectedUsers.includes(userId)) {
+        setSelectedUsers([...selectedUsers, userId])
+      } else {
+        setSelectedUsers(
+          selectedUsers.filter((selectedUserId) => {
+            return selectedUserId !== userId;
+          })
+        )
+      }
+    }
+
+  const handleSelectAllUsers = () => {
+    if(selectedUsers.length < currentCourse.length) {
+      setSelectedUsers(currentCourse.map((student) => student.student_id))
+        console.log(selectedUsers)
     } else {
-      let tempStudent = course.map((student) => 
-      student.student_id == id ? { ...student, isChecked: checked } : student 
-    );
-      setStudents(tempStudent);
-      setSelectPeople(tempStudent)
+      setSelectedUsers([])
     }
   }
-
-  //Works in conjunction with the handleChange function. Needed to track who is selected and who is not
-  useEffect(() => {
-      let selectedStudents = selectedPeople.filter(unChecked => unChecked.isChecked == true)
-  }, [selectedPeople])
-
-  //Used for sorting from ASC to DSC for name/progress/Client-side/Server-side.
+  
+  //[Sort] Used for sorting from ASC to DSC for name/progress/Client-side/Server-side.
   const wordSorting= (name) => {
       if(order === "ASC") {
-        const sorted = [...course].sort((a,b) =>
+        const sorted = [...currentCourse].sort((a,b) =>
           a[name].toUpperCase() > b[name].toUpperCase() ? 1 : -1
       );
       console.log(name, "name")
       console.log(sorted)
-      setStudents(sorted);
+      setCurrentCourse(sorted);
       setOrder("DSC")
     }
     if(order === "DSC") {
-      const sorted = [...course].sort((a,b) =>
+      const sorted = [...currentCourse].sort((a,b) =>
         a[name].toUpperCase() < b[name].toUpperCase() ? 1 : -1
       );
-      setStudents(sorted);
+      setCurrentCourse(sorted);
       setOrder("ASC")
     }
   }
@@ -121,27 +134,27 @@ const StudentSummary = () => {
   //Same function as above but used for values
   const sorting= (name) => {
     if(order === "ASC") {
-      const sorted = [...course].sort((a,b) =>
+      const sorted = [...currentCourse].sort((a,b) =>
         a[name] > b[name] ? 1 : -1
     );
     console.log(name, "name")
     console.log(sorted)
-    setStudents(sorted);
+    setCurrentCourse(sorted);
     setOrder("DSC")
   }
   if(order === "DSC") {
-    const sorted = [...course].sort((a,b) =>
+    const sorted = [...currentCourse].sort((a,b) =>
       a[name] < b[name] ? 1 : -1
     );
-    setStudents(sorted);
+    setCurrentCourse(sorted);
     setOrder("ASC")
   }
 }
+
   
-  //Axios delete request. Removes from the database and Asana
+  //[Delete Request] Axios delete request. Removes from the database and Asana
   const handleDeleteClick = (studentId, studentGid) => {
     const newStudent = [...students] //Create New Array based on current students
-    console.log(studentGid)
     const index = students.findIndex((student) => student.student_id === studentId)
     newStudent.splice(index, 1);
     axios.delete(`/api/students/${studentId}`).then(() => {
@@ -157,35 +170,36 @@ const StudentSummary = () => {
     })
   }
  
-    const openGitHubModal = () => {
-      setShowGitHubModal((prev) => !prev);
-    };
+  //[Modals] Allows the modals to be opened
+  const openGitHubModal = () => {
+    setShowGitHubModal((prev) => !prev);
+  };
   
-    const openCommentModel = (student) => {
-      setShowCommenttModal((prev) => !prev);
-      setNoteStudent(student)
-    };
+  const openCommentModel = (student) => {
+    setShowCommenttModal((prev) => !prev);
+    setStudentNote(student)
+  };
 
-    const openGraphModel = (student) => {
-      setShowGraphModal((prev) => !prev);
-      setStudentGraph(student)
-    }
+  const openGraphModel = (student) => {
+    setShowGraphModal((prev) => !prev);
+    setStudentGraph(student)
+  }
   
-    useEffect(() => {
-      setStudents(students);
-    }, []);
+  useEffect(() => {
+    setStudents(students);
+  }, []);
   
   
   return (
     <div>
       <GitHubModal showGitHubModal={showGitHubModal} setShowGitHubModal={setShowGitHubModal} onClose={() => {setShowGitHubModal(false);}}/>
-      <CommentModal showCommentModal={showCommentModal} setShowCommenttModal={setShowCommenttModal} onClose={() => {setShowCommenttModal(false)}} noteStudent = {noteStudent}/>
+      <CommentModal showCommentModal={showCommentModal} setShowCommenttModal={setShowCommenttModal} onClose={() => {setShowCommenttModal(false)}} studentNote = {studentNote}/>
       <GraphModal showGraphModal={showGraphModal} setShowGraphModal={setShowGraphModal} onClose={() => {setShowGraphModal(false)}} studentGraph = {studentGraph}/>
       <div className={studentStyle.container}>
         <div className={studentStyle.topBorder}>
           <div className={studentStyle.selectRow}>
             <div className={studentStyle.selectAllBox}>
-              <input className={studentStyle.checkBox} type="checkbox" id="allSelect" checked={!students.some((student) => student?.isChecked !== true)} onChange={handleChange}/>
+              <input className={studentStyle.checkBox} type="checkbox" id="allSelect" checked={selectedUsers.length === currentCourse.length} onChange={handleSelectAllUsers}/>
               <label htmlFor="selectMe"> Select/Deselect All</label>
             </div>
             <GroupMaker />
@@ -202,23 +216,23 @@ const StudentSummary = () => {
               <thead className= {studentStyle.thead}>
                 <tr className= {studentStyle.headerRow}>
                   <th className= {studentStyle.smallHeader}></th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => wordSorting("name")}>Name</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("learn_avg")}>Learn Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => wordSorting("client_side_test")}>Client-Side</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => wordSorting("server_side_test")}>Server-Side</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("teamwork_avg")}>Teamwork Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
-                  <th className= {studentStyle.header} scope="col" onClick={() => sorting("progress")}>Progess</th>
-                  <th className= {studentStyle.header} scope="col">Notes</th>
+                  <th className= {studentStyle.nameColumn} scope="col" onClick={() => wordSorting("name")}>Name</th>
+                  <th className= {studentStyle.learnColumn} scope="col" onClick={() => sorting("learn_avg")}>Learn Avg</th>
+                  <th className= {studentStyle.clientColumn} scope="col" onClick={() => wordSorting("client_side_test")}>Client-Side</th>
+                  <th className= {studentStyle.serverColumn} scope="col" onClick={() => wordSorting("server_side_test")}>Server-Side</th>
+                  <th className= {studentStyle.teamColumn} scope="col" onClick={() => sorting("teamwork_avg")}>Team Avg</th>
+                  <th className= {studentStyle.techColumn} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
+                  <th className= {studentStyle.progressColumn} scope="col" onClick={() => sorting("progress")}>Progess</th>
+                  <th className= {studentStyle.noteColumn} scope="col">Notes</th>
                   <th className= {studentStyle.smallHeader} scope="col"></th>
                 </tr>
               </thead>
               <tbody className= {studentStyle.tbody}>
               {/* Iterate through the students data, ties in with the variable course */}
-              {course.map((student) => (
+              {currentCourse.map((student) => (
                 <tr className= {studentStyle.tbodyRow} id={student.student_id} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
-                    <input type="checkbox" id = {student.student_id} checked={student?.isChecked || false} onChange={handleChange} ></input>
+                    <input type="checkbox" value = {student.student_id} checked={selectedUsers.includes(student.student_id)} onChange={handleSelectUser}></input>
                   </td>
                   <td  className= {studentStyle.nameContent}  onClick={() => setStudentId(student.student_id)}>
                     <Link className= {studentStyle.nameSpace} href={`/student/${student.student_id}`}>{student.name}</Link>

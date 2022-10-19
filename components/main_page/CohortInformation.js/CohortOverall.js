@@ -15,10 +15,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
-import { studentsState, cohortsState, currentCohortState } from "../../state.js";
+import { studentsState, cohortsState, currentCohortState, groupsState } from "../../state.js";
 import { useRecoilState } from "recoil";
-import GroupMaker from "./DropDown";
-import UpdateProjectsModal from "./UpdateProjectsModal"
+import UpdateProjectsModal from "./UpdateProjectsModal";
+import UpdateAssessmentsModal from './UpdateAssessmentsModal';
+
 
 ChartJS.register(
   CategoryScale,
@@ -35,11 +36,14 @@ ChartJS.register(
 const CohortOverall = ({ children }) => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showUpdateProjectModal, setShowUpdateProjectModal] = useState(false);
+  const [showUpdateAssessmentModal, setShowUpdateAssessmentModal] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState({});
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [students, setStudents] = useRecoilState(studentsState)
   const [cohortAvg, setCohortAvg] = useState(0)
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
+  const [groups, setGroups] = useRecoilState(groupsState)
+  // const [groupsDivs, setGroupsDivs] = useState('')
  
   const studentsInCohort = students.filter(student => student.cohort === currentCohort) 
   const currentClass = cohorts.filter(classNow => classNow.name === currentCohort)
@@ -78,6 +82,10 @@ const CohortOverall = ({ children }) => {
 
   const openUpdateProjectModal = () => {
     setShowUpdateProjectModal((prev) => !prev);
+  };
+
+  const openUpdateAssementModal = () => {
+    setShowUpdateAssessmentModal((prev) => !prev);
   };
 
 
@@ -131,7 +139,7 @@ const CohortOverall = ({ children }) => {
     labels: ["Cohort Averages"],
     datasets: [
       {
-        label: "Cohort Average",
+        label: "Cohort Avg",
         data: [cohortAvg],
         borderColor: "black",
         backgroundColor: ["green"],
@@ -169,20 +177,38 @@ const CohortOverall = ({ children }) => {
             setShowUpdateModal={setShowUpdateModal}
             onClose={() => {
               setShowUpdateModal(false);
-            }}
-          />
+            }}/>
           <div className={overallStyles.link}>
-            <u onClick={openUpdateProjectModal}>Projects Grade Update</u>
+            <u onClick={openUpdateProjectModal}>Projects Update</u>
           </div>
           <UpdateProjectsModal
             showUpdateProjectModal={showUpdateProjectModal}
             setShowUpdateProjectModal={setShowUpdateProjectModal}
             onClose={() => {
               setShowUpdateProjectModal(false);
-            }}
-          />
+            }}/>
+          <div className={overallStyles.link}>
+            <u onClick={openUpdateAssementModal}>Assessments Update</u>
+          </div>
+          <UpdateAssessmentsModal
+            showUpdateAssessmentModal={showUpdateAssessmentModal}
+            setShowUpdateAssessmentModal={setShowUpdateAssessmentModal}
+            onClose={() => {
+              setShowUpdateAssessmentModal(false);
+            }}/>
         </div>
-        <GroupMaker />
+        <div className={overallStyles.link}>
+            <u>Groups</u>
+        </div>
+          <div className={overallStyles.groups}>
+              {groups ? (
+                // console.log(Object.values(groups).map())
+                Object.values(groups).map((group) => {
+                  // {console.log(group)}
+                  return <div>{group.join(', ')}</div>
+                })
+                ) : ('')}
+          </div>
       </div>
     </div>
   );
