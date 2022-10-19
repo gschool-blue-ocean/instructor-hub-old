@@ -125,7 +125,15 @@ export const checkedPeopleState = atom({
   default: [],
 });
 
+<<<<<<< HEAD
 export const syncNeeded = atom({
   key: 'sync data',
   default: false,
 })
+=======
+export const groupsState = atom({
+  key: 'groups',
+  default: []
+})
+
+>>>>>>> aa2c1c64191e3fd3609dbc0aaa9f934b909f14d6
