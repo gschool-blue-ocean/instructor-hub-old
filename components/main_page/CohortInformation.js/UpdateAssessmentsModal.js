@@ -10,9 +10,9 @@ import {
         projectsState,
         learnGradesState,
       } from "../../state";
-import styles from "../../../styles/UpdateModal.module.css";
+// import styles from "../../../styles/UpdateModal.module.css";
 import axios from 'axios'
-import style from '../../../styles/UpdateAssessments.module.css'
+import styles from '../../../styles/UpdateAssessments.module.css'
 
 const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssessmentModal, onClose }) => {
   // What student is being updated at this moment
@@ -168,10 +168,10 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
             <div className={styles.update}>
               {course[currStudent] ? (
               <form className={styles.updateForm} onSubmit={(e) => submitHandler(e)}>
-                  <label htmlFor="assessments">Assessments</label> <br />
-                  <div className={style.lableContainer}>
-                  {/* <label className={style.labels}>Assesment</label> */}
-                  <span onClick={() => setAddAssessName(!addAssessName)} className={style.addBtn} >&#10009;</span>
+                  {/* <label htmlFor="assessments">Assessments</label> <br /> */}
+                  <div className={styles.labelContainer}>
+                    <label className={styles.labels}>Assesment</label>
+                    <span onClick={() => setAddAssessName(!addAssessName)} className={styles.addBtn} >&#10009;</span>
                   </div>
                   {addAssessName ? 
                   <input onChange={(e) => setNewAssessName(e.target.value)}></input>     
@@ -190,16 +190,15 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
                 }
                 <br />
                 <label htmlFor="Grade">Grade</label> <br />
-                <input type="number" min="1" max="100" defaultValue="1" required onChange={(e) => {setScore(e.target.value)
-                }}></input>
-                <div>%</div>                  
+                <div className={styles.gradePercentage}>
+                    <input className={styles.input} type="number" min="1" max="100" defaultValue="1" required onChange={(e) => {
+                        setScore(e.target.value)}}></input>
+                    <div className={styles.percentage}>%</div>     
+                </div>             
                 <br />
-                {/* <label htmlFor="Notes">Notes</label> <br />
-                <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea> */}
                 <br />
-                <button type="submit"  value="Submit" onClick={(e) => submitHandler(e)}>Submit</button>
+                <button type="submit"  value="Submit" onClick={(e) => submitHandler(e)} className={styles.submit}>Submit</button>
               </form>
-            //   onClick={(e) => onSubmit(e)
             ) : (
               <span>Go code with your buds, you're done</span>
             )}

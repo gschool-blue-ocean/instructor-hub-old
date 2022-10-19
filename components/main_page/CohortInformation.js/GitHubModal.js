@@ -15,7 +15,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
 
   //Filter required to make current cohort students appear
-  // let course = students.filter(studentCohort => studentCohort.cohort == currentCohort)
+  let course = students.filter(studentCohort => studentCohort.cohort == currentCohort)
   
   // edit github accounts
   const patchGithub = (e) => {
@@ -89,7 +89,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
                       </a>
                       {isEditing && student.student_id == githubAccount ? 
                           <>
-                          <input type="text" defaultValue={student.github} onChange={(e) => setCurrentValue(e.target.value) } />
+                          <input type="text" defaultValue={student.github} onChange={(e) => setCurrentValue(e.target.value)} className={gitStyle.codeName} />
                            <button onClick={(e) => patchGithub(e)}>&#10004;</button>
                            <button onClick={() => setIsEditing(false)}>X</button>
                           </> 

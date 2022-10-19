@@ -51,6 +51,7 @@ const CohortOverall = ({ children }) => {
       currentClass.map((cohort) => {
       if (cohort.cohort_id) {
        setCohortAvg(cohort.cohort_avg)
+       console.log(typeof cohort.cohort_avg)
       }
       })
       // }
