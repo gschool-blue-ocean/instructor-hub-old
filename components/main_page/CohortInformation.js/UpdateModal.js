@@ -231,7 +231,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
           <div className={styles.modalOverlay} onClick={onClose} />
 
           <div className={styles.UpdateModal}>
-            <div>
+            <div className={styles.innerContainer}>
               <div className={styles.header}>
                 Update -{" "}
                 {filteredCohort[currStudent]
