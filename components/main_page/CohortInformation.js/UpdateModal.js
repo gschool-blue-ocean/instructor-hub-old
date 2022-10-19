@@ -248,69 +248,73 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                     onSubmit={submitHandler}
                     onKeyDown={enterListener}
                   >
-                    <option value="none" selected disabled hidden>
-                      Select an Option
-                    </option>
-                    <option value="4 - Needs improvement">
-                      4 - Needs improvement
-                    </option>
-                    <option value="3 - Approaching standard">
-                      3 - Approaching standard
-                    </option>
-                    <option value="2 - Meets standard">
-                      2 - Meets standard
-                    </option>
-                    <option value="1 - Exceeds standard">
-                      1 - Exceeds standard
-                    </option>
-                  </select>{" "}
-                  <br />
-                  <label htmlFor="Team">Teamwork Aptitude</label> <br />
-                  <select id="Team" name="Team" required>
-                    <option value="none" selected disabled hidden>
-                      Select an Option
-                    </option>
-                    <option value="4 - Needs improvement">
-                      4 - Needs improvement
-                    </option>
-                    <option value="3 - Approaching standard">
-                      3 - Approaching standard
-                    </option>
-                    <option value="2 - Meets standard">
-                      2 - Meets standard
-                    </option>
-                    <option value="1 - Exceeds standard">
-                      1 - Exceeds standard
-                    </option>
-                  </select>{" "}
-                  <br />
-                  <label htmlFor="Notes">Notes</label> <br />
-                  <textarea
-                    id="Notes"
-                    name="Notes"
-                    rows="10"
-                    cols="30"
-                    required
-                  ></textarea>{" "}
-                  <br />
-                  <input type="submit" value="Submit" />
-                </form>
-              ) : (
-                <>
-                  <ul>
+                    <label htmlFor="Tech">Technical Aptitude</label> <br />
+                    <select
+                      id="Tech"
+                      name="Tech"
+                      required
+                      autoFocus={true}
+                      ref={firstInput}
+                    >
+                      <option value="none" selected disabled hidden>
+                        Select an Option
+                      </option>
+                      <option value="1 - Needs improvement">
+                        1 - Needs improvement
+                      </option>
+                      <option value="2 - Approaching standard">
+                        2 - Approaching standard
+                      </option>
+                      <option value="3 - Meets standard">
+                        3 - Meets standard
+                      </option>
+                      <option value="4 - Exceeds standard">
+                        4 - Exceeds standard
+                      </option>
+                    </select>{" "}
+                    <br />
+                    <label htmlFor="Team">Teamwork Aptitude</label> <br />
+                    <select id="Team" name="Team" required>
+                      <option value="none" selected disabled hidden>
+                        Select an Option
+                      </option>
+                      <option value="1 - Needs improvement">
+                        1 - Needs improvement
+                      </option>
+                      <option value="2 - Approaching standard">
+                        2 - Approaching standard
+                      </option>
+                      <option value="3 - Meets standard">
+                        3 - Meets standard
+                      </option>
+                      <option value="4 - Exceeds standard">
+                        4 - Exceeds standard
+                      </option>
+                    </select>{" "}
+                    <br />
+                    <label htmlFor="Notes">Notes</label> <br />
+                    <textarea
+                      id="Notes"
+                      name="Notes"
+                      rows="10"
+                      cols="30"
+                      required
+                    ></textarea>{" "}
+                    <br />
+                    <input type="submit" value="Submit" />
+                  </form>
+                ) : (
+                  <>
                     {stagedCohort.map((student) => (
-                      <li key={student.GID}>
-                        {student.Name} - Tech: {student.Tech}
-                        <br />
-                        Team: {student.Team}
-                        <br />
-                        Notes: {student.Notes}
-                      </li>
+                      <>
+                        <ul>
+                          <li key={student.GID}>{student.name}</li>
+                        </ul>
+                      </>
                     ))}
-                  </ul>
-                  <button onClick={asanaRoute}>Click to Update</button>
-                </>
-              )}
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </>
