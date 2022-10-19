@@ -124,3 +124,8 @@ export const checkedPeopleState = atom({
   key: 'checked people',
   default: [],
 });
+
+export const syncNeeded = atom({
+  key: 'sync data',
+  default: false,
+})

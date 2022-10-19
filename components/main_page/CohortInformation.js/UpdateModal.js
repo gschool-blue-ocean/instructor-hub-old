@@ -5,6 +5,7 @@ import {
   studentsState,
   currentCohortState,
   cohortsState,
+  syncNeeded,
 } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
 import axios from "axios";
@@ -37,6 +38,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [sync, setSync] = useRecoilState(syncNeeded)
 
   const fetchData = async () => {
     if (filteredCohort[currStudent]) {

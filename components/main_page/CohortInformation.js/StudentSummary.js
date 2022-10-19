@@ -44,7 +44,7 @@ const StudentSummary = () => {
     }
     console.log(tableData, "Table Data")
     fetchData()
-  }, [])
+  }, [students])
 
   // [Progress Conversion] Determines Progress row words
   let progress = (num) => {
@@ -264,7 +264,7 @@ const StudentSummary = () => {
                   <td className= {studentStyle.trashContent}>
                     <svg className={studentStyle.trash} viewBox="0 0 12 12" onClick={()=> handleDeleteClick(student.student_id, student.gid)}>
                       <path d="M6.5 17q-.625 0-1.062-.438Q5 16.125 5 15.5v-10H4V4h4V3h4v1h4v1.5h-1v10q0 .625-.438 1.062Q14.125 17 13.5 17Zm7-11.5h-7v10h7ZM8 14h1.5V7H8Zm2.5 0H12V7h-1.5Zm-4-8.5v10Z"></path>
-                    </svg>{" "}
+                    </svg>
                   </td>
                 </tr>
                 ))}
