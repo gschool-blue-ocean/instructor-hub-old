@@ -120,7 +120,7 @@ export const accessToken = atom({
   default: ''
 })
 
-export const checkedPeopleState = atom({
+export const selectedStudentsState = atom({
   key: 'checked people',
   default: [],
 });
@@ -131,6 +131,11 @@ export const syncNeeded = atom({
 })
 export const groupsState = atom({
   key: 'groups',
+  default: []
+})
+
+export const currentCourseState = atom({
+  key: 'current course',
   default: []
 })
 

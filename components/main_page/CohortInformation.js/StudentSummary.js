@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import GitHubModal from "./GitHubModal";
 import CommentModal from "./CommentModal";
 import GraphModal from "./GraphModal";
-import { studentsState, currentStudentState ,studentIdState, cohortsState, currentCohortState, checkedPeopleState, usersState } from "../../state";
+import { studentsState, currentStudentState ,studentIdState, cohortsState, currentCohortState, selectedStudentsState, usersState, currentCourseState } from "../../state";
 import axios from "axios";
 import Link from 'next/link'
 import GroupMaker from "./GroupMaker";
@@ -19,31 +19,26 @@ const StudentSummary = () => {
   const [studentNote, setStudentNote] = useState(" ");
   const [studentGraph, setStudentGraph] = useState(" ");
   const [order, setOrder] = useState("ASC");
-  const [selectedUsers, setSelectedUsers] = useState([])
-  const [sort, setSort] = useState([])
-  const [currentCourse, setCurrentCourse] = useState([])
+  const [currentCourse, setCurrentCourse] = useRecoilState(currentCourseState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
-  const [selectedPeople, setSelectPeople] = useRecoilState(checkedPeopleState);
+  const [selectedStudents, setSelectStudents] = useRecoilState(selectedStudentsState);
   const [user, setUser] = useRecoilState(usersState);
 
-  // Allows the cohorts to be filter/Possible problem with removing course randomly 
-  useEffect(() => { //pulls the incompleted array
+  // Allows the studentsState to be filter based on current cohort selected on table
+  useEffect(() => {
     if(students) {
       setCurrentCourse(students.filter(studentCohort => studentCohort.cohort == currentCohort))
     }
+    setSelectStudents([])
   }, [currentCohort, students])
 
-  // [Delete] Needed to delete the student from the database and asana
+  // [Delete] Resets the studentState after one is deleted
   useEffect(() => {
     setStudents(students);
   }, []);
 
-  // useEffect(() => {
-  //   if(students) {
-
-  //   }
-  // }, [students])
-
+ 
+  console.log(selectedStudents)
   // [Progress Conversion] Determines Progress row words
   let progress = (num) => {
     if (num === 1) {
@@ -85,38 +80,33 @@ const StudentSummary = () => {
   }
 
   //[CheckBoxs] Allows the individual checkboxs to work based on the userId
-  const handleSelectUser =(event) => {
-      const userId = Number(event.target.value);
-      console.log(selectedUsers, "SelectedUsers")
-
-      if(!selectedUsers.includes(userId)) {
-        setSelectedUsers([...selectedUsers, userId])
+  const handleSelectedStudents =(event) => {
+      const userId = Number(event.target.value); //store the value received by event.target in a varable. Number is needed to change the id recieved into a string
+      if(!selectedStudents.includes(userId)) { //Check if selectedStudents includes the Id
+        setSelectStudents([...selectedStudents, userId]) // if it doesn't, use usestate, passing it an array whose first value is the spread of the existing selectedStudents, and a second value we want to add with userId
       } else {
-        setSelectedUsers(
-          selectedUsers.filter((selectedUserId) => {
-            return selectedUserId !== userId;
-          })
+        setSelectStudents(selectedStudents.filter((selectedUserId) => { // we use the filter method to exclude the Checked UserId
+          return selectedUserId !== userId; //Only true if the userId does not match the selectedUserId
+        })
         )
       }
     }
-
-  const handleSelectAllUsers = () => {
-    if(selectedUsers.length < currentCourse.length) {
-      setSelectedUsers(currentCourse.map((student) => student.student_id))
-        console.log(selectedUsers)
+    
+  const handleSelectAllStudents = () => {
+    if(selectedStudents.length < currentCourse.length) { // if selectedStudents is less than currentCourse(array for the cohort students)
+      setSelectStudents(currentCourse.map((student) => student.student_id)) // setSelectStudents equal to a new array by mapping over our currentCourse array, pulling the student_id for each student
+        // console.log(selectedStudents, "line 106 SelectAll")
     } else {
-      setSelectedUsers([])
+      setSelectStudents([]) //set an empty array to signify no users are currently selected
     }
   }
-  
+
   //[Sort] Used for sorting from ASC to DSC for name/progress/Client-side/Server-side.
   const wordSorting= (name) => {
       if(order === "ASC") {
         const sorted = [...currentCourse].sort((a,b) =>
           a[name].toUpperCase() > b[name].toUpperCase() ? 1 : -1
       );
-      console.log(name, "name")
-      console.log(sorted)
       setCurrentCourse(sorted);
       setOrder("DSC")
     }
@@ -192,7 +182,7 @@ const StudentSummary = () => {
         <div className={studentStyle.topBorder}>
           <div className={studentStyle.selectRow}>
             <div className={studentStyle.selectAllBox}>
-              <input className={studentStyle.checkBox} type="checkbox" id="allSelect" checked={selectedUsers.length === currentCourse.length} onChange={handleSelectAllUsers}/>
+              <input className={studentStyle.checkBox} type="checkbox" id="allSelect" checked={selectedStudents.length === currentCourse.length} onChange={handleSelectAllStudents}/>
               <label htmlFor="selectMe"> Select/Deselect All</label>
             </div>
             <GroupMaker />
@@ -225,7 +215,8 @@ const StudentSummary = () => {
               {currentCourse.map((student) => (
                 <tr className= {studentStyle.tbodyRow} id={student.student_id} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
-                    <input type="checkbox" value = {student.student_id} checked={selectedUsers.includes(student.student_id)} onChange={handleSelectUser}></input>
+                    {/*Stringify because userId returns OBJECT object as a string. In order to match value to UserId, we had to stringify the value while parsing event.target.value */}
+                    <input type="checkbox" value = {student.student_id} checked={selectedStudents.includes(student.student_id)} onChange={handleSelectedStudents}></input>
                   </td>
                   <td  className= {studentStyle.nameContent}  onClick={() => setStudentId(student.student_id)}>
                     <Link className= {studentStyle.nameSpace} href={`/student/${student.student_id}`}>{student.name}</Link>

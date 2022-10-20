@@ -1,7 +1,7 @@
 import styles from "../../../styles/GroupMaker.module.css";
 import { useState, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { studentsState, groupsState, currentCohortState } from '../../state'
+import { studentsState, groupsState, currentCohortState, selectedStudentsState, currentCourseState } from '../../state'
 
 
 
@@ -15,7 +15,11 @@ const GroupMaker = () => {
     const [enough, setEnough] = useState(true);
     const [groupNumber, setGroupNumber] = useState(0);
     const [mixedStudents, setMixedStudents] = useState([])
+    const [selectedStudents, setSelectStudents] = useRecoilState(selectedStudentsState);
+    const [currentCourse, setCurrentCourse] = useRecoilState(currentCourseState);
     // const [cohortStudents, setCohortStudents] = useState([]);
+
+    console.log(currentCourse)
 
     useEffect(() => {
       if (!enough) {
@@ -24,6 +28,8 @@ const GroupMaker = () => {
         }, '3000')
       }
     }, [enough])
+
+    console.log(selectedStudents)
 
     // useEffect(() => {
     //   // if (mixedStudents) {
@@ -51,8 +57,10 @@ const GroupMaker = () => {
     // }
 
     const createGroup = () => {
+      //The purpose of the reduce function is to match the selectedStudent(which is a student_id value) with currentCourse student_id and make new Array using Concat with just the student names.
+      let student_array = currentCourse.reduce((arr, student) => selectedStudents.includes(student.student_id) ? arr.concat(student.name) : arr, [])
       if (groupNumber == null) return;
-      if (groupNumber > students.length) {
+      if (groupNumber > student_array.length) {
         setEnough(false);
         return;
       }
@@ -65,8 +73,7 @@ const GroupMaker = () => {
       }
       
   
-
-      let arr = [...students];
+      let arr = [...student_array];
       console.log('arr', arr);
       shuffle(arr)
       let groupObj = {};
@@ -81,7 +88,7 @@ const GroupMaker = () => {
             if (!groupObj[acc]) {
               groupObj[acc] = [];
             }
-            groupObj[acc].push(student.name)
+            groupObj[acc].push(student)
             acc++
           }
       }
@@ -94,7 +101,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -107,7 +114,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -120,7 +127,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -133,7 +140,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -146,7 +153,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -159,7 +166,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -172,7 +179,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -185,7 +192,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -198,7 +205,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -211,7 +218,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -224,7 +231,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -237,7 +244,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
@@ -250,7 +257,7 @@ const GroupMaker = () => {
           if (!groupObj[acc]) {
             groupObj[acc] = [];
           }
-          groupObj[acc].push(student.name)
+          groupObj[acc].push(student)
           acc++
         }
       }
