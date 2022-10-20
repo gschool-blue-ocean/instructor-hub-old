@@ -125,10 +125,6 @@ export const selectedStudentsState = atom({
   default: [],
 });
 
-export const syncNeeded = atom({
-  key: 'sync data',
-  default: false,
-})
 export const groupsState = atom({
   key: 'groups',
   default: []

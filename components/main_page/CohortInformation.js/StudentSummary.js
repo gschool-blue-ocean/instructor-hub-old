@@ -125,8 +125,6 @@ const StudentSummary = () => {
       const sorted = [...currentCourse].sort((a,b) =>
         a[name] > b[name] ? 1 : -1
     );
-    console.log(name, "name")
-    console.log(sorted)
     setCurrentCourse(sorted);
     setOrder("DSC")
   }
@@ -215,7 +213,6 @@ const StudentSummary = () => {
               {currentCourse.map((student) => (
                 <tr className= {studentStyle.tbodyRow} id={student.student_id} key={student.student_id}>
                   <td className= {studentStyle.smallContent}>
-                    {/*Stringify because userId returns OBJECT object as a string. In order to match value to UserId, we had to stringify the value while parsing event.target.value */}
                     <input type="checkbox" value = {student.student_id} checked={selectedStudents.includes(student.student_id)} onChange={handleSelectedStudents}></input>
                   </td>
                   <td  className= {studentStyle.nameContent}  onClick={() => setStudentId(student.student_id)}>
