@@ -260,111 +260,119 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                 X
               </button>
             </div>
-            <div className={styles.update}>
-              {filteredCohort[currStudent] ? (
-                <>
-                  <form
-                    className={styles.updateForm}
-                    onSubmit={submitHandler}
-                    // onKeyDown={enterListener}
-                  >
-                    <label htmlFor="Tech">Technical Aptitude</label> <br />
-                    <select
-                      id="Tech"
-                      name="Tech"
-                      required
-                      autoFocus={true}
-                      ref={firstInput}
+            <div className={styles.mainBodyCon}>
+              <div className={styles.arrow}> 
+              <span className={styles.arrow} onClick={prevStudent} disabled={currStudent === 0 ? true : false}>&#171;</span>
+              </div>
+              <div className={styles.update}>
+                {filteredCohort[currStudent] ? (
+                  <>
+                    <form
+                      className={styles.updateForm}
+                      onSubmit={submitHandler}
+                      // onKeyDown={enterListener}
                     >
-                      <option
-                        value="none"
-                        selected={true}
-                        disabled={true}
-                        hidden={true}
+                      <label htmlFor="Tech">Technical Aptitude</label> <br />
+                      <select
+                        id="Tech"
+                        name="Tech"
+                        required
+                        autoFocus={true}
+                        ref={firstInput}
                       >
-                        Select an Option
-                      </option>
-                      <option value="1 - Needs improvement">
-                        1 - Needs improvement
-                      </option>
-                      <option value="2 - Approaching standard">
-                        2 - Approaching standard
-                      </option>
-                      <option value="3 - Meets standard">
-                        3 - Meets standard
-                      </option>
-                      <option value="4 - Exceeds standard">
-                        4 - Exceeds standard
-                      </option>
-                    </select>{" "}
-                    <br />
-                    <label htmlFor="Team">Teamwork Aptitude</label> <br />
-                    <select id="Team" name="Team" required>
-                      <option
-                        value="none"
-                        selected={true}
-                        disabled={true}
-                        hidden={true}
+                        <option
+                          value="none"
+                          selected={true}
+                          disabled={true}
+                          hidden={true}
+                        >
+                          Select an Option
+                        </option>
+                        <option value="1 - Needs improvement">
+                          1 - Needs improvement
+                        </option>
+                        <option value="2 - Approaching standard">
+                          2 - Approaching standard
+                        </option>
+                        <option value="3 - Meets standard">
+                          3 - Meets standard
+                        </option>
+                        <option value="4 - Exceeds standard">
+                          4 - Exceeds standard
+                        </option>
+                      </select>{" "}
+                      <br />
+                      <label htmlFor="Team">Teamwork Aptitude</label> <br />
+                      <select id="Team" name="Team" required>
+                        <option
+                          value="none"
+                          selected={true}
+                          disabled={true}
+                          hidden={true}
+                        >
+                          Select an Option
+                        </option>
+                        <option value="1 - Needs improvement">
+                          1 - Needs improvement
+                        </option>
+                        <option value="2 - Approaching standard">
+                          2 - Approaching standard
+                        </option>
+                        <option value="3 - Meets standard">
+                          3 - Meets standard
+                        </option>
+                        <option value="4 - Exceeds standard">
+                          4 - Exceeds standard
+                        </option>
+                      </select>{" "}
+                      <br />
+                      <label htmlFor="Notes">Notes</label> <br />
+                      <textarea
+                        id="Notes"
+                        name="Notes"
+                        rows="10"
+                        cols="30"
+                        required
+                      ></textarea>{" "}
+                      <br />
+                      <input type="submit" value="Submit" />
+                    </form>
+                    {/* <div className={styles.formFooter}>
+                      <button
+                        onClick={prevStudent}
+                        disabled={currStudent === 0 ? true : false}
                       >
-                        Select an Option
-                      </option>
-                      <option value="1 - Needs improvement">
-                        1 - Needs improvement
-                      </option>
-                      <option value="2 - Approaching standard">
-                        2 - Approaching standard
-                      </option>
-                      <option value="3 - Meets standard">
-                        3 - Meets standard
-                      </option>
-                      <option value="4 - Exceeds standard">
-                        4 - Exceeds standard
-                      </option>
-                    </select>{" "}
-                    <br />
-                    <label htmlFor="Notes">Notes</label> <br />
-                    <textarea
-                      id="Notes"
-                      name="Notes"
-                      rows="10"
-                      cols="30"
-                      required
-                    ></textarea>{" "}
-                    <br />
-                    <input type="submit" value="Submit" />
-                  </form>
-                  <div className={styles.formFooter}>
-                    <button
-                      onClick={prevStudent}
-                      disabled={currStudent === 0 ? true : false}
-                    >
-                      Previous Student
-                    </button>
-                    <button onClick={nextStudent}>Next Student</button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <ul>
-                    {stagedCohort.map((student) => (
-                      <li key={student.GID}>
-                        {student.Name} - Tech: {student.Tech}
-                        <br />
-                        Team: {student.Team}
-                        <br />
-                        Notes: {student.Notes}
-                      </li>
-                    ))}
-                  </ul>
-                  <button onClick={asanaRoute}>Click to Update</button>
-                </>
-              )}
+                        Previous Student
+                      </button>
+                      <button onClick={nextStudent}>Next Student</button>
+                    </div> */}
+                  </>
+                ) : (
+                  <>
+                    <ul>
+                      {stagedCohort.map((student) => (
+                        <li key={student.GID}>
+                          {student.Name} - Tech: {student.Tech}
+                          <br />
+                          Team: {student.Team}
+                          <br />
+                          Notes: {student.Notes}
+                        </li>
+                      ))}
+                    </ul>
+                    <button onClick={asanaRoute}>Click to Update</button>
+                  </>
+                )}
+              </div>
+              <div>
+              <span className={styles.arrow} onClick={nextStudent}>&#187;</span>
+              </div>
             </div>
           </div>
         </>
       ) : null}
     </>
-  );
+  )
 };
 
 export default UpdateModal;
