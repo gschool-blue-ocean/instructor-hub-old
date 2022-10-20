@@ -5,7 +5,7 @@ import { loggedIn } from '../state'
 import { currentStudentState,notesState,studentIdState,usersState} from "../state";
 import { useRecoilState } from "recoil";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StudentMainBody = () => {
   // current student is the current information for one person 
@@ -21,6 +21,13 @@ const StudentMainBody = () => {
   const [newNote, setNewNote] = useState(''); 
   const [users, setUsers] = useRecoilState(usersState);
 
+  useEffect(() => {
+    axios.get("/api/notes").then((res) => {
+      // console.log(res);
+      setNotes(res.data);
+      // console.log(res.data);
+    });
+  },[studentId])
 
   let userNotes = notes.filter(note => note.student_id == studentId); 
   // converting ETs date into MM DAY YYYY

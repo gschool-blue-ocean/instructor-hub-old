@@ -152,7 +152,9 @@ const SignUp = () => {
                                 </div>
                                 <div>
                                     {"Already have an account? Click "}
-                                    <Link href='/' className={styles.linkText}>here</Link>
+                                    <Link href='/' className={styles.linkText}>
+                                      <span  className={styles.linkText}> here</span> 
+                                    </Link>
                                     {" to sign in."}
                                 </div>
                             </form>
