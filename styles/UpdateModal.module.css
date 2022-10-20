@@ -102,3 +102,10 @@
   display: flex;
   justify-content: space-between;
 }
+.arrows {
+  font-size: xx-large;
+}
+.mainBodyCon{
+  display: flex;
+  align-items: center;
+}
