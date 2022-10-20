@@ -28,6 +28,7 @@ const AssessModal = ({showAssessModal, onClose }) => {
 
   const onSubmit = (e) => {
     e.preventDefault()
+    console.log(newAssessName, 'here'); 
     axios.post("/api/learn", {
       "assessment_name": newAssessName, 
     }).then((res) => {

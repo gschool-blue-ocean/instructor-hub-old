@@ -32,14 +32,10 @@ const UpdateProjectsModal = ({
   const [students, setStudents] = useRecoilState(studentsState);
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
-
   const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [projects, setProjects] = useRecoilState(projectsState);
-  const [currStudentProjects, setCurrStudentProjects] = useRecoilState(
-    currStudentProjectsState
-  );
-  const [currentStudent, setCurrentStudent] =
-    useRecoilState(currentStudentState);
+  const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState);
+  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
   const [users, setUsers] = useRecoilState(usersState);
   const [projSelected, setProjSelected] = useState("");
   const [projGrade, setProjGrade] = useState([]);
@@ -100,6 +96,22 @@ const UpdateProjectsModal = ({
     enterListener(e);
   };
 
+  const prevStudent = () => {
+    setCurrStudent((prev) => {
+      if (prev !== 0) {
+        return prev - 1;
+      } else {
+        return 0;
+      }
+    });
+  };
+
+  const nextStudent = () => {
+    setCurrStudent((prev) => {
+      return prev + 1;
+    });
+  };
+  
   const enterListener = (e) => {
     e.preventDefault();
     const selectedProjName = projects.find(
@@ -221,6 +233,14 @@ const UpdateProjectsModal = ({
               ) : (
                 <span>Go code with your buds, you're done</span>
               )}
+            </div>
+            <div className={styles.formFooter}>
+              <button onClick={prevStudent} disabled={currStudent === 0 ? true : false}>
+                Previous Student
+              </button>
+              <button onClick={nextStudent} disabled={currStudent === (course.length - 1) ? true : false}>
+                Next Student
+              </button>
             </div>
           </div>
         </>
