@@ -42,6 +42,18 @@ const GroupMaker = () => {
       console.log(groups)
     }, [groups])
 
+    useEffect(()=> {
+      if(groups) {
+        setGroups([])
+      }
+    }, [])
+
+    useEffect(() => {
+      if(groups) {
+        setGroups([])
+      }
+    }, [currentCohort])
+
     // const test = () => {
     //   setMixedStudents((array) => {
     //     for(let i = array.length - 1; i > 0; i--) {

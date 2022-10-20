@@ -52,7 +52,7 @@
     margin: 14px;
 }
 .links:hover{
-    transform: scale(1.5);
+    transform: scale(1.2);
 }
 .links{
     display: inline-block;

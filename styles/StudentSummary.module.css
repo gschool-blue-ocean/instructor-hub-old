@@ -134,28 +134,32 @@
 }
 
 .techColumn {
-    padding: 10px 0px;
+    padding: 10px 5px 10px 0px;
     font-size: 15px;
     width: 15px;
     cursor: pointer;
 }
 
 .progressColumn {
-    padding: 10px 0px;
+    padding: 0px;
     font-size: 15px;
-    width: 15px;
-    cursor: pointer;
+    width: 6px;
+    cursor: default;
 }
 
 .noteColumn {
-    padding: 10px 0px;
+    padding: 0px;
     font-size: 15px;
     width: 15px;
-    cursor: pointer;
+    cursor: default;
 }
 
 .smallHeader {
     width: 15px !important;
+}
+
+.smallHeader2 {
+    width: 20px !important;
 }
 
 .header:hover{
@@ -172,25 +176,6 @@
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
 }
-
-.tbody::-webkit-scrollbar {
-    width: 5px;
-  }
-  
-  /* Track */
-  .tbody::-webkit-scrollbar-track {
-    background: #f1f1f13a; 
-  }
-   
-  /* Handle */
-  .tbody::-webkit-scrollbar-thumb {
-    background: rgba(52, 76, 157, 0.748); 
-  }
-  
-  /* Handle on hover */
-  .tbody::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-  }
 
 .tbodyRow {
     display: table;
@@ -225,6 +210,7 @@
     font-size: 16px;
     padding: 8px;
     text-align: center;
+    cursor: default;
 }
 
 .smallContent { 
@@ -240,7 +226,7 @@
     font-weight: 400;
     vertical-align: inherit;
     font-size: 16px;
-    padding-right: 10px;
+    padding-right: 37px;
 }
 
 .commentIcon {

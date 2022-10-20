@@ -55,7 +55,7 @@
 .groups {
     display: flex;
     flex-direction: column;
-    height: 132.5px;
-    overflow-y: scroll;
+    height: 90px;
+    overflow: auto;
     /* flex-wrap: wrap; */
 }

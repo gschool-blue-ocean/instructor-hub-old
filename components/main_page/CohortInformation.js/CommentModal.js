@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { studentsState, notesState } from "../../state.js";
+import { studentsState, notesState, usersState } from "../../state.js";
 import Image from "next/image";
 import commentStyle from "../../../styles/CommentModal.module.css";
 
 const CommentModal = ({ studentNote, showCommentModal, setShowCommenttModal, onClose }) => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [notes, setNotes] = useRecoilState(notesState);
+  const [user, setUser] = useRecoilState(usersState);
 
   let userNotes = notes.filter(note => note.student_id == studentNote.student_id); 
 
@@ -35,7 +36,7 @@ const CommentModal = ({ studentNote, showCommentModal, setShowCommenttModal, onC
                       <div className={commentStyle.headerLayout}>
                         <div className={commentStyle.textColor}>
                           <div className={commentStyle.inlineBlock}>
-                            <h4 className={commentStyle.userName}>{note.name}</h4>
+                            <h4 className={commentStyle.userName}>{user.username}</h4>
                           </div>
                           <>
                             <span className={commentStyle.time}> {new Date(note.note_date).toDateString()}</span>
