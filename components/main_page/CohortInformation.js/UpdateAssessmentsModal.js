@@ -9,6 +9,7 @@ import {
       } from "../../state";
 import axios from 'axios'
 import styles from '../../../styles/UpdateAssessments.module.css'
+import style from "../../../styles/UpdateModal.module.css";
 
 const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssessmentModal, onClose }) => {
   // What student is being updated at this moment
@@ -22,13 +23,9 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
   const [students, setStudents] = useRecoilState(studentsState);
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
-  const [projects, setProjects] = useRecoilState(projectsState);
-  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState)
-  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
   const [users, setUsers] = useRecoilState(usersState);
   const [newAssessName, setNewAssessName] = useState(''); 
   const [score, setScore] = useState('100'); 
-  // const [projNotes, setAssessNotes] = useState(''); 
   const [assess, setAssess] = useState({}); 
   const [learn, setLearn] = useRecoilState(learnState);
   const [addAssessName, setAddAssessName] = useState(false);
@@ -155,7 +152,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
     setScore('100')
     firstInput.current.focus();
     } else {
-      console.log(newAssessName)
+     
       axios.get(`https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, {
       headers: {
         Authorization: `Bearer ${users.asana_access_token}`,
@@ -242,7 +239,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
               
             //   onClick={(e) => onSubmit(e)
             ) : (
-              <span>Go code with your buds, you're done</span>
+              <span>{"Go code with your buds, you're done"}</span>
             )}
             </div>
             <div className={styles.formFooter}>

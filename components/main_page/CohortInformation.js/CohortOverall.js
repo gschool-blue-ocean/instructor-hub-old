@@ -49,13 +49,15 @@ const CohortOverall = ({ children }) => {
   const currentClass = cohorts.filter(classNow => classNow.name === currentCohort)
 
 // function to get cohort average
-    useEffect(() => {  
+  useEffect(() => {  
       currentClass.map((cohort) => {
         if (cohort.cohort_id) {
         setCohortAvg(cohort.cohort_avg)
         }
       })
     }, [currentCohort])
+
+  const cohortAverage = () => {}
 // function to get tech average
   const techAvg = () => {
     let sum = 0;
@@ -204,7 +206,7 @@ const CohortOverall = ({ children }) => {
                 // console.log(Object.values(groups).map())
                 Object.values(groups).map((group) => {
                   // {console.log(group)}
-                  return <div>{group.join(', ')}</div>
+                  return <div key={group[0].name}>{group.join(', ')}</div>
                 })
                 ) : ('')}
           </div>
