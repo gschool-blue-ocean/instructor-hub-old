@@ -1,11 +1,30 @@
 
-const authenticated = (handler) => {
-      return async (req, res) => {
+import {verify} from 'jsonwebtoken';
+export const authenticated = (handler) => {
+    return async (req, res) => {
+      return new Promise ((resolve, reject) => {
         //do token/cookie checks here
         console.log("touched the middleware")
-        return (req, res);
-      }
+        verify(req.headers.authorization, process.env.COOKIE_SECRET_KEY, function(err, decoded) {
+          if(err && decoded) {
+        return handler(req, res);
+        }
+        res.status(500).json({message: 'sorry, not authenticated'});
+      })
+        
+        resolve();
+      });
+    }
+     
   };
+
+  export const authenticate = (handler) => {
+    return async (req, res) => {
+    return handler(req, res);
+  }
+
+
+}
 
 //   export const config = {
 //     matcher: [
@@ -21,4 +40,3 @@ const authenticated = (handler) => {
 //   };
 
 
-  export default authenticated;

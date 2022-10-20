@@ -1,9 +1,10 @@
 import postgres from "postgres";
-import authenticated from '../middleware/authenticated';
+import {verify} from 'jsonwebtoken';
 
 // const { DB_CONNECTION_URL, PORT, NODE_ENV } = process.env;
 const sql = postgres(
   process.env.DB_CONNECTION_URL,
+  { max: 20 },
   process.env.NODE_ENV === "production"
     ? {
         ssl: { rejectUnauthorized: false },
@@ -11,6 +12,25 @@ const sql = postgres(
       }
     : {}
 );
+
+
+const authenticated = (handler) => {
+    return async (req, res) => {
+      return new Promise ((resolve, reject) => {
+        //do token/cookie checks here
+        console.log("learn.js - touched the cookie checkre")
+        verify(req.headers.authorization, process.env.COOKIE_SECRET_KEY, function(err, decoded) {
+          if(err && decoded) {
+        return handler(req, res);
+        }
+        res.redirect('/');
+      })
+        
+        resolve();
+      });
+    }
+     
+  };
 
 export default authenticated(async function learnHandler(req, res) {
   if (req.method === "GET") {
