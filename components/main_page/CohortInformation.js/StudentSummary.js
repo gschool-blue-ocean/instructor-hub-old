@@ -37,8 +37,11 @@ const StudentSummary = () => {
     setStudents(students);
   }, []);
 
+  useEffect(() => {
+    
+  })
+  console.log(currentCourse)
  
-  console.log(selectedStudents)
   // [Progress Conversion] Determines Progress row words
   let progress = (num) => {
     if (num === 1) {
