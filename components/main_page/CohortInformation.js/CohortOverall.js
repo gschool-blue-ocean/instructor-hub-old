@@ -47,16 +47,14 @@ const CohortOverall = ({ children }) => {
  
   const studentsInCohort = students.filter(student => student.cohort === currentCohort) 
   const currentClass = cohorts.filter(classNow => classNow.name === currentCohort)
- 
+
 // function to get cohort average
     useEffect(() => {  
       currentClass.map((cohort) => {
-      if (cohort.cohort_id) {
-       setCohortAvg(cohort.cohort_avg)
-       console.log(typeof cohort.cohort_avg)
-      }
+        if (cohort.cohort_id) {
+        setCohortAvg(cohort.cohort_avg)
+        }
       })
-      // }
     }, [currentCohort])
 // function to get tech average
   const techAvg = () => {

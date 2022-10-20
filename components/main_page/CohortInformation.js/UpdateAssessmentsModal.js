@@ -5,12 +5,8 @@ import {
         studentsState,
         currentCohortState,
         learnState,
-        currentStudentState,
-        currentlearnAndLearnGradesState,
-        projectsState,
         learnGradesState,
       } from "../../state";
-// import styles from "../../../styles/UpdateModal.module.css";
 import axios from 'axios'
 import styles from '../../../styles/UpdateAssessments.module.css'
 
@@ -19,26 +15,16 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
   const [currStudent, setCurrStudent] = useState(0);
   // This is derived state -- updated at same time as currStudent, one derives the other
   const [indexedStudent, setIndexedStudent] = useState({});
-  const [modal, setModal] = useState(false);
-  // This is a rough draft idea, probably obscelesced by simply POSTing each student to Asana
-  const [stagedCohort, setStagedCohort] = useState([]);
   // Merely to identify who is making the update, and possibly selecting the students of the user's default cohort
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
-  const [user, setUser] = useRecoilState(usersState);
   // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
   // (by going through the students)
   const [students, setStudents] = useRecoilState(studentsState);
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
-
-  
-  const [projects, setProjects] = useRecoilState(projectsState);
-  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState)
-  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
   const [users, setUsers] = useRecoilState(usersState);
   const [newAssessName, setNewAssessName] = useState(''); 
   const [score, setScore] = useState(''); 
-  const [projNotes, setAssessNotes] = useState(''); 
   const [assessId, setAssessId] = useState(''); 
   const [learn, setLearn] = useRecoilState(learnState);
   const [addAssessName, setAddAssessName] = useState(false);
@@ -60,6 +46,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
   onClose = () => {
     setCurrStudent(0);
     setShowUpdateAssessmentModal(false);
+    setAddAssessName(false);
   };
   // this grade is set in the input element
 //   let grade = score
@@ -67,8 +54,9 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
     let assessmentId = Number(assessId)
     let assessScore = Number(score)
  // post assessment_name to request to learn table
-    const onSubmit = (e) => {
-        e.preventDefault()
+    const onSubmitting = (e) => {
+        e.preventDefault();
+        
         axios.post("/api/learn", {
           "assessment_name": newAssessName, 
         }).then((res) => {
@@ -84,6 +72,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
   const submitHandler = async (e) => {
     e.preventDefault();   
+    setAddAssessName(false);
     // post request to local database
     try {
       await axios.post('/api/learnGrades', {
@@ -105,8 +94,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
       }
     })
     
-    setAssessNotes("")
-    onSubmit(e);
+    onSubmitting(e);
     enterListener(e);
     firstInput.current.focus();
   };
@@ -121,7 +109,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
       }
     })
     .then((res) => {
-      setAssessNotes("")
+      
       instructorNotes = res.data.data.notes
     })
     // Once you gotten your previews notes in Asana it checks the if there was previews note is empty or not to add <u> tag as the title 

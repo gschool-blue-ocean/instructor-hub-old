@@ -133,8 +133,7 @@ const UpdateProjectsModal = ({
               workspace: "1213745087037",
               assignee_section: null,
               html_notes: `<body>${instructorNotes}\n ${selectedProjName.project_name.toUpperCase()}: ${
-                grade ? "Passed" : "Failed"
-              }</body>`, //need conditional or neeed to make this field mandatory
+              grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
               parent: null,
               resource_subtype: "default_task",
             },
