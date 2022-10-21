@@ -1,28 +1,42 @@
 import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import {
+  usersState,
   studentsState,
   currentCohortState,
+  studentIdState,
+  currentStudentState,
   currStudentProjectsState,
   projectsState,
 } from "../../state";
 import styles from "../../../styles/UpdateModal.module.css";
 import axios from "axios";
 
-const UpdateProjectsModal = ({showUpdateProjectModal,setShowUpdateProjectModal,onClose,}) => {
+const UpdateProjectsModal = ({
+  showUpdateProjectModal,
+  setShowUpdateProjectModal,
+  onClose,
+}) => {
   // What student is being updated at this moment
   const [currStudent, setCurrStudent] = useState(0);
   // This is derived state -- updated at same time as currStudent, one derives the other
   const [indexedStudent, setIndexedStudent] = useState({});
+  const [modal, setModal] = useState(false);
+  // This is a rough draft idea, probably obscelesced by simply POSTing each student to Asana
+  const [stagedCohort, setStagedCohort] = useState([]);
   // Merely to identify who is making the update, and possibly selecting the students of the user's default cohort
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
+  const [user, setUser] = useRecoilState(usersState);
   // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
   // (by going through the students)
   const [students, setStudents] = useRecoilState(studentsState);
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
+  const [studentId, setStudentId] = useRecoilState(studentIdState);
   const [projects, setProjects] = useRecoilState(projectsState);
   const [currStudentProjects, setCurrStudentProjects] = useRecoilState(currStudentProjectsState);
+  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
+  const [users, setUsers] = useRecoilState(usersState);
   const [projSelected, setProjSelected] = useState("");
   const [projGrade, setProjGrade] = useState([]);
   const [projNotes, setProjNotes] = useState("");
@@ -68,7 +82,7 @@ const UpdateProjectsModal = ({showUpdateProjectModal,setShowUpdateProjectModal,o
     } catch (error) {
       alert(`This project has already been added for ${indexedStudent.name}`);
     }
-    // increments to the next student on submit
+
     setCurrStudent((prev) => {
       if (prev < course.length) {
         return prev + 1;
@@ -131,7 +145,8 @@ const UpdateProjectsModal = ({showUpdateProjectModal,setShowUpdateProjectModal,o
               workspace: "1213745087037",
               assignee_section: null,
               html_notes: `<body>${instructorNotes}\n ${selectedProjName.project_name.toUpperCase()}: ${
-              grade ? "Passed" : "Failed"}</body>`, //need conditional or neeed to make this field mandatory
+                grade ? "Passed" : "Failed"
+              }</body>`, //need conditional or neeed to make this field mandatory
               parent: null,
               resource_subtype: "default_task",
             },
