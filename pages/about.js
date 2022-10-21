@@ -16,8 +16,8 @@ const about = () => {
 
             <div className={style.name}>Alexander Cobble</div>
             <div className={style.about}>
-              This is about me blah blah blah and more blah here, creative blahs
-              only allowed or no, this is alot more difficult then I thought
+              {"Project Manager"}<br/>
+              {"A full-stack software engineer with endless curiosity, and a love for animals. My passion for learning drives me ever forward in the path I pursue."}
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/A-Cobble'>
