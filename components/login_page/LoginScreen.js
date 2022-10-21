@@ -7,6 +7,7 @@ import { usersState, loggedIn, currentCohortState } from "../state.js";
 import { useRouter } from "next/router"
 import { useCookies } from "react-cookie"
 import { parseCookies } from "../../components/login_page/SignUp"
+import axios from "axios";
 
 
 const LoginScreen = () => {
@@ -15,7 +16,6 @@ const LoginScreen = () => {
   const [enteredPassword, setEnteredPassword] = useState("")
   const [verifiedUser, setVerifiedUser] = useRecoilState(loggedIn)
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
-  const [cookie, setCookie] = useCookies(["user"])
   const router = useRouter();
   
   const usernameFunc = (e) => {
@@ -26,50 +26,23 @@ const LoginScreen = () => {
   }
   const checkUser = (e) =>{
     e.preventDefault()
-    for (let element of user){
-      if(element.username === enteredUsername && element.password === enteredPassword){
-        setVerifiedUser(true)
-        setUser(element)
-        setCurrentCohort(element.default_cohort)
-        router.push("/home")
-        // return {data: enteredUsername}
+    axios.post(
+      '/api/login',
+      {
+        username: enteredUsername,
+        password: enteredPassword
       }
-    }
-  }
+    ).then((res) => {
+      if (res.status === 200) {
+        setVerifiedUser(true)
+        setUser(res.data.message)
+        setCurrentCohort(res.data.message.default_cohort)
+      }
+    }).then(() => {
+      router.push("/home")
+    });
+  };
   
-  // const handleSignIn = async () => {
-  //   try {
-  //     const response = await checkUser(e) //handle API call to sign in here.
-  //     const data = response.data
-
-  //     setCookie("user", JSON.stringify(data), {
-  //       path: "/home",
-  //       maxAge: 3600, // Expires after 1hr
-  //       sameSite: true,
-  //     })
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
-
-
-//   <p>Data from cookie: {data.user}</p>
-//   FullPage.getInitialProps = async ({ req, res }) => {
-// const data = parseCookies(req)
-
-// if (res) {
-// if (Object.keys(data).length === 0 && data.constructor === Object){
-// res.writeHead(301, { Location: "/home" })
-// res.end()
-// }
-// }
-
-// return {
-// data: data && data,
-// }
-// }
-
-
 
   return (
     <div>
@@ -104,8 +77,8 @@ const LoginScreen = () => {
                     </div>
                     <div>
                       {"Don't have an account? Click "}
-                      <Link href="/signup" className={styles.linkText}>
-                        here!
+                      <Link href="/signup" >
+                       <span className={styles.linkText}>here!</span> 
                       </Link>
                     </div>
                     {/* <div className='text-[12px] font-[500] text-center'>&nbsp;</div> */}
