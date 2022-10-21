@@ -11,7 +11,7 @@ const about = () => {
         </div>
         <div className={style.subContainer}>
           <div className={style.team}>
-            <Image src="/pic1.jpg" height={200} width={200} />
+            <Image src='/Alex.jpg' height={200} width={200}/>
             {/* <img className={style.img} alt='team member' src='/pic1.jpg'/> */}
 
             <div className={style.name}>Alexander Cobble</div>
@@ -32,17 +32,7 @@ const about = () => {
             <Image src="/ZiR.jpg" height={200} width={200} />
             <div className={style.name}>Zachary Hudson</div>
             <div className={style.about}>
-              {"On this project, I was the Architecture Owner, and I was
-              responsible for adding a Chart.js graph to the Home page, and for
-              the Weekly Update component. With a group this large, being the
-              Architecture Owner mostly meant I tried to help out wherever I
-              could with programming problems while also working on my
-              components. I wanted to bring in Branch Protections for our GitHub
-              workspace, but that just wasn't possible in this scenario. "}
-              <br />
-              {"When I find my next job as a software engineer, I'm going to spend
-              big money on upgrading my computer, gearing up to go backpacking,
-              and taking trips to cities I haven't been to yet."}
+              {"Orchestrated component interconnectivity within the project. Driven by wanderlust, technology is my passion."}
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/Self-Zachtualization'>
@@ -58,7 +48,7 @@ const about = () => {
 
             <div className={style.name}>Gerard San Juan</div>
             <div className={style.about}>
-            {"Hi, I'm Gerard. Food is good, anime is wonderful, and software engineering is the way."} 
+            {"Hi, I'm Gerard! I pursue software engineering to hopefully one day help humanity push the limits of its own existence. I also love anime very much."} 
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/Tiwala'>
@@ -70,12 +60,11 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src="/pic1.jpg" height={200} width={200} />
+            <Image src='/Michael.png' height={200} width={200}/>
 
             <div className={style.name}>Michael Jefferson</div>
-            <div className={style.about}>
-              This is about me blah blah blah and more blah here, creative blahs
-              only allowed or no, this is alot more difficult then I thought
+            <div className={style.about} >
+              {"Full-stack Software Engineer, Cyber and Intelligence Analyst with several years of experience working in DoD and Intelligence Community support roles. Knowledgeable and experienced in both Javascript and cloud app deployment."}
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/heymj317'>
@@ -108,7 +97,7 @@ const about = () => {
 
             <div className={style.name}>Charles Vitanza</div>
             <div className={style.about} >
-              {"I am an inspiring software engineer who recently transitioned from the Air Force and dreams of eventually working as a software engineer in the video game industry"} 
+              {"I am an inspiring software engineer who recently transitioned from the Air Force with the dream of eventually working in the video game industry"} 
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/BlazingAces'>
@@ -120,7 +109,7 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src="/pic1.jpg" height={200} width={200} />
+            <Image src="/Mike.jfif" height={200} width={200} />
             <div className={style.name}>Mike Cohen</div>
             <div className={style.about}>
               This is about me blah blah blah and more blah here, creative blahs
@@ -130,7 +119,7 @@ const about = () => {
               <a className={style.links} href='https://github.com/mbcohen777'>
                 <Image alt="GitHub Icon" src='/GitHubIcon.png' width={48} height={48}></Image>
               </a>
-              <a className={style.links} href='https://github.com/SamChav'>
+              <a className={style.links} href='#'>
                 <Image alt="Linkedin Icon" src='/LinkedinIcon.png' width={48} height={48}></Image>
               </a>
             </div>
@@ -153,11 +142,10 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src="/pic1.jpg" height={200} width={200} />
+            <Image src="/Martha.png" height={200} width={200} />
             <div className={style.name}>Martha Martin</div>
             <div className={style.about}>
-              This is about me blah blah blah and more blah here, creative blahs
-              only allowed or no, this is alot more difficult then I thought
+              {"I enjoy bringing people's visions to life, and being a software engineer allows me to express my creativity. I enjoy the challenge and growth in this career field."}
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/mmartin440'>
@@ -169,11 +157,12 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src="/pic1.jpg" height={200} width={200} />
+            <Image src="/Randy.jfif" height={200} width={200} />
             <div className={style.name}>Randy Fernandez</div>
             <div className={style.about}>
-              This is about me blah blah blah and more blah here, creative blahs
-              only allowed or no, this is alot more difficult then I thought
+              {"'Intelligent and multi-talented, Randy is a great person and a valuable asset to any team.'"} 
+              <br/> 
+              {"- Gerard San Juan"}
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/RRFernandez'>

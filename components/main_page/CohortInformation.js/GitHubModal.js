@@ -50,7 +50,7 @@ const GitHubModal = ({ showGitHubModal, setShowGitHubModal, onClose }) => {
         <div>
           <div className={gitStyle.background} onClick={onClose}></div>
           <div className={gitStyle.gitContainer}>
-            <div className={gitStyle.top_bar}></div>
+            {/* <div className={gitStyle.top_bar}></div> */}
             <div>
               <div className={gitStyle.listHeader}>
                 <div>

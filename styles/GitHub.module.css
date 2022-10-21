@@ -10,13 +10,13 @@
 
 .gitContainer {
     position: fixed;
-    max-width: 1442px;
-    min-width: 500px;
+    max-width: 600px;
+    min-width: 400px;
     z-index:1000;
     top: 50%;
     left: 50%;
     font-weight: normal;
-    background: rgb(69, 78, 106);
+    background: linear-gradient(145deg, rgba(0,53,69,1) 2%, rgba(0,69,74,1) 31%, rgba(60,101,98,1) 89%);
     transform: translate(-50%, -50%);
     flex-wrap: wrap;
     -webkit-box-direction: normal;
@@ -35,7 +35,7 @@
     top: 0;
     z-index: 32;
     height: 50px;
-    border: 1px solid;
+    border: 1px black solid;
 }
 
 .headerInfo {
@@ -78,8 +78,8 @@
 .tableList {
     display: block;
     table-layout: fixed;
-    max-width: 1442px;
-    min-width: 500px;
+    max-width: 600px;
+    min-width: 400px;
     max-height: 400px;
     padding-left: 0;
     margin-top: 0;
@@ -87,11 +87,30 @@
     overflow: auto;
 }
 
+.tableList::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+.tableList::-webkit-scrollbar-track {
+    background: #f1f1f13a; 
+  }
+   
+  /* Handle */
+.tableList::-webkit-scrollbar-thumb {
+    background: rgba(52, 76, 157, 0.748); 
+  }
+  
+  /* Handle on hover */
+.tableList::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
 .tableListItem {
     position: relative;
-    border-bottom: 1px solid;
-    border-left: 1px solid;
-    border-right: 1px solid;
+    border-bottom: 1px black solid;
+    border-left: 1px black solid;
+    border-right: 1px black solid;
     /* display: table-row; */
     list-style: none;
 }

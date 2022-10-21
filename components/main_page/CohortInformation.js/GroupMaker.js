@@ -42,11 +42,11 @@ const GroupMaker = () => {
       console.log(groups)
     }, [groups])
 
-    useEffect(()=> {
-      if(groups) {
-        setGroups([])
-      }
-    }, [])
+    // useEffect(()=> {
+    //   if(groups) {
+    //     setGroups([])
+    //   }
+    // }, [])
 
     useEffect(() => {
       if(groups) {
