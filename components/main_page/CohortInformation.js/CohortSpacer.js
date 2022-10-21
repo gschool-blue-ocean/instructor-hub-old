@@ -1,24 +1,22 @@
 import spacerStyle from "../../../styles/CohortSpacer.module.css";
 import { useEffect, useState } from "react";
-// import NewCohortModal from './NewCohortModal'
 import { useRecoilState } from "recoil";
 import {
   cohortsState,
   currentCohortState,
   usersState,
-  accessToken,
   studentsState,
 } from "../../state.js";
 import axios from "axios";
 
 const CohortSpacer = () => {
-  // const [newCohortModal, showNewCohortModal] = useState(false)
+  
   const [cohorts, setCohorts] = useRecoilState(cohortsState);
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [students, setStudents] = useRecoilState(studentsState);
   const [user, setUser] = useRecoilState(usersState);
-  // const [asanaCohorts, setAsanaCohorts] = useState([])
-  // const [asana_access_token, setAsana_Access_Token] = useRecoilState(accessToken)
+  const [cohortId, setCohortId] = useState(0);
+  const [cohortName, setCohortName] = useState('')
 
   useEffect(() => {
     if (user) {
@@ -26,6 +24,13 @@ const CohortSpacer = () => {
     }
   }, [user]);
 
+  // useEffect(() => {
+  //   if (currentCohort) {
+  //     let filterId = cohorts.filter((cohort) => currentCohort === cohort.name)
+  //     setCohortId(filterId.cohort_id);
+  //   }  
+  // }, [currentCohort]);
+  console.log("cohorts:", cohorts)
   const syncCohorts = () => {
     //verifies that the cohorts set state matches what is in our database
     axios.get("/api/cohorts").then((res) => setCohorts(res.data));
@@ -40,17 +45,25 @@ const CohortSpacer = () => {
       },
     }).then((res) => {
       //this goes through each cohort in the asana database and adds ones that do not exist in our database
+      console.log("cohorts:", cohorts)
+      console.log("res.data:", res.data)
       res.data.data.forEach((asanaCohort) => {
         const found = cohorts.find((element) => element.gid === asanaCohort.gid);
-        // console.log(found, "found");
-        if (found === undefined) {
+       console.log("currentCohort:", currentCohort)
+        if (found) {
           console.log(asanaCohort, "success, cohorts will be added to our database");
-          axios.put("/api/cohorts", {
-            name: `${asanaCohort.name}`,
-            gid: `${asanaCohort.gid}`,
+          axios.get("/api/cohorts")
+          .then((res) => {
+            const currentCohortId = res.data.filter((cohortid) => cohortid.name === currentCohort)
+            console.log("currentCohortId:", currentCohortId)
+            if(currentCohortId && !cohortId && currentCohortId[0].name === currentCohort) 
+            console.log("res.data:", res.data)
+            setCohortId(currentCohortId[0].cohort_id)
+            console.log(currentCohortId[0].cohort_id) 
+            // console.log(currentCohort)
           })
         } else {
-          console.log("failed, cohorts are in our database");
+          console.error("failed")
         }
         // this axios request looks at the students in our database and adds new students from the asana database
         axios.get(`https://app.asana.com/api/1.0/tasks/?project=${asanaCohort.gid}`, {
@@ -59,13 +72,18 @@ const CohortSpacer = () => {
           },
         }).then((res) => {
           res.data.data.forEach((asanaStudent) => {
+            console.log(currentCohort)
             const found = students.find((element) => element.gid === asanaStudent.gid);
-            if (found === undefined) {
+            if (found === undefined && cohortId && asanaCohort.name === currentCohort) {
               axios.put("/api/students", {
                 name: `${asanaStudent.name}`,
                 cohort: `${asanaCohort.name}`,
                 gid: `${asanaStudent.gid}`,
-              }).then((res) => setStudents((prev) => [...prev, ...res.data]));
+                cohort_id: cohortId
+              }).then((res) => {
+                setStudents((prev) => [...prev, ...res.data])
+                setCohortId(0)
+              });
             }
           })
 
@@ -121,12 +139,6 @@ const CohortSpacer = () => {
             ))}
         </select>
       </div>
-      {/* <NewCohortModal
-      showNewCohortModal={showNewCohortModal}
-      newCohortModal={newCohortModal}
-      onClose={() => {
-        showNewCohortModal(false);
-      }}/> */}
     </>
   );
 };

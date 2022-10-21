@@ -5,38 +5,27 @@ import {
         studentsState,
         currentCohortState,
         learnState,
-        currentStudentState,
-        currentlearnAndLearnGradesState,
-        projectsState,
         learnGradesState,
       } from "../../state";
-import styles from "../../../styles/UpdateModal.module.css";
 import axios from 'axios'
-import style from '../../../styles/UpdateAssessments.module.css'
+import styles from '../../../styles/UpdateAssessments.module.css'
+import style from "../../../styles/UpdateModal.module.css";
 
 const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssessmentModal, onClose }) => {
   // What student is being updated at this moment
   const [currStudent, setCurrStudent] = useState(0);
   // This is derived state -- updated at same time as currStudent, one derives the other
   const [indexedStudent, setIndexedStudent] = useState({});
-  const [modal, setModal] = useState(false);
-  // This is a rough draft idea, probably obscelesced by simply POSTing each student to Asana
-  const [stagedCohort, setStagedCohort] = useState([]);
   // Merely to identify who is making the update, and possibly selecting the students of the user's default cohort
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
-  const [user, setUser] = useRecoilState(usersState);
   // Unless this is replaced by some "selected students" state, or "current cohort" state, this determines how the updater iterates
   // (by going through the students)
   const [students, setStudents] = useRecoilState(studentsState);
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
-  const [projects, setProjects] = useRecoilState(projectsState);
-  const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState)
-  const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
   const [users, setUsers] = useRecoilState(usersState);
   const [newAssessName, setNewAssessName] = useState(''); 
   const [score, setScore] = useState('100'); 
-  // const [projNotes, setAssessNotes] = useState(''); 
   const [assess, setAssess] = useState({}); 
   const [learn, setLearn] = useRecoilState(learnState);
   const [addAssessName, setAddAssessName] = useState(false);
@@ -61,7 +50,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
     setAddAssessName(false)
     setScore('100')
   };
-
+  // increments to the next student on submit
   const prevStudent = () => {
     setCurrStudent((prev) => {
       if (prev !== 0) {
@@ -79,10 +68,9 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
   };
 
   // this grade is set in the input element
-//   let grade = score
-//     let assessmentId = Number(projSelected)
     let assessmentId = Number(assess.value)
     let assessScore = Number(score)
+
  // post assessment_name to request to learn table
     const onSubmiting = (e) => {
       e.preventDefault()
@@ -163,7 +151,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
     setScore('100')
     firstInput.current.focus();
     } else {
-      console.log(newAssessName)
+     
       axios.get(`https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, {
       headers: {
         Authorization: `Bearer ${users.asana_access_token}`,
@@ -244,13 +232,9 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
                 }}></input>
                 <div>%</div>                  
                 <br />
-                {/* <label htmlFor="Notes">Notes</label> <br />
-                <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea> */}
                 <br />
                 <button type="submit"  value="Submit" onClick={(e) => onSubmiting(e)}>Submit</button>
               </form>
-              
-            //   onClick={(e) => onSubmit(e)
             ) : (
               <span>{"Go code with your buds, you're done"}</span>
             )}

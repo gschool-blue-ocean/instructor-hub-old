@@ -32,17 +32,17 @@ const about = () => {
             <Image src="/ZiR.jpg" height={200} width={200} />
             <div className={style.name}>Zachary Hudson</div>
             <div className={style.about}>
-              {"On this project, I was the Architecture Owner, and I was
+              {`On this project, I was the Architecture Owner, and I was
               responsible for adding a Chart.js graph to the Home page, and for
               the Weekly Update component. With a group this large, being the
               Architecture Owner mostly meant I tried to help out wherever I
               could with programming problems while also working on my
               components. I wanted to bring in Branch Protections for our GitHub
-              workspace, but that just wasn't possible in this scenario. "}
+              workspace, but that just wasn't possible in this scenario. `}
               <br />
-              {"When I find my next job as a software engineer, I'm going to spend
+              {`When I find my next job as a software engineer, I'm going to spend
               big money on upgrading my computer, gearing up to go backpacking,
-              and taking trips to cities I haven't been to yet."}
+              and taking trips to cities I haven't been to yet.`}
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/Self-Zachtualization'>
@@ -87,12 +87,11 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src="/pic1.jpg" height={200} width={200} />
+            <Image src="/daryle.jpg" height={200} width={200} />
 
             <div className={style.name}>Daryle Tan</div>
             <div className={style.about}>
-              This is about me blah blah blah and more blah here, creative blahs
-              only allowed or no, this is alot more difficult then I thought
+            {"I got into software development because of my interest in the cryptocurrency industry. I enjoy creating and building applications."}
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/daryle-tan'>
