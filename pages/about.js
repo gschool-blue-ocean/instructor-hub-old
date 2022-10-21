@@ -13,7 +13,7 @@ const about = () => {
       </div>
       <div className={style.subContainer}>
           <div className={style.team}>
-            <Image src='/pic1.jpg' height={200} width={200}/>
+            <Image src='/Alex.jpg' height={200} width={200}/>
             {/* <img className={style.img} alt='team member' src='/pic1.jpg'/> */}
 
             <div className={style.name}>Alexander Cobble</div>
@@ -63,12 +63,11 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src='/pic1.jpg' height={200} width={200}/>
+            <Image src='/Michael.png' height={200} width={200}/>
 
             <div className={style.name}>Michael Jefferson</div>
             <div className={style.about} >
-              This is about me blah blah blah and more blah here, creative blahs only allowed or no, 
-              this is alot more difficult then I thought 
+              {"Full-stack Software Engineer, Cyber and Intelligence Analyst with several years of experience working in DoD and Intelligence Community support roles. Knowledgeable and experienced in both Javascript and cloud app deployment."}
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/heymj317'>
