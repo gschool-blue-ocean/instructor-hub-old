@@ -177,6 +177,25 @@
     border-bottom-left-radius: 10px;
 }
 
+.tbody::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+.tbody::-webkit-scrollbar-track {
+    background: #f1f1f13a; 
+  }
+   
+  /* Handle */
+.tbody::-webkit-scrollbar-thumb {
+    background: rgba(52, 76, 157, 0.748); 
+  }
+  
+  /* Handle on hover */
+.tbody::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
 .tbodyRow {
     display: table;
     width: 100%;

@@ -16,25 +16,6 @@ a {
   box-sizing: border-box;
 }
 
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f13a; 
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: rgba(52, 76, 157, 0.748); 
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555; 
-}
-
 /* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
