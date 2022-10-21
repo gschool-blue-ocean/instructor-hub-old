@@ -29,14 +29,14 @@
   padding: 30px;
   z-index: 1000;
   width: fit-content;
-  max-width: 840px;
+  max-width: 460px;
   /* height: 680px; */
   flex-wrap: wrap;
   /* border: 1px solid black; */
   border-radius: 10px;
   -webkit-box-direction: normal;
   -webkit-box-orient: vertical;
-  max-height: 80%;
+  /* max-height: 80%; */
   display: flex;
   justify-content: center;
 }
@@ -73,19 +73,22 @@
 }
 
 .update {
-  max-height: 100%;
+  max-height: 750px;
+  max-width: 500px;
+  word-break: break-all;
   margin: 5px;
   margin-left: 5px;
   padding: 25px;
-  overflow: auto;
+  /* overflow: auto; */
   background: #0b131b61;
   color: whitesmoke;
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   justify-content: center;
   text-align: center;
   font-weight: bold;
   border-radius: 10px;
+  overflow-y: auto;
 }
 
 .updateForm {
@@ -108,4 +111,21 @@
 .mainBodyCon{
   display: flex;
   align-items: center;
+}
+
+.assesmentTitleCon {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+.addBtn{
+  cursor: pointer;
+}
+.option{
+  width: 50%;
+  text-align: center;
+}
+
+.assessInput {
+  margin-bottom: 10px;
 }

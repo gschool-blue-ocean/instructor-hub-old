@@ -22,13 +22,13 @@
     margin-left: 20px;
 }
 .studentName{
-    font-size: 20px;
-    text-decoration: uppercase;
+    font-size: 22px;
+    text-transform: uppercase;
 }
 .gitTransCon{
     display: flex;
     flex-direction: row;
-    font-size: 10px;
+    font-size: 12px;
 }
 .etsDate {
     padding-right: 20px;

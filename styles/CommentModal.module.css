@@ -47,6 +47,7 @@
     padding: 32px 32px 10px 15px;
     display: block;
     /* text-align: center; */
+    margin-left: 25px;
 }
 
 .close {

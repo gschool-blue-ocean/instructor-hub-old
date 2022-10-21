@@ -6,34 +6,22 @@ const NavBar = () => {
   return (
     <>
       <div>
-        <div className={styles.navBarCon} >
+        <div className={styles.navBarCon}>
           <div className={styles.worddisplay}>
-            <div className={styles.navOptLeft}>
-              <Link href='/home'>
-                <span className={styles.navSpan}>
-                  HOME
-                </span>
-              </Link>
-            </div>
+            <Link href="/home">
+              <div className={styles.navOptLeft}>
+                <span className={styles.navSpan}>HOME</span>
+              </div>
+            </Link>
             <div className={styles.navOptMid}>
-                <span className={styles.navSpan}>
-                  ASANA
-                </span>
+              <span className={styles.navSpan}>ASANA</span>
             </div>
-            <div className={styles.navOptMid}>
-              <a href='https://auth.galvanize.com/sign_in'>
-                <span className={styles.navSpan}>
-                  LEARN
-                </span>
-              </a>
-            </div>
-            <div className={styles.navOptRight}>
-              <a href='https://auth.pairin.com/auth/signin?continue=https://app.pairin.com'>
-                <span className={styles.navSpan}>
-                  PAIRIN
-                </span>
-              </a>
-            </div>
+            <a className={styles.navOptMid} href="https://auth.galvanize.com/sign_in" >
+              <span className={styles.navSpan}>LEARN</span>
+            </a>
+            <a className={styles.navOptRight} href="https://auth.pairin.com/auth/signin?continue=https://app.pairin.com" >
+              <span className={styles.navSpan}>PAIRIN</span>
+            </a>
           </div>
         </div>
       </div>
