@@ -60,7 +60,7 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src='/Michael.png' height={200} width={200}/>
+            <Image src='/Michael.jpg' height={200} width={200}/>
 
             <div className={style.name}>Michael Jefferson</div>
             <div className={style.about} >
