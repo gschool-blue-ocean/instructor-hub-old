@@ -57,22 +57,17 @@ export default async function studentsHandler(req, res) {
     try {
       const {
         name,
-        cohortName,
         cohort,
         gid,
-        cohort_id,
-        
       } = req.body;
-      // INSERT INTO students(cohort_id, name) SELECT (SELECT cohort_id FROM cohorts WHERE  cohorts.name = ${cohortName}), '${name}';`
 
       const putStudent = await sql`
                INSERT INTO students ( 
                 name,
                 cohort,
-                gid,
-                cohort_id
+                gid
                 )
-               VALUES (${name}, ${cohort}, ${gid}, ${cohort_id}) 
+               VALUES (${name}, ${cohort}, ${gid}) 
                RETURNING *`;
       res.status(200).json(putStudent);
     } catch (error) {
