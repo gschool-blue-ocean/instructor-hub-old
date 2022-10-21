@@ -19,7 +19,6 @@ const AssessModal = ({showAssessModal, onClose }) => {
   
   const selectedOption = (e) => {
     setAssessId(e.target.value)
-    // console.log(e.target.value, 'value')
   }
   /*----------Converting String into Number----------*/
   let assessmentId = Number(assessId)
@@ -28,7 +27,6 @@ const AssessModal = ({showAssessModal, onClose }) => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    console.log(newAssessName, 'here'); 
     axios.post("/api/learn", {
       "assessment_name": newAssessName, 
     }).then((res) => {
@@ -64,7 +62,6 @@ const AssessModal = ({showAssessModal, onClose }) => {
             },
           })
           .then((res) => {
-            console.log(res.data.data)
             instructorNotes = res.data.data.notes
           })
           // Once you gotten your previews notes in Asana it checks the if there was previews note is empty or not to add <u> tag as the title 

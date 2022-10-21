@@ -12,7 +12,6 @@ const sql = postgres(
 );
 export default async function getProjectGrades (req, res) { 
     const id = req.query.projectGradesid; 
-    console.log(id, "id"); 
     if (req.method === "GET") {
       try {
         const projectGradesId = await sql`

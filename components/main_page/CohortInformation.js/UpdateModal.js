@@ -88,7 +88,6 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   };
 
   useEffect(() => {
-    // console.log("user, students, or currentCohortName has changed");
     if (students) {
       const impendingCohort = students.filter(
         (student) => student.cohort == currentCohortName
@@ -105,12 +104,10 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
 
   // Try to cut out the middleman -- only need currStudent or indexedStudent, not both
   useEffect(() => {
-    // console.log("currStudent or filteredCohort has changed");
     if (filteredCohort[currStudent]) {
       setIndexedStudent(() => filteredCohort[currStudent]);
     }
     fetchData();
-    console.log("filteredCohort come back", filteredCohort);
   }, [currStudent, filteredCohort]);
 
   // To reset the indexer value if modal is closed early

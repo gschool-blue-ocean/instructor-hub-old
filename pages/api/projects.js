@@ -24,7 +24,6 @@ export default async function projectsHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const { project_name, gid } = req.body;
-      console.log(req.body);
       const createProjects = await sql`
                INSERT INTO projects (project_name, gid ) VALUES (${project_name}, ${gid}) RETURNING *`;
       res.status(200).json(createProjects[0]);

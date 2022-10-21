@@ -16,7 +16,6 @@ const sql = postgres(
 
 
 export default async function learnHandler(req, res) {
-  console.log('learn.js - fetching assessments');
   if (req.method === "GET") {
     try {
       const learn = await sql`
@@ -29,7 +28,6 @@ export default async function learnHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const { assessment_name } = req.body;
-      console.log(req.body);
       const createAssessment = await sql`
                INSERT INTO learn ( assessment_name ) VALUES (${assessment_name}) RETURNING *`;
       return res.status(200).json(createAssessment[0]);

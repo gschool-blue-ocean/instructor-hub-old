@@ -29,7 +29,6 @@ export default async function notesHandler(req, res) {
         name,
         note_date,
       } = req.body;
-      console.log(req.body);
       const createNotes = await sql`
         INSERT INTO notes (student_id, notes, name, note_date) VALUES (${student_id}, ${notes}, ${name}, ${note_date})
         RETURNING *`;

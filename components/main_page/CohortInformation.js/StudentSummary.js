@@ -35,14 +35,6 @@ const StudentSummary = () => {
     setSelectStudents([])
   }, [currentCohort, students])
 
-  // useEffect(() => {
-  //   axios.get("/api/students")
-  //   .then(res => {
-  //     console.log(res, "line 38")
-  //     // setCurrentCourse(res.data)
-  //   })
-  // }, [])
-
   // [Delete] Resets the studentState after one is deleted
   useEffect(() => {
     setStudents(students);
@@ -104,7 +96,6 @@ const StudentSummary = () => {
   const handleSelectAllStudents = () => {
     if(selectedStudents.length < currentCourse.length) { // if selectedStudents is less than currentCourse(array for the cohort students)
       setSelectStudents(currentCourse.map((student) => student.student_id)) // setSelectStudents equal to a new array by mapping over our currentCourse array, pulling the student_id for each student
-        // console.log(selectedStudents, "line 106 SelectAll")
     } else {
       setSelectStudents([]) //set an empty array to signify no users are currently selected
     }

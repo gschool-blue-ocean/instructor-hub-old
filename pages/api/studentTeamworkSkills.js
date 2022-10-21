@@ -24,7 +24,6 @@ export default async function studentTeamworkSkillsHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const { student_id, score, record_date } = req.body;
-      console.log(req.body);
       const createStudentTeamworkSkills = await sql`
                INSERT INTO student_teamwork_skills ( student_id, score, record_date ) VALUES ( ${student_id}, ${score}, NOW()) RETURNING *`;
       res.status(200).json({ createStudentTeamworkSkills });

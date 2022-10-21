@@ -24,7 +24,6 @@ export default async function codingGroupsHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const { cohort_id } = req.body;
-      console.log(req.body);
       const createGroup = await sql`
                INSERT INTO coding_groups ( cohort_id ) VALUES (${cohort_id}) RETURNING *`;
       res.status(200).json(createGroup);

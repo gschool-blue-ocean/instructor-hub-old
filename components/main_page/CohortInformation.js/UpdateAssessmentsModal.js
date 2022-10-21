@@ -163,7 +163,6 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
     setScore('100')
     firstInput.current.focus();
     } else {
-      console.log(newAssessName)
       axios.get(`https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, {
       headers: {
         Authorization: `Bearer ${users.asana_access_token}`,

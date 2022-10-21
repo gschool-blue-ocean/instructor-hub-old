@@ -20,8 +20,6 @@ const sql = postgres(
     return new Promise ((resolve, reject) => {
    
         if (req.method === "PATCH") {
-            console.log("logout.js - received a patch request");
-            console.log(`logout.js - logout Request`);
             
                 const user = {
                     sub: 'logout'

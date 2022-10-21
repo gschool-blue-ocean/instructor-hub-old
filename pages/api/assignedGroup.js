@@ -24,7 +24,6 @@ export default async function assignedGroupingsHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const { student_id, group_id } = req.body;
-      console.log(req.body);
       const assignGroup = await sql`
                  INSERT INTO assigned_student_groupings (student_id, group_id ) VALUES (${student_id}, ${group_id}) RETURNING *`;
       res.status(200).json(req.body);

@@ -23,9 +23,7 @@ const StudentMainBody = () => {
 
   useEffect(() => {
     axios.get("/api/notes").then((res) => {
-      // console.log(res);
       setNotes(res.data);
-      // console.log(res.data);
     });
   },[studentId])
 
@@ -47,9 +45,6 @@ const StudentMainBody = () => {
     "name": `${note.name}`
   }
     ).then((res) => {
-    
-    console.log(res.data)
-
     const indexOfNotes = notes.findIndex((note) => note.note_id === res.data.note_id);
     const updateNotes = [...notes];
     updateNotes[indexOfNotes] = res.data;
@@ -66,7 +61,6 @@ const StudentMainBody = () => {
     }).then((res) => console.log(res.data) ).then (() => {
       axios.get("/api/notes").then((res) => {
           setNotes(res.data);
-          // console.log(notes, 'notes');
         })
     })
     // For a new subtask note IN Asana you need to do a POST request instead 

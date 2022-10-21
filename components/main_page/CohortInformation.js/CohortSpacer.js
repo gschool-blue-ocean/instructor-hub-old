@@ -42,9 +42,7 @@ const CohortSpacer = () => {
       //this goes through each cohort in the asana database and adds ones that do not exist in our database
       res.data.data.forEach((asanaCohort) => {
         const found = cohorts.find((element) => element.gid === asanaCohort.gid);
-        // console.log(found, "found");
         if (found === undefined) {
-          console.log(asanaCohort, "success, cohorts will be added to our database");
           axios.put("/api/cohorts", {
             name: `${asanaCohort.name}`,
             gid: `${asanaCohort.gid}`,

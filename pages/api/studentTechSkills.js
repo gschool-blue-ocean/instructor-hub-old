@@ -24,7 +24,6 @@ export default async function studentTechSkillsHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const { student_id, score, record_date } = req.body;
-      console.log(req.body);
       const createStudentTechSkills = await sql`
                INSERT INTO student_tech_skills ( student_id, score, record_date ) VALUES ( ${student_id}, ${score}, NOW()) RETURNING *`;
       res.status(200).json({ createStudentTechSkills });

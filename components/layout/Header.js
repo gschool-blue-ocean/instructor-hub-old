@@ -20,7 +20,6 @@ const Header = () => {
   useEffect(() => {
     if (users) {
       setCurrentCohort(users.default_cohort);
-      // console.log(currentCohort)
     }
   }, [users]);
 
@@ -29,7 +28,6 @@ const Header = () => {
     showDropDown(false)
     axios.patch('/api/logout')
     .then((res) => {
-      console.log('logout response');
       console.log(res);
     })
 
@@ -50,7 +48,6 @@ const Header = () => {
       "default_cohort" : `${e.target.value}`
     })
       .then((res) => {
-        console.log(res.data, "newDefault")
         setUsers(users);
       })
   }

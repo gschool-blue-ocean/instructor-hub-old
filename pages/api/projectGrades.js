@@ -24,7 +24,6 @@ export default async function projectGradesHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const { student_id, project_id, project_passed, notes} = req.body;
-      console.log(req.body);
       const createProjectGrades = await sql`
                INSERT INTO project_grades ( student_id, project_id, project_passed, notes )
                VALUES ( ${student_id}, ${project_id}, ${project_passed}, ${notes}) RETURNING *`;

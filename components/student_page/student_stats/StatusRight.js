@@ -23,16 +23,13 @@ const StatusRight = ({currentStudent}) => {
 
 
   const [teckSkill, setTeckSkill] = useState([]); 
-  // console.log(studentTechSkills, 'here')
   useEffect(() => {
     axios.get("/api/studentTeamworkSkills").then((res) => {
       setStudentTeamworkSkills(res.data.studentTeamworkSkills);
-      // console.log(res.data.studentTeamworkSkills);
     });
 
     axios.get("/api/studentTechSkills").then((res) => {
       setStudentTechSkills(res.data.studentTechSkills);
-      // console.log(res.data.studentTechSkills);
     });
   },[studentId])
 

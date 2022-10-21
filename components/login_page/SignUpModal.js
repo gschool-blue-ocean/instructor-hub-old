@@ -40,7 +40,8 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
                     axios.put('/api/students', {
                         "name": `${asanaStudent.name}`,
                         "cohort": `${defaultCohortGid.name}`,
-                        "gid": `${asanaStudent.gid}`
+                        "gid": `${asanaStudent.gid}`,
+                        "cohort_id": defaultCohortGid.cohort_id
                     }).then((res)=> setStudents((prev) => [...prev, ...res.data]))
                 }
             })
@@ -57,6 +58,20 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
         }).then((res) =>{
             console.log(res.data)
          setUser(res.data)
+        }).then(()=> {
+            axios.post(
+                '/api/login',
+                {
+                  username: username,
+                  password: password
+                }
+              ).then((res) => {
+                if (res.status === 200) {
+                  setUser(res.data.message)
+                }
+              }).then(() => {
+                router.push("/home")
+              })
         })
         setLoggedInStatus(true)
         getStudents();

@@ -24,7 +24,6 @@ export default async function learnGradesHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const { student_id, assessment_id, assessment_grade } = req.body;
-      console.log(req.body);
       const assignGroup = await sql`
                      INSERT INTO learn_grades (student_id, assessment_id, assessment_grade ) VALUES (${student_id}, ${assessment_id}, ${assessment_grade}) RETURNING *`;
       res.status(200).json(req.body);

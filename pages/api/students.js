@@ -41,7 +41,6 @@ export default async function studentsHandler(req, res) {
         github,
         gid
       } = req.body;
-      console.log(req.body);
       const createStudent = await sql`
                INSERT INTO students ( name, learn_avg, tech_avg, teamwork_avg, server_side_test, client_side_test, cohort, cohort_id, ets_date, github,
                 gid )
