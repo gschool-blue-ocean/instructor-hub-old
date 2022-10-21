@@ -1,9 +1,7 @@
-import { COMPILER_NAMES } from "next/dist/shared/lib/constants";
 import postgres from "postgres";
 import cookie from 'cookie'; 
 import {sign} from 'jsonwebtoken';  
 import {compare} from 'bcrypt';
-import { resolve } from "styled-jsx/css";
 
 
 // const { DB_CONNECTION_URL, PORT, NODE_ENV } = process.env;
@@ -45,14 +43,15 @@ const sql = postgres(
                         user, 
                         //"0eb9b871-55be-470e-bd1b-80280585cd9a", 
                         process.env.COOKIE_SECRET_KEY,
-                        {expiresIn: '24hr'}
+                        //{expiresIn: '24hr'}
+                        {expiresIn: '2min'}
                     );
     
                         res.setHeader('Set-Cookie', cookie.serialize('authCookie', authToken, {
                             httpOnly: true,
                             secure: process.env.NODE_ENV !== 'development',
                             sameSite: 'strict',
-                            maxAge: 86400,
+                            maxAge: 120,
                             path: '/'
                         }))
                         return res.json({message : {

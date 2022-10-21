@@ -34,59 +34,16 @@ const LoginScreen = () => {
         password: enteredPassword
       }
     ).then((res) => {
-      console.log('components_loginScreen.js');
-      console.log(res.data.message);
       if (res.status === 200) {
         setVerifiedUser(true)
         setUser(res.data.message)
         setCurrentCohort(res.data.message.default_cohort)
-        router.push("/home")
       }
+    }).then(() => {
+      router.push("/home")
     });
-    // for (let element of user){
-    //   if(element.username === enteredUsername && element.password === enteredPassword){
-    //     setVerifiedUser(true)
-    //     setUser(element)
-    //     setCurrentCohort(element.default_cohort)
-    //     router.push("/home")
-    //     // return {data: enteredUsername}
-    //   }
-    // }
-  }
+  };
   
-  // const handleSignIn = async () => {
-  //   try {
-  //     const response = await checkUser(e) //handle API call to sign in here.
-  //     const data = response.data
-
-  //     setCookie("user", JSON.stringify(data), {
-  //       path: "/home",
-  //       maxAge: 3600, // Expires after 1hr
-  //       sameSite: true,
-  //     })
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
-
-
-//   <p>Data from cookie: {data.user}</p>
-//   FullPage.getInitialProps = async ({ req, res }) => {
-// const data = parseCookies(req)
-
-// if (res) {
-// if (Object.keys(data).length === 0 && data.constructor === Object){
-// res.writeHead(301, { Location: "/home" })
-// res.end()
-// }
-// }
-
-// return {
-// data: data && data,
-// }
-// }
-
-
 
   return (
     <div>

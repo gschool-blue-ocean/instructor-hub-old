@@ -5,11 +5,11 @@ export const authenticated = (handler) => {
       return new Promise ((resolve, reject) => {
         //do token/cookie checks here
         console.log("touched the middleware")
-        verify(req.headers.authorization, process.env.COOKIE_SECRET_KEY, function(err, decoded) {
+        verify(req.cookies.authCookie, process.env.COOKIE_SECRET_KEY, function(err, decoded) {
           if(err && decoded) {
         return handler(req, res);
         }
-        res.status(500).json({message: 'sorry, not authenticated'});
+        res.redirect('/');
       })
         
         resolve();

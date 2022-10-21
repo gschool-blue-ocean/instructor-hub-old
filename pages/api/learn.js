@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import {verify} from 'jsonwebtoken';
+
 
 // const { DB_CONNECTION_URL, PORT, NODE_ENV } = process.env;
 const sql = postgres(
@@ -14,25 +14,9 @@ const sql = postgres(
 );
 
 
-const authenticated = (handler) => {
-    return async (req, res) => {
-      return new Promise ((resolve, reject) => {
-        //do token/cookie checks here
-        console.log("learn.js - touched the cookie checkre")
-        verify(req.headers.authorization, process.env.COOKIE_SECRET_KEY, function(err, decoded) {
-          if(err && decoded) {
-        return handler(req, res);
-        }
-        res.redirect('/');
-      })
-        
-        resolve();
-      });
-    }
-     
-  };
 
-export default authenticated(async function learnHandler(req, res) {
+export default async function learnHandler(req, res) {
+  console.log('learn.js - fetching assessments');
   if (req.method === "GET") {
     try {
       const learn = await sql`
@@ -56,4 +40,4 @@ export default authenticated(async function learnHandler(req, res) {
   } else {
     return res.status(400).json({ msg: "You messed up" });
   }
-});
+};

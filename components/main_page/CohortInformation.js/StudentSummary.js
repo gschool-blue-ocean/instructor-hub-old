@@ -10,6 +10,7 @@ import axios from "axios";
 import Link from 'next/link'
 import GroupMaker from "./GroupMaker";
 
+
 const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [studentId, setStudentId] = useRecoilState(studentIdState);
@@ -39,8 +40,7 @@ const StudentSummary = () => {
     const fetchData = async () => {
       const result = await axios.get(`/api/students`);
       const data = await result.data
-      console.log(data)
-      setTableData(data)
+        setTableData(data)
     }
     console.log(tableData, "Table Data")
     fetchData()

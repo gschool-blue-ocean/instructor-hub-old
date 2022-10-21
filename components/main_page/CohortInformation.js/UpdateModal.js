@@ -39,7 +39,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
-    if (filteredCohort[currStudent]) {
+    if (filteredCohort[currStudent] && user) {
       const projectInfo = await axios.get(
         `https://app.asana.com/api/1.0/projects/${cohortObject[0].gid}`,
         {
