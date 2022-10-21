@@ -33,6 +33,7 @@
     background: #ddd;
     border-radius: 12px;
 }
+
 .img{
     width: 200px;
     height: 200px;
@@ -52,7 +53,7 @@
     margin: 14px;
 }
 .links:hover{
-    transform: scale(1.5);
+    transform: scale(1.2);
 }
 .links{
     display: inline-block;

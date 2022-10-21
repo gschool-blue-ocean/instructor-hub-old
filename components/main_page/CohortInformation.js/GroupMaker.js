@@ -19,8 +19,6 @@ const GroupMaker = () => {
     const [currentCourse, setCurrentCourse] = useRecoilState(currentCourseState);
     // const [cohortStudents, setCohortStudents] = useState([]);
 
-    console.log(currentCourse)
-
     useEffect(() => {
       if (!enough) {
         setTimeout(() => {
@@ -28,8 +26,6 @@ const GroupMaker = () => {
         }, '3000')
       }
     }, [enough])
-
-    console.log(selectedStudents)
 
     // useEffect(() => {
     //   // if (mixedStudents) {
@@ -45,6 +41,18 @@ const GroupMaker = () => {
     useEffect(() => {
       console.log(groups)
     }, [groups])
+
+    useEffect(()=> {
+      if(groups) {
+        setGroups([])
+      }
+    }, [])
+
+    useEffect(() => {
+      if(groups) {
+        setGroups([])
+      }
+    }, [currentCohort])
 
     // const test = () => {
     //   setMixedStudents((array) => {
