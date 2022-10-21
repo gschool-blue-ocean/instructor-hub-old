@@ -1,9 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import postgres from "postgres";
 
+
 const { DB_CONNECTION_URL, PORT, NODE_ENV } = process.env;
 const sql = postgres(
   process.env.DB_CONNECTION_URL,
+  { max: 20 },
   process.env.NODE_ENV === "production"
     ? {
         ssl: { rejectUnauthorized: false },
@@ -11,6 +13,8 @@ const sql = postgres(
       }
     : {}
 );
+
+
 
 export default async function studentsHandler(req, res) {
   if (req.method === "GET") {
@@ -73,4 +77,4 @@ export default async function studentsHandler(req, res) {
   } else {
     res.status(400).json({ msg: "You messed up" });
   }
-}
+};

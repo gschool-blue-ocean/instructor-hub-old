@@ -4,6 +4,7 @@ import { Line } from 'react-chartjs-2';
 import {useEffect, useState} from 'react'
 import { studentTechSkillsState, studentTeamworkSkillsState, studentIdState, currentlearnAndLearnGradesState } from "../../state";
 import { useRecoilState } from 'recoil';
+import axios from "axios";
 
 ChartJS.register(
   CategoryScale,
@@ -23,7 +24,17 @@ const StatusRight = ({currentStudent}) => {
 
   const [teckSkill, setTeckSkill] = useState([]); 
   // console.log(studentTechSkills, 'here')
+  useEffect(() => {
+    axios.get("/api/studentTeamworkSkills").then((res) => {
+      setStudentTeamworkSkills(res.data.studentTeamworkSkills);
+      // console.log(res.data.studentTeamworkSkills);
+    });
 
+    axios.get("/api/studentTechSkills").then((res) => {
+      setStudentTechSkills(res.data.studentTechSkills);
+      // console.log(res.data.studentTechSkills);
+    });
+  },[studentId])
 
    let currTechSkills = studentTechSkills.filter(teckSkill => teckSkill.student_id == studentId); 
    let arrTeckSkills = currTechSkills.map((skill) => skill.score); 

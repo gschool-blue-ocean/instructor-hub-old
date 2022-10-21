@@ -39,7 +39,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
-    if (filteredCohort[currStudent]) {
+    if (filteredCohort[currStudent] && user) {
       const projectInfo = await axios.get(
         `https://app.asana.com/api/1.0/projects/${cohortObject[0].gid}`,
         {
@@ -261,8 +261,8 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
               </button>
             </div>
             <div className={styles.mainBodyCon}>
-              <div className={styles.arrow}> 
-              <span className={styles.arrow} onClick={prevStudent} disabled={currStudent === 0 ? true : false}>&#171;</span>
+              <div > 
+              <span className={styles.arrows} onClick={prevStudent} disabled={currStudent === 0 ? true : false}>&#171;</span>
               </div>
               <div className={styles.update}>
                 {filteredCohort[currStudent] ? (
@@ -365,7 +365,7 @@ const UpdateModal = ({ showUpdateModal, setShowUpdateModal, onClose }) => {
                 )}
               </div>
               <div>
-              <span className={styles.arrow} onClick={nextStudent}>&#187;</span>
+              <span className={styles.arrows} onClick={nextStudent}>&#187;</span>
               </div>
             </div>
           </div>
