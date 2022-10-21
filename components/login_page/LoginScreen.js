@@ -16,7 +16,6 @@ const LoginScreen = () => {
   const [enteredPassword, setEnteredPassword] = useState("")
   const [verifiedUser, setVerifiedUser] = useRecoilState(loggedIn)
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState)
-  const [cookie, setCookie] = useCookies(["user"])
   const router = useRouter();
   
   const usernameFunc = (e) => {

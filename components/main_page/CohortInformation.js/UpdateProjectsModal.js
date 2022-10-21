@@ -231,7 +231,7 @@ const UpdateProjectsModal = ({
                   </button>
                 </form>
               ) : (
-                <span>Go code with your buds, you're done</span>
+                <span>{"Go code with your buds, you're done"}</span>
               )}
             </div>
             <div className={styles.formFooter}>
