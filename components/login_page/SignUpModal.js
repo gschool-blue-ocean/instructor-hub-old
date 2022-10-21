@@ -58,7 +58,6 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
             console.log(res.data)
          setUser(res.data)
         })
-        sessionStorage.setItem('logged_in_Status', 'true');
         setLoggedInStatus(true)
         getStudents();
         router.push("/home")

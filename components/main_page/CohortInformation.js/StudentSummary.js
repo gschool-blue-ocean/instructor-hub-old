@@ -10,6 +10,7 @@ import axios from "axios";
 import Link from 'next/link'
 import GroupMaker from "./GroupMaker";
 
+
 const StudentSummary = () => {
   const [students, setStudents] = useRecoilState(studentsState);
   const [studentId, setStudentId] = useRecoilState(studentIdState);
@@ -24,21 +25,29 @@ const StudentSummary = () => {
   const [selectedStudents, setSelectStudents] = useRecoilState(selectedStudentsState);
   const [user, setUser] = useRecoilState(usersState);
 
-  // Allows the studentsState to be filter based on current cohort selected on table
+  // Allows the studentsState to be filter based on current cohort selected on table. Pulls updated info when switched to another cohort
   useEffect(() => {
     if(students) {
-      setCurrentCourse(students.filter(studentCohort => studentCohort.cohort == currentCohort))
+      axios.get("/api/students").then((res) => {
+        setCurrentCourse(students.filter(studentCohort => studentCohort.cohort == currentCohort))
+      })
     }
     setSelectStudents([])
   }, [currentCohort, students])
+
+  // useEffect(() => {
+  //   axios.get("/api/students")
+  //   .then(res => {
+  //     console.log(res, "line 38")
+  //     // setCurrentCourse(res.data)
+  //   })
+  // }, [])
 
   // [Delete] Resets the studentState after one is deleted
   useEffect(() => {
     setStudents(students);
   }, []);
-
  
-  console.log(selectedStudents)
   // [Progress Conversion] Determines Progress row words
   let progress = (num) => {
     if (num === 1) {
@@ -203,9 +212,9 @@ const StudentSummary = () => {
                   <th className= {studentStyle.serverColumn} scope="col" onClick={() => wordSorting("server_side_test")}>Server-Side</th>
                   <th className= {studentStyle.teamColumn} scope="col" onClick={() => sorting("teamwork_avg")}>Team Avg</th>
                   <th className= {studentStyle.techColumn} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
-                  <th className= {studentStyle.progressColumn} scope="col" onClick={() => sorting("progress")}>Progess</th>
+                  <th className= {studentStyle.progressColumn} scope="col">Progess</th>
                   <th className= {studentStyle.noteColumn} scope="col">Notes</th>
-                  <th className= {studentStyle.smallHeader} scope="col"></th>
+                  <th className= {studentStyle.smallHeader2} scope="col"></th>
                 </tr>
               </thead>
               <tbody className= {studentStyle.tbody}>

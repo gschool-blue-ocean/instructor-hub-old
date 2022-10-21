@@ -27,14 +27,22 @@ const Header = () => {
   //function allows for logging out and rerouting to sign in page. Also resets the dropDown menu to the hidden state
   const logoutFunc = ()=>{
     showDropDown(false)
-    axios.get("/api/users").then((res)=>setUsers(res.data.users))
-    router.push("/")
-  }
+    axios.patch('/api/logout')
+    .then((res) => {
+      console.log('logout response');
+      console.log(res);
+    })
+
+      router.push("/")
+    }
+  
+
   const signInStatus = ()=>{
     if(loggedInStatus){
       return true
     }
   }
+
 
   const newDefault = (e) => {
     let userId = users.user_id
