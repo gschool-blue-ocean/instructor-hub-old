@@ -1,24 +1,7 @@
 
 import postgres from "postgres";
-//import {verify} from 'jsonwebtoken';
+import { resolve } from "styled-jsx/css";
 
-// const authenticated = (handler) => {
-//     return async (req, res) => {
-//       return new Promise ((resolve, reject) => {
-//         //do token/cookie checks here
-//         console.log("touched the middleware")
-//         verify(req.headers.authorization, process.env.COOKIE_SECRET_KEY, function(err, decoded) {
-//           if(err && decoded) {
-//         return handler(req, res);
-//         }
-//         res.status(500).json({message: 'sorry, not authenticated'});
-//       })
-        
-//         resolve();
-//       });
-//     }
-     
-//   };
 
 
 // const { DB_CONNECTION_URL, PORT, NODE_ENV } = process.env;
