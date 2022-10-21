@@ -24,9 +24,9 @@
     color: rgb(0, 0, 0);
     padding: 50px;
     z-index: 1000;
-    width: 720px;
-    height: 680px;
-    flex-wrap: wrap;
+    /* width: 720px; */
+    /* height: 680px; */
+    /* flex-wrap: wrap; */
     border: 1px solid black;
     border-radius: 15px;
     -webkit-box-direction: normal;
@@ -43,7 +43,16 @@
     display: flex;
     flex-direction: column;
   }
-  
+  .label{
+    color: white;
+    padding: 15px;
+    text-transform: uppercase;
+  }
+  .select{
+    padding: 5px;
+    color: white;
+    background: #0d2831eb;
+  }
   .submit {
     border-radius: 10px;
     border: none;
