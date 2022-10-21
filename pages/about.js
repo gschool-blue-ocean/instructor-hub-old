@@ -51,7 +51,7 @@ const about = () => {
 
             <div className={style.name}>Gerard San Juan</div>
             <div className={style.about}>
-            {"Hi, I'm Gerard. Food is good, anime is wonderful, and software engineering is the way."} 
+            {"Hi, I'm Gerard! I pursue software engineering to hopefully one day help humanity push the limits of its own existence. I also love anime very much."} 
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/Tiwala'>
@@ -101,7 +101,7 @@ const about = () => {
 
             <div className={style.name}>Charles Vitanza</div>
             <div className={style.about} >
-              {"I am an inspiring software engineer who recently transitioned from the Air Force and dreams of eventually working as a software engineer in the video game industry"} 
+              {"I am an inspiring software engineer who recently transitioned from the Air Force with the dream of eventually working in the video game industry"} 
             </div>
             <div className={style.socialLink}>
               <a className={style.links} href='https://github.com/BlazingAces'>
@@ -123,7 +123,7 @@ const about = () => {
               <a className={style.links} href='https://github.com/mbcohen777'>
                 <Image alt="GitHub Icon" src='/GitHubIcon.png' width={48} height={48}></Image>
               </a>
-              <a className={style.links} href='https://github.com/SamChav'>
+              <a className={style.links} href='#'>
                 <Image alt="Linkedin Icon" src='/LinkedinIcon.png' width={48} height={48}></Image>
               </a>
             </div>

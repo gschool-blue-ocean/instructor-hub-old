@@ -59,3 +59,22 @@
     overflow: auto;
     /* flex-wrap: wrap; */
 }
+
+.groups::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+.groups::-webkit-scrollbar-track {
+    background: #f1f1f13a; 
+  }
+   
+  /* Handle */
+.groups::-webkit-scrollbar-thumb {
+    background: rgba(52, 76, 157, 0.748); 
+  }
+  
+  /* Handle on hover */
+.groups::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }

@@ -43,7 +43,8 @@
 .cohort {
   border-radius: 10px;
   border: none;
-  padding: 10px 15px;
+  padding: 10px 38px;
+  font-size: 13px;
   /* display: inline-block; */
   cursor: pointer;
   text-decoration: none !important;
@@ -52,7 +53,7 @@
   /* background-color: rgba(33, 48, 33, 0.781); */
   /* background: linear-gradient(129deg, rgb(33, 47, 32) 0%, rgb(0, 45, 2) 71%, rgba(0,0,0,1) 100%); */
   background: #0b131b61;
-  margin-left: auto;
+  margin-left: 332px;
   margin-right: auto;
   /* margin-top: auto; */
   margin-bottom: auto;
