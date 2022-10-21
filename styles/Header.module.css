@@ -29,11 +29,13 @@
 }
 
 .dropDown {
-    border-radius: 15px;
+    border-radius: 8px;
     flex-direction: column;
     vertical-align: top;
     position: absolute;
-    background-image: linear-gradient(to right, #445278, #2b66a8);
+    /* background-image: linear-gradient(to right, #445278, #2b66a8); */
+    background: #0d2831eb;
+
 }
 
 .dropDown a {
@@ -42,12 +44,42 @@
     padding-left: 10px;
     padding-right: 15px;
     color: white;
-    text-align: center;
+    /* text-align: center; */
     /* background: rgb(184, 183, 183); */
     font-size: 14px;
     font-weight: normal;
+    font-size: medium;
+    /* text-transform: uppercase; */
+    transition: .4s;
 }
-
+/* .dropDown a:hover{
+    transform: scale(1.1);
+} */
 .spacer {
     height: 107.5px;
+}
+
+.cohortSelecter {
+    padding: 2px;
+    text-align: left;
+    width: 150px;
+    color: white;
+    /* border: 1px solid white; */
+    border-radius: 5px;
+    background:#ffffff00; 
+    transition: .4s;
+    border: none;
+    font-size: 15px;
+}
+
+.selecterCon{
+    padding-left: 5px;
+    padding-right: 5px;
+    position: relative;
+    bottom: 12px;
+    color: white;
+}
+.cohortSelecter:hover{
+    border: 1px solid white;
+    /* transform: scale(1.1); */
 }

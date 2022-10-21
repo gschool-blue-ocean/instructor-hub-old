@@ -99,14 +99,18 @@
 }
 
 .nameColumn {
-    padding: 10px 0px;
+    /* use if using client-side/server-side */
+    /* padding: 10px 0px; */
+    padding: 5px;
     font-size: 15px;
     width: 15px;
     cursor: pointer;
 }
 
 .learnColumn {
-    padding: 10px 5px;
+    /* use if using client-side/server-side */
+    /* padding: 10px 5px; */
+    padding:10px;
     font-size: 15px;
     width: 15px;
     cursor: pointer;
@@ -127,14 +131,18 @@
 }
 
 .teamColumn {
-    padding: 10px 12px 10px 0px;
+    /* use if using client-side/server-side */
+    /* padding: 10px 12px 10px 0px; */
+    padding:10px;
     font-size: 15px;
     width: 15px;
     cursor: pointer;
 }
 
 .techColumn {
-    padding: 10px 5px 10px 0px;
+    /* use if using client-side/server-side */
+    /* padding: 10px 5px 10px 0px; */
+    padding: 10px;
     font-size: 15px;
     width: 15px;
     cursor: pointer;
@@ -148,7 +156,9 @@
 }
 
 .noteColumn {
-    padding: 0px;
+     /* use if using client-side/server-side */
+    /* padding: 0px; */
+    padding: 10px;
     font-size: 15px;
     width: 15px;
     cursor: default;
@@ -159,7 +169,9 @@
 }
 
 .smallHeader2 {
-    width: 20px !important;
+    /* use if using client-side/server-side */
+    /* width: 20px !important; */ 
+    width: 15px !important;
 }
 
 .header:hover{

@@ -29,7 +29,7 @@ const StudentSummary = () => {
   useEffect(() => {
     if(students) {
       axios.get("/api/students").then((res) => {
-        setCurrentCourse(students.filter(studentCohort => studentCohort.cohort == currentCohort))
+        setCurrentCourse(res.data.students.filter(studentCohort => studentCohort.cohort == currentCohort))
       })
     }
     setSelectStudents([])
@@ -199,8 +199,8 @@ const StudentSummary = () => {
                   <th className= {studentStyle.smallHeader}></th>
                   <th className= {studentStyle.nameColumn} scope="col" onClick={() => wordSorting("name")}>Name</th>
                   <th className= {studentStyle.learnColumn} scope="col" onClick={() => sorting("learn_avg")}>Learn Avg</th>
-                  <th className= {studentStyle.clientColumn} scope="col" onClick={() => wordSorting("client_side_test")}>Client-Side</th>
-                  <th className= {studentStyle.serverColumn} scope="col" onClick={() => wordSorting("server_side_test")}>Server-Side</th>
+                  {/* <th className= {studentStyle.clientColumn} scope="col" onClick={() => wordSorting("client_side_test")}>Client-Side</th>
+                  <th className= {studentStyle.serverColumn} scope="col" onClick={() => wordSorting("server_side_test")}>Server-Side</th> */}
                   <th className= {studentStyle.teamColumn} scope="col" onClick={() => sorting("teamwork_avg")}>Team Avg</th>
                   <th className= {studentStyle.techColumn} scope="col" onClick={() => sorting("tech_avg")}>Tech Avg</th>
                   <th className= {studentStyle.progressColumn} scope="col">Progess</th>
@@ -219,8 +219,8 @@ const StudentSummary = () => {
                     <Link className= {studentStyle.nameSpace} href={`/student/${student.student_id}`}>{student.name}</Link>
                   </td>
                   <td className= {studentStyle.content}>{student.learn_avg}%</td>
-                  <td className= {studentStyle.content}>{student.client_side_test}</td>
-                  <td className= {studentStyle.content}>{student.server_side_test}</td>
+                  {/* <td className= {studentStyle.content}>{student.client_side_test}</td>
+                  <td className= {studentStyle.content}>{student.server_side_test}</td> */}
                   <td className= {studentStyle.content}>{colPercent(student.teamwork_avg)}</td>
                   <td className= {studentStyle.content}>{colPercent(student.tech_avg)}</td>
                   <td className= {studentStyle.content} onClick={() => openGraphModel(student)}>{progress(Math.ceil((student.teamwork_avg + student.tech_avg)/2))}

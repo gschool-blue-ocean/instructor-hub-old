@@ -74,14 +74,17 @@ const Header = () => {
               {/* this will allow the menu to only be shown if logged in */}
               {signInStatus ? (
                 <>
-                  <a onClick={() =>logoutFunc()}>Logout</a>
-                  <select onChange={(e) => newDefault(e)}>
+                  <a onClick={() =>logoutFunc()}>Sign Out</a>
+                  <div className={headerStyle.selecterCon}>
+                  <select className={headerStyle.cohortSelecter} onChange={(e) => newDefault(e)}>
                     <option value= "" disabled selected hidden>Choose A Cohort</option>
                     {/* <option value={currentCohort}>{currentCohort}</option> */}
                     {cohorts.filter((course) => course.name !== currentCohort).map((cohortList) => (
                       <option key= {cohortList.cohort_id} value={cohortList.name}>{cohortList.name}</option>
                     ))}
                   </select>
+                  
+                  </div>
                 </>
               ): ""}
             </div>
