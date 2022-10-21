@@ -12,7 +12,6 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
 import { studentsState, cohortsState, currentCohortState, groupsState } from "../../state.js";
@@ -43,20 +42,22 @@ const CohortOverall = ({ children }) => {
   const [cohortAvg, setCohortAvg] = useState(0)
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [groups, setGroups] = useRecoilState(groupsState)
-  // const [groupsDivs, setGroupsDivs] = useState('')
- 
   const studentsInCohort = students.filter(student => student.cohort === currentCohort) 
   const currentClass = cohorts.filter(classNow => classNow.name === currentCohort)
- 
+
 // function to get cohort average
-    useEffect(() => {  
+  useEffect(() => {  
       currentClass.map((cohort) => {
-      if (cohort.cohort_id) {
-       setCohortAvg(cohort.cohort_avg)
-      }
+        if (cohort.cohort_id) {
+        setCohortAvg(cohort.cohort_avg)
+        }
       })
-      // }
     }, [currentCohort])
+
+  // const cohortAverage = () => {
+  //   let sum = 0;
+  //   studentsInCohort.map((student) => )
+  // }
 // function to get tech average
   const techAvg = () => {
     let sum = 0;
@@ -205,7 +206,7 @@ const CohortOverall = ({ children }) => {
                 // console.log(Object.values(groups).map())
                 Object.values(groups).map((group) => {
                   // {console.log(group)}
-                  return <div>{group.join(', ')}</div>
+                  return <div key={group[0].name}>{group.join(', ')}</div>
                 })
                 ) : ('')}
           </div>
