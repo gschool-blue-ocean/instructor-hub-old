@@ -30,16 +30,14 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
   const [students, setStudents] = useRecoilState(studentsState);
   // This lets us use a ref hook to grab the first Select input and refocus it on form submission
   const firstInput = useRef(null);
-
-  
   const [projects, setProjects] = useRecoilState(projectsState);
   const [currentLearnAndLearnGrades, setCurrentLearnAndLearnGrades] = useRecoilState(currentlearnAndLearnGradesState)
   const [currentStudent, setCurrentStudent] = useRecoilState(currentStudentState);
   const [users, setUsers] = useRecoilState(usersState);
   const [newAssessName, setNewAssessName] = useState(''); 
-  const [score, setScore] = useState(''); 
-  const [projNotes, setAssessNotes] = useState(''); 
-  const [assessId, setAssessId] = useState(''); 
+  const [score, setScore] = useState('100'); 
+  // const [projNotes, setAssessNotes] = useState(''); 
+  const [assess, setAssess] = useState({}); 
   const [learn, setLearn] = useRecoilState(learnState);
   const [addAssessName, setAddAssessName] = useState(false);
   const [learnGrades, setLearnGrades] = useRecoilState(learnGradesState)
@@ -49,9 +47,9 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
   useEffect(() => {
     if (course[currStudent]) {
         setIndexedStudent(course[currStudent]);
-        console.log(currStudent)
     }
   }, [currStudent, currentCohort]); 
+  
   
   // Filters students to be updated by matching their cohort value to currentCohort's name
   let course = students.filter((classRoom) => classRoom.cohort === currentCohort);
@@ -60,37 +58,57 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
   onClose = () => {
     setCurrStudent(0);
     setShowUpdateAssessmentModal(false);
+    setAddAssessName(false)
+    setScore('100')
   };
+
+  const prevStudent = () => {
+    setCurrStudent((prev) => {
+      if (prev !== 0) {
+        return prev - 1;
+      } else {
+        return 0;
+      }
+    });
+  };
+
+  const nextStudent = () => {
+    setCurrStudent((prev) => {
+      return prev + 1;
+    });
+  };
+
   // this grade is set in the input element
 //   let grade = score
 //     let assessmentId = Number(projSelected)
-    let assessmentId = Number(assessId)
+    let assessmentId = Number(assess.value)
     let assessScore = Number(score)
  // post assessment_name to request to learn table
-    const onSubmit = (e) => {
-        e.preventDefault()
-        axios.post("/api/learn", {
-          "assessment_name": newAssessName, 
-        }).then((res) => {
-          setAssessId((prev) =>  res.data.assessment_id)
-          const newLearn = [...learn, res.data]
-            setLearn(newLearn);
-            setCurrStudent(prev => { return prev + 1 })
-            console.log('learnGrades:', learnGrades)
-            console.log('learn;', learn)
-        })
+    const onSubmiting = (e) => {
+      e.preventDefault()
+        let currentAssessment = learn.find((test) => test.assessment_name === newAssessName)
+        if(currentAssessment === undefined && addAssessName){
+          axios.post("/api/learn", {
+            "assessment_name": newAssessName, 
+          }).then((res) => {
+            setAssess(res.data.assessment_id)
+            setLearn((prev) => [...prev, res.data]);
+            setCurrStudent(prev => prev + 1 )
+          }).then(submitHandler(e))
+        }
+        submitHandler(e)
       }
 
   // enterListener only necessary because the Notes input is a textarea, and "Enter" is used by default for newline
   const submitHandler = async (e) => {
     e.preventDefault();   
+    setAddAssessName(false)
     // post request to local database
     try {
       await axios.post('/api/learnGrades', {
         "student_id": indexedStudent.student_id,
         "assessment_id": assessmentId,
         "assessment_grade": assessScore,
-        // "notes": `${projNotes}`
       }).then((res) => setLearnGrades((prev)=> [...prev, ...res.data]))
     } 
     catch(error) {     
@@ -104,27 +122,58 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
         return 0;
       }
     })
-    
-    setAssessNotes("")
-    onSubmit(e);
     enterListener(e);
-    firstInput.current.focus();
   };
 
   const enterListener = (e) => {
     e.preventDefault();
-    const assessmentName = learn.find((assessment) => assessment.assessment_id === assessmentId)
     let instructorNotes = ''
-    axios.get(`https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, {
+    if(!addAssessName) {
+      axios.get(`https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, {
+        headers: {
+          Authorization: `Bearer ${users.asana_access_token}`,
+        }
+      })
+      .then((res) => {
+        instructorNotes = res.data.data.notes
+      })
+      // Once you gotten your previews notes in Asana it checks the if there was previews note is empty or not to add <u> tag as the title 
+      
+      .then(() => {
+        !instructorNotes.length ? instructorNotes = "<u>Test Name: Test Score</u>" : null
+        // Once it checks it then it will do a put request to Asana 
+      
+        axios({
+          method: "PUT", //must be put method not patch
+          url: `https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, //need task id variable -- sooo...this student gid needs to be filled when the student is selected, need to correlate between this LOCAL DB NEEDED
+          headers: {
+            Authorization: `Bearer ${users.asana_access_token}`,  //need template literal for ALLLLL headers so global state dependant on user
+          }, 
+          data: { 
+            data: {
+              "workspace": "1213745087037",
+              "assignee_section": null,
+              "html_notes": `<body>${instructorNotes}\n ${(assess[assess.selectedIndex].textContent).toUpperCase()}: ${assessScore}</body>`, //need conditional or neeed to make this field mandatory
+              "parent": null,
+              "resource_subtype": "default_task",
+            }
+          }
+        })
+      })
+    setScore('100')
+    firstInput.current.focus();
+    } else {
+      console.log(newAssessName)
+      axios.get(`https://app.asana.com/api/1.0/tasks/${indexedStudent.gid}`, {
       headers: {
         Authorization: `Bearer ${users.asana_access_token}`,
       }
     })
     .then((res) => {
-      setAssessNotes("")
       instructorNotes = res.data.data.notes
     })
     // Once you gotten your previews notes in Asana it checks the if there was previews note is empty or not to add <u> tag as the title 
+    
     .then(() => {
       !instructorNotes.length ? instructorNotes = "<u>Test Name: Test Score</u>" : null
       // Once it checks it then it will do a put request to Asana 
@@ -138,15 +187,16 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
           data: {
             "workspace": "1213745087037",
             "assignee_section": null,
-            "html_notes": `<body>${instructorNotes}\n ${assessmentName.assessment_name.toUpperCase()}: ${assessScore}</body>`, //need conditional or neeed to make this field mandatory
+            "html_notes": `<body>${instructorNotes}\n ${newAssessName.toUpperCase()}: ${assessScore}</body>`, //need conditional or neeed to make this field mandatory
             "parent": null,
             "resource_subtype": "default_task",
           }
         }
       })
     })
-
-    firstInput.current.focus();
+    setScore('100')
+    setAddAssessName(false)
+  }
   };
 
 
@@ -167,7 +217,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
             </div>
             <div className={styles.update}>
               {course[currStudent] ? (
-              <form className={styles.updateForm} onSubmit={(e) => submitHandler(e)}>
+              <form className={styles.updateForm} onSubmit={(e) => onSubmiting(e)}>
                   <label htmlFor="assessments">Assessments</label> <br />
                   <div className={style.lableContainer}>
                   {/* <label className={style.labels}>Assesment</label> */}
@@ -176,13 +226,13 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
                   {addAssessName ? 
                   <input onChange={(e) => setNewAssessName(e.target.value)}></input>     
                   :
-                  <select id="assessments" name="assessments" required autoFocus={true} ref={firstInput} onChange={(e) => setNewAssessName(e.target.value)}>
-                  <option value="none" selected disabled hidden>
+                  <select id="assessments" name="assessments" required autoFocus={true} ref={firstInput}  onChange={(e)=>setAssess(e.target)}>
+                  <option value="" selected disabled hidden>
                     Select an Option
                   </option>
                     {learn.map((assessment) => {
                           return (
-                          <option key={assessment.assessment_id} value={assessment.assessment_name}>
+                          <option key={assessment.assessment_id} value={assessment.assessment_id}>
                               {assessment.assessment_name}
                           </option>)
                       })}
@@ -190,19 +240,27 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
                 }
                 <br />
                 <label htmlFor="Grade">Grade</label> <br />
-                <input type="number" min="1" max="100" defaultValue="1" required onChange={(e) => {setScore(e.target.value)
+                <input type="number" min="0" max="100" defaultValue="100" required onChange={(e) => {setScore(e.target.value)
                 }}></input>
                 <div>%</div>                  
                 <br />
                 {/* <label htmlFor="Notes">Notes</label> <br />
                 <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea> */}
                 <br />
-                <button type="submit"  value="Submit" onClick={(e) => submitHandler(e)}>Submit</button>
+                <button type="submit"  value="Submit" onClick={(e) => onSubmiting(e)}>Submit</button>
               </form>
+              
             //   onClick={(e) => onSubmit(e)
             ) : (
               <span>Go code with your buds, you're done</span>
             )}
+            </div>
+            <div className={styles.formFooter}>
+              <button onClick={prevStudent} disabled={currStudent === 0 ? true : false}>
+                Previous Student
+              </button>
+              <button onClick={nextStudent} disabled={currStudent === (course.length - 1) ? true : false}>
+                Next Student</button>
             </div>
           </div>
         </>
