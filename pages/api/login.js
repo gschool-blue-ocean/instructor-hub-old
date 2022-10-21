@@ -1,7 +1,7 @@
 import postgres from "postgres";
 import cookie from 'cookie'; 
-import { sign } from 'jsonwebtoken';  
-import { compare } from 'bcrypt';
+import {sign} from 'jsonwebtoken';  
+import {compare} from 'bcrypt';
 
 
 // const { DB_CONNECTION_URL, PORT, NODE_ENV } = process.env;
@@ -44,14 +44,14 @@ const sql = postgres(
                         //"0eb9b871-55be-470e-bd1b-80280585cd9a", 
                         process.env.COOKIE_SECRET_KEY,
                         //{expiresIn: '24hr'}
-                        {expiresIn: '60'}
+                        {expiresIn: '2min'}
                     );
     
                         res.setHeader('Set-Cookie', cookie.serialize('authCookie', authToken, {
                             httpOnly: true,
                             secure: process.env.NODE_ENV !== 'development',
                             sameSite: 'strict',
-                            maxAge: 60,
+                            maxAge: 120,
                             path: '/'
                         }))
                         return res.json({message : {

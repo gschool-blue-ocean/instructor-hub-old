@@ -5,6 +5,8 @@ import { useState } from "react"
 import { useRecoilState } from "recoil";
 import { usersState, loggedIn, currentCohortState } from "../state.js";
 import { useRouter } from "next/router"
+import { useCookies } from "react-cookie"
+import { parseCookies } from "../../components/login_page/SignUp"
 import axios from "axios";
 
 
@@ -24,21 +26,23 @@ const LoginScreen = () => {
   }
   const checkUser = (e) =>{
     e.preventDefault()
-    axios.post('/api/login',
+    axios.post(
+      '/api/login',
       {
         username: enteredUsername,
         password: enteredPassword
       }
     ).then((res) => {
       if (res.status === 200) {
-        console.log(res.data.message)
         setVerifiedUser(true)
         setUser(res.data.message)
         setCurrentCohort(res.data.message.default_cohort)
-        router.push("/home")
       }
+    }).then(() => {
+      router.push("/home")
     });
   };
+  
 
   return (
     <div>
@@ -73,8 +77,8 @@ const LoginScreen = () => {
                     </div>
                     <div>
                       {"Don't have an account? Click "}
-                      <Link href="/signup" className={styles.linkText}>
-                        here!
+                      <Link href="/signup" >
+                       <span className={styles.linkText}>here!</span> 
                       </Link>
                     </div>
                     {/* <div className='text-[12px] font-[500] text-center'>&nbsp;</div> */}
