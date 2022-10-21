@@ -71,6 +71,7 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
                     <div className={styles.modalOverlay} onClick={onClose}/>
                     <div className={styles.newCohortModal}>
                        <label className={styles.label}>Please Select Your Default Cohort.</label>
+                       <div className={styles.selectCon} >
                        <select className={styles.select} onChange={(e)=>selectedCohort(e)}>
                             <option value="" selected disabled hidden>Choose default here</option>
                             {/* {listOfCohorts.map(ele=> { */}
@@ -80,7 +81,10 @@ const SignUpModal = ({displayCohortModal, /*listOfCohorts,*/cohorts, password, u
                                 )
                             })}
                        </select>
+                       </div>
+                       <div className={styles.btn}>
                        <button onClick={saveUserInfo}>Submit</button>
+                       </div>
                     </div>
                 </>
             ) : null}

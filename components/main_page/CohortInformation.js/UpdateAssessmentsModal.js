@@ -215,53 +215,64 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
                 X
               </button>
             </div>
-            <div className={styles.update}>
-              {course[currStudent] ? (
-              <form className={styles.updateForm} onSubmit={(e) => onSubmiting(e)}>
-                  <label htmlFor="assessments">Assessments</label> <br />
-                  <div className={style.lableContainer}>
-                  {/* <label className={style.labels}>Assesment</label> */}
-                  <span onClick={() => setAddAssessName(!addAssessName)} className={style.addBtn} >&#10009;</span>
+            <div className={styles.mainBodyCon}>
+              <div>
+                <span className={styles.arrows} onClick={prevStudent} disabled={currStudent === 0 ? true : false}>&#171;</span>
+              </div>
+              <div className={styles.update}>
+                {course[currStudent] ? (
+                <form className={styles.updateForm} onSubmit={(e) => onSubmiting(e)}>
+                  <div className={styles.assesmentTitleCon }>
+                    <label htmlFor="assessments">Assessments</label>
+                    <div className={style.lableContainer}>
+                    {/* <label className={style.labels}>Assesment</label> */}
+                    <span onClick={() => setAddAssessName(!addAssessName)} className={styles.addBtn} >&#10009;</span>
+                    </div>
+
                   </div>
-                  {addAssessName ? 
-                  <input onChange={(e) => setNewAssessName(e.target.value)}></input>     
-                  :
-                  <select id="assessments" name="assessments" required autoFocus={true} ref={firstInput}  onChange={(e)=>setAssess(e.target)}>
-                  <option value="" selected disabled hidden>
-                    Select an Option
-                  </option>
-                    {learn.map((assessment) => {
-                          return (
-                          <option key={assessment.assessment_id} value={assessment.assessment_id}>
-                              {assessment.assessment_name}
-                          </option>)
-                      })}
-                </select>
-                }
-                <br />
-                <label htmlFor="Grade">Grade</label> <br />
-                <input type="number" min="0" max="100" defaultValue="100" required onChange={(e) => {setScore(e.target.value)
-                }}></input>
-                <div>%</div>                  
-                <br />
-                {/* <label htmlFor="Notes">Notes</label> <br />
-                <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea> */}
-                <br />
-                <button type="submit"  value="Submit" onClick={(e) => onSubmiting(e)}>Submit</button>
-              </form>
-              
-            //   onClick={(e) => onSubmit(e)
-            ) : (
-              <span>Go code with your buds, you're done</span>
-            )}
+                    {addAssessName ? 
+                    <input className={styles.assessInput} onChange={(e) => setNewAssessName(e.target.value)}></input>     
+                    :
+                    <select id="assessments" name="assessments" required autoFocus={true} ref={firstInput}  onChange={(e)=>setAssess(e.target)}>
+                    <option value="" selected disabled hidden>
+                      Select an Option
+                    </option>
+                      {learn.map((assessment) => {
+                            return (
+                            <option key={assessment.assessment_id} value={assessment.assessment_id}>
+                                {assessment.assessment_name}
+                            </option>)
+                        })}
+                  </select>
+                  }
+                  <br />
+                  <label htmlFor="Grade">Grade</label> <br />
+                  <input  className={styles.option}  type="number" min="0" max="100" defaultValue="100" required onChange={(e) => {setScore(e.target.value)
+                  }}></input>
+                  {/* <span>%</span>  */}
+                  <br />
+                  {/* <label htmlFor="Notes">Notes</label> <br />
+                  <textarea id="Notes" name="Notes" rows="10" cols="30" value={projNotes} required onChange={(e) => setAssessNotes(e.target.value)}></textarea> */}
+                  <br />
+                  <button type="submit"  value="Submit" onClick={(e) => onSubmiting(e)}>Submit</button>
+                </form>
+                
+              //   onClick={(e) => onSubmit(e)
+              ) : (
+                <span>Go code with your buds, you're done</span>
+              )}
+              </div>
+            <div>
+              <span className={styles.arrows} onClick={nextStudent} disabled={currStudent === (course.length - 1) ? true : false}>&#187;</span>
             </div>
-            <div className={styles.formFooter}>
+            </div>
+            {/* <div className={styles.formFooter}>
               <button onClick={prevStudent} disabled={currStudent === 0 ? true : false}>
                 Previous Student
               </button>
               <button onClick={nextStudent} disabled={currStudent === (course.length - 1) ? true : false}>
                 Next Student</button>
-            </div>
+            </div> */}
           </div>
         </>
       ) : null}

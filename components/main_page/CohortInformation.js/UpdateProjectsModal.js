@@ -172,76 +172,84 @@ const UpdateProjectsModal = ({
                 X
               </button>
             </div>
-            <div className={styles.update}>
-              {course[currStudent] ? (
-                <form
-                  className={styles.updateForm}
-                  onSubmit={(e) => submitHandler(e)}
-                >
-                  <label htmlFor="Projects">Projects</label> <br />
-                  <select
-                    id="Projects"
-                    name="Projects"
-                    required
-                    autoFocus={true}
-                    ref={firstInput}
-                    onChange={(e) => setProjSelected(e.target.value)}
+            <div className={styles.mainBodyCon}>
+              <div>
+                <span className={styles.arrows} onClick={prevStudent} disabled={currStudent === 0 ? true : false}>&#171;</span>
+              </div>
+              <div className={styles.update}>
+                {course[currStudent] ? (
+                  <form
+                    className={styles.updateForm}
+                    onSubmit={(e) => submitHandler(e)}
                   >
-                    <option value="none" selected disabled hidden>
-                      Select an Option
-                    </option>
-                    <option value="1">1 - Twiddler</option>
-                    <option value="2">2 - PixelArtMaker</option>
-                    <option value="3">3 - ReactMVP</option>
-                    <option value="4">4 - FoodTruck</option>
-                    <option value="5">5 - Hackathon</option>
-                  </select>
-                  <br />
-                  <label htmlFor="Grade">Grade</label> <br />
-                  <select
-                    id="Grade"
-                    name="Grade"
-                    required
-                    onChange={(e) => setProjGrade(e.target.value)}
-                  >
-                    <option value="none" selected disabled hidden>
-                      Select an Option
-                    </option>
-                    <option value={true}>1 - Passed</option>
-                    <option value={false}>2 - Failed</option>
-                  </select>
-                  <br />
-                  <label htmlFor="Notes">Notes</label> <br />
-                  <textarea
-                    id="Notes"
-                    name="Notes"
-                    rows="10"
-                    cols="30"
-                    value={projNotes}
-                    required
-                    onChange={(e) => setProjNotes(e.target.value)}
-                  ></textarea>
-                  <br />
-                  <button
-                    type="submit"
-                    onClick={(e) => submitHandler(e)}
-                    value="Submit"
-                  >
-                    Submit
-                  </button>
-                </form>
-              ) : (
-                <span>Go code with your buds, you're done</span>
-              )}
+                    <label htmlFor="Projects">Projects</label> <br />
+                    <select
+                      id="Projects"
+                      name="Projects"
+                      required
+                      autoFocus={true}
+                      ref={firstInput}
+                      onChange={(e) => setProjSelected(e.target.value)}
+                    >
+                      <option value="none" selected disabled hidden>
+                        Select an Option
+                      </option>
+                      <option value="1">1 - Twiddler</option>
+                      <option value="2">2 - PixelArtMaker</option>
+                      <option value="3">3 - ReactMVP</option>
+                      <option value="4">4 - FoodTruck</option>
+                      <option value="5">5 - Hackathon</option>
+                    </select>
+                    <br />
+                    <label htmlFor="Grade">Grade</label> <br />
+                    <select
+                      id="Grade"
+                      name="Grade"
+                      required
+                      onChange={(e) => setProjGrade(e.target.value)}
+                    >
+                      <option value="none" selected disabled hidden>
+                        Select an Option
+                      </option>
+                      <option value={true}>1 - Passed</option>
+                      <option value={false}>2 - Failed</option>
+                    </select>
+                    <br />
+                    <label htmlFor="Notes">Notes</label> <br />
+                    <textarea
+                      id="Notes"
+                      name="Notes"
+                      rows="10"
+                      cols="30"
+                      value={projNotes}
+                      required
+                      onChange={(e) => setProjNotes(e.target.value)}
+                    ></textarea>
+                    <br />
+                    <button
+                      type="submit"
+                      onClick={(e) => submitHandler(e)}
+                      value="Submit"
+                    >
+                      Submit
+                    </button>
+                  </form>
+                ) : (
+                  <span>Go code with your buds, you're done</span>
+                )}
+              </div>
+              <div>
+                <span className={styles.arrows}  onClick={nextStudent} disabled={currStudent === (course.length - 1) ? true : false}>&#187;</span>
+              </div>
             </div>
-            <div className={styles.formFooter}>
-              <button onClick={prevStudent} disabled={currStudent === 0 ? true : false}>
+            {/* <div className={styles.formFooter}> */}
+              {/* <button onClick={prevStudent} disabled={currStudent === 0 ? true : false}>
                 Previous Student
               </button>
               <button onClick={nextStudent} disabled={currStudent === (course.length - 1) ? true : false}>
                 Next Student
-              </button>
-            </div>
+              </button> */}
+            {/* </div> */}
           </div>
         </>
       ) : null}

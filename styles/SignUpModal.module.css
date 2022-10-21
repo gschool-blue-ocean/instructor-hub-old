@@ -6,10 +6,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.87);
     z-index: 1000;
   }
-  
   .newCohortModal {
     position: fixed;
     top: 50%;
@@ -48,10 +47,19 @@
     padding: 15px;
     text-transform: uppercase;
   }
+  .selectCon{
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+  }
   .select{
     padding: 5px;
     color: white;
     background: #0d2831eb;
+  }
+  .btn{
+    display: flex;
+    justify-content: center;
   }
   .submit {
     border-radius: 10px;
