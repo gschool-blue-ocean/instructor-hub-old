@@ -44,10 +44,16 @@ const about = () => {
               and taking trips to cities I haven't been to yet.
             </div>
             <div className={style.socialLink}>
-              <a className={style.links} href="#">
+              <a
+                className={style.links}
+                href="https://github.com/Self-Zachtualization"
+              >
                 <i>GH Icon</i>
               </a>
-              <a className={style.links} href="#">
+              <a
+                className={style.links}
+                href="https://www.linkedin.com/in/zacharychudson/"
+              >
                 <i>LI Icon</i>
               </a>
             </div>
