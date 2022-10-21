@@ -138,12 +138,12 @@ const CohortOverall = ({ children }) => {
   const data = {
     labels: ["Cohort Averages"],
     datasets: [
-      {
-        label: "Cohort Avg",
-        data: [cohortAvg],
-        borderColor: "black",
-        backgroundColor: ["green"],
-      },
+      // {
+      //   label: "Cohort Avg",
+      //   data: [cohortAvg],
+      //   borderColor: "black",
+      //   backgroundColor: ["green"],
+      // },
       {
         label: "Tech Avg",
         data: [techAvg()],

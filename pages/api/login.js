@@ -18,20 +18,11 @@ const sql = postgres(
   
   export default async function login(req, res) {
     return new Promise ((resolve, reject) => {
-        console.log('new promise?');
         if (req.method === "POST") {
-            console.log("login.js - received a post request");
-            console.log(`login.js - Login Request`);
-            console.log(req.body)
             sql`SELECT * FROM users where username = ${req.body.username}`.then(person => {
-                console.log(`login.js - sql result`);
-            console.log(person[0]);
             const user_query = person[0];
             compare(req.body.password, user_query.password).then((result) => {
-                console.log(`login.js - compare result ${result}`);
-                if (result) {
-                    console.log('login.js - passwords matched!');
-                    
+                if (result) {                    
                     const user = {
                         sub: user_query.user_id, 
                         default_cohort: user_query.default_cohort, 
@@ -44,14 +35,14 @@ const sql = postgres(
                         //"0eb9b871-55be-470e-bd1b-80280585cd9a", 
                         process.env.COOKIE_SECRET_KEY,
                         //{expiresIn: '24hr'}
-                        {expiresIn: '2min'}
+                        {expiresIn: '24hr'}
                     );
     
                         res.setHeader('Set-Cookie', cookie.serialize('authCookie', authToken, {
                             httpOnly: true,
                             secure: process.env.NODE_ENV !== 'development',
                             sameSite: 'strict',
-                            maxAge: 120,
+                            maxAge: 86400,
                             path: '/'
                         }))
                         return res.json({message : {

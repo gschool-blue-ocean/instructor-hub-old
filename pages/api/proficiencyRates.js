@@ -24,7 +24,6 @@ export default async function proficiencyRatesHandler(req, res) {
   } else if (req.method === "POST") {
     try {
       const { skill_id, skill_descr } = req.body;
-      console.log(req.body);
       const createProficiencyRates = await sql`
                INSERT INTO proficiency_rates ( skill_id, skill_descr ) VALUES ( ${skill_id}, ${skill_descr}) RETURNING *`;
       res.status(200).json({ createProficiencyRates });

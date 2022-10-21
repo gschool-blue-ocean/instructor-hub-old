@@ -28,19 +28,12 @@ const GroupMaker = () => {
     }, [enough])
 
     // useEffect(() => {
-    //   // if (mixedStudents) {
-    //   //   console.log('arr', mixedStudents);
-    //   // }
-    //   setMixedStudents(students)
-    // }, [])
+    //   console.log(groupNumber)
+    // }, [groupNumber])
 
-    useEffect(() => {
-      console.log(groupNumber)
-    }, [groupNumber])
-
-    useEffect(() => {
-      console.log(groups)
-    }, [groups])
+    // useEffect(() => {
+    //   console.log(groups)
+    // }, [groups])
 
     // useEffect(()=> {
     //   if(groups) {
@@ -53,16 +46,6 @@ const GroupMaker = () => {
         setGroups([])
       }
     }, [currentCohort])
-
-    // const test = () => {
-    //   setMixedStudents((array) => {
-    //     for(let i = array.length - 1; i > 0; i--) {
-    //       const j = Math.floor(Math.random() * (i + 1));
-    //       [array[i], array[j]] = [array[j], array[i]]
-    //     }
-    //   })
-    //   console.log(mixedStudents)
-    // }
 
     const createGroup = () => {
       //The purpose of the reduce function is to match the selectedStudent(which is a student_id value) with currentCourse student_id and make new Array using Concat with just the student names.
@@ -82,7 +65,6 @@ const GroupMaker = () => {
       
   
       let arr = [...student_array];
-      console.log('arr', arr);
       shuffle(arr)
       let groupObj = {};
 
@@ -269,7 +251,6 @@ const GroupMaker = () => {
           acc++
         }
       }
-      // console.log(students)
       setGroups(groupObj)
     }
 

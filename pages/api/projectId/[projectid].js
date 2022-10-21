@@ -13,7 +13,6 @@ const sql = postgres(
 
 export default async function getprojectId(req, res) {
   const id = req.query.projectid;
-  console.log(id + "projectid");
 
   if (req.method === "GET") {
     try {

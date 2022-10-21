@@ -44,7 +44,6 @@ const ProjectModal = ({showProjModal, setShowProjModal, onClose}) => {
         .then(() => {
           axios.get(`/api/projectsAndProjectGradesId/${studentId}`).then((res) => {
             setCurrStudentProjects(res.data);
-            // console.log(res.data, 'new');
           })
         }) 
     
@@ -54,8 +53,6 @@ const ProjectModal = ({showProjModal, setShowProjModal, onClose}) => {
             Authorization: `Bearer ${users.asana_access_token}`,
           }
         }).then((res) => {
-          console.log(projSelected, 'porjSelected'); 
-          console.log(res.data.data)
           instructorNotes = res.data.data.notes
 
         }).then(() => { instructorNotes.length === 0 ? instructorNotes = "<u>Test Name: Test Score</u>" : null

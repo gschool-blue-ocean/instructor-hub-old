@@ -4,7 +4,6 @@ export const authenticated = (handler) => {
     return async (req, res) => {
       return new Promise ((resolve, reject) => {
         //do token/cookie checks here
-        console.log("touched the middleware")
         verify(req.cookies.authCookie, process.env.COOKIE_SECRET_KEY, function(err, decoded) {
           if(err && decoded) {
         return handler(req, res);
