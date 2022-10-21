@@ -12,7 +12,6 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import overallStyles from "../../../styles/CohortOverall.module.css";
 import UpdateModal from "./UpdateModal";
 import { studentsState, cohortsState, currentCohortState, groupsState } from "../../state.js";
@@ -43,8 +42,6 @@ const CohortOverall = ({ children }) => {
   const [cohortAvg, setCohortAvg] = useState(0)
   const [currentCohort, setCurrentCohort] = useRecoilState(currentCohortState);
   const [groups, setGroups] = useRecoilState(groupsState)
-  // const [groupsDivs, setGroupsDivs] = useState('')
- 
   const studentsInCohort = students.filter(student => student.cohort === currentCohort) 
   const currentClass = cohorts.filter(classNow => classNow.name === currentCohort)
 
@@ -57,7 +54,10 @@ const CohortOverall = ({ children }) => {
       })
     }, [currentCohort])
 
-  const cohortAverage = () => {}
+  // const cohortAverage = () => {
+  //   let sum = 0;
+  //   studentsInCohort.map((student) => )
+  // }
 // function to get tech average
   const techAvg = () => {
     let sum = 0;

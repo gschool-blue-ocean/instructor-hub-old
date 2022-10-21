@@ -50,7 +50,7 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
     setAddAssessName(false)
     setScore('100')
   };
-
+  // increments to the next student on submit
   const prevStudent = () => {
     setCurrStudent((prev) => {
       if (prev !== 0) {
@@ -68,10 +68,9 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
   };
 
   // this grade is set in the input element
-//   let grade = score
-//     let assessmentId = Number(projSelected)
     let assessmentId = Number(assess.value)
     let assessScore = Number(score)
+
  // post assessment_name to request to learn table
     const onSubmiting = (e) => {
       e.preventDefault()
@@ -236,8 +235,6 @@ const UpdateAssessmentsModal = ({ showUpdateAssessmentModal, setShowUpdateAssess
                 <br />
                 <button type="submit"  value="Submit" onClick={(e) => onSubmiting(e)}>Submit</button>
               </form>
-              
-            //   onClick={(e) => onSubmit(e)
             ) : (
               <span>{"Go code with your buds, you're done"}</span>
             )}
