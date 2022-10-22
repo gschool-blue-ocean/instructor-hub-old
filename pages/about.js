@@ -11,7 +11,7 @@ const about = () => {
         </div>
         <div className={style.subContainer}>
           <div className={style.team}>
-            <Image src='/Alex.jpg' height={200} width={200}/>
+            <Image src='/Alex.jpeg' height={200} width={200}/>
             {/* <img className={style.img} alt='team member' src='/pic1.jpg'/> */}
 
             <div className={style.name}>Alexander Cobble</div>
@@ -60,7 +60,7 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src='/Michael.png' height={200} width={200}/>
+            <Image src='/Michael.jpeg' height={200} width={200}/>
 
             <div className={style.name}>Michael Jefferson</div>
             <div className={style.about} >
@@ -93,7 +93,7 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src='/Charles.jpg' height={200} width={200}/>
+            <Image src='/Charles.jpeg' height={200} width={200}/>
 
             <div className={style.name}>Charles Vitanza</div>
             <div className={style.about} >
@@ -109,7 +109,7 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src="/Mike.jfif" height={200} width={200} />
+            <Image src="/Mike.jpeg" height={200} width={200} />
             <div className={style.name}>Mike Cohen</div>
             <div className={style.about}>
               This is about me blah blah blah and more blah here, creative blahs
@@ -142,7 +142,7 @@ const about = () => {
             </div>
           </div>
           <div className={style.team}>
-            <Image src="/Martha.png" height={200} width={200} />
+            <Image src="/Martha.jpg" height={200} width={200} />
             <div className={style.name}>Martha Martin</div>
             <div className={style.about}>
               {"I enjoy bringing people's visions to life, and being a software engineer allows me to express my creativity. I enjoy the challenge and growth in this career field."}
