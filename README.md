@@ -2,6 +2,8 @@
 
 [![Instructor Hub](http://img.youtube.com/vi/IM0lWfHRSpo/0.jpg)](https://youtu.be/IM0lWfHRSpo)
 
+[MCSP-13 Presentation](https://drive.google.com/file/d/1WbfoHGMt5sVqZwbGxQvH-ploWGzTEhQ7/view?usp=share_link)
+
 Instructor-hub is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). It aims to address the problem of instructors having to juggle though multiple apps. Instructor-hub pulls it all together so instructors can get things done all in one place.
 Technologies used includes:
 
