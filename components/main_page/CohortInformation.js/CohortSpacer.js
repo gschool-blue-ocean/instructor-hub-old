@@ -104,7 +104,7 @@ const CohortSpacer = () => {
           value={currentCohort}
           onChange={(e) => setCurrentCohort((prev) => e.target.value)}
         >
-          <option value={currentCohort} selected>
+          <option value={currentCohort}>
             {currentCohort}
           </option>
           {cohorts
